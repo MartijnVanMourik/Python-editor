@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="nl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Educatieve Python Editor</title>
+
+    <!-- Tailwind CSS for modern responsive styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for beautiful interface icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- CodeMirror 5 CSS & JS for reliable offline-capable text editing -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/python/python.min.js"></script>
+
+    <!-- Skulpt Python browser execution library -->
+    <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
+
+    <style>
+        /* Custom scrollbar styles for premium look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* CodeMirror custom adjustments */
+        .CodeMirror {
+            height: 100% !important;
+            font-family: 'Fira Code', Consolas, Monaco, 'Andale Mono', monospace;
+            font-size: 15px;
+            border-radius: 0.375rem;
+        }
+
+        /* Turtle canvas container adjustments */
+        #turtle-canvas {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            background-color: #ffffff;
+            border: 1px solid #334155;
+            border-radius: 0.75rem;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            margin: 0 auto;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #turtle-canvas * {
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            background: transparent !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Fullscreen style for panel-turtle */
+        .turtle-fullscreen-active {
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 9999 !important;
+            background-color: rgba(2, 6, 23, 0.95) !important;
+            backdrop-filter: blur(16px) !important;
+            -webkit-backdrop-filter: blur(16px) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 2rem !important;
+            animation: turtleFadeIn 0.25s ease-out;
+        }
+
+        .turtle-fullscreen-active #turtle-canvas {
+            width: min(75vh, 75vw) !important;
+            height: min(75vh, 75vw) !important;
+            max-width: 800px !important;
+            max-height: 800px !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+            border-color: #475569 !important;
+        }
+
+        /* Fullscreen toggling utility classes */
+        .turtle-fullscreen-only {
+            display: none !important;
+        }
+
+        .turtle-fullscreen-active .turtle-fullscreen-only {
+            display: flex !important;
+        }
+
+        .turtle-fullscreen-active .turtle-normal-only {
+            display: none !important;
+        }
+
+        @keyframes turtleFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col overflow-x-hidden">
+
+    <!-- Header / Navbar -->
+    <header
+        class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-50">
+        <div class="flex items-center gap-3">
+            <div class="bg-gradient-to-tr from-yellow-500 to-blue-500 p-2 rounded-lg shadow-md">
+                <i class="fa-brands fa-python text-2xl text-slate-950"></i>
+            </div>
+            <div>
+                <h1 id="config-title" class="font-bold text-lg md:text-xl tracking-wide text-slate-100">Python
+                    Leeromgeving</h1>
+                <p class="text-xs text-slate-400">Interactieve Editor voor havo / vwo Informatica</p>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+            <!-- Progress Status -->
+            <span id="save-indicator"
+                class="text-xs bg-slate-800 text-slate-400 px-2.5 py-1.5 rounded-full border border-slate-700 flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                Automatisch opgeslagen
+            </span>
+
+            <!-- Global Action Buttons -->
+            <button onclick="exportToJSON()"
+                class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-700 transition flex items-center gap-2"
+                title="Exporteer je voortgang naar een JSON bestand">
+                <i class="fa-solid fa-file-export text-blue-400"></i>
+                <span>Inleverbestand (.json)</span>
+            </button>
+            <button onclick="triggerImport()"
+                class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-700 transition flex items-center gap-2"
+                title="Importeer een eerder opgeslagen JSON voortgangsbestand">
+                <i class="fa-solid fa-file-import text-purple-400"></i>
+                <span>Importeer Werk</span>
+            </button>
+            <input type="file" id="import-file" class="hidden" accept=".json" onchange="importFromJSON(event)">
+        </div>
+    </header>
+
+    <!-- Main Interactive Workspace -->
+    <main class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
+
+        <!-- LEFT PANEL: Instructions & Navigation (Dynamic Tasks) -->
+        <section
+            class="w-full lg:w-1/3 bg-slate-900/60 border-r border-slate-800 flex flex-col p-4 overflow-y-auto max-h-[50vh] lg:max-h-none">
+            <div class="mb-4">
+                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Kies je Opdracht</h2>
+                <!-- Task Selection Buttons Container -->
+                <div id="task-selector-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-2">
+                    <!-- Dynamic tabs will insert here -->
+                </div>
+            </div>
+
+            <!-- Instruction Box -->
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex-1 flex flex-col min-h-[150px]">
+                <div class="flex items-center gap-2 border-b border-slate-800 pb-2 mb-3">
+                    <i class="fa-solid fa-circle-info text-blue-400 text-lg"></i>
+                    <h3 class="font-bold text-slate-100">Opdrachtomschrijving</h3>
+                </div>
+                <div id="assignment-instruction"
+                    class="text-sm text-slate-300 leading-relaxed flex-1 prose prose-invert overflow-y-auto max-h-48 lg:max-h-none">
+                    Selecteer een opdracht om de instructies te laden...
+                </div>
+            </div>
+        </section>
+
+        <!-- MIDDLE & RIGHT PANEL: Editor + Code Output (Fully Responsive Grid) -->
+        <section class="flex-1 flex flex-col overflow-hidden min-h-[50vh] lg:min-h-0">
+
+            <!-- Mobile Switch Tabs (Only visible on small screens to toggle between Code and Output Panels) -->
+            <div class="lg:hidden flex bg-slate-900 border-b border-slate-800 text-sm font-medium">
+                <button id="tab-btn-editor" onclick="switchMobileView('editor')"
+                    class="flex-1 py-3 text-center border-b-2 border-blue-500 text-blue-400">
+                    <i class="fa-solid fa-code mr-1"></i> Editor
+                </button>
+                <button id="tab-btn-output" onclick="switchMobileView('output')"
+                    class="flex-1 py-3 text-center border-b-2 border-transparent text-slate-400">
+                    <i class="fa-solid fa-terminal mr-1"></i> Output & Tests
+                </button>
+            </div>
+
+            <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden h-full">
+
+                <!-- Code Mirror Editor Window (lg:span-7) -->
+                <div id="editor-wrapper-panel"
+                    class="lg:col-span-7 flex flex-col border-b lg:border-b-0 lg:border-r border-slate-800 h-full overflow-hidden">
+                    <!-- Tab-bar for active files within the task if multiple files are used (or just current file indicator) -->
+                    <div
+                        class="bg-slate-900/80 px-4 py-2 flex items-center justify-between border-b border-slate-800 text-xs text-slate-400 font-mono">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-file-code text-yellow-500"></i>
+                            <span id="active-filename" class="font-bold text-slate-200">main.py</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="resetCurrentCode()"
+                                class="text-slate-400 hover:text-red-400 transition flex items-center gap-1"
+                                title="Herstel de code naar de beginopstelling">
+                                <i class="fa-solid fa-rotate-left"></i> Reset code
+                            </button>
+                            <button onclick="exportSinglePy()"
+                                class="text-slate-400 hover:text-blue-400 transition flex items-center gap-1"
+                                title="Download alleen dit .py bestand">
+                                <i class="fa-solid fa-download"></i> .py export
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CodeMirror target div -->
+                    <div class="flex-1 relative min-h-[250px] lg:min-h-0">
+                        <textarea id="code-editor" class="hidden"></textarea>
+                    </div>
+
+                    <!-- Editor Control Toolbar -->
+                    <div
+                        class="bg-slate-900 border-t border-slate-800 p-3 flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex gap-2">
+                            <!-- Run Code Button -->
+                            <button onclick="runPythonCode()"
+                                class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/20 active:scale-95 transition flex items-center gap-2">
+                                <i class="fa-solid fa-play text-lg"></i>
+                                <span>Voer Code Uit</span>
+                            </button>
+                            <!-- Run Unit Tests Button -->
+                            <button id="btn-run-tests" onclick="runAssignmentTests()"
+                                class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2.5 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-2">
+                                <i class="fa-solid fa-circle-check text-lg"></i>
+                                <span>Test Code</span>
+                            </button>
+                        </div>
+                        <div class="text-xs text-slate-400 font-mono">
+                            Druk op <kbd
+                                class="bg-slate-800 px-1 py-0.5 rounded border border-slate-700 text-slate-300">Ctrl+Enter</kbd>
+                            om uit te voeren
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Output, Terminal, Canvas & Tests Window (lg:span-5) -->
+                <div id="output-wrapper-panel"
+                    class="hidden lg:col-span-5 lg:flex flex-col h-full overflow-hidden bg-slate-950">
+
+                    <!-- Sub Tabs for Right Panel: Terminal Console vs Turtle Canvas vs Auto Tests -->
+                    <div class="bg-slate-900/80 border-b border-slate-800 flex text-xs font-semibold">
+                        <button id="subtab-btn-console" onclick="switchOutputSubTab('console')"
+                            class="flex-1 py-3 text-center border-b-2 border-emerald-500 text-emerald-400">
+                            <i class="fa-solid fa-terminal mr-1"></i> Console
+                        </button>
+                        <button id="subtab-btn-turtle" onclick="switchOutputSubTab('turtle')"
+                            class="flex-1 py-3 text-center border-b-2 border-transparent text-slate-400 flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-compass-drafting mr-1"></i> Turtle Canvas
+                            <span id="turtle-indicator"
+                                class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse hidden"></span>
+                        </button>
+                        <button id="subtab-btn-tests" onclick="switchOutputSubTab('tests')"
+                            class="flex-1 py-3 text-center border-b-2 border-transparent text-slate-400 flex items-center justify-center gap-1">
+                            <i class="fa-solid fa-square-poll-vertical mr-1"></i> Test Resultaten
+                            <span id="test-summary-badge"
+                                class="hidden px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400">0/0</span>
+                        </button>
+                    </div>
+
+                    <!-- Panel Display Areas -->
+                    <div class="flex-1 p-4 overflow-y-auto relative flex flex-col gap-4">
+
+                        <!-- Panel A: Console Terminal -->
+                        <div id="panel-console" class="flex-1 flex flex-col h-full">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="text-xs font-mono text-slate-400">CONSOLE OUTPUT</span>
+                                <button onclick="clearConsole()"
+                                    class="text-xs text-slate-500 hover:text-slate-300 transition">
+                                    <i class="fa-solid fa-trash-can mr-1"></i> Schoonmaken
+                                </button>
+                            </div>
+                            <!-- Live Terminal Display -->
+                            <pre id="console-output"
+                                class="flex-1 bg-slate-900 border border-slate-800 rounded-xl p-4 font-mono text-sm text-emerald-400 overflow-y-auto whitespace-pre-wrap min-h-[150px] leading-relaxed select-text"></pre>
+                        </div>
+
+                        <!-- Panel B: Turtle Graphics Canvas (Hidden by default, shown when import turtle) -->
+                        <div id="panel-turtle" class="hidden flex-1 flex flex-col items-center justify-center transition-all duration-300">
+                            
+                            <!-- Normal header -->
+                            <div class="w-full flex items-center justify-between mb-2 turtle-normal-only">
+                                <span class="text-xs font-mono text-slate-400">TURTLE GRAPHICS CANVAS</span>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="toggleTurtleFullscreen()"
+                                        class="text-xs bg-slate-800 hover:bg-slate-700 hover:text-slate-100 text-slate-300 px-2.5 py-1.5 rounded-lg border border-slate-700 transition flex items-center gap-1.5"
+                                        title="Vergroot het canvas naar volledig scherm">
+                                        <i class="fa-solid fa-expand text-blue-400"></i>
+                                        <span>Volledig Scherm</span>
+                                    </button>
+                                    <span
+                                        class="text-[10px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/20">Canvas 400x400</span>
+                                </div>
+                            </div>
+
+                            <!-- Fullscreen Header (only visible when expanded) -->
+                            <div class="w-full max-w-2xl lg:max-w-3xl flex items-center justify-between mb-4 turtle-fullscreen-only px-2">
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-gradient-to-tr from-yellow-500 to-blue-500 p-2 rounded-lg shadow-md">
+                                        <i class="fa-solid fa-compass-drafting text-lg text-slate-950"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-100 text-base">Turtle Graphics - Volledig Scherm</h3>
+                                        <p class="text-xs text-slate-400">Druk op 'Escape' of klik op sluiten om terug te gaan</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <!-- Run Code Button in Fullscreen -->
+                                    <button onclick="runPythonCode()"
+                                        class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-4 py-2 rounded-xl transition flex items-center gap-2 shadow-lg active:scale-95 text-sm"
+                                        title="Voer de Python code uit">
+                                        <i class="fa-solid fa-play"></i>
+                                        <span>Voer Code Uit</span>
+                                    </button>
+                                    <button onclick="toggleTurtleFullscreen()"
+                                        class="bg-slate-800 hover:bg-slate-700 hover:text-red-400 text-slate-300 px-4 py-2 rounded-xl border border-slate-700 transition flex items-center gap-2 font-medium shadow-lg text-sm">
+                                        <i class="fa-solid fa-compress"></i>
+                                        <span>Sluiten</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                             <!-- Wrapper for interactive canvas container with grab cursor -->
+                             <div class="relative group">
+                                 <!-- Target element where Skulpt renders Canvas -->
+                                 <div id="turtle-canvas" class="cursor-grab">
+                                     <!-- Skulpt automatically injects HTML5 Canvas here -->
+                                 </div>
+                                 
+                                 <!-- Floating Controls (Zoom in, Zoom out, Reset) -->
+                                 <div class="absolute bottom-3 right-3 flex flex-col gap-1.5 z-10 bg-slate-900/90 border border-slate-700/50 p-1.5 rounded-xl backdrop-blur-md shadow-lg opacity-40 group-hover:opacity-100 transition-opacity duration-200">
+                                     <button onclick="adjustZoom(0.1)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Zoom in"><i class="fa-solid fa-plus"></i></button>
+                                     <button onclick="adjustZoom(-0.1)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Zoom uit"><i class="fa-solid fa-minus"></i></button>
+                                     <button onclick="resetTurtleView()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Herstel weergave"><i class="fa-solid fa-arrows-to-dot"></i></button>
+                                 </div>
+                             </div>
+                            
+                            <p class="text-[11px] text-slate-400 mt-2 text-center turtle-normal-only">
+                                <i class="fa-solid fa-circle-info text-blue-400"></i> Als turtle herstart, wordt het
+                                canvas automatisch opnieuw getekend.
+                            </p>
+                        </div>
+
+                        <!-- Panel C: Automated Test Suite Results -->
+                        <div id="panel-tests" class="hidden flex-1 flex flex-col h-full">
+                            <div class="mb-3">
+                                <h4 class="text-xs font-mono text-slate-400 uppercase tracking-wider mb-1">Automatische
+                                    Unit Tests</h4>
+                                <p class="text-xs text-slate-400">Deze tests controleren of jouw code correct werkt voor
+                                    verschillende scenario's.</p>
+                            </div>
+                            <div id="tests-list" class="flex flex-col gap-3 overflow-y-auto">
+                                <!-- Dynamic tests get loaded here -->
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+    </main>
+
+    </main>
+
+    <!-- Custom Input Modal Overlay (For standard synchronous inputs inside Python without browser alert / prompt) -->
+    <div id="input-modal"
+        class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-[9999]">
+        <div
+            class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-250">
+            <div class="flex items-center gap-3 text-emerald-400 mb-4">
+                <i class="fa-solid fa-terminal text-2xl"></i>
+                <h3 class="text-lg font-bold text-slate-100">Invoer gevraagd</h3>
+            </div>
+            <p id="input-modal-prompt"
+                class="text-sm text-slate-300 mb-4 font-mono bg-slate-950 p-3 rounded-lg border border-slate-800 whitespace-pre-wrap">
+            </p>
+            <input type="text" id="input-modal-field"
+                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono mb-4 text-base"
+                placeholder="Typ je antwoord hier..." autofocus>
+            <div class="flex justify-end">
+                <button id="input-modal-submit"
+                    class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl transition shadow-lg active:scale-95">
+                    Verstuur <i class="fa-solid fa-paper-plane ml-1"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables state definition
+        let editor; // CodeMirror Editor Instance
+        let currentTaskId = ""; // ID of active assignment
+        let taskConfig = {}; // Current loaded assignment configuration JSON
+        let userProgress = {}; // Student's saved code progress state mapped by Task ID
+        let runOutputs = []; // Array of recorded outputs during Python execution
+        let isRunningTest = false; // Flag to isolate manual input from test input mocks
+        let testInputsQueue = []; // Sequence of inputs configured for the active automated test case
+        let activeMobileView = "editor"; // State tracking for mobile split screen
+        let activeOutputSubTab = "console"; // Active subtab in the output panel
+
+        // Fallback default tasks configuration if none loaded via url querystring
+        const DEFAULT_CONFIG = {
+            "title": "Informatica Opdracht - Basis Python",
+            "tabs": [
+                {
+                    "id": "rekenen",
+                    "filename": "rekenen.py",
+                    "instruction": "<h3 class='text-lg font-semibold text-slate-100 mb-2'>De Optelmachine</h3><p class='mb-2'>Schrijf een programma dat de gebruiker om twee aparte getallen vraagt en vervolgens de som (optelsom) hiervan print.</p><p class='mb-2 font-semibold text-amber-400'>Specificaties:</p><ul class='list-disc list-inside space-y-1 mb-3'><li>Vraag eerst om invoer 1</li><li>Vraag dan om invoer 2</li><li>Bereken de som van beide getallen</li><li>Print het resultaat (alleen het getal)</li></ul><p class='text-xs text-slate-400 italic bg-slate-950 p-2 rounded border border-slate-800'>Tip: Gebruik `int()` om de invoer (string) om te zetten naar een geheel getal!</p>",
+                    "initialCode": "# Schrijf hier je code voor de optelmachine\ngetal1 = input(\"Eerste getal: \")\ngetal2 = input(\"Tweede getal: \")\n\n# Bereken en print de som\nsom = int(getal1) + int(getal2)\nprint(som)\n",
+                    "tests": [
+                        {
+                            "name": "Eenvoudig optellen (5 + 10)",
+                            "inputs": ["5", "10"],
+                            "expectedOutput": "15",
+                            "matchType": "exact"
+                        },
+                        {
+                            "name": "Rekenen met negatieve getallen (-3 + 8)",
+                            "inputs": ["-3", "8"],
+                            "expectedOutput": "5",
+                            "matchType": "exact"
+                        },
+                        {
+                            "name": "Grotere getallen (123 + 456)",
+                            "inputs": ["123", "456"],
+                            "expectedOutput": "579",
+                            "matchType": "exact"
+                        }
+                    ]
+                },
+                {
+                    "id": "begroeting",
+                    "filename": "begroeting.py",
+                    "instruction": "<h3 class='text-lg font-semibold text-slate-100 mb-2'>Persoonlijke Begroeting</h3><p class='mb-2'>Schrijf een programma dat de naam en de leeftijd van de gebruiker vraagt. Print daarna een begroeting in het formaat:</p><div class='bg-slate-950 p-3 rounded font-mono text-sm border border-slate-800 text-slate-300 mb-3'>Hallo [Naam], jij bent [Leeftijd] jaar oud!</div><p class='mb-2 font-semibold text-amber-400'>Voorbeeld:</p><p class='text-xs font-mono text-slate-300 bg-slate-950 p-2 rounded mb-2'>Naam invoer: Jan<br>Leeftijd invoer: 16<br>Output: Hallo Jan, jij bent 16 jaar oud!</p>",
+                    "initialCode": "# Vraag om naam en leeftijd\nnaam = input(\"Hoe heet je? \")\nleeftijd = input(\"Hoe oud ben je? \")\n\n# Print de juiste begroetingszin\nprint(\"Hallo \" + naam + \", jij bent \" + leeftijd + \" jaar oud!\")\n",
+                    "tests": [
+                        {
+                            "name": "Test met Jan (16)",
+                            "inputs": ["Jan", "16"],
+                            "expectedOutput": "Hallo Jan, jij bent 16 jaar oud!",
+                            "matchType": "exact"
+                        },
+                        {
+                            "name": "Test met Sophie (17)",
+                            "inputs": ["Sophie", "17"],
+                            "expectedOutput": "Hallo Sophie, jij bent 17 jaar oud!",
+                            "matchType": "exact"
+                        }
+                    ]
+                },
+                {
+                    "id": "turtle_spiraal",
+                    "filename": "spiraal.py",
+                    "instruction": "<h3 class='text-lg font-semibold text-slate-100 mb-2'>Kleurrijke Turtle Spiraal</h3><p class='mb-2'>In deze opdracht gaan we aan de slag met de <b>Turtle</b> grafische bibliotheek!</p><p class='mb-2'>Schrijf een programma dat met een lus een spiraalvormig patroon tekent. Gebruik verschillende kleuren om een spectaculair figuur te maken!</p><p class='font-semibold text-amber-400 mb-1'>Probeer het volgende:</p><ul class='list-disc list-inside space-y-1 mb-3 text-slate-300'><li>Importeer turtle met: <code class='text-yellow-400'>import turtle</code></li><li>Gebruik een lus die minstens 20 keer herhaalt</li><li>Verander de kleur bij elke iteratie</li><li>Klik op 'Voer Code Uit' en bekijk het resultaat in het <b>Turtle Canvas</b> tabblad!</li></ul>",
+                    "initialCode": "import turtle\n\n# Setup van de turtle\nt = turtle.Turtle()\nt.speed(10) # Snel tekenen\n\n# Teken een geometrisch spiraalpatroon\nkleuren = [\"red\", \"blue\", \"green\", \"orange\", \"purple\", \"cyan\"]\n\nfor x in range(50):\n    t.pencolor(kleuren[x % 6])\n    t.forward(x * 3)\n    t.left(59) # Hoek zorgt voor spiraaleffect\n",
+                    "tests": [] // Turtle assignments usually don't have unit tests
+                }
+            ]
+        };
+
+        window.onload = function () {
+            // Initialize CodeMirror instance on textarea
+            editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
+                mode: { name: "python", version: 3, singleLineStringErrors: false },
+                lineNumbers: true,
+                theme: "dracula",
+                indentUnit: 4,
+                tabSize: 4,
+                autoCloseBrackets: true,
+                viewportMargin: Infinity
+            });
+
+            // Auto-save changes in background when user types
+            editor.on("change", () => {
+                if (currentTaskId) {
+                    userProgress[currentTaskId] = editor.getValue();
+                    localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+                    showSavingState();
+                }
+            });
+
+            // Bind hotkeys (Ctrl+Enter / Cmd+Enter to run code)
+            window.addEventListener("keydown", function (e) {
+                if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+                    e.preventDefault();
+                    runPythonCode();
+                }
+            });
+
+            // Fetch external configuration if specified in URL query params (?config=URL)
+            loadConfiguration();
+
+            // Initialize Turtle pan/zoom event listeners
+            initInteractiveTurtle();
+        };
+
+        let saveTimeout;
+        function showSavingState() {
+            const indicator = document.getElementById("save-indicator");
+            indicator.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> Opgesteld opslaan...';
+
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                indicator.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Automatisch opgeslagen';
+            }, 800);
+        }
+
+        async function loadConfiguration() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const configUrl = urlParams.get('config');
+
+            if (configUrl) {
+                try {
+                    const response = await fetch(configUrl);
+                    if (!response.ok) throw new Error("Netwerk response was niet oké");
+                    taskConfig = await response.json();
+                } catch (error) {
+                    console.error("Fout bij laden van externe config: ", error);
+                    alert("Kon de geconfigureerde opdrachten niet laden van URL. We laden de ingebouwde demo-opdrachten.");
+                    taskConfig = DEFAULT_CONFIG;
+                }
+            } else {
+                taskConfig = DEFAULT_CONFIG;
+            }
+
+            // Apply title
+            document.getElementById("config-title").textContent = taskConfig.title || "Python Leeromgeving";
+
+            // Restore saved workspace from localStorage if available
+            const saved = localStorage.getItem("edu_py_editor_progress");
+            if (saved) {
+                try {
+                    userProgress = JSON.parse(saved);
+                } catch (e) {
+                    userProgress = {};
+                }
+            }
+
+            // Render assignment list
+            renderTaskSelector();
+        }
+
+        function renderTaskSelector() {
+            const container = document.getElementById("task-selector-container");
+            container.innerHTML = "";
+
+            taskConfig.tabs.forEach((task, index) => {
+                // Determine whether task is passed based on local storage metadata if existing
+                const isPassed = checkIfPassed(task.id);
+
+                const btn = document.createElement("button");
+                btn.id = `task-btn-${task.id}`;
+                btn.onclick = () => selectTask(task.id);
+                btn.className = `w-full text-left p-3 rounded-xl transition flex flex-col gap-1 ${index === 0 ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-md' : 'bg-slate-800/80 hover:bg-slate-800 text-slate-300'
+                    }`;
+
+                btn.innerHTML = `
+                    <div class="flex items-center justify-between w-full">
+                        <span class="font-semibold text-sm truncate">${task.filename}</span>
+                        <span id="badge-${task.id}">
+                            ${isPassed ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>' : '<i class="fa-regular fa-circle text-slate-500"></i>'}
+                        </span>
+                    </div>
+                    <span class="text-[11px] opacity-80 truncate">${task.id}</span>
+                `;
+                container.appendChild(btn);
+            });
+
+            // Select initial task
+            if (taskConfig.tabs.length > 0) {
+                selectTask(taskConfig.tabs[0].id);
+            }
+        }
+
+        // Check if all testcases passed for a task
+        function checkIfPassed(taskId) {
+            const passedArray = JSON.parse(localStorage.getItem(`edu_py_task_passed_${taskId}`) || "[]");
+            const task = taskConfig.tabs.find(t => t.id === taskId);
+            if (!task || !task.tests || task.tests.length === 0) return false;
+            return passedArray.length === task.tests.length && passedArray.every(v => v === true);
+        }
+
+        function selectTask(taskId) {
+            // Update active states on previous buttons
+            if (currentTaskId) {
+                const prevBtn = document.getElementById(`task-btn-${currentTaskId}`);
+                if (prevBtn) {
+                    prevBtn.className = "w-full text-left p-3 rounded-xl transition flex flex-col gap-1 bg-slate-800/80 hover:bg-slate-800 text-slate-300";
+                }
+            }
+
+            const currentBtn = document.getElementById(`task-btn-${taskId}`);
+            if (currentBtn) {
+                currentBtn.className = "w-full text-left p-3 rounded-xl transition flex flex-col gap-1 bg-blue-600 hover:bg-blue-500 text-white shadow-lg";
+            }
+
+            currentTaskId = taskId;
+            const task = taskConfig.tabs.find(t => t.id === taskId);
+
+            if (task) {
+                // Set instruction panel content
+                document.getElementById("assignment-instruction").innerHTML = task.instruction;
+                document.getElementById("active-filename").textContent = task.filename;
+
+                // Load existing user code or default initial template
+                let codeToLoad = task.initialCode;
+                if (userProgress[taskId] !== undefined) {
+                    codeToLoad = userProgress[taskId];
+                }
+                editor.setValue(codeToLoad);
+
+                // Auto detect if code has turtle and show canvas tab, otherwise default to console
+                if (codeToLoad.includes("import turtle")) {
+                    switchOutputSubTab('turtle');
+                } else {
+                    switchOutputSubTab('console');
+                }
+
+                // Render blank test outcomes
+                renderEmptyTests(task);
+            }
+        }
+
+        function resetCurrentCode() {
+            const confirmation = document.createElement("div");
+            confirmation.innerHTML = `
+                <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-[99999]">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl">
+                        <h3 class="text-lg font-bold text-red-400 mb-2">Code herstellen?</h3>
+                        <p class="text-sm text-slate-300 mb-6">Weet je zeker dat je jouw huidige werk voor deze opdracht wilt resetten naar het begin? Dit kan niet ongedaan worden gemaakt.</p>
+                        <div class="flex justify-end gap-3">
+                            <button id="cancel-reset" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-sm">Annuleren</button>
+                            <button id="confirm-reset" class="px-4 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-medium transition text-sm">Ja, reset code</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(confirmation);
+
+            document.getElementById("cancel-reset").onclick = function () {
+                confirmation.remove();
+            };
+
+            document.getElementById("confirm-reset").onclick = function () {
+                const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+                if (task) {
+                    editor.setValue(task.initialCode);
+                    userProgress[currentTaskId] = task.initialCode;
+                    localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+                }
+                confirmation.remove();
+            };
+        }
+
+        function clearConsole() {
+            document.getElementById("console-output").innerText = "";
+            runOutputs = [];
+        }
+
+        function appendToConsole(text) {
+            const consoleBox = document.getElementById("console-output");
+            consoleBox.innerText += text;
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+            runOutputs.push(text);
+        }
+
+        // Custom Promise-based Input Overlay System
+        function showInputModal(promptText, resolveCallback) {
+            const modal = document.getElementById("input-modal");
+            const promptBox = document.getElementById("input-modal-prompt");
+            const inputField = document.getElementById("input-modal-field");
+            const submitBtn = document.getElementById("input-modal-submit");
+
+            promptBox.textContent = promptText || "Invoer vereist:";
+            inputField.value = "";
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+            inputField.focus();
+
+            const handleSubmit = () => {
+                const value = inputField.value;
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+                appendToConsole(value + "\n");
+
+                // Clean up listeners to prevent double bindings
+                submitBtn.onclick = null;
+                inputField.onkeydown = null;
+
+                resolveCallback(value);
+            };
+
+            submitBtn.onclick = handleSubmit;
+            inputField.onkeydown = (e) => {
+                if (e.key === "Enter") {
+                    handleSubmit();
+                }
+            };
+        }
+
+        function runPythonCode() {
+            // Ensure console is active when user manually executes
+            switchOutputSubTab('console');
+            clearConsole();
+
+            const code = editor.getValue();
+            isRunningTest = false;
+
+            // Reset pan/zoom view state
+            resetTurtleView();
+
+            // Setup turtle div resetting
+            const canvasDiv = document.getElementById("turtle-canvas");
+            canvasDiv.innerHTML = "";
+
+            // Display loading indicator if Turtle library is called
+            if (code.includes("import turtle")) {
+                document.getElementById("turtle-indicator").classList.remove("hidden");
+                // Auto switch to canvas tab for visual turtle assignments
+                switchOutputSubTab('turtle');
+            } else {
+                document.getElementById("turtle-indicator").classList.add("hidden");
+            }
+
+            // Configure Skulpt Engine
+            Sk.configure({
+                output: appendToConsole,
+                read: function (file) {
+                    if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][file] === undefined) {
+                        throw "Bestand niet gevonden: '" + file + "'";
+                    }
+                    return Sk.builtinFiles["files"][file];
+                },
+                inputfun: function (prompt) {
+                    return new Promise((resolve) => {
+                        showInputModal(prompt, resolve);
+                    });
+                },
+                inputfunTakesPrompt: true
+            });
+
+            // Target the canvas element for turtle drawings
+            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = "turtle-canvas";
+
+            const myPromise = Sk.misceval.asyncToPromise(function () {
+                return Sk.importMainWithBody("<stdin>", false, code, true);
+            });
+
+            myPromise.then(
+                function (mod) {
+                    appendToConsole("\n-- Uitvoering succesvol beëindigd --\n");
+                },
+                function (err) {
+                    appendToConsole("\nFoutmelding:\n" + err.toString() + "\n");
+                }
+            );
+        }
+
+        // Execute automated unit tests
+        async function runAssignmentTests() {
+            const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+            if (!task) return;
+
+            if (!task.tests || task.tests.length === 0) {
+                showToast("Geen automatische tests beschikbaar voor deze opdracht.");
+                return;
+            }
+
+            // Switch view to tests panel
+            switchOutputSubTab('tests');
+
+            const listContainer = document.getElementById("tests-list");
+            listContainer.innerHTML = '<p class="text-sm text-slate-400 animate-pulse"><i class="fa-solid fa-spinner animate-spin mr-2"></i> Bezig met uitvoeren van tests...</p>';
+
+            const results = [];
+
+            // Execute each test sequentially
+            for (let i = 0; i < task.tests.length; i++) {
+                const testCase = task.tests[i];
+                const passed = await runSingleTestCase(task.initialCode, editor.getValue(), testCase);
+                results.push(passed);
+            }
+
+            // Save passing state to localstorage
+            localStorage.setItem(`edu_py_task_passed_${task.id}`, JSON.stringify(results));
+
+            // Re-render task selection badges
+            renderTaskSelector();
+
+            // Display visual outcome summaries
+            renderTestOutcomes(task, results);
+        }
+
+        function runSingleTestCase(initialCode, studentCode, testCase) {
+            return new Promise((resolve) => {
+                // Keep track of inputs we provide for the mocking function
+                testInputsQueue = [...testCase.inputs];
+                let consoleOutputs = [];
+                let printOutputs = [];
+
+                // Custom intercept run outputs
+                const testOutputLogger = (text) => {
+                    consoleOutputs.push(text);
+                    printOutputs.push(text);
+                };
+
+                // Configure temporary skulpt run with mock interfaces
+                Sk.configure({
+                    output: testOutputLogger,
+                    read: function (file) {
+                        if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][file] === undefined) {
+                            throw "Bestand niet gevonden: '" + file + "'";
+                        }
+                        return Sk.builtinFiles["files"][file];
+                    },
+                    inputfun: function (prompt) {
+                        // Return inputs queue sequentially
+                        if (testInputsQueue.length > 0) {
+                            const val = testInputsQueue.shift();
+                            // Echo user typed text mock simulated
+                            consoleOutputs.push(prompt + val + "\n");
+                            return val;
+                        } else {
+                            // Empty queue fallback to prevent freezing
+                            consoleOutputs.push(prompt + "[Geen test invoer meer]\n");
+                            return "";
+                        }
+                    },
+                    inputfunTakesPrompt: true
+                });
+
+                // Run Skulpt asynchronised to promise
+                const executionPromise = Sk.misceval.asyncToPromise(function () {
+                    return Sk.importMainWithBody("<stdin>", false, studentCode, true);
+                });
+
+                executionPromise.then(
+                    function (mod) {
+                        // Evaluate gathered print outputs against expectations
+                        const rawPrintOutput = printOutputs.join("").trim();
+                        const rawConsoleOutput = consoleOutputs.join("").trim();
+                        const checkPassed = evaluateOutput(rawPrintOutput, testCase.expectedOutput, testCase.matchType);
+                        resolve({
+                            name: testCase.name,
+                            inputs: testCase.inputs,
+                            expected: testCase.expectedOutput,
+                            actual: rawConsoleOutput,
+                            passed: checkPassed
+                        });
+                    },
+                    function (err) {
+                        // Failed execution logic crash
+                        resolve({
+                            name: testCase.name,
+                            inputs: testCase.inputs,
+                            expected: testCase.expectedOutput,
+                            actual: "Foutmelding tijdens uitvoering: " + err.toString(),
+                            passed: false
+                        });
+                    }
+                );
+            });
+        }
+
+        function evaluateOutput(actual, expected, matchType) {
+            const cleanActual = actual.replace(/\r\n/g, "\n").trim().toLowerCase();
+            const cleanExpected = expected.replace(/\r\n/g, "\n").trim().toLowerCase();
+
+            if (matchType === "exact") {
+                return cleanActual === cleanExpected;
+            } else if (matchType === "contains") {
+                return cleanActual.includes(cleanExpected);
+            } else if (matchType === "regex") {
+                try {
+                    const regex = new RegExp(expected, "i");
+                    return regex.test(actual);
+                } catch (e) {
+                    return false;
+                }
+            }
+            return cleanActual.includes(cleanExpected); // default safety fallback
+        }
+
+        function renderEmptyTests(task) {
+            const listContainer = document.getElementById("tests-list");
+            const badge = document.getElementById("test-summary-badge");
+
+            if (!task.tests || task.tests.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-8 text-slate-500">
+                        <i class="fa-solid fa-wand-magic-sparkles text-3xl mb-2 text-slate-600"></i>
+                        <p class="text-sm">Geen automatische tests vereist voor deze opdracht.</p>
+                        <p class="text-xs mt-1">Tekening kun je visueel beoordelen in het Turtle Canvas.</p>
+                    </div>
+                `;
+                badge.classList.add("hidden");
+                return;
+            }
+
+            badge.classList.remove("hidden");
+            badge.textContent = `0/${task.tests.length}`;
+            badge.className = "px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400";
+
+            listContainer.innerHTML = "";
+            task.tests.forEach((test) => {
+                const card = document.createElement("div");
+                card.className = "bg-slate-900 border border-slate-800 rounded-xl p-3 flex items-center justify-between";
+                card.innerHTML = `
+                    <div>
+                        <h5 class="text-sm font-semibold text-slate-300">${test.name}</h5>
+                        <p class="text-xs text-slate-500 mt-0.5">Invoer: [${test.inputs.join(", ")}]</p>
+                    </div>
+                    <i class="fa-regular fa-circle-question text-slate-600 text-lg"></i>
+                `;
+                listContainer.appendChild(card);
+            });
+        }
+
+        function renderTestOutcomes(task, results) {
+            const listContainer = document.getElementById("tests-list");
+            listContainer.innerHTML = "";
+
+            let passedCount = 0;
+
+            results.forEach((res) => {
+                if (res.passed) passedCount++;
+
+                const card = document.createElement("div");
+                card.className = `bg-slate-900 border rounded-xl p-4 transition flex flex-col gap-2 ${res.passed ? 'border-emerald-500/30 shadow-md shadow-emerald-950/10' : 'border-red-500/30 shadow-md shadow-red-950/10'
+                    }`;
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h5 class="text-sm font-bold text-slate-200">${res.name}</h5>
+                            <p class="text-[11px] text-slate-500 mt-0.5">Test invoer gebruikt: <span class="font-mono bg-slate-950 px-1 py-0.5 rounded text-slate-400">[${res.inputs.join(", ")}]</span></p>
+                        </div>
+                        <div>
+                            ${res.passed
+                        ? '<span class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2 py-1 rounded-full border border-emerald-500/20"><i class="fa-solid fa-check mr-1"></i> Goedgekeurd</span>'
+                        : '<span class="bg-red-500/10 text-red-400 text-xs font-bold px-2 py-1 rounded-full border border-red-500/20"><i class="fa-solid fa-xmark mr-1"></i> Fout</span>'
+                    }
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2 text-xs font-mono">
+                        <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                            <span class="text-[10px] text-slate-500 uppercase block mb-1">Verwachte Output:</span>
+                            <div class="text-slate-300 whitespace-pre-wrap">${res.expected}</div>
+                        </div>
+                        <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
+                            <span class="text-[10px] text-slate-500 uppercase block mb-1">Jouw Output:</span>
+                            <div class="${res.passed ? 'text-emerald-400' : 'text-red-400'} whitespace-pre-wrap">${res.actual || '[Niets geprint]'}</div>
+                        </div>
+                    </div>
+                `;
+                listContainer.appendChild(card);
+            });
+
+            // Update tab badge summaries
+            const badge = document.getElementById("test-summary-badge");
+            badge.textContent = `${passedCount}/${task.tests.length}`;
+
+            if (passedCount === task.tests.length) {
+                badge.className = "px-1.5 py-0.5 rounded text-[10px] bg-emerald-500 text-slate-950 font-bold animate-bounce";
+                showToast("🏆 Gefeliciteerd! Alle tests voor deze opdracht zijn geslaagd!");
+            } else {
+                badge.className = "px-1.5 py-0.5 rounded text-[10px] bg-red-500/20 text-red-400 border border-red-500/30";
+            }
+        }
+
+        function switchOutputSubTab(tabId) {
+            const tabs = ['console', 'turtle', 'tests'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`subtab-btn-${t}`);
+                const panel = document.getElementById(`panel-${t}`);
+                if (t === tabId) {
+                    btn.classList.add('border-emerald-500', 'text-emerald-400');
+                    btn.classList.remove('border-transparent', 'text-slate-400');
+                    panel.classList.remove('hidden');
+                } else {
+                    btn.classList.remove('border-emerald-500', 'text-emerald-400');
+                    btn.classList.add('border-transparent', 'text-slate-400');
+                    panel.classList.add('hidden');
+                }
+            });
+            activeOutputSubTab = tabId;
+        }
+
+        function switchMobileView(viewId) {
+            const editorPanel = document.getElementById("editor-wrapper-panel");
+            const outputPanel = document.getElementById("output-wrapper-panel");
+            const btnEditor = document.getElementById("tab-btn-editor");
+            const btnOutput = document.getElementById("tab-btn-output");
+
+            if (viewId === 'editor') {
+                editorPanel.classList.remove("hidden");
+                outputPanel.classList.add("hidden", "lg:flex");
+                btnEditor.className = "flex-1 py-3 text-center border-b-2 border-blue-500 text-blue-400";
+                btnOutput.className = "flex-1 py-3 text-center border-b-2 border-transparent text-slate-400";
+                // Force CodeMirror to refresh dimensions on tab changes
+                setTimeout(() => editor.refresh(), 50);
+            } else {
+                editorPanel.classList.add("hidden");
+                outputPanel.classList.remove("hidden");
+                btnEditor.className = "flex-1 py-3 text-center border-b-2 border-transparent text-slate-400";
+                btnOutput.className = "flex-1 py-3 text-center border-b-2 border-blue-500 text-blue-400";
+            }
+            activeMobileView = viewId;
+        }
+
+        function exportSinglePy() {
+            const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+            if (!task) return;
+
+            const code = editor.getValue();
+            const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = task.filename || "code.py";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportToJSON() {
+            // Compile export object
+            const exportData = {
+                export_version: "1.0",
+                timestamp: new Date().toISOString(),
+                project_title: taskConfig.title,
+                student_code: userProgress,
+                test_results: {}
+            };
+
+            // Capture test statuses for JSON payload
+            taskConfig.tabs.forEach((task) => {
+                exportData.test_results[task.id] = {
+                    passed: checkIfPassed(task.id),
+                    results: JSON.parse(localStorage.getItem(`edu_py_task_passed_${task.id}`) || "[]")
+                };
+            });
+
+            // Convert to download file
+            const jsonString = JSON.stringify(exportData, null, 2);
+            const blob = new Blob([jsonString], { type: "application/json;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = `voortgang_${taskConfig.title.toLowerCase().replace(/\s+/g, "_")}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            showToast("Inleverbestand succesvol geëxporteerd!");
+        }
+
+        // Trigger input file picker dialog
+        function triggerImport() {
+            document.getElementById("import-file").click();
+        }
+
+        function importFromJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+
+                    if (!data.student_code) {
+                        throw new Error("Ongeldig bestandsformaat. Kan student_code niet vinden.");
+                    }
+
+                    // Re-apply student code values to workspace
+                    userProgress = data.student_code;
+                    localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+
+                    // Re-apply test histories to localstorage
+                    if (data.test_results) {
+                        Object.keys(data.test_results).forEach((taskId) => {
+                            const taskMeta = data.test_results[taskId];
+                            if (taskMeta && taskMeta.results) {
+                                localStorage.setItem(`edu_py_task_passed_${taskId}`, JSON.stringify(taskMeta.results));
+                            }
+                        });
+                    }
+
+                    // Refresh select task and UI selectors
+                    renderTaskSelector();
+                    showToast("Werk succesvol geïmporteerd!");
+                } catch (err) {
+                    alert("Fout bij het importeren van het bestand: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+            // Reset files picker value
+            event.target.value = "";
+        }
+
+        // Simple floating notification feedback
+        function showToast(message) {
+            const toast = document.createElement("div");
+            toast.className = "fixed bottom-5 right-5 bg-slate-900 border border-slate-700 text-slate-100 px-4 py-3 rounded-xl shadow-2xl z-[999999] flex items-center gap-2 max-w-sm text-sm animate-bounce";
+            toast.innerHTML = `<i class="fa-solid fa-circle-info text-emerald-400"></i> <span>${message}</span>`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove("animate-bounce");
+                toast.classList.add("opacity-0", "transition", "duration-500");
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        function toggleTurtleFullscreen() {
+            const panel = document.getElementById("panel-turtle");
+            if (panel) {
+                panel.classList.toggle("turtle-fullscreen-active");
+            }
+        }
+
+        // Turtle Zoom and Pan interactive handlers
+        let zoom = 1.0;
+        let panX = 0;
+        let panY = 0;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
+
+        function updateTurtleTransform() {
+            const elements = document.querySelectorAll("#turtle-canvas > *");
+            elements.forEach(el => {
+                el.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
+                el.style.transformOrigin = "center center";
+            });
+        }
+
+        function adjustZoom(amount) {
+            zoom = Math.max(0.2, Math.min(5.0, zoom + amount));
+            updateTurtleTransform();
+        }
+
+        function resetTurtleView() {
+            zoom = 1.0;
+            panX = 0;
+            panY = 0;
+            updateTurtleTransform();
+        }
+
+        function initInteractiveTurtle() {
+            const canvasContainer = document.getElementById("turtle-canvas");
+            if (!canvasContainer) return;
+
+            canvasContainer.addEventListener("mousedown", (e) => {
+                if (e.button !== 0) return; // Only left click
+                isDragging = true;
+                startX = e.clientX - panX;
+                startY = e.clientY - panY;
+                canvasContainer.style.cursor = "grabbing";
+            });
+
+            window.addEventListener("mousemove", (e) => {
+                if (!isDragging) return;
+                panX = e.clientX - startX;
+                panY = e.clientY - startY;
+                updateTurtleTransform();
+            });
+
+            window.addEventListener("mouseup", () => {
+                if (isDragging) {
+                    isDragging = false;
+                    canvasContainer.style.cursor = "grab";
+                }
+            });
+
+            canvasContainer.addEventListener("wheel", (e) => {
+                e.preventDefault();
+                adjustZoom(e.deltaY < 0 ? 0.08 : -0.08);
+            }, { passive: false });
+
+            // Mobile Touch Support
+            canvasContainer.addEventListener("touchstart", (e) => {
+                if (e.touches.length === 1) {
+                    isDragging = true;
+                    startX = e.touches[0].clientX - panX;
+                    startY = e.touches[0].clientY - panY;
+                }
+            });
+
+            canvasContainer.addEventListener("touchmove", (e) => {
+                if (!isDragging || e.touches.length !== 1) return;
+                panX = e.touches[0].clientX - startX;
+                panY = e.touches[0].clientY - startY;
+                updateTurtleTransform();
+            });
+
+            canvasContainer.addEventListener("touchend", () => {
+                isDragging = false;
+            });
+        }
+
+        window.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") {
+                const panel = document.getElementById("panel-turtle");
+                if (panel && panel.classList.contains("turtle-fullscreen-active")) {
+                    toggleTurtleFullscreen();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
