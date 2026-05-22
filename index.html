@@ -308,7 +308,7 @@
                         </div>
 
                         <!-- Panel B: Turtle Graphics Canvas (Hidden by default, shown when import turtle) -->
-                        <div id="panel-turtle" class="hidden flex-1 flex flex-col items-center justify-center transition-all duration-300">
+                        <div id="panel-turtle" class="hidden flex-1 flex flex-col items-center justify-start transition-all duration-300">
                             
                             <!-- Normal header -->
                             <div class="w-full flex items-center justify-between mb-2 turtle-normal-only">
@@ -359,11 +359,12 @@
                                      <!-- Skulpt automatically injects HTML5 Canvas here -->
                                  </div>
                                  
-                                 <!-- Floating Controls (Zoom in, Zoom out, Reset) -->
+                                 <!-- Floating Controls (Zoom in, Zoom out, Reset, Download) -->
                                  <div class="absolute bottom-3 right-3 flex flex-col gap-1.5 z-10 bg-slate-900/90 border border-slate-700/50 p-1.5 rounded-xl backdrop-blur-md shadow-lg opacity-40 group-hover:opacity-100 transition-opacity duration-200">
                                      <button onclick="adjustZoom(0.1)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Zoom in"><i class="fa-solid fa-plus"></i></button>
                                      <button onclick="adjustZoom(-0.1)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Zoom uit"><i class="fa-solid fa-minus"></i></button>
                                      <button onclick="resetTurtleView()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Herstel weergave"><i class="fa-solid fa-arrows-to-dot"></i></button>
+                                     <button onclick="downloadCanvasImage()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Download tekening (PNG)"><i class="fa-solid fa-camera"></i></button>
                                  </div>
                              </div>
                             
@@ -648,9 +649,20 @@
                 editor.setValue(codeToLoad);
 
                 // Auto detect if code has turtle and show canvas tab, otherwise default to console
-                if (codeToLoad.includes("import turtle")) {
+                const isTurtle = codeToLoad.includes("import turtle");
+                const btnConsole = document.getElementById("subtab-btn-console");
+                const btnTurtle = document.getElementById("subtab-btn-turtle");
+                const btnTests = document.getElementById("subtab-btn-tests");
+
+                if (isTurtle) {
+                    btnTurtle.classList.remove("hidden");
+                    btnConsole.classList.add("hidden");
+                    btnTests.classList.add("hidden");
                     switchOutputSubTab('turtle');
                 } else {
+                    btnTurtle.classList.add("hidden");
+                    btnConsole.classList.remove("hidden");
+                    btnTests.classList.remove("hidden");
                     switchOutputSubTab('console');
                 }
 
@@ -737,12 +749,16 @@
         }
 
         function runPythonCode() {
-            // Ensure console is active when user manually executes
-            switchOutputSubTab('console');
-            clearConsole();
-
             const code = editor.getValue();
+            const isTurtle = code.includes("import turtle");
             isRunningTest = false;
+
+            if (isTurtle) {
+                switchOutputSubTab('turtle');
+            } else {
+                switchOutputSubTab('console');
+                clearConsole();
+            }
 
             // Reset pan/zoom view state
             resetTurtleView();
@@ -752,10 +768,8 @@
             canvasDiv.innerHTML = "";
 
             // Display loading indicator if Turtle library is called
-            if (code.includes("import turtle")) {
+            if (isTurtle) {
                 document.getElementById("turtle-indicator").classList.remove("hidden");
-                // Auto switch to canvas tab for visual turtle assignments
-                switchOutputSubTab('turtle');
             } else {
                 document.getElementById("turtle-indicator").classList.add("hidden");
             }
@@ -1189,6 +1203,40 @@
             panX = 0;
             panY = 0;
             updateTurtleTransform();
+        }
+
+        function downloadCanvasImage() {
+            const canvases = document.querySelectorAll("#turtle-canvas canvas");
+            if (canvases.length === 0) {
+                showToast("Geen tekening gevonden om te downloaden.");
+                return;
+            }
+
+            // Create a temporary canvas with matching dimensions
+            const tempCanvas = document.createElement("canvas");
+            const width = canvases[0].width || 400;
+            const height = canvases[0].height || 400;
+            tempCanvas.width = width;
+            tempCanvas.height = height;
+            const tempCtx = tempCanvas.getContext("2d");
+
+            // Fill background with solid white
+            tempCtx.fillStyle = "#ffffff";
+            tempCtx.fillRect(0, 0, width, height);
+
+            // Draw all Skulpt canvas layers in order onto the temp canvas
+            canvases.forEach(canvas => {
+                tempCtx.drawImage(canvas, 0, 0);
+            });
+
+            // Export and download the combined image
+            const link = document.createElement("a");
+            link.download = `${currentTaskId || 'turtle'}_voorbeeld.png`;
+            link.href = tempCanvas.toDataURL("image/png");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("📸 Afbeelding gedownload!");
         }
 
         function initInteractiveTurtle() {
