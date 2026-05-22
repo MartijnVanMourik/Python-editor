@@ -543,7 +543,13 @@
 
             if (configUrl) {
                 try {
-                    const response = await fetch(configUrl);
+                    let targetUrl = configUrl;
+                    if (!configUrl.startsWith("http://") && !configUrl.startsWith("https://")) {
+                        if (!configUrl.endsWith(".json") && !configUrl.includes("/")) {
+                            targetUrl = `opdrachten/${configUrl}.json`;
+                        }
+                    }
+                    const response = await fetch(targetUrl);
                     if (!response.ok) throw new Error("Netwerk response was niet oké");
                     taskConfig = await response.json();
                 } catch (error) {
