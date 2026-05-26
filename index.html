@@ -510,89 +510,15 @@
         let activeOutputSubTab = "console"; // Active subtab in the output panel
         let isEditMode = false; // Flag for teacher editing mode
         let courseNamespace = "default"; // Namespace identifier based on loaded course config URL
-        let progressStorageKey = "edu_py_editor_progress_default"; // Dynamic localStorage key for progress isolation
 
-        // Intercept localStorage to automatically namespace progress and test result keys per course config
-        (function() {
-            const originalGetItem = localStorage.getItem.bind(localStorage);
-            const originalSetItem = localStorage.setItem.bind(localStorage);
-            const originalRemoveItem = localStorage.removeItem.bind(localStorage);
+        // Helper to namespace and get progress and passed test storage keys
+        function getProgressStorageKey() {
+            return `edu_py_editor_progress_${courseNamespace}`;
+        }
 
-            localStorage.getItem = function (key) {
-                if (key === "edu_py_editor_progress") {
-                    let value = originalGetItem(progressStorageKey);
-                    // Backwards compatibility migration
-                    if (!value) {
-                        const oldValue = originalGetItem("edu_py_editor_progress");
-                        if (oldValue) {
-                            try {
-                                const parsed = JSON.parse(oldValue);
-                                const migrated = {};
-                                let hasMigration = false;
-                                // If taskConfig is already loaded and has tabs, we can selectively migrate
-                                if (taskConfig && taskConfig.tabs) {
-                                    taskConfig.tabs.forEach(t => {
-                                        if (parsed[t.id]) {
-                                            migrated[t.id] = parsed[t.id];
-                                            hasMigration = true;
-                                        }
-                                    });
-                                } else {
-                                    // Fallback to migrating everything
-                                    Object.assign(migrated, parsed);
-                                    hasMigration = true;
-                                }
-                                if (hasMigration) {
-                                    value = JSON.stringify(migrated);
-                                    originalSetItem(progressStorageKey, value);
-                                }
-                            } catch (e) {
-                                console.error("Migration error: ", e);
-                            }
-                        }
-                    }
-                    return value;
-                }
-                if (key.startsWith("edu_py_task_passed_")) {
-                    const taskId = key.replace("edu_py_task_passed_", "");
-                    const newKey = `edu_py_task_passed_${courseNamespace}_${taskId}`;
-                    let value = originalGetItem(newKey);
-                    if (!value) {
-                        const oldValue = originalGetItem(key);
-                        if (oldValue) {
-                            originalSetItem(newKey, oldValue);
-                            value = oldValue;
-                        }
-                    }
-                    return value;
-                }
-                return originalGetItem(key);
-            };
-
-            localStorage.setItem = function (key, value) {
-                if (key === "edu_py_editor_progress") {
-                    return originalSetItem(progressStorageKey, value);
-                }
-                if (key.startsWith("edu_py_task_passed_")) {
-                    const taskId = key.replace("edu_py_task_passed_", "");
-                    const newKey = `edu_py_task_passed_${courseNamespace}_${taskId}`;
-                    return originalSetItem(newKey, value);
-                }
-                return originalSetItem(key, value);
-            };
-
-            localStorage.removeItem = function (key) {
-                if (key === "edu_py_editor_progress") {
-                    return originalRemoveItem(progressStorageKey);
-                }
-                if (key.startsWith("edu_py_task_passed_")) {
-                    const taskId = key.replace("edu_py_task_passed_", "");
-                    const newKey = `edu_py_task_passed_${courseNamespace}_${taskId}`;
-                    return originalRemoveItem(newKey);
-                }
-                return originalRemoveItem(key);
-            };
-        })();
+        function getTaskPassedKey(taskId) {
+            return `edu_py_task_passed_${courseNamespace}_${taskId}`;
+        }
 
         // Fallback default tasks configuration if none loaded via url querystring
         const DEFAULT_CONFIG = {
@@ -674,7 +600,7 @@
                     if (workspace) {
                         workspace.files[workspace.activeFile] = codeValue;
                         userProgress[currentTaskId] = workspace;
-                        localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+                        localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
                         showSavingState();
 
                         // Reactive environment toggler for turtle imports inside main.py
@@ -796,11 +722,48 @@
                 taskConfig = DEFAULT_CONFIG;
             }
 
+            // Initialize task titles if they don't exist
+            if (taskConfig && taskConfig.tabs) {
+                taskConfig.tabs.forEach((task, idx) => {
+                    if (!task.title) {
+                        if (task.filename && task.filename !== "main.py") {
+                            task.title = task.filename.replace(/\.py$/, "");
+                        } else {
+                            task.title = `Opdracht ${idx + 1}`;
+                        }
+                    }
+                });
+            }
+
             // Apply title
             document.getElementById("config-title").textContent = taskConfig.title || "Python Leeromgeving";
 
-            // Restore saved workspace from localStorage if available
-            const saved = localStorage.getItem("edu_py_editor_progress");
+            // Restore saved workspace from namespaced localStorage, with backwards-compatible migration fallback
+            const namespacedKey = getProgressStorageKey();
+            let saved = localStorage.getItem(namespacedKey);
+            if (!saved) {
+                const oldSaved = localStorage.getItem("edu_py_editor_progress");
+                if (oldSaved) {
+                    try {
+                        const parsed = JSON.parse(oldSaved);
+                        const migrated = {};
+                        let hasMigration = false;
+                        taskConfig.tabs.forEach(t => {
+                            if (parsed[t.id]) {
+                                migrated[t.id] = parsed[t.id];
+                                hasMigration = true;
+                            }
+                        });
+                        if (hasMigration) {
+                            saved = JSON.stringify(migrated);
+                            localStorage.setItem(namespacedKey, saved);
+                        }
+                    } catch (e) {
+                        console.error("Migration error: ", e);
+                    }
+                }
+            }
+
             if (saved) {
                 try {
                     userProgress = JSON.parse(saved);
@@ -831,15 +794,15 @@
                     }`;
 
                 btn.innerHTML = `
-                    <span class="font-semibold text-sm truncate select-none mr-2">${task.filename}</span>
+                    <span class="font-semibold text-sm truncate select-none mr-2">${task.title}</span>
                     <span id="badge-${task.id}" class="shrink-0">
                         ${isPassed ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>' : '<i class="fa-regular fa-circle text-slate-500"></i>'}
                     </span>
                 `;
 
                 if (isEditMode) {
-                    btn.ondblclick = () => renameTaskFilename(task.id);
-                    btn.title = "Dubbelklik om bestandsnaam aan te passen";
+                    btn.ondblclick = () => renameTaskTitle(task.id);
+                    btn.title = "Dubbelklik om naam van de opdracht aan te passen";
                 }
 
                 wrapper.appendChild(btn);
@@ -1075,7 +1038,7 @@
                 if (task) {
                     // Reset the user's progress for this task entirely to trigger getTaskWorkspace re-initialization
                     delete userProgress[currentTaskId];
-                    localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+                    localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
                     
                     const workspace = getTaskWorkspace(currentTaskId);
                     editor.setValue(workspace.files[workspace.activeFile] || "");
@@ -1137,7 +1100,7 @@
             if (workspace) {
                 workspace.files[workspace.activeFile] = editor.getValue();
                 userProgress[currentTaskId] = workspace;
-                localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+                localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
             }
 
             const mainCode = workspace ? (workspace.files["main.py"] || "") : editor.getValue();
@@ -1499,7 +1462,7 @@
             taskConfig.tabs.forEach((task) => {
                 exportData.test_results[task.id] = {
                     passed: checkIfPassed(task.id),
-                    results: JSON.parse(localStorage.getItem(`edu_py_task_passed_${task.id}`) || "[]")
+                    results: JSON.parse(localStorage.getItem(getTaskPassedKey(task.id)) || "[]")
                 };
             });
 
@@ -1539,14 +1502,14 @@
 
                     // Re-apply student code values to workspace
                     userProgress = data.student_code;
-                    localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+                    localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
 
                     // Re-apply test histories to localstorage
                     if (data.test_results) {
                         Object.keys(data.test_results).forEach((taskId) => {
                             const taskMeta = data.test_results[taskId];
                             if (taskMeta && taskMeta.results) {
-                                localStorage.setItem(`edu_py_task_passed_${taskId}`, JSON.stringify(taskMeta.results));
+                                localStorage.setItem(getTaskPassedKey(taskId), JSON.stringify(taskMeta.results));
                             }
                         });
                     }
@@ -1838,7 +1801,7 @@
 
             // 3. Update localStorage
             userProgress[currentTaskId] = workspace;
-            localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+            localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
 
             // 4. Update CodeMirror value
             editor.setValue(workspace.files[filename] || "");
@@ -1890,7 +1853,7 @@
 
             // Save state
             userProgress[currentTaskId] = workspace;
-            localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+            localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
 
             // Update editor and re-render
             editor.setValue("");
@@ -1946,7 +1909,7 @@
 
             // Save state
             userProgress[currentTaskId] = workspace;
-            localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+            localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
 
             // Re-render
             renderWorkspaceTabs();
@@ -1970,7 +1933,7 @@
 
                 // Save state
                 userProgress[currentTaskId] = workspace;
-                localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+                localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
 
                 // Load active code and re-render
                 editor.setValue(workspace.files[workspace.activeFile] || "");
@@ -2358,16 +2321,12 @@
 
         // Assignment Configuration Modifier Helpers
         function createNewTaskInConfig() {
-            let name = prompt("Voer de bestandsnaam in voor de nieuwe opdracht (bijv. oefening.py):");
+            let name = prompt("Voer de naam in voor de nieuwe opdracht (bijv. Teken een Vierkant):");
             if (name === null) return;
             name = name.trim();
             if (!name) return;
 
-            if (!name.endsWith(".py")) {
-                name += ".py";
-            }
-
-            const id = name.replace(/\.py$/, "").toLowerCase().replace(/[^a-z0-9]/g, "_");
+            const id = name.toLowerCase().replace(/[^a-z0-9]/g, "_") + "_" + Date.now();
             
             // Verify no duplicates
             if (taskConfig.tabs.find(t => t.id === id)) {
@@ -2377,8 +2336,9 @@
 
             const newTask = {
                 id: id,
-                filename: name,
-                instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>Nieuwe Opdracht</h3><p class='mb-2'>Typ hier de instructies voor deze opdracht...</p>`,
+                title: name,
+                filename: "main.py",
+                instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>${name}</h3><p class='mb-2'>Typ hier de instructies voor deze opdracht...</p>`,
                 files: [
                     {
                         filename: "main.py",
@@ -2412,13 +2372,13 @@
             const task = taskConfig.tabs.find(t => t.id === taskId);
             if (!task) return;
 
-            if (confirm(`Weet je zeker dat je de opdracht "${task.filename}" volledig wilt verwijderen uit de cursus?`)) {
+            if (confirm(`Weet je zeker dat je de opdracht "${task.title || task.filename}" volledig wilt verwijderen uit de cursus?`)) {
                 // Remove from list
                 taskConfig.tabs = taskConfig.tabs.filter(t => t.id !== taskId);
                 
                 // Clear progress inside localStorage if needed
                 delete userProgress[taskId];
-                localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+                localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
 
                 // Set new active task
                 if (currentTaskId === taskId) {
@@ -2436,22 +2396,18 @@
             }
         }
 
-        function renameTaskFilename(taskId) {
+        function renameTaskTitle(taskId) {
             const task = taskConfig.tabs.find(t => t.id === taskId);
             if (!task) return;
 
-            let newName = prompt(`Pas de bestandsnaam van de opdracht aan:`, task.filename);
-            if (newName === null) return;
-            newName = newName.trim();
-            if (!newName) return;
+            let newTitle = prompt(`Pas de naam van de opdracht aan:`, task.title || task.filename.replace(/\.py$/, ""));
+            if (newTitle === null) return;
+            newTitle = newTitle.trim();
+            if (!newTitle) return;
 
-            if (!newName.endsWith(".py")) {
-                newName += ".py";
-            }
-
-            task.filename = newName;
+            task.title = newTitle;
             renderTaskSelector();
-            showToast(`✏️ Bestandsnaam hernoemd naar ${newName}`);
+            showToast(`✏️ Opdrachtnaam aangepast naar "${newTitle}"`);
         }
 
         // Test Cases UI Form Builder for Teachers
@@ -2600,8 +2556,11 @@
             }
 
             // 3. Fallback to probed image file on disk
-            const filename = task.filename || "opdracht.py";
-            const filenameWithoutPy = filename.replace(/\.py$/, "");
+            // Prioritize task ID to prevent main.png collisions on multi-file workspace entrypoints
+            let filenameWithoutPy = task.id || "opdracht";
+            if (task.filename && task.filename !== "main.py") {
+                filenameWithoutPy = task.filename.replace(/\.py$/, "");
+            }
             const targetSrc = `opdrachten/${filenameWithoutPy}.png`;
 
             // Probe image exists dynamically
@@ -2636,7 +2595,7 @@
             if (workspace) {
                 workspace.files[workspace.activeFile] = editor.getValue();
                 userProgress[currentTaskId] = workspace;
-                localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+                localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
             }
 
             const finalConfig = JSON.parse(JSON.stringify(taskConfig));
@@ -2702,7 +2661,7 @@
                 // Reset student session parameters to prevent state bleed
                 currentTaskId = "";
                 userProgress = {};
-                localStorage.removeItem("edu_py_editor_progress");
+                localStorage.removeItem(getProgressStorageKey());
 
                 // Apply new default title to title bar
                 document.getElementById("config-title").textContent = taskConfig.title;
