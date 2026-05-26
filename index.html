@@ -124,6 +124,15 @@
                 transform: scale(1);
             }
         }
+
+        /* Hide scrollbars for clean look in tabs */
+        .scrollbar-none::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-none {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
     </style>
 </head>
 
@@ -217,10 +226,10 @@
                     class="lg:col-span-7 flex flex-col border-b lg:border-b-0 lg:border-r border-slate-800 h-full overflow-hidden">
                     <!-- Tab-bar for active files within the task if multiple files are used (or just current file indicator) -->
                     <div
-                        class="bg-slate-900/80 px-4 py-2 flex items-center justify-between border-b border-slate-800 text-xs text-slate-400 font-mono">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-file-code text-yellow-500"></i>
-                            <span id="active-filename" class="font-bold text-slate-200">main.py</span>
+                        class="bg-slate-900/80 px-4 py-1.5 flex items-center justify-between border-b border-slate-800 text-xs text-slate-400 font-mono min-h-[44px]">
+                        <!-- Left: Tab Container -->
+                        <div id="editor-tabs-container" class="flex items-center gap-1.5 overflow-x-auto max-w-[70%] py-0.5 scrollbar-none">
+                            <!-- Tabs dynamically rendered here -->
                         </div>
                         <div class="flex items-center gap-3">
                             <button onclick="resetCurrentCode()"
@@ -506,9 +515,13 @@
             // Auto-save changes in background when user types
             editor.on("change", () => {
                 if (currentTaskId) {
-                    userProgress[currentTaskId] = editor.getValue();
-                    localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
-                    showSavingState();
+                    const workspace = getTaskWorkspace(currentTaskId);
+                    if (workspace) {
+                        workspace.files[workspace.activeFile] = editor.getValue();
+                        userProgress[currentTaskId] = workspace;
+                        localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+                        showSavingState();
+                    }
                 }
             });
 
@@ -639,17 +652,15 @@
             if (task) {
                 // Set instruction panel content
                 document.getElementById("assignment-instruction").innerHTML = task.instruction;
-                document.getElementById("active-filename").textContent = task.filename;
 
                 // Load existing user code or default initial template
-                let codeToLoad = task.initialCode;
-                if (userProgress[taskId] !== undefined) {
-                    codeToLoad = userProgress[taskId];
-                }
-                editor.setValue(codeToLoad);
+                const workspace = getTaskWorkspace(taskId);
+                const activeCode = workspace.files[workspace.activeFile] || "";
+                editor.setValue(activeCode);
 
-                // Auto detect if code has turtle and show canvas tab, otherwise default to console
-                const isTurtle = codeToLoad.includes("import turtle");
+                // Auto detect if main file code has turtle and show canvas tab, otherwise default to console
+                const mainCode = workspace.files["main.py"] || "";
+                const isTurtle = mainCode.includes("import turtle");
                 const btnConsole = document.getElementById("subtab-btn-console");
                 const btnTurtle = document.getElementById("subtab-btn-turtle");
                 const btnTests = document.getElementById("subtab-btn-tests");
@@ -665,6 +676,9 @@
                     btnTests.classList.remove("hidden");
                     switchOutputSubTab('console');
                 }
+
+                // Render tabs bar
+                renderWorkspaceTabs();
 
                 // Render blank test outcomes
                 renderEmptyTests(task);
@@ -694,9 +708,13 @@
             document.getElementById("confirm-reset").onclick = function () {
                 const task = taskConfig.tabs.find(t => t.id === currentTaskId);
                 if (task) {
-                    editor.setValue(task.initialCode);
-                    userProgress[currentTaskId] = task.initialCode;
+                    // Reset the user's progress for this task entirely to trigger getTaskWorkspace re-initialization
+                    delete userProgress[currentTaskId];
                     localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+                    
+                    const workspace = getTaskWorkspace(currentTaskId);
+                    editor.setValue(workspace.files[workspace.activeFile] || "");
+                    renderWorkspaceTabs();
                 }
                 confirmation.remove();
             };
@@ -749,8 +767,16 @@
         }
 
         function runPythonCode() {
-            const code = editor.getValue();
-            const isTurtle = code.includes("import turtle");
+            // Save current active tab code first
+            const workspace = getTaskWorkspace(currentTaskId);
+            if (workspace) {
+                workspace.files[workspace.activeFile] = editor.getValue();
+                userProgress[currentTaskId] = workspace;
+                localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+            }
+
+            const mainCode = workspace ? (workspace.files["main.py"] || "") : editor.getValue();
+            const isTurtle = mainCode.includes("import turtle");
             isRunningTest = false;
 
             if (isTurtle) {
@@ -767,17 +793,16 @@
             const canvasDiv = document.getElementById("turtle-canvas");
             canvasDiv.innerHTML = "";
 
-            // Display loading indicator if Turtle library is called
-            if (isTurtle) {
-                document.getElementById("turtle-indicator").classList.remove("hidden");
-            } else {
-                document.getElementById("turtle-indicator").classList.add("hidden");
-            }
-
             // Configure Skulpt Engine
             Sk.configure({
                 output: appendToConsole,
                 read: function (file) {
+                    // Check local virtual workspace files first
+                    const cleanFilename = file.replace(/^\.\//, "");
+                    if (workspace && workspace.files[cleanFilename] !== undefined) {
+                        return workspace.files[cleanFilename];
+                    }
+                    // Fallback to builtins
                     if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][file] === undefined) {
                         throw "Bestand niet gevonden: '" + file + "'";
                     }
@@ -795,7 +820,7 @@
             (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = "turtle-canvas";
 
             const myPromise = Sk.misceval.asyncToPromise(function () {
-                return Sk.importMainWithBody("<stdin>", false, code, true);
+                return Sk.importMainWithBody("<stdin>", false, mainCode, true);
             });
 
             myPromise.then(
@@ -845,6 +870,9 @@
 
         function runSingleTestCase(initialCode, studentCode, testCase) {
             return new Promise((resolve) => {
+                const workspace = getTaskWorkspace(currentTaskId);
+                const mainCode = workspace ? (workspace.files["main.py"] || "") : studentCode;
+
                 // Keep track of inputs we provide for the mocking function
                 testInputsQueue = [...testCase.inputs];
                 let consoleOutputs = [];
@@ -860,6 +888,10 @@
                 Sk.configure({
                     output: testOutputLogger,
                     read: function (file) {
+                        const cleanFilename = file.replace(/^\.\//, "");
+                        if (workspace && workspace.files[cleanFilename] !== undefined) {
+                            return workspace.files[cleanFilename];
+                        }
                         if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][file] === undefined) {
                             throw "Bestand niet gevonden: '" + file + "'";
                         }
@@ -883,7 +915,7 @@
 
                 // Run Skulpt asynchronised to promise
                 const executionPromise = Sk.misceval.asyncToPromise(function () {
-                    return Sk.importMainWithBody("<stdin>", false, studentCode, true);
+                    return Sk.importMainWithBody("<stdin>", false, mainCode, true);
                 });
 
                 executionPromise.then(
@@ -1062,16 +1094,17 @@
         }
 
         function exportSinglePy() {
-            const task = taskConfig.tabs.find(t => t.id === currentTaskId);
-            if (!task) return;
+            const workspace = getTaskWorkspace(currentTaskId);
+            if (!workspace) return;
 
+            const filename = workspace.activeFile;
             const code = editor.getValue();
             const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
             const url = URL.createObjectURL(blob);
 
             const link = document.createElement("a");
             link.href = url;
-            link.download = task.filename || "code.py";
+            link.download = filename || "code.py";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -1146,6 +1179,9 @@
 
                     // Refresh select task and UI selectors
                     renderTaskSelector();
+                    if (currentTaskId) {
+                        selectTask(currentTaskId);
+                    }
                     showToast("Werk succesvol geïmporteerd!");
                 } catch (err) {
                     alert("Fout bij het importeren van het bestand: " + err.message);
@@ -1289,6 +1325,273 @@
             canvasContainer.addEventListener("touchend", () => {
                 isDragging = false;
             });
+        }
+
+        // Trinket-Style Dynamic Multi-File Workspace State and UI Helpers
+        function getTaskWorkspace(taskId) {
+            const task = taskConfig.tabs.find(t => t.id === taskId);
+            if (!task) return null;
+
+            // 1. Check if we already have a saved workspace in userProgress
+            if (userProgress[taskId] && typeof userProgress[taskId] === "object" && userProgress[taskId].files) {
+                return userProgress[taskId];
+            }
+
+            // 2. Synthesize/initialize workspace
+            const workspace = {
+                activeFile: "main.py",
+                files: {}
+            };
+
+            // If the task has a pre-defined files array (new JSON format)
+            if (task.files && Array.isArray(task.files) && task.files.length > 0) {
+                task.files.forEach(f => {
+                    workspace.files[f.filename] = f.initialCode || "";
+                });
+                // Enforce main.py exists as the entrypoint
+                if (workspace.files["main.py"] === undefined) {
+                    const mainFile = task.files.find(f => f.isMain) || task.files[0];
+                    workspace.files["main.py"] = mainFile.initialCode || "";
+                    if (mainFile.filename !== "main.py") {
+                        workspace.files[mainFile.filename] = mainFile.initialCode || "";
+                    }
+                }
+                workspace.activeFile = "main.py";
+            } else {
+                // Fallback/Legacy single-file tasks
+                const filename = "main.py";
+                let initialCode = task.initialCode || "";
+                // Capture any existing plain string progress from previous version
+                if (userProgress[taskId] && typeof userProgress[taskId] === "string") {
+                    initialCode = userProgress[taskId];
+                }
+                workspace.files[filename] = initialCode;
+                workspace.activeFile = filename;
+            }
+
+            return workspace;
+        }
+
+        function renderWorkspaceTabs() {
+            const container = document.getElementById("editor-tabs-container");
+            if (!container) return;
+
+            const workspace = getTaskWorkspace(currentTaskId);
+            if (!workspace) return;
+
+            container.innerHTML = "";
+
+            // Get filenames array
+            const filenames = Object.keys(workspace.files);
+            
+            // Render each tab
+            filenames.forEach(filename => {
+                const isActive = workspace.activeFile === filename;
+                const isMain = filename === "main.py";
+
+                const tab = document.createElement("div");
+                tab.className = isActive 
+                    ? "bg-slate-800 text-blue-400 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-bold shadow-md cursor-pointer shrink-0 transition"
+                    : "bg-slate-900/60 hover:bg-slate-800/80 text-slate-400 hover:text-slate-200 border border-transparent px-3 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer shrink-0 transition";
+
+                // Click to activate tab
+                tab.onclick = (e) => {
+                    if (e.target.closest('.delete-tab-btn')) return;
+                    switchTab(filename);
+                };
+
+                // Double click to rename (only for non-main files)
+                if (!isMain) {
+                    tab.ondblclick = () => renameFile(filename);
+                    tab.title = "Dubbelklik om te hernoemen";
+                }
+
+                // File icon
+                const icon = document.createElement("i");
+                icon.className = isMain ? "fa-solid fa-file-code text-yellow-500" : "fa-solid fa-file text-slate-400";
+                tab.appendChild(icon);
+
+                // Tab label
+                const label = document.createElement("span");
+                label.textContent = filename;
+                label.className = "select-none";
+                tab.appendChild(label);
+
+                // Delete button for custom files
+                if (!isMain) {
+                    const deleteBtn = document.createElement("i");
+                    deleteBtn.className = "fa-solid fa-xmark text-[10px] text-slate-500 hover:text-red-400 hover:bg-slate-700/50 rounded p-0.5 ml-1 transition delete-tab-btn";
+                    deleteBtn.title = "Verwijder bestand";
+                    deleteBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        deleteFile(filename);
+                    };
+                    tab.appendChild(deleteBtn);
+                }
+
+                container.appendChild(tab);
+            });
+
+            // Render a permanent '+' Add File Button
+            const addBtn = document.createElement("button");
+            addBtn.className = "bg-slate-900/40 hover:bg-slate-800/80 text-slate-500 hover:text-slate-300 border border-dashed border-slate-800 hover:border-slate-700 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition active:scale-95";
+            addBtn.title = "Nieuw bestand toevoegen";
+            addBtn.onclick = addNewFile;
+            addBtn.innerHTML = '<i class="fa-solid fa-plus text-xs"></i>';
+            container.appendChild(addBtn);
+        }
+
+        function switchTab(filename) {
+            const workspace = getTaskWorkspace(currentTaskId);
+            if (!workspace) return;
+
+            // 1. Save current code in active tab before switching
+            workspace.files[workspace.activeFile] = editor.getValue();
+
+            // 2. Set new active file
+            workspace.activeFile = filename;
+
+            // 3. Update localStorage
+            userProgress[currentTaskId] = workspace;
+            localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+
+            // 4. Update CodeMirror value
+            editor.setValue(workspace.files[filename] || "");
+
+            // 5. Re-render tabs
+            renderWorkspaceTabs();
+        }
+
+        function addNewFile() {
+            const workspace = getTaskWorkspace(currentTaskId);
+            if (!workspace) return;
+
+            let name = prompt("Voer de naam van het nieuwe bestand in (bijv. dier.py):");
+            if (name === null) return; // user cancelled
+
+            name = name.trim();
+            if (!name) {
+                alert("Bestandsnaam mag niet leeg zijn.");
+                return;
+            }
+
+            // Force .py extension if missing
+            if (!name.endsWith(".py")) {
+                name += ".py";
+            }
+
+            // Sanitize name
+            if (!/^[a-zA-Z0-9_\-\.]+$/.test(name)) {
+                alert("Ongeldige bestandsnaam. Gebruik alleen letters, cijfers, punten, underscores of streepjes.");
+                return;
+            }
+
+            if (name === "main.py") {
+                alert("main.py bestaat al en is het startbestand.");
+                return;
+            }
+
+            if (workspace.files[name] !== undefined) {
+                alert(`Bestand ${name} bestaat al.`);
+                return;
+            }
+
+            // Save current active tab code first
+            workspace.files[workspace.activeFile] = editor.getValue();
+
+            // Create new file
+            workspace.files[name] = "";
+            workspace.activeFile = name;
+
+            // Save state
+            userProgress[currentTaskId] = workspace;
+            localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+
+            // Update editor and re-render
+            editor.setValue("");
+            renderWorkspaceTabs();
+            showToast(`📝 ${name} aangemaakt!`);
+        }
+
+        function renameFile(filename) {
+            if (filename === "main.py") return; // cannot rename main.py
+
+            const workspace = getTaskWorkspace(currentTaskId);
+            if (!workspace) return;
+
+            let newName = prompt(`Hernoem ${filename} naar:`, filename);
+            if (newName === null) return; // user cancelled
+
+            newName = newName.trim();
+            if (!newName) return;
+
+            if (!newName.endsWith(".py")) {
+                newName += ".py";
+            }
+
+            if (newName === filename) return; // same name
+
+            if (!/^[a-zA-Z0-9_\-\.]+$/.test(newName)) {
+                alert("Ongeldige bestandsnaam. Gebruik alleen letters, cijfers, punten, underscores of streepjes.");
+                return;
+            }
+
+            if (newName === "main.py") {
+                alert("main.py is een gereserveerde naam.");
+                return;
+            }
+
+            if (workspace.files[newName] !== undefined) {
+                alert(`Bestand ${newName} bestaat al.`);
+                return;
+            }
+
+            // Save current active code
+            workspace.files[workspace.activeFile] = editor.getValue();
+
+            // Copy content
+            const content = workspace.files[filename];
+            delete workspace.files[filename];
+            workspace.files[newName] = content;
+
+            // Update active pointer if active was renamed
+            if (workspace.activeFile === filename) {
+                workspace.activeFile = newName;
+            }
+
+            // Save state
+            userProgress[currentTaskId] = workspace;
+            localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+
+            // Re-render
+            renderWorkspaceTabs();
+            showToast(`✏️ ${filename} hernoemd naar ${newName}`);
+        }
+
+        function deleteFile(filename) {
+            if (filename === "main.py") return; // cannot delete main.py
+
+            const workspace = getTaskWorkspace(currentTaskId);
+            if (!workspace) return;
+
+            if (confirm(`Weet je zeker dat je ${filename} wilt verwijderen?`)) {
+                // Delete file
+                delete workspace.files[filename];
+
+                // Fallback active pointer to main.py if active file was deleted
+                if (workspace.activeFile === filename) {
+                    workspace.activeFile = "main.py";
+                }
+
+                // Save state
+                userProgress[currentTaskId] = workspace;
+                localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+
+                // Load active code and re-render
+                editor.setValue(workspace.files[workspace.activeFile] || "");
+                renderWorkspaceTabs();
+                showToast(`🗑️ ${filename} verwijderd`);
+            }
         }
 
         window.addEventListener("keydown", function (e) {
