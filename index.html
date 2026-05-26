@@ -177,6 +177,32 @@
         </div>
     </header>
 
+    <!-- Teacher Mode Pinned Banner -->
+    <div id="teacher-banner" class="hidden bg-purple-950 border-b border-purple-800 px-4 py-2 flex flex-col md:flex-row items-center justify-between gap-3 z-40 sticky top-[68px] animate-in slide-in-from-top duration-200 shadow-md">
+        <div class="flex items-center gap-2 text-purple-200 text-xs md:text-sm font-semibold tracking-wider">
+            <i class="fa-solid fa-graduation-cap text-purple-400 text-base animate-pulse"></i>
+            <span>DOCENTENMODUS ACTIEF &mdash; Opdrachten en tests inline bewerken</span>
+        </div>
+        <div class="flex flex-wrap items-center gap-2">
+            <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-300">
+                <span class="text-slate-400 font-mono">Bestand:</span>
+                <input type="text" id="teacher-filename-input" 
+                    class="bg-transparent text-slate-200 font-mono focus:outline-none w-36" 
+                    placeholder="opdracht1.json" title="De bestandsnaam van het te downloaden configuratiebestand">
+            </div>
+            
+            <button onclick="startNewCourse()" class="bg-purple-900/60 hover:bg-purple-800 border border-purple-700/50 text-purple-200 font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5" title="Start een lege cursus">
+                <i class="fa-solid fa-file-circle-plus"></i>
+                <span>Nieuwe Cursus</span>
+            </button>
+
+            <button onclick="downloadCourseJSON()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5">
+                <i class="fa-solid fa-cloud-arrow-down"></i>
+                <span>Download Cursus JSON</span>
+            </button>
+        </div>
+    </div>
+
     <!-- Main Interactive Workspace -->
     <main class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
 
@@ -197,9 +223,52 @@
                     <i class="fa-solid fa-circle-info text-blue-400 text-lg"></i>
                     <h3 class="font-bold text-slate-100">Opdrachtomschrijving</h3>
                 </div>
-                <div id="assignment-instruction"
-                    class="text-sm text-slate-300 leading-relaxed flex-1 prose prose-invert overflow-y-auto max-h-48 lg:max-h-none">
-                    Selecteer een opdracht om de instructies te laden...
+                <!-- WYSIWYG Toolbar (Visible only in edit mode) -->
+                <div id="wysiwyg-toolbar" class="hidden flex flex-wrap items-center gap-1 bg-slate-950 border border-slate-800 p-1.5 rounded-lg mb-3">
+                    <button id="wysiwyg-btn-bold" onclick="execStyle('bold')" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-xs" title="Vet (B)"><i class="fa-solid fa-bold"></i></button>
+                    <button id="wysiwyg-btn-italic" onclick="execStyle('italic')" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center italic text-xs" title="Cursief (I)"><i class="fa-solid fa-italic"></i></button>
+                    <button id="wysiwyg-btn-list-ul" onclick="execStyle('insertUnorderedList')" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center text-xs" title="Opsomming"><i class="fa-solid fa-list-ul"></i></button>
+                    <button id="wysiwyg-btn-list-ol" onclick="execStyle('insertOrderedList')" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center text-xs" title="Genummerde lijst"><i class="fa-solid fa-list-ol"></i></button>
+                    <button id="wysiwyg-btn-code" onclick="insertCodeBlock()" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-mono text-xs" title="Code-regel"><i class="fa-solid fa-code"></i></button>
+                    <button id="wysiwyg-btn-h3" onclick="insertHeader()" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-[10px]" title="Koptekst (H3)">H3</button>
+                    <button id="wysiwyg-btn-p" onclick="insertParagraph()" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center text-xs" title="Standaard tekst"><i class="fa-solid fa-paragraph"></i></button>
+                    <button id="wysiwyg-btn-tip" onclick="insertTipBox()" class="px-2 h-7 rounded bg-amber-500/20 border border-amber-500/30 hover:bg-amber-500/30 text-amber-300 transition flex items-center justify-center text-[10px] font-semibold" title="Tipbox invoegen"><i class="fa-solid fa-lightbulb mr-1"></i> Tip</button>
+                    <button id="wysiwyg-btn-info" onclick="insertInfoBox()" class="px-2 h-7 rounded bg-blue-500/20 border border-blue-500/30 hover:bg-blue-500/30 text-blue-300 transition flex items-center justify-center text-[10px] font-semibold" title="Infobox invoegen"><i class="fa-solid fa-info-circle mr-1"></i> Info</button>
+                    <button id="wysiwyg-btn-table" onclick="insertTable()" class="px-2 h-7 rounded bg-purple-950/20 border border-purple-800/30 hover:bg-purple-950/40 text-purple-300 transition flex items-center justify-center text-[10px] font-semibold" title="Tabel invoegen"><i class="fa-solid fa-table mr-1"></i> Tabel</button>
+
+                    <!-- Dynamic Table Controls (Visible only when selection inside a table) -->
+                    <button id="wysiwyg-btn-add-row" onclick="addTableRow()" class="hidden bg-purple-950/80 hover:bg-purple-900 border border-purple-600/50 text-purple-200 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95" title="Rij eronder toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Rij</button>
+                    <button id="wysiwyg-btn-add-col" onclick="addTableColumn()" class="hidden bg-purple-950/80 hover:bg-purple-900 border border-purple-600/50 text-purple-200 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95" title="Kolom ernaast toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Kolom</button>
+                    <button id="wysiwyg-btn-del-table" onclick="deleteTable()" class="hidden bg-red-950/60 hover:bg-red-950 border border-red-800/40 text-red-300 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95" title="Tabel verwijderen"><i class="fa-solid fa-trash-can text-[8px]"></i> Tabel</button>
+                    
+                    <!-- Text Color Selector -->
+                    <div class="relative inline-block ml-auto">
+                        <button onclick="toggleColorPalette(event)" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center text-xs" title="Tekstkleur">
+                            <i class="fa-solid fa-palette text-amber-400"></i>
+                        </button>
+                        <div id="wysiwyg-color-palette" class="hidden absolute right-0 top-8 bg-slate-900 border border-slate-700 rounded-xl p-2 shadow-2xl z-50 grid grid-cols-4 gap-1 w-32">
+                            <!-- Curated 16 colors loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <button onclick="toggleHtmlView()" id="btn-toggle-html" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition flex items-center justify-center text-xs" title="Toggle HTML Weergave"><i class="fa-solid fa-code-compare"></i></button>
+                </div>
+                
+                <div id="assignment-instruction-container" class="flex-1 flex flex-col min-h-0 min-w-0">
+                    <div id="assignment-instruction"
+                        class="text-sm text-slate-300 leading-relaxed prose prose-invert overflow-y-auto max-h-48 lg:max-h-none mb-4 select-text">
+                        Selecteer een opdracht om de instructies te laden...
+                    </div>
+                    <!-- Dynamic Target Preview Image Container -->
+                    <div id="assignment-preview-container" class="hidden border border-slate-800 rounded-xl bg-slate-950 p-2 mt-auto shrink-0 relative">
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-[10px] font-mono text-slate-500 uppercase block">Verwacht resultaat:</span>
+                            <button id="delete-preview-btn" onclick="deletePreviewImage()" class="hidden text-red-500 hover:text-red-400 text-xs font-semibold px-1 transition" title="Verwijder verwacht resultaat">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
+                        <img id="assignment-preview-img" src="" class="rounded-lg shadow-md max-w-full h-auto max-h-[160px] mx-auto object-contain border border-slate-900" />
+                    </div>
                 </div>
             </div>
         </section>
@@ -439,6 +508,7 @@
         let testInputsQueue = []; // Sequence of inputs configured for the active automated test case
         let activeMobileView = "editor"; // State tracking for mobile split screen
         let activeOutputSubTab = "console"; // Active subtab in the output panel
+        let isEditMode = false; // Flag for teacher editing mode
 
         // Fallback default tasks configuration if none loaded via url querystring
         const DEFAULT_CONFIG = {
@@ -517,10 +587,37 @@
                 if (currentTaskId) {
                     const workspace = getTaskWorkspace(currentTaskId);
                     if (workspace) {
-                        workspace.files[workspace.activeFile] = editor.getValue();
+                        const codeValue = editor.getValue();
+                        workspace.files[workspace.activeFile] = codeValue;
                         userProgress[currentTaskId] = workspace;
                         localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
                         showSavingState();
+
+                        // Reactive environment toggler for turtle imports inside main.py
+                        if (workspace.activeFile === "main.py") {
+                            const isTurtle = codeValue.includes("import turtle") || codeValue.includes("from turtle import");
+                            const btnConsole = document.getElementById("subtab-btn-console");
+                            const btnTurtle = document.getElementById("subtab-btn-turtle");
+                            const btnTests = document.getElementById("subtab-btn-tests");
+
+                            if (btnConsole && btnTurtle && btnTests) {
+                                const isCurrentlyTurtleVisible = !btnTurtle.classList.contains("hidden");
+
+                                if (isTurtle && !isCurrentlyTurtleVisible) {
+                                    btnTurtle.classList.remove("hidden");
+                                    btnConsole.classList.add("hidden");
+                                    btnTests.classList.add("hidden");
+                                    switchOutputSubTab('turtle');
+                                    showToast("🐢 Turtle gedetecteerd: Canvas geopend!");
+                                } else if (!isTurtle && isCurrentlyTurtleVisible) {
+                                    btnTurtle.classList.add("hidden");
+                                    btnConsole.classList.remove("hidden");
+                                    btnTests.classList.remove("hidden");
+                                    switchOutputSubTab('console');
+                                    showToast("💻 Console geopend (geen turtle)");
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -554,6 +651,37 @@
         async function loadConfiguration() {
             const urlParams = new URLSearchParams(window.location.search);
             const configUrl = urlParams.get('config');
+            isEditMode = urlParams.get('edit') === 'true';
+
+            // Show teacher edit banner and make title contenteditable
+            if (isEditMode) {
+                const banner = document.getElementById("teacher-banner");
+                if (banner) banner.classList.remove("hidden");
+                const configTitle = document.getElementById("config-title");
+                if (configTitle) {
+                    configTitle.contentEditable = "true";
+                    configTitle.classList.add("border-b", "border-dashed", "border-slate-500", "focus:outline-none", "focus:border-blue-500", "cursor-pointer");
+                    configTitle.title = "Klik om de cursustitel aan te passen";
+                    configTitle.oninput = function() {
+                        taskConfig.title = this.textContent.trim();
+                    };
+                }
+
+                // Prefill bestandsnaam input field in teacher mode
+                const filenameInput = document.getElementById("teacher-filename-input");
+                if (filenameInput) {
+                    let defaultName = "opdracht1.json";
+                    if (configUrl) {
+                        let parts = configUrl.split("/");
+                        let name = parts[parts.length - 1];
+                        defaultName = name.endsWith(".json") ? name : `${name}.json`;
+                    }
+                    filenameInput.value = defaultName;
+                }
+
+                // Render dynamic color palette circles
+                renderColorPalette();
+            }
 
             if (configUrl) {
                 try {
@@ -597,29 +725,89 @@
             container.innerHTML = "";
 
             taskConfig.tabs.forEach((task, index) => {
-                // Determine whether task is passed based on local storage metadata if existing
                 const isPassed = checkIfPassed(task.id);
+                const isActive = task.id === currentTaskId;
+
+                const wrapper = document.createElement("div");
+                wrapper.className = "flex items-center gap-1.5 group w-full";
 
                 const btn = document.createElement("button");
                 btn.id = `task-btn-${task.id}`;
                 btn.onclick = () => selectTask(task.id);
-                btn.className = `w-full text-left p-3 rounded-xl transition flex flex-col gap-1 ${index === 0 ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-md' : 'bg-slate-800/80 hover:bg-slate-800 text-slate-300'
+                btn.className = `flex-1 text-left p-2.5 rounded-xl transition flex flex-col gap-0.5 min-w-0 ${isActive ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg' : 'bg-slate-800/80 hover:bg-slate-800 text-slate-300'
                     }`;
 
                 btn.innerHTML = `
-                    <div class="flex items-center justify-between w-full">
-                        <span class="font-semibold text-sm truncate">${task.filename}</span>
-                        <span id="badge-${task.id}">
+                    <div class="flex items-center justify-between w-full min-w-0 gap-2">
+                        <span class="font-semibold text-sm truncate select-none">${task.filename}</span>
+                        <span id="badge-${task.id}" class="shrink-0">
                             ${isPassed ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>' : '<i class="fa-regular fa-circle text-slate-500"></i>'}
                         </span>
                     </div>
-                    <span class="text-[11px] opacity-80 truncate">${task.id}</span>
+                    <span class="text-[10px] opacity-75 truncate select-none">${task.id}</span>
                 `;
-                container.appendChild(btn);
+
+                if (isEditMode) {
+                    btn.ondblclick = () => renameTaskFilename(task.id);
+                    btn.title = "Dubbelklik om bestandsnaam aan te passen";
+                }
+
+                wrapper.appendChild(btn);
+
+                if (isEditMode) {
+                    const controls = document.createElement("div");
+                    controls.className = "flex flex-col gap-0.5 shrink-0";
+
+                    if (index > 0) {
+                        const upBtn = document.createElement("button");
+                        upBtn.className = "w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 flex items-center justify-center text-[10px] transition";
+                        upBtn.innerHTML = '<i class="fa-solid fa-chevron-up"></i>';
+                        upBtn.title = "Omhoog verplaatsen";
+                        upBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            moveTask(index, -1);
+                        };
+                        controls.appendChild(upBtn);
+                    }
+
+                    if (index < taskConfig.tabs.length - 1) {
+                        const downBtn = document.createElement("button");
+                        downBtn.className = "w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 flex items-center justify-center text-[10px] transition";
+                        downBtn.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
+                        downBtn.title = "Omlaag verplaatsen";
+                        downBtn.onclick = (e) => {
+                            e.stopPropagation();
+                            moveTask(index, 1);
+                        };
+                        controls.appendChild(downBtn);
+                    }
+
+                    const delBtn = document.createElement("button");
+                    delBtn.className = "w-5 h-5 rounded bg-slate-900 hover:bg-red-950 text-slate-500 hover:text-red-400 flex items-center justify-center text-[10px] transition";
+                    delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
+                    delBtn.title = "Verwijder opdracht uit cursus";
+                    delBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        deleteTaskFromConfig(task.id);
+                    };
+                    controls.appendChild(delBtn);
+
+                    wrapper.appendChild(controls);
+                }
+
+                container.appendChild(wrapper);
             });
 
-            // Select initial task
-            if (taskConfig.tabs.length > 0) {
+            if (isEditMode) {
+                const addOpdrachtBtn = document.createElement("button");
+                addOpdrachtBtn.className = "w-full py-2.5 rounded-xl border border-dashed border-purple-800 hover:border-purple-600 bg-purple-950/20 hover:bg-purple-950/40 text-purple-300 font-semibold text-xs tracking-wider transition flex items-center justify-center gap-2 active:scale-95 mt-2";
+                addOpdrachtBtn.innerHTML = '<i class="fa-solid fa-circle-plus"></i> NIEUWE OPDRACHT';
+                addOpdrachtBtn.onclick = createNewTaskInConfig;
+                container.appendChild(addOpdrachtBtn);
+            }
+
+            // Select initial task if none selected yet
+            if (taskConfig.tabs.length > 0 && !currentTaskId) {
                 selectTask(taskConfig.tabs[0].id);
             }
         }
@@ -633,25 +821,98 @@
         }
 
         function selectTask(taskId) {
-            // Update active states on previous buttons
-            if (currentTaskId) {
-                const prevBtn = document.getElementById(`task-btn-${currentTaskId}`);
-                if (prevBtn) {
-                    prevBtn.className = "w-full text-left p-3 rounded-xl transition flex flex-col gap-1 bg-slate-800/80 hover:bg-slate-800 text-slate-300";
-                }
-            }
-
-            const currentBtn = document.getElementById(`task-btn-${taskId}`);
-            if (currentBtn) {
-                currentBtn.className = "w-full text-left p-3 rounded-xl transition flex flex-col gap-1 bg-blue-600 hover:bg-blue-500 text-white shadow-lg";
-            }
-
             currentTaskId = taskId;
+            renderTaskSelector();
+
             const task = taskConfig.tabs.find(t => t.id === taskId);
 
             if (task) {
+                // Reset WYSIWYG html raw view toggled state
+                isViewingHtml = false;
+                const toggleBtn = document.getElementById("btn-toggle-html");
+                if (toggleBtn) toggleBtn.classList.remove("text-blue-400", "bg-slate-700");
+
                 // Set instruction panel content
-                document.getElementById("assignment-instruction").innerHTML = task.instruction;
+                const docBox = document.getElementById("assignment-instruction");
+                if (docBox) {
+                    docBox.innerHTML = task.instruction;
+                    if (isEditMode) {
+                        docBox.contentEditable = "true";
+                        docBox.oninput = saveActiveInstruction;
+                        docBox.onkeydown = function(e) {
+                            if (e.key === "Enter") {
+                                const selection = window.getSelection();
+                                if (selection.rangeCount) {
+                                    const range = selection.getRangeAt(0);
+                                    let container = range.commonAncestorContainer;
+                                    if (container.nodeType === Node.TEXT_NODE) {
+                                        container = container.parentNode;
+                                    }
+                                    const codeElem = container.closest("code");
+                                    const preElem = container.closest("pre");
+
+                                    // If inside an inline <code> but NOT a <pre> block code
+                                    if (codeElem && !preElem) {
+                                        e.preventDefault();
+                                        
+                                        // Convert inline code to pre block
+                                        const pre = document.createElement("pre");
+                                        pre.className = "bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs text-yellow-400 my-3 block whitespace-pre-wrap";
+                                        
+                                        const newCode = document.createElement("code");
+                                        newCode.className = "font-mono";
+                                        
+                                        const text = codeElem.textContent;
+                                        const offset = range.startOffset;
+                                        const newText = text.slice(0, offset) + "\n" + text.slice(offset);
+                                        newCode.textContent = newText;
+                                        
+                                        pre.appendChild(newCode);
+                                        codeElem.replaceWith(pre);
+
+                                        // Focus cursor exactly after the inserted newline
+                                        const newRange = document.createRange();
+                                        if (newCode.firstChild) {
+                                            newRange.setStart(newCode.firstChild, Math.min(offset + 1, newCode.textContent.length));
+                                        } else {
+                                            newRange.selectNodeContents(newCode);
+                                        }
+                                        newRange.collapse(true);
+                                        selection.removeAllRanges();
+                                        selection.addRange(newRange);
+
+                                        // Insert empty spacing paragraph below the block so cursor can escape easily
+                                        if (!pre.nextSibling || pre.nextSibling.nodeName.toLowerCase() !== "p") {
+                                            const p = document.createElement("p");
+                                            p.innerHTML = "&nbsp;";
+                                            pre.parentNode.insertBefore(p, pre.nextSibling);
+                                        }
+
+                                        saveActiveInstruction();
+                                        updateWysiwygToolbarHighlighting();
+                                    }
+                                }
+                            }
+                        };
+                        docBox.onpaste = function(e) {
+                            e.preventDefault();
+                            const text = (e.clipboardData || window.clipboardData).getData("text/plain");
+                            document.execCommand("insertText", false, text);
+                        };
+                        docBox.classList.add("focus:outline-none", "focus:ring-1", "focus:ring-blue-500/50", "rounded-lg", "p-1");
+                        const toolbar = document.getElementById("wysiwyg-toolbar");
+                        if (toolbar) toolbar.classList.remove("hidden");
+                    } else {
+                        docBox.contentEditable = "false";
+                        docBox.onkeydown = null;
+                        docBox.onpaste = null;
+                        const toolbar = document.getElementById("wysiwyg-toolbar");
+                        if (toolbar) toolbar.classList.add("hidden");
+                    }
+                }
+
+                // Search and load dynamic image preview
+                loadAssignmentPreviewImage(task);
 
                 // Load existing user code or default initial template
                 const workspace = getTaskWorkspace(taskId);
@@ -660,7 +921,7 @@
 
                 // Auto detect if main file code has turtle and show canvas tab, otherwise default to console
                 const mainCode = workspace.files["main.py"] || "";
-                const isTurtle = mainCode.includes("import turtle");
+                const isTurtle = mainCode.includes("import turtle") || mainCode.includes("from turtle import");
                 const btnConsole = document.getElementById("subtab-btn-console");
                 const btnTurtle = document.getElementById("subtab-btn-turtle");
                 const btnTests = document.getElementById("subtab-btn-tests");
@@ -680,8 +941,12 @@
                 // Render tabs bar
                 renderWorkspaceTabs();
 
-                // Render blank test outcomes
-                renderEmptyTests(task);
+                // Render blank test outcomes (or test editor in edit mode)
+                if (isEditMode) {
+                    renderTestEditor(task);
+                } else {
+                    renderEmptyTests(task);
+                }
             }
         }
 
@@ -776,7 +1041,7 @@
             }
 
             const mainCode = workspace ? (workspace.files["main.py"] || "") : editor.getValue();
-            const isTurtle = mainCode.includes("import turtle");
+            const isTurtle = mainCode.includes("import turtle") || mainCode.includes("from turtle import");
             isRunningTest = false;
 
             if (isTurtle) {
@@ -1003,6 +1268,15 @@
         function renderTestOutcomes(task, results) {
             const listContainer = document.getElementById("tests-list");
             listContainer.innerHTML = "";
+
+            // Prepend a "Back to Editor" button if in teacher edit mode
+            if (isEditMode) {
+                const backBtn = document.createElement("button");
+                backBtn.className = "w-full py-2 bg-slate-900 border border-slate-800 text-purple-400 hover:text-purple-300 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 mb-3 active:scale-95";
+                backBtn.innerHTML = '<i class="fa-solid fa-arrow-left-long"></i> Terug naar bewerken';
+                backBtn.onclick = () => renderTestEditor(task);
+                listContainer.appendChild(backBtn);
+            }
 
             let passedCount = 0;
 
@@ -1266,13 +1540,24 @@
             });
 
             // Export and download the combined image
+            const dataURL = tempCanvas.toDataURL("image/png");
+
+            // Embed preview image directly in the current task if active
+            if (currentTaskId) {
+                const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+                if (task) {
+                    task.previewImage = dataURL;
+                    loadAssignmentPreviewImage(task);
+                }
+            }
+
             const link = document.createElement("a");
             link.download = `${currentTaskId || 'turtle'}_voorbeeld.png`;
-            link.href = tempCanvas.toDataURL("image/png");
+            link.href = dataURL;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            showToast("📸 Afbeelding gedownload!");
+            showToast("📸 Afbeelding gekoppeld en gedownload!");
         }
 
         function initInteractiveTurtle() {
@@ -1593,6 +1878,901 @@
                 showToast(`🗑️ ${filename} verwijderd`);
             }
         }
+
+        // WYSIWYG HTML Toolbar Handlers for Auteursmodus
+        function execStyle(command, value = null) {
+            document.execCommand(command, false, value);
+            saveActiveInstruction();
+        }
+
+        function insertHeader() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+
+            let container = range.commonAncestorContainer;
+            if (container.nodeType === Node.TEXT_NODE) {
+                container = container.parentNode;
+            }
+
+            const docBox = document.getElementById("assignment-instruction");
+            if (!docBox || !docBox.contains(container)) return;
+
+            // Find the closest block-level element inside our contenteditable box
+            let blockParent = container;
+            while (blockParent && blockParent !== docBox) {
+                const tag = blockParent.nodeName.toLowerCase();
+                if (["p", "h1", "h2", "h3", "h4", "h5", "h6", "div", "li"].includes(tag)) {
+                    break;
+                }
+                blockParent = blockParent.parentNode;
+            }
+
+            // If we found a valid parent block container inside our editor
+            if (blockParent && blockParent !== docBox) {
+                const tag = blockParent.nodeName.toLowerCase();
+                if (tag === "h3") {
+                    // Toggle off: convert H3 to standard Paragraph block
+                    const p = document.createElement("p");
+                    p.className = "mb-2 text-sm text-slate-300";
+                    p.innerHTML = blockParent.innerHTML;
+                    blockParent.replaceWith(p);
+                } else {
+                    // Toggle on / convert existing block to H3 block
+                    const h3 = document.createElement("h3");
+                    h3.className = "text-lg font-semibold text-slate-100 mb-2";
+                    h3.innerHTML = blockParent.innerHTML;
+                    blockParent.replaceWith(h3);
+                }
+            } else {
+                // Fallback to standard command formatting if no block wrapper found
+                document.execCommand("formatBlock", false, "<h3>");
+            }
+
+            saveActiveInstruction();
+        }
+
+        function insertParagraph() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+
+            let container = range.commonAncestorContainer;
+            if (container.nodeType === Node.TEXT_NODE) {
+                container = container.parentNode;
+            }
+
+            const docBox = document.getElementById("assignment-instruction");
+            if (!docBox || !docBox.contains(container)) return;
+
+            let blockParent = container;
+            while (blockParent && blockParent !== docBox) {
+                const tag = blockParent.nodeName.toLowerCase();
+                if (["p", "h1", "h2", "h3", "h4", "h5", "h6", "div", "li"].includes(tag)) {
+                    break;
+                }
+                blockParent = blockParent.parentNode;
+            }
+
+            if (blockParent && blockParent !== docBox) {
+                const tag = blockParent.nodeName.toLowerCase();
+                if (tag !== "p") {
+                    const p = document.createElement("p");
+                    p.className = "mb-2 text-sm text-slate-300";
+                    p.innerHTML = blockParent.innerHTML;
+                    blockParent.replaceWith(p);
+                }
+            } else {
+                document.execCommand("formatBlock", false, "<p>");
+            }
+
+            saveActiveInstruction();
+        }
+
+        function insertCodeBlock() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+
+            // Check if already inside code tag or pre block
+            let container = range.commonAncestorContainer;
+            if (container.nodeType === Node.TEXT_NODE) {
+                container = container.parentNode;
+            }
+            const codeElem = container.closest("code");
+            const preElem = container.closest("pre");
+
+            if (codeElem || preElem) {
+                // Toggle off: replace the element with its plain contents
+                const targetToRemove = preElem || codeElem;
+                const parent = targetToRemove.parentNode;
+                
+                // If it is a pre block containing code, let's grab the inner code node or text content
+                const contentNode = preElem ? (preElem.querySelector("code") || preElem) : codeElem;
+                
+                while (contentNode.firstChild) {
+                    parent.insertBefore(contentNode.firstChild, targetToRemove);
+                }
+                targetToRemove.remove();
+                saveActiveInstruction();
+                return;
+            }
+
+            // Toggle on: Check if the selection spans multiple lines
+            const selText = selection.toString();
+            const hasNewlines = selText.includes("\n") || selText.includes("\r");
+
+            if (hasNewlines) {
+                // Multi-line selection: Create a beautiful block-level pre container
+                const preElement = document.createElement("pre");
+                preElement.className = "bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs text-yellow-400 my-3 block whitespace-pre-wrap";
+                
+                const codeElement = document.createElement("code");
+                codeElement.className = "font-mono";
+                codeElement.textContent = selText;
+                
+                preElement.appendChild(codeElement);
+                range.deleteContents();
+                range.insertNode(preElement);
+
+                // Insert empty spacing paragraph below the block so cursor can escape easily
+                const p = document.createElement("p");
+                p.innerHTML = "&nbsp;";
+                preElement.parentNode.insertBefore(p, preElement.nextSibling);
+            } else {
+                // Single line or single word selection: Create an inline code element
+                const codeElement = document.createElement("code");
+                codeElement.className = "bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs";
+                codeElement.textContent = selText || "code";
+                range.deleteContents();
+                range.insertNode(codeElement);
+
+                // Focus and select the newly inserted code block if it was blank
+                if (!selText) {
+                    const newRange = document.createRange();
+                    newRange.selectNodeContents(codeElement);
+                    selection.removeAllRanges();
+                    selection.addRange(newRange);
+                }
+            }
+
+            saveActiveInstruction();
+        }
+
+        function insertTipBox() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+
+            let container = range.commonAncestorContainer;
+            if (container.nodeType === Node.TEXT_NODE) {
+                container = container.parentNode;
+            }
+            const tipElem = container.closest(".wysiwyg-tip-box");
+
+            if (tipElem) {
+                // Toggle off: completely delete the element (including contents!)
+                tipElem.remove();
+                saveActiveInstruction();
+                return;
+            }
+
+            // Otherwise toggle on: insert new tip box
+            const tipBox = document.createElement("div");
+            tipBox.className = "wysiwyg-tip-box bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-xs text-amber-300 italic my-3";
+            const selText = selection.toString().trim();
+            tipBox.innerHTML = `<i class="fa-solid fa-lightbulb mr-1.5 text-amber-400"></i>${selText || 'Tip: Typ hier je hulpmiddel...'}`;
+            range.insertNode(tipBox);
+            
+            // Insert empty space paragraph below the box so selection/cursor can escape easily
+            const p = document.createElement("p");
+            p.innerHTML = "&nbsp;";
+            tipBox.parentNode.insertBefore(p, tipBox.nextSibling);
+
+            saveActiveInstruction();
+        }
+
+        function insertInfoBox() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+
+            let container = range.commonAncestorContainer;
+            if (container.nodeType === Node.TEXT_NODE) {
+                container = container.parentNode;
+            }
+            const infoElem = container.closest(".wysiwyg-info-box");
+
+            if (infoElem) {
+                // Toggle off: completely delete the element (including contents!)
+                infoElem.remove();
+                saveActiveInstruction();
+                return;
+            }
+
+            // Otherwise toggle on: insert new info box
+            const infoBox = document.createElement("div");
+            infoBox.className = "wysiwyg-info-box bg-blue-500/10 border border-blue-500/30 rounded-xl p-3 text-xs text-blue-300 my-3";
+            const selText = selection.toString().trim();
+            infoBox.innerHTML = `<i class="fa-solid fa-info-circle mr-1.5 text-blue-400"></i>${selText || 'Opmerking: Typ hier je aanvullende informatie...'}`;
+            range.insertNode(infoBox);
+            
+            // Insert empty space paragraph below the box so selection/cursor can escape easily
+            const p = document.createElement("p");
+            p.innerHTML = "&nbsp;";
+            infoBox.parentNode.insertBefore(p, infoBox.nextSibling);
+
+            saveActiveInstruction();
+        }
+
+        function insertTable() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+
+            const table = document.createElement("table");
+            table.className = "wysiwyg-table w-full border-collapse border border-slate-800 my-4 text-xs md:text-sm bg-slate-950/20";
+            table.style.borderRadius = "8px";
+            table.style.overflow = "hidden";
+            table.innerHTML = `
+                <thead>
+                    <tr class="bg-slate-900">
+                        <th class="border border-slate-800 p-2 text-left font-bold text-slate-200">Kop 1</th>
+                        <th class="border border-slate-800 p-2 text-left font-bold text-slate-200">Kop 2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="border border-slate-800 p-2 text-slate-300">Cel 1</td>
+                        <td class="border border-slate-800 p-2 text-slate-300">Cel 2</td>
+                    </tr>
+                </tbody>
+            `;
+
+            range.deleteContents();
+            range.insertNode(table);
+
+            // Spacing paragraph below table to allow easy cursor exit
+            const p = document.createElement("p");
+            p.innerHTML = "&nbsp;";
+            table.parentNode.insertBefore(p, table.nextSibling);
+
+            saveActiveInstruction();
+        }
+
+        function addTableRow() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+
+            let container = range.commonAncestorContainer;
+            if (container.nodeType === Node.TEXT_NODE) {
+                container = container.parentNode;
+            }
+            const tr = container.closest("tr");
+            if (!tr) return;
+
+            // Create new row
+            const newTr = document.createElement("tr");
+            
+            // Count number of cells in the current row
+            const cellsCount = tr.cells.length;
+            for (let i = 0; i < cellsCount; i++) {
+                const td = document.createElement("td");
+                td.className = "border border-slate-800 p-2 text-slate-300";
+                td.innerHTML = "Nieuwe cel";
+                newTr.appendChild(td);
+            }
+
+            // Insert new row after the current row
+            tr.parentNode.insertBefore(newTr, tr.nextSibling);
+            saveActiveInstruction();
+            showToast("➕ Rij eronder toegevoegd");
+        }
+
+        function addTableColumn() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+
+            let container = range.commonAncestorContainer;
+            if (container.nodeType === Node.TEXT_NODE) {
+                container = container.parentNode;
+            }
+            const cell = container.closest("td") || container.closest("th");
+            const table = container.closest("table");
+            if (!cell || !table) return;
+
+            const cellIndex = cell.cellIndex;
+
+            // Iterate over all rows in the table to insert a column cell at the active index
+            const rows = table.querySelectorAll("tr");
+            rows.forEach(row => {
+                const isHeader = row.parentNode.nodeName.toLowerCase() === "thead" || row.querySelector("th");
+                if (isHeader) {
+                    const th = document.createElement("th");
+                    th.className = "border border-slate-800 p-2 text-left font-bold text-slate-200";
+                    th.innerHTML = "Nieuwe kop";
+                    row.insertBefore(th, row.cells[cellIndex + 1] || null);
+                } else {
+                    const td = document.createElement("td");
+                    td.className = "border border-slate-800 p-2 text-slate-300";
+                    td.innerHTML = "Nieuwe cel";
+                    row.insertBefore(td, row.cells[cellIndex + 1] || null);
+                }
+            });
+
+            saveActiveInstruction();
+            showToast("➕ Kolom ernaast toegevoegd");
+        }
+
+        function deleteTable() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+
+            let container = range.commonAncestorContainer;
+            if (container.nodeType === Node.TEXT_NODE) {
+                container = container.parentNode;
+            }
+            const table = container.closest("table");
+            if (!table) return;
+
+            if (confirm("Weet je zeker dat je deze tabel volledig wilt verwijderen?")) {
+                table.remove();
+                saveActiveInstruction();
+                showToast("🗑️ Tabel verwijderd");
+            }
+        }
+
+        let isViewingHtml = false;
+        function toggleHtmlView() {
+            const docBox = document.getElementById("assignment-instruction");
+            if (!docBox) return;
+
+            isViewingHtml = !isViewingHtml;
+            const btn = document.getElementById("btn-toggle-html");
+
+            if (isViewingHtml) {
+                // Display raw HTML code
+                docBox.textContent = docBox.innerHTML;
+                docBox.contentEditable = "false";
+                if (btn) btn.classList.add("text-blue-400", "bg-slate-700");
+            } else {
+                // Render HTML
+                docBox.innerHTML = docBox.textContent;
+                docBox.contentEditable = "true";
+                if (btn) btn.classList.remove("text-blue-400", "bg-slate-700");
+                docBox.focus();
+            }
+        }
+
+        function saveActiveInstruction() {
+            if (!currentTaskId || isViewingHtml) return;
+            const docBox = document.getElementById("assignment-instruction");
+            const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+            if (task && docBox) {
+                task.instruction = docBox.innerHTML;
+            }
+        }
+
+        // Assignment Configuration Modifier Helpers
+        function createNewTaskInConfig() {
+            let name = prompt("Voer de bestandsnaam in voor de nieuwe opdracht (bijv. oefening.py):");
+            if (name === null) return;
+            name = name.trim();
+            if (!name) return;
+
+            if (!name.endsWith(".py")) {
+                name += ".py";
+            }
+
+            const id = name.replace(/\.py$/, "").toLowerCase().replace(/[^a-z0-9]/g, "_");
+            
+            // Verify no duplicates
+            if (taskConfig.tabs.find(t => t.id === id)) {
+                alert("Een opdracht met deze ID bestaat al.");
+                return;
+            }
+
+            const newTask = {
+                id: id,
+                filename: name,
+                instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>Nieuwe Opdracht</h3><p class='mb-2'>Typ hier de instructies voor deze opdracht...</p>`,
+                files: [
+                    {
+                        filename: "main.py",
+                        initialCode: "# Schrijf hier je Python-code...\n",
+                        isMain: true
+                    }
+                ],
+                tests: []
+            };
+
+            taskConfig.tabs.push(newTask);
+            renderTaskSelector();
+            selectTask(id);
+            showToast(`✨ Opdracht ${name} aangemaakt!`);
+        }
+
+        function moveTask(index, offset) {
+            const targetIndex = index + offset;
+            if (targetIndex < 0 || targetIndex >= taskConfig.tabs.length) return;
+
+            // Swap elements in taskConfig.tabs array
+            const temp = taskConfig.tabs[index];
+            taskConfig.tabs[index] = taskConfig.tabs[targetIndex];
+            taskConfig.tabs[targetIndex] = temp;
+
+            renderTaskSelector();
+            showToast("↕️ Volgorde aangepast");
+        }
+
+        function deleteTaskFromConfig(taskId) {
+            const task = taskConfig.tabs.find(t => t.id === taskId);
+            if (!task) return;
+
+            if (confirm(`Weet je zeker dat je de opdracht "${task.filename}" volledig wilt verwijderen uit de cursus?`)) {
+                // Remove from list
+                taskConfig.tabs = taskConfig.tabs.filter(t => t.id !== taskId);
+                
+                // Clear progress inside localStorage if needed
+                delete userProgress[taskId];
+                localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+
+                // Set new active task
+                if (currentTaskId === taskId) {
+                    currentTaskId = taskConfig.tabs.length > 0 ? taskConfig.tabs[0].id : "";
+                }
+
+                renderTaskSelector();
+                if (currentTaskId) {
+                    selectTask(currentTaskId);
+                } else {
+                    document.getElementById("assignment-instruction").innerHTML = "Geen opdrachten beschikbaar. Klik op Nieuwe Opdracht.";
+                    editor.setValue("");
+                }
+                showToast(`🗑️ Opdracht verwijderd`);
+            }
+        }
+
+        function renameTaskFilename(taskId) {
+            const task = taskConfig.tabs.find(t => t.id === taskId);
+            if (!task) return;
+
+            let newName = prompt(`Pas de bestandsnaam van de opdracht aan:`, task.filename);
+            if (newName === null) return;
+            newName = newName.trim();
+            if (!newName) return;
+
+            if (!newName.endsWith(".py")) {
+                newName += ".py";
+            }
+
+            task.filename = newName;
+            renderTaskSelector();
+            showToast(`✏️ Bestandsnaam hernoemd naar ${newName}`);
+        }
+
+        // Test Cases UI Form Builder for Teachers
+        function renderTestEditor(task) {
+            const listContainer = document.getElementById("tests-list");
+            const badge = document.getElementById("test-summary-badge");
+            
+            if (!listContainer || !badge) return;
+
+            badge.classList.remove("hidden");
+            const testsCount = task.tests ? task.tests.length : 0;
+            badge.textContent = `Editor: ${testsCount}`;
+            badge.className = "px-1.5 py-0.5 rounded text-[10px] bg-purple-900 text-purple-200 font-bold";
+
+            listContainer.innerHTML = "";
+
+            if (!task.tests) task.tests = [];
+
+            task.tests.forEach((test, testIndex) => {
+                const card = document.createElement("div");
+                card.className = "bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col gap-3 shadow-md";
+
+                card.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <span class="text-xs font-bold text-purple-400">TESTCASE #${testIndex + 1}</span>
+                        <button onclick="deleteTestFromTask(${testIndex})" class="text-xs text-red-500 hover:text-red-400 transition" title="Verwijder deze testcase">
+                            <i class="fa-solid fa-trash-can mr-1"></i> Verwijder
+                        </button>
+                    </div>
+
+                    <div class="flex flex-col gap-1 text-xs">
+                        <label class="text-slate-400 font-medium">Test Naam:</label>
+                        <input type="text" value="${test.name || ''}" oninput="updateTestField(${testIndex}, 'name', this.value)" 
+                            class="bg-slate-950 border border-slate-800 focus:border-blue-500 focus:outline-none rounded-lg px-2.5 py-1.5 text-slate-200 font-semibold" 
+                            placeholder="bijv. Eenvoudig optellen (5 + 10)" />
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                        <div class="flex flex-col gap-1">
+                            <label class="text-slate-400 font-medium" title="Kommagescheiden lijst van invoerwaarden voor input()">Invoerwaarden (comma-gescheiden):</label>
+                            <input type="text" value="${test.inputs ? test.inputs.join(', ') : ''}" oninput="updateTestField(${testIndex}, 'inputs', this.value)" 
+                                class="bg-slate-950 border border-slate-800 focus:border-blue-500 focus:outline-none rounded-lg px-2.5 py-1.5 text-slate-200 font-mono" 
+                                placeholder="bijv. 5, 10" />
+                        </div>
+
+                        <div class="flex flex-col gap-1">
+                            <label class="text-slate-400 font-medium">Vergelijkingsmethode (Match):</label>
+                            <select onchange="updateTestField(${testIndex}, 'matchType', this.value)" 
+                                class="bg-slate-950 border border-slate-800 focus:border-blue-500 focus:outline-none rounded-lg px-2.5 py-1.5 text-slate-200 font-semibold cursor-pointer">
+                                <option value="exact" ${test.matchType === 'exact' ? 'selected' : ''}>Exact match (Aanbevolen)</option>
+                                <option value="contains" ${test.matchType === 'contains' ? 'selected' : ''}>Bevat substring (contains)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1 text-xs">
+                        <label class="text-slate-400 font-medium">Verwachte Output (geprinte waarde):</label>
+                        <textarea oninput="updateTestField(${testIndex}, 'expectedOutput', this.value)" rows="2"
+                            class="bg-slate-950 border border-slate-800 focus:border-blue-500 focus:outline-none rounded-lg px-2.5 py-1.5 text-slate-200 font-mono whitespace-pre resize-y" 
+                            placeholder="Typ hier de exacte verwachte geprinte output...">${test.expectedOutput || ''}</textarea>
+                    </div>
+                `;
+
+                listContainer.appendChild(card);
+            });
+
+            const addTestBtn = document.createElement("button");
+            addTestBtn.className = "w-full py-2.5 rounded-xl border border-dashed border-purple-800 hover:border-purple-600 bg-purple-950/20 hover:bg-purple-950/40 text-purple-300 font-semibold text-xs tracking-wider transition flex items-center justify-center gap-2 active:scale-95 mt-2";
+            addTestBtn.innerHTML = '<i class="fa-solid fa-circle-plus"></i> NIEUWE TESTCASE TOEVOEGEN';
+            addTestBtn.onclick = createNewTestCaseInTask;
+            listContainer.appendChild(addTestBtn);
+        }
+
+        function updateTestField(testIndex, field, value) {
+            const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+            if (!task || !task.tests || !task.tests[testIndex]) return;
+
+            if (field === 'inputs') {
+                task.tests[testIndex].inputs = value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+            } else {
+                task.tests[testIndex][field] = value;
+            }
+        }
+
+        function createNewTestCaseInTask() {
+            const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+            if (!task) return;
+
+            if (!task.tests) task.tests = [];
+
+            task.tests.push({
+                name: "Nieuwe testcase",
+                inputs: [],
+                expectedOutput: "",
+                matchType: "exact"
+            });
+
+            renderTestEditor(task);
+            showToast("✨ Nieuwe testcase toegevoegd!");
+        }
+
+        function deleteTestFromTask(testIndex) {
+            const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+            if (!task || !task.tests) return;
+
+            if (confirm("Weet je zeker dat je deze testcase wilt verwijderen?")) {
+                task.tests.splice(testIndex, 1);
+                renderTestEditor(task);
+                showToast("🗑️ Testcase verwijderd");
+            }
+        }
+
+        // Automatic image preview checking
+        function loadAssignmentPreviewImage(task) {
+            const previewContainer = document.getElementById("assignment-preview-container");
+            const previewImg = document.getElementById("assignment-preview-img");
+            const deleteBtn = document.getElementById("delete-preview-btn");
+            
+            if (!previewContainer || !previewImg) return;
+
+            // Helper to toggle delete button visibility in edit mode
+            function updateDeleteButtonVisibility(visible) {
+                if (deleteBtn) {
+                    if (visible && isEditMode) {
+                        deleteBtn.classList.remove("hidden");
+                    } else {
+                        deleteBtn.classList.add("hidden");
+                    }
+                }
+            }
+
+            // 1. Check if we have an embedded preview image
+            if (task.previewImage) {
+                previewImg.src = task.previewImage;
+                previewContainer.classList.remove("hidden");
+                updateDeleteButtonVisibility(true);
+                return;
+            }
+
+            // 2. Check if the preview image was explicitly deleted/cleared
+            if (task.previewImage === "") {
+                previewImg.src = "";
+                previewContainer.classList.add("hidden");
+                updateDeleteButtonVisibility(false);
+                return;
+            }
+
+            // 3. Fallback to probed image file on disk
+            const filename = task.filename || "opdracht.py";
+            const filenameWithoutPy = filename.replace(/\.py$/, "");
+            const targetSrc = `opdrachten/${filenameWithoutPy}.png`;
+
+            // Probe image exists dynamically
+            const tempImg = new Image();
+            tempImg.onload = function() {
+                previewImg.src = targetSrc;
+                previewContainer.classList.remove("hidden");
+                updateDeleteButtonVisibility(true); // Allow clearing/overriding probed image as well
+            };
+            tempImg.onerror = function() {
+                previewImg.src = "";
+                previewContainer.classList.add("hidden");
+                updateDeleteButtonVisibility(false);
+            };
+            tempImg.src = targetSrc;
+        }
+
+        // Delete/clear preview image
+        function deletePreviewImage() {
+            const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+            if (task) {
+                task.previewImage = ""; // Explicitly set to empty string to skip disk probe
+                loadAssignmentPreviewImage(task);
+                showToast("🗑️ Verwacht resultaat verwijderd");
+            }
+        }
+
+        // Complete Cursus JSON curriculum exporter
+        function downloadCourseJSON() {
+            // Save active tab code of current assignment first
+            const workspace = getTaskWorkspace(currentTaskId);
+            if (workspace) {
+                workspace.files[workspace.activeFile] = editor.getValue();
+                userProgress[currentTaskId] = workspace;
+                localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
+            }
+
+            const finalConfig = JSON.parse(JSON.stringify(taskConfig));
+
+            // Populate all tab codes into files array template
+            finalConfig.tabs.forEach(task => {
+                const ws = getTaskWorkspace(task.id);
+                if (ws && ws.files) {
+                    task.files = Object.keys(ws.files).map(filename => ({
+                        filename: filename,
+                        initialCode: ws.files[filename],
+                        isMain: filename === "main.py"
+                    }));
+                    task.initialCode = ws.files["main.py"] || "";
+                    task.filename = "main.py";
+                }
+            });
+
+            const jsonString = JSON.stringify(finalConfig, null, 4);
+            const blob = new Blob([jsonString], { type: "application/json;charset=utf-8" });
+            const url = URL.createObjectURL(blob);
+
+            const filenameInput = document.getElementById("teacher-filename-input");
+            let filename = "opdracht1.json";
+            if (filenameInput && filenameInput.value.trim()) {
+                filename = filenameInput.value.trim();
+                if (!filename.endsWith(".json")) {
+                    filename += ".json";
+                }
+            } else {
+                const urlParams = new URLSearchParams(window.location.search);
+                const configName = urlParams.get('config') || "opdracht1";
+                filename = configName.endsWith(".json") ? configName : `${configName}.json`;
+            }
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            showToast("💾 Cursus JSON succesvol gedownload! Plaats het in je opdrachten-map.");
+        }
+
+        // Start a brand new, empty Course JSON from scratch
+        function startNewCourse() {
+            if (confirm("Weet je zeker dat je met een nieuwe cursus wilt beginnen? Alle niet-gedownloade wijzigingen aan de huidige cursus gaan verloren.")) {
+                taskConfig = {
+                    title: "Nieuwe Python Cursus",
+                    tabs: [
+                        {
+                            id: "opdracht_1",
+                            filename: "opdracht_1.py",
+                            instruction: "<h3 class='text-lg font-semibold text-slate-100 mb-2'>Titel van Opdracht 1</h3><p class='mb-2'>Dit is de omschrijving in HTML-formaat. Typ hier de opdrachten voor studenten.</p>",
+                            initialCode: "# Schrijf hier je begin-code\nprint('Hallo Wereld!')\n",
+                            tests: []
+                        }
+                    ]
+                };
+
+                // Reset student session parameters to prevent state bleed
+                currentTaskId = "";
+                userProgress = {};
+                localStorage.removeItem("edu_py_editor_progress");
+
+                // Apply new default title to title bar
+                document.getElementById("config-title").textContent = taskConfig.title;
+
+                // Set filename input to standard default
+                const filenameInput = document.getElementById("teacher-filename-input");
+                if (filenameInput) {
+                    filenameInput.value = "nieuwe_cursus.json";
+                }
+
+                // Render task selector and select the first assignment
+                renderTaskSelector();
+                if (taskConfig.tabs.length > 0) {
+                    selectTask(taskConfig.tabs[0].id);
+                }
+
+                showToast("✨ Nieuwe cursus gestart! Pas de opdrachten en titel naar wens aan.");
+            }
+        }
+
+        // Color palette controls for WYSIWYG
+        function toggleColorPalette(event) {
+            event.stopPropagation();
+            const palette = document.getElementById("wysiwyg-color-palette");
+            if (palette) {
+                palette.classList.toggle("hidden");
+            }
+        }
+
+        function renderColorPalette() {
+            const palette = document.getElementById("wysiwyg-color-palette");
+            if (!palette) return;
+
+            const colors = [
+                { hex: "#cbd5e1", name: "Standaard" },
+                { hex: "#ffffff", name: "Wit" },
+                { hex: "#94a3b8", name: "Grijs" },
+                { hex: "#f87171", name: "Rood" },
+                { hex: "#fb7185", name: "Roze" },
+                { hex: "#fb923c", name: "Oranje" },
+                { hex: "#fbbf24", name: "Amber" },
+                { hex: "#facc15", name: "Geel" },
+                { hex: "#a3e635", name: "Lime" },
+                { hex: "#4ade80", name: "Groen" },
+                { hex: "#34d399", name: "Smaragd" },
+                { hex: "#22d3ee", name: "Cyaan" },
+                { hex: "#38bdf8", name: "Sky" },
+                { hex: "#60a5fa", name: "Blauw" },
+                { hex: "#a78bfa", name: "Paars" },
+                { hex: "#f472b6", name: "Fuchsia" }
+            ];
+
+            palette.innerHTML = "";
+            colors.forEach(color => {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "w-6 h-6 rounded-full border border-slate-800 hover:border-white transition active:scale-90 flex-shrink-0";
+                btn.style.backgroundColor = color.hex;
+                btn.title = color.name;
+                btn.onclick = (e) => {
+                    e.stopPropagation();
+                    execStyle("foreColor", color.hex);
+                    palette.classList.add("hidden");
+                };
+                palette.appendChild(btn);
+            });
+        }
+
+        // Document level click listener to close popover
+        document.addEventListener("click", () => {
+            const palette = document.getElementById("wysiwyg-color-palette");
+            if (palette) {
+                palette.classList.add("hidden");
+            }
+        });
+
+        // Dynamic WYSIWYG button active state highlighting based on cursor selection parents
+        function updateWysiwygToolbarHighlighting() {
+            if (!isEditMode) return;
+
+            const boldBtn = document.getElementById("wysiwyg-btn-bold");
+            const italicBtn = document.getElementById("wysiwyg-btn-italic");
+            const codeBtn = document.getElementById("wysiwyg-btn-code");
+            const h3Btn = document.getElementById("wysiwyg-btn-h3");
+            const tipBtn = document.getElementById("wysiwyg-btn-tip");
+            const infoBtn = document.getElementById("wysiwyg-btn-info");
+            
+            const addRowBtn = document.getElementById("wysiwyg-btn-add-row");
+            const addColBtn = document.getElementById("wysiwyg-btn-add-col");
+            const delTableBtn = document.getElementById("wysiwyg-btn-del-table");
+
+            // Hide table modifier controls by default
+            if (addRowBtn) addRowBtn.classList.add("hidden");
+            if (addColBtn) addColBtn.classList.add("hidden");
+            if (delTableBtn) delTableBtn.classList.add("hidden");
+
+            // Reset standard button styling to defaults
+            const defaultBtnClass = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-xs";
+            const defaultItalicClass = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center italic text-xs";
+            const defaultCodeClass = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-mono text-xs";
+            const defaultH3Class = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-[10px]";
+            
+            const activeBtnClass = "w-7 h-7 rounded bg-slate-700 text-blue-400 font-bold border border-blue-500/20 transition flex items-center justify-center text-xs";
+            const activeItalicClass = "w-7 h-7 rounded bg-slate-700 text-blue-400 italic border border-blue-500/20 transition flex items-center justify-center text-xs";
+            const activeCodeClass = "w-7 h-7 rounded bg-slate-700 text-blue-400 font-mono border border-blue-500/20 transition flex items-center justify-center text-xs";
+            const activeH3Class = "w-7 h-7 rounded bg-slate-700 text-blue-400 font-bold border border-blue-500/20 transition flex items-center justify-center text-[10px]";
+
+            // Reset callout buttons styling to defaults
+            if (tipBtn) {
+                tipBtn.className = "px-2 h-7 rounded bg-amber-500/20 border border-amber-500/30 hover:bg-amber-500/30 text-amber-300 transition flex items-center justify-center text-[10px] font-semibold";
+            }
+            if (infoBtn) {
+                infoBtn.className = "px-2 h-7 rounded bg-blue-500/20 border border-blue-500/30 hover:bg-blue-500/30 text-blue-300 transition flex items-center justify-center text-[10px] font-semibold";
+            }
+
+            if (boldBtn) boldBtn.className = defaultBtnClass;
+            if (italicBtn) italicBtn.className = defaultItalicClass;
+            if (codeBtn) codeBtn.className = defaultCodeClass;
+            if (h3Btn) h3Btn.className = defaultH3Class;
+
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+
+            let container = selection.getRangeAt(0).commonAncestorContainer;
+            if (container.nodeType === Node.TEXT_NODE) {
+                container = container.parentNode;
+            }
+
+            const docBox = document.getElementById("assignment-instruction");
+            if (!docBox || !docBox.contains(container)) return;
+
+            // Traverse the DOM up to the assignment instructions container
+            let curr = container;
+            while (curr && curr !== docBox) {
+                const nodeName = curr.nodeName.toLowerCase();
+                
+                if (nodeName === "b" || nodeName === "strong") {
+                    if (boldBtn) boldBtn.className = activeBtnClass;
+                }
+                if (nodeName === "i" || nodeName === "em") {
+                    if (italicBtn) italicBtn.className = activeItalicClass;
+                }
+                if (nodeName === "code" || nodeName === "pre") {
+                    if (codeBtn) codeBtn.className = activeCodeClass;
+                }
+                if (nodeName === "h3") {
+                    if (h3Btn) h3Btn.className = activeH3Class;
+                }
+                if (nodeName === "table" || nodeName === "td" || nodeName === "th" || nodeName === "tr") {
+                    // Reveal table action buttons (Rij, Kolom, Tabel verwijderen) when active inside a table cell
+                    if (addRowBtn) addRowBtn.classList.remove("hidden");
+                    if (addColBtn) addColBtn.classList.remove("hidden");
+                    if (delTableBtn) delTableBtn.classList.remove("hidden");
+                }
+                if (curr.classList && curr.classList.contains("wysiwyg-tip-box")) {
+                    if (tipBtn) {
+                        tipBtn.className = "px-2 h-7 rounded bg-amber-500/40 border border-amber-500 text-amber-100 transition flex items-center justify-center text-[10px] font-bold shadow-md shadow-amber-950/20";
+                    }
+                }
+                if (curr.classList && curr.classList.contains("wysiwyg-info-box")) {
+                    if (infoBtn) {
+                        infoBtn.className = "px-2 h-7 rounded bg-blue-500/40 border border-blue-500 text-blue-100 transition flex items-center justify-center text-[10px] font-bold shadow-md shadow-blue-950/20";
+                    }
+                }
+                curr = curr.parentNode;
+            }
+        }
+
+        // Register document level selection listener
+        document.addEventListener("selectionchange", updateWysiwygToolbarHighlighting);
 
         window.addEventListener("keydown", function (e) {
             if (e.key === "Escape") {

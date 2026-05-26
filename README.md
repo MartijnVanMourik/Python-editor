@@ -12,6 +12,12 @@ Een moderne, interactieve en volledig cliënt-side Python-leeromgeving ontworpen
     *   **Interactief Zoomen & Pannen**: Versleep de tekening met je muis (of vinger op mobiel) en zoom in/out met het muiswiel.
     *   **Zwevend Bedieningspaneel**: Snel inzoomen, uitzoomen en de weergave centreren met één klik.
     *   **Live Run in Fullscreen**: Voer code uit en bekijk de animatie direct terwijl je in volledig scherm bent.
+*   **Trinket-Style Multi-bestand Projecten (OOP)**:
+    *   **Tabbladen-UI**: Direct bestanden aanmaken (`+`), hernoemen (dubbelklik) of verwijderen via een vloeiende tabbladenbalk boven de editor.
+    *   **Virtueel Importsysteem**: Skulpt is zo uitgebreid dat studenten hun eigen klassen en bestanden kunnen importeren (bijv. `from dier import Dier`), wat volwaardig objectgeoriënteerd programmeren lokaal in de browser mogelijk maakt!
+    *   **Slimme Auto-Save**: Alle geopende bestanden worden per opdracht real-time in de browser (`localStorage`) opgeslagen.
+*   **Turtle Auto-detectie & Reactieve Omgeving**:
+    *   Zodra er `import turtle` of `from turtle import` in de code wordt getypt, schakelt de editor automatisch over naar de **Turtle Canvas**-weergave. Zodra deze imports worden verwijderd, keert het scherm direct terug naar de standaard **Console**-weergave.
 *   **Slimme Automatische Unit Tests**:
     *   Evalueert studentencode automatisch op basis van gedefinieerde testcases.
     *   **Strikte scheiding**: De testrunner scheidt invoerprompts (zoals `Hoe heet je? `) van de daadwerkelijk geprinte waarden (`print()`). Hierdoor kunnen testen betrouwbaar op `"exact"` matchen, terwijl studenten toch duidelijke invoerprompts kunnen gebruiken.
@@ -55,8 +61,13 @@ Een opdrachtenbestand is een JSON-bestand dat een titel en een lijst met opdrach
 *   **`id`** *(string)*: Een unieke identificatie (zonder spaties) om de voortgang van de student in de browser op te slaan.
 *   **`filename`** *(string)*: De bestandsnaam die boven de editor en in het menu wordt getoond (bijv. `som.py`).
 *   **`instruction`** *(string)*: De opdrachtomschrijving. Dit veld ondersteunt volledige HTML-opmaak (inclusief Tailwind CSS-klassen) voor rijke en interactieve instructies.
-*   **`initialCode`** *(string)*: De startcode die in de editor klaarstaat voor de student. Gebruik `\n` voor nieuwe regels.
+*   **`initialCode`** *(string)*: De startcode die in de editor klaarstaat voor de student. Gebruik `\n` voor nieuwe regels (alleen gebruikt als er geen `files` array is gedefinieerd).
 *   **`tests`** *(array)*: Een lijst met testgevallen die de code van de student automatisch controleren (leeg laten `[]` voor Turtle-opdrachten).
+*   **`previewImage`** *(string, optioneel)*: Een Base64-gecodeerde afbeelding (DataURL, bijv. `data:image/png;base64,...`) die als verwacht resultaat onder de opdrachtomschrijving wordt weergegeven. Dit maakt de opdrachtenreeks volledig zelfvoorzienend en offline-compatible zonder extra losse bestanden.
+*   **`files`** *(array, optioneel)*: Een lijst met startbestanden voor multi-bestand (Trinket-stijl) opdrachten. Elk bestandsobject bevat:
+    *   **`filename`** *(string)*: De bestandsnaam van dit bestand (bijv. `dier.py`).
+    *   **`initialCode`** *(string)*: De begin-code die in dit bestand staat.
+    *   **`isMain`** *(boolean)*: Moet `true` zijn voor exact één bestand (meestal `main.py`), wat de hoofdingang is van de code-uitvoering en tests.
 
 #### Testgeval-object (binnen `tests`):
 *   **`name`** *(string)*: De naam van de test die de student ziet (bijv. `Test met Jan (16)`).
@@ -106,6 +117,88 @@ Maak een bestand genaamd `opdracht1.json` aan in de map `opdrachten/` en gebruik
   ]
 }
 ```
+
+---
+
+## 👩‍🏫 Docentenmodus & Auteursomgeving (Opdrachten Editor)
+
+De Educatieve Python Editor bevat een ingebouwde, verborgen **Docentenmodus (Auteursmodus)**. Hiermee kun je direct in de browser opdrachten aanmaken, aanpassen, herordenen en unit tests ontwerpen zonder handmatig complexe JSON-bestanden te hoeven schrijven.
+
+### 🔌 Activeren van de Docentenmodus
+
+Je activeert de Docentenmodus door de query-parameter `&edit=true` toe te voegen aan de URL. 
+
+Bijvoorbeeld lokaal:
+👉 [http://localhost:8000/index.html?config=opdracht1&edit=true](http://localhost:8000/index.html?config=opdracht1&edit=true)
+
+Wanneer actief, verschijnt er een opvallende **paarse statusbalk** bovenin het scherm om aan te geven dat je in bewerkingsmodus bent.
+
+---
+
+### 🛠️ Mogelijkheden in de Docentenmodus
+
+#### 1. Cursustitel Bewerken
+Klik simpelweg op de titel van de cursus (linksboven in de zwarte balk). De tekst wordt omlijnd met een stippellijn en is direct aanpasbaar.
+
+#### 2. Opdrachten Beheren (Linkermenu)
+*   **Hernoemen**: Dubbelklik op een opdrachtknop in de lijst om de bestandsnaam (bijv. `opdracht_1.py`) aan te passen.
+*   **Volgorde aanpassen**: Gebruik de omhoog/omlaag-pijltjes naast elke opdracht om de volgorde in het menu te wijzigen.
+*   **Verwijderen**: Klik op het prullenbak-icoon om een opdracht volledig te wissen.
+*   **Nieuwe Opdracht toevoegen**: Klik onderaan de lijst op de paarse knop `+ NIEUWE OPDRACHT` om een nieuwe opdracht op basis van een sjabloon toe te voegen.
+
+#### 3. WYSIWYG Rijke-Tekst Editor (Instructies)
+Boven de opdrachtomschrijving verschijnt een bewerkingsbalk. Hiermee kun je geselecteerde tekst opmaken:
+*   **B / I**: Vetgedrukt of cursief maken.
+*   **Opsommingen**: Bullet-lists en genummerde lijsten invoegen.
+*   **Kopteksten & Paragrafen**: H3-koppen en standaard alinea's invoegen.
+*   **Dynamische Status-Highlighting**: Wanneer je cursor of selectie zich in een specifiek opgemaakt element bevindt (zoals `b`, `i`, `h3`, `code`, een tip-/infokader of een tabel), licht de bijbehorende knop in de toolbar automatisch op! Hierdoor zie je direct welke elementen actief zijn.
+*   **Aan/Uit Toggles**:
+    *   `Vet (B)` / `Cursief (I)` / `Koptekst (H3)`: Klik op de knop om de stijl toe te passen. Staat je cursor al in tekst met deze stijl? Klik nogmaals op de knop om de opmaak te verwijderen! Een `H3`-koptekst verandert dan weer netjes terug in een standaard paragraaf (`p`).
+    *   `Code` (Inline code): Selecteer tekst en klik op `Code` om er een inline code-element van te maken. Als je cursor of selectie al in een code-element staat, klik dan nogmaals op `Code` om het element te verwijderen.
+    *   **Slimme Code-Conversie**: Selecteer je meerdere regels en klik je op `Code`? Dan wordt er direct een groot block-level `<pre><code>` segment van gemaakt. Druk je op **Enter** terwijl je een inline code-element aan het bewerken bent? Dan wordt het code-element ter plekke gesplitst en automatisch omgezet in een `<pre><code>` blok!
+    *   `Tip` / `Info` (Callout-kaders): Voeg een opvallend geel tipkader of blauw informatiekader toe. Staat de cursor al in zo'n kader? Klik nogmaals op de knop om het complete kader **inclusief de volledige inhoud direct te wissen**!
+*   **Stijlvaste Kopiëren/Plakken Beveiliging 📋**: Wanneer je tekst van externe websites kopieert en in het tip- of info-venster plakt, onderschept de editor dit. Alle externe lettertypes, kleuren en opmaakstijlen worden gewist en automatisch omgezet naar platte tekst, waardoor de standaardkleuren en premium typografie van het lokale thema vlekkeloos behouden blijven!
+*   **Interactieve Tabellen 📊**:
+    *   `Tabel`: Voegt direct een prachtig donker gestileerde 2x2 tabel toe.
+    *   `+ Rij` / `+ Kolom` *(dynamisch)*: Zodra je cursor in een tabelcel staat, verschijnen er automatisch paarse knoppen in de toolbar om direct een rij eronder of kolom ernaast in te voegen.
+    *   `🗑️ Tabel` *(dynamisch)*: Verwijdert met één klik de gehele actieve tabel uit de omschrijving.
+*   **Kleurenpalet 🎨**: Klik op het palet-icoon om een dropdown met **16 gecureerde, heldere webkleuren** te openen. Hiermee kun je geselecteerde tekst eenvoudig een kleur geven die uitstekend leesbaar is op een donkere achtergrond.
+*   **HTML Modus**: Klik op het `<>` (code-compare) icoon rechts op de toolbar om te schakelen tussen de visuele weergave en de ruwe HTML-code. Dit is handig voor docenten die fijnmazige controle willen over de opmaak.
+
+#### 4. Geïntegreerde Voorbeeldweergave ("Verwacht resultaat") 📸
+*   **Direct Inbedden**: Bij Turtle-opdrachten kun je op de camera-knop (📸) in het zwevende bedieningspaneel klikken. De editor legt de tekening direct vast en slaat deze op als Base64-gecodeerde PNG-afbeelding (`task.previewImage`) in de opdracht zelf.
+*   **Live Preview**: De voorbeeldtekening verschijnt onmiddellijk live onder de omschrijving onder het kopje **"Verwacht resultaat:"**.
+*   **Verwijderen**: In Docentenmodus verschijnt er een subtiel vuilnisbak-icoontje naast het kopje om de preview met één klik te wissen.
+*   **Offline Compatibiliteit**: Omdat de afbeeldingen rechtstreeks in de geëxporteerde JSON worden ingebed, hoef je geen losse PNG-afbeeldingen meer op een server te plaatsen. De opdrachtenreeks is 100% zelfvoorzienend en offline-compatible!
+*   **Disk Fallback**: Mocht er geen ingebedde afbeelding zijn, dan zoekt de editor automatisch naar een lokaal bestand op schijf (`opdrachten/<bestandsnaam-zonder-py>.png`) om compatibel te blijven met bestaand lesmateriaal.
+
+#### 5. Interactieve Unit Test Builder
+Wanneer je naar het tabblad **Tests** schakelt onder de console, zie je in de Docentenmodus een interactieve formulier-builder in plaats van lege testresultaten:
+*   **Nieuwe Testcase**: Klik op `+ NIEUWE TESTCASE TOEVOEGEN`.
+*   **Naam**: Geef de test een duidelijke omschrijving (bijv. "Test met invoer 10 en 20").
+*   **Invoerwaarden**: Voer de waarden in die opeenvolgend aan `input()` moeten worden meegegeven (gescheiden door komma's).
+*   **Match**: Kies tussen:
+    *   `Exact match`: De geprinte output moet exact overeenkomen (hoofdletterongevoelig, witruimte aan begin/eind genegeerd).
+    *   `Bevat substring`: De verwachte tekst moet ergens in de geprinte output voorkomen.
+*   **Verwachte Output**: Typ de verwachte geprinte tekst. Dit veld ondersteunt meerdere regels.
+
+---
+
+### 💾 Exporteren en Opslaan van je Cursus
+
+Omdat de applicatie volledig cliënt-side in de browser draait, kan deze niet rechtstreeks bestanden op jouw lokale schijf overschrijven. Je beheert en slaat je cursusbestanden als volgt op:
+
+#### 1. Bestandsnaam Aanpassen
+In de paarse banner zie je het invoerveld **`Bestand:`**. Hier kun je de gewenste JSON-bestandsnaam typen (bijv. `les_1_optellen.json`). Als je op downloaden klikt, krijgt het bestand automatisch deze naam.
+
+#### 2. Starten met een Lege Cursus
+Wil je een compleet nieuwe cursus vanaf de grond af opbouwen? Klik op de paarse knop **`Nieuwe Cursus`** in de banner. De editor wist alle in-memory voortgang en laadt een schone sjabloon-opdracht waarin je direct kunt gaan typen.
+
+#### 3. Downloaden & Opslaan
+1.  Klik op de knop **`Download Cursus JSON`**.
+2.  Het JSON-bestand wordt direct met de door jou opgegeven bestandsnaam gedownload.
+3.  Plaats dit gedownloade JSON-bestand in de map `opdrachten/` van je project.
+4.  Laad de pagina met de bijbehorende query-parameter (bijv. `index.html?config=les_1_optellen`) om direct je nieuwe cursus te gebruiken!
 
 ---
 
