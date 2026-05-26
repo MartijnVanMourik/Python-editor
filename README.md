@@ -21,7 +21,7 @@ Een moderne, interactieve en volledig cliënt-side Python-leeromgeving ontworpen
 *   **Slimme Automatische Unit Tests**:
     *   Evalueert studentencode automatisch op basis van gedefinieerde testcases.
     *   **Strikte scheiding**: De testrunner scheidt invoerprompts (zoals `Hoe heet je? `) van de daadwerkelijk geprinte waarden (`print()`). Hierdoor kunnen testen betrouwbaar op `"exact"` matchen, terwijl studenten toch duidelijke invoerprompts kunnen gebruiken.
-*   **Voortgangsbehoud**: Code van studenten wordt automatisch per opdracht in de `localStorage` van de browser opgeslagen.
+*   **Voortgangsbehoud & Project-Isolatie**: Code en testresultaten worden per opdracht automatisch in de `localStorage` opgeslagen. Dit is volledig **geïsoleerd per opdrachtenreeks (cursus)** op basis van het geladen JSON-bestand in de URL. Hierdoor kunnen studenten aan meerdere verschillende cursussen tegelijkertijd werken zonder dat hun voortgang botst of elkaar overschrijft!
 *   **Voortgang Exporteren/Importeren**: Studenten kunnen hun werk exporteren naar een compact `.json` inleverbestand en later weer importeren om verder te werken.
 
 ---

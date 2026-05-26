@@ -509,6 +509,90 @@
         let activeMobileView = "editor"; // State tracking for mobile split screen
         let activeOutputSubTab = "console"; // Active subtab in the output panel
         let isEditMode = false; // Flag for teacher editing mode
+        let courseNamespace = "default"; // Namespace identifier based on loaded course config URL
+        let progressStorageKey = "edu_py_editor_progress_default"; // Dynamic localStorage key for progress isolation
+
+        // Intercept localStorage to automatically namespace progress and test result keys per course config
+        (function() {
+            const originalGetItem = localStorage.getItem.bind(localStorage);
+            const originalSetItem = localStorage.setItem.bind(localStorage);
+            const originalRemoveItem = localStorage.removeItem.bind(localStorage);
+
+            localStorage.getItem = function (key) {
+                if (key === "edu_py_editor_progress") {
+                    let value = originalGetItem(progressStorageKey);
+                    // Backwards compatibility migration
+                    if (!value) {
+                        const oldValue = originalGetItem("edu_py_editor_progress");
+                        if (oldValue) {
+                            try {
+                                const parsed = JSON.parse(oldValue);
+                                const migrated = {};
+                                let hasMigration = false;
+                                // If taskConfig is already loaded and has tabs, we can selectively migrate
+                                if (taskConfig && taskConfig.tabs) {
+                                    taskConfig.tabs.forEach(t => {
+                                        if (parsed[t.id]) {
+                                            migrated[t.id] = parsed[t.id];
+                                            hasMigration = true;
+                                        }
+                                    });
+                                } else {
+                                    // Fallback to migrating everything
+                                    Object.assign(migrated, parsed);
+                                    hasMigration = true;
+                                }
+                                if (hasMigration) {
+                                    value = JSON.stringify(migrated);
+                                    originalSetItem(progressStorageKey, value);
+                                }
+                            } catch (e) {
+                                console.error("Migration error: ", e);
+                            }
+                        }
+                    }
+                    return value;
+                }
+                if (key.startsWith("edu_py_task_passed_")) {
+                    const taskId = key.replace("edu_py_task_passed_", "");
+                    const newKey = `edu_py_task_passed_${courseNamespace}_${taskId}`;
+                    let value = originalGetItem(newKey);
+                    if (!value) {
+                        const oldValue = originalGetItem(key);
+                        if (oldValue) {
+                            originalSetItem(newKey, oldValue);
+                            value = oldValue;
+                        }
+                    }
+                    return value;
+                }
+                return originalGetItem(key);
+            };
+
+            localStorage.setItem = function (key, value) {
+                if (key === "edu_py_editor_progress") {
+                    return originalSetItem(progressStorageKey, value);
+                }
+                if (key.startsWith("edu_py_task_passed_")) {
+                    const taskId = key.replace("edu_py_task_passed_", "");
+                    const newKey = `edu_py_task_passed_${courseNamespace}_${taskId}`;
+                    return originalSetItem(newKey, value);
+                }
+                return originalSetItem(key, value);
+            };
+
+            localStorage.removeItem = function (key) {
+                if (key === "edu_py_editor_progress") {
+                    return originalRemoveItem(progressStorageKey);
+                }
+                if (key.startsWith("edu_py_task_passed_")) {
+                    const taskId = key.replace("edu_py_task_passed_", "");
+                    const newKey = `edu_py_task_passed_${courseNamespace}_${taskId}`;
+                    return originalRemoveItem(newKey);
+                }
+                return originalRemoveItem(key);
+            };
+        })();
 
         // Fallback default tasks configuration if none loaded via url querystring
         const DEFAULT_CONFIG = {
@@ -585,9 +669,9 @@
             // Auto-save changes in background when user types
             editor.on("change", () => {
                 if (currentTaskId) {
+                    const codeValue = editor.getValue();
                     const workspace = getTaskWorkspace(currentTaskId);
                     if (workspace) {
-                        const codeValue = editor.getValue();
                         workspace.files[workspace.activeFile] = codeValue;
                         userProgress[currentTaskId] = workspace;
                         localStorage.setItem("edu_py_editor_progress", JSON.stringify(userProgress));
@@ -652,6 +736,15 @@
             const urlParams = new URLSearchParams(window.location.search);
             const configUrl = urlParams.get('config');
             isEditMode = urlParams.get('edit') === 'true';
+
+            // Establish clean course namespace for project isolation
+            if (configUrl) {
+                // Remove special characters, keep only alphanumerics and underscores
+                courseNamespace = configUrl.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+            } else {
+                courseNamespace = "default";
+            }
+            progressStorageKey = `edu_py_editor_progress_${courseNamespace}`;
 
             // Show teacher edit banner and make title contenteditable
             if (isEditMode) {
@@ -734,17 +827,14 @@
                 const btn = document.createElement("button");
                 btn.id = `task-btn-${task.id}`;
                 btn.onclick = () => selectTask(task.id);
-                btn.className = `flex-1 text-left p-2.5 rounded-xl transition flex flex-col gap-0.5 min-w-0 ${isActive ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg' : 'bg-slate-800/80 hover:bg-slate-800 text-slate-300'
+                btn.className = `flex-1 text-left p-2.5 rounded-xl transition flex items-center justify-between min-w-0 ${isActive ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg' : 'bg-slate-800/80 hover:bg-slate-800 text-slate-300'
                     }`;
 
                 btn.innerHTML = `
-                    <div class="flex items-center justify-between w-full min-w-0 gap-2">
-                        <span class="font-semibold text-sm truncate select-none">${task.filename}</span>
-                        <span id="badge-${task.id}" class="shrink-0">
-                            ${isPassed ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>' : '<i class="fa-regular fa-circle text-slate-500"></i>'}
-                        </span>
-                    </div>
-                    <span class="text-[10px] opacity-75 truncate select-none">${task.id}</span>
+                    <span class="font-semibold text-sm truncate select-none mr-2">${task.filename}</span>
+                    <span id="badge-${task.id}" class="shrink-0">
+                        ${isPassed ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>' : '<i class="fa-regular fa-circle text-slate-500"></i>'}
+                    </span>
                 `;
 
                 if (isEditMode) {
@@ -814,7 +904,17 @@
 
         // Check if all testcases passed for a task
         function checkIfPassed(taskId) {
-            const passedArray = JSON.parse(localStorage.getItem(`edu_py_task_passed_${taskId}`) || "[]");
+            const key = getTaskPassedKey(taskId);
+            let savedPassed = localStorage.getItem(key);
+            if (!savedPassed) {
+                // Backwards compatibility migration fallback
+                const oldSaved = localStorage.getItem(`edu_py_task_passed_${taskId}`);
+                if (oldSaved) {
+                    savedPassed = oldSaved;
+                    localStorage.setItem(key, oldSaved);
+                }
+            }
+            const passedArray = JSON.parse(savedPassed || "[]");
             const task = taskConfig.tabs.find(t => t.id === taskId);
             if (!task || !task.tests || task.tests.length === 0) return false;
             return passedArray.length === task.tests.length && passedArray.every(v => v === true);
