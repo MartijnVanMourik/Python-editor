@@ -344,10 +344,17 @@
                         class="bg-slate-900 border-t border-slate-800 p-3 flex flex-wrap items-center justify-between gap-3">
                         <div class="flex gap-2">
                             <!-- Run Code Button -->
-                            <button onclick="runPythonCode()"
+                            <button id="btn-run-code" onclick="togglePythonExecution()"
                                 class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/20 active:scale-95 transition flex items-center gap-2">
                                 <i class="fa-solid fa-play text-lg"></i>
                                 <span>Voer Code Uit</span>
+                            </button>
+                            <!-- Validate Code Button -->
+                            <button id="btn-validate-code" onclick="validatePythonCode()"
+                                class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold px-4 py-2.5 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-2 border border-slate-700"
+                                title="Controleer de code op syntaxfouten zonder deze uit te voeren">
+                                <i class="fa-solid fa-clipboard-check text-lg text-slate-400"></i>
+                                <span>Valideer</span>
                             </button>
                             <!-- Run Unit Tests Button -->
                             <button id="btn-run-tests" onclick="runAssignmentTests()"
@@ -381,7 +388,7 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <!-- Run Code Button -->
-                            <button onclick="runPythonCode()"
+                            <button id="btn-run-code-demo" onclick="togglePythonExecution()"
                                 class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-4 py-2 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-2 text-xs">
                                 <i class="fa-solid fa-play"></i>
                                 <span>Voer Code Uit</span>
@@ -457,7 +464,7 @@
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <!-- Run Code Button in Fullscreen -->
-                                    <button onclick="runPythonCode()"
+                                    <button id="btn-run-code-fullscreen" onclick="togglePythonExecution()"
                                         class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-4 py-2 rounded-xl transition flex items-center gap-2 shadow-lg active:scale-95 text-sm"
                                         title="Voer de Python code uit">
                                         <i class="fa-solid fa-play"></i>
@@ -529,10 +536,14 @@
             <input type="text" id="input-modal-field"
                 class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono mb-4 text-base"
                 placeholder="Typ je antwoord hier..." autofocus>
-            <div class="flex justify-end">
+            <div class="flex justify-end gap-3">
+                <button id="input-modal-stop"
+                    class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium px-4 py-2.5 rounded-xl transition active:scale-95 text-sm flex items-center gap-1.5 shadow border border-slate-700">
+                    Stop <i class="fa-solid fa-stop text-red-500"></i>
+                </button>
                 <button id="input-modal-submit"
-                    class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl transition shadow-lg active:scale-95">
-                    Verstuur <i class="fa-solid fa-paper-plane ml-1"></i>
+                    class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl transition shadow-lg active:scale-95 text-sm flex items-center gap-1.5">
+                    Verstuur <i class="fa-solid fa-paper-plane"></i>
                 </button>
             </div>
         </div>
@@ -584,6 +595,8 @@
         let userProgress = {}; // Student's saved code progress state mapped by Task ID
         let runOutputs = []; // Array of recorded outputs during Python execution
         let isRunningTest = false; // Flag to isolate manual input from test input mocks
+        let isExecuting = false; // Flag to track if Python code/tests are currently running
+        let executionInterrupted = false; // Flag to check if stop execution was requested
         let testInputsQueue = []; // Sequence of inputs configured for the active automated test case
         let activeMobileView = "editor"; // State tracking for mobile split screen
         let activeOutputSubTab = "console"; // Active subtab in the output panel
@@ -592,6 +605,7 @@
         let canvasSize = 400; // Default canvas size in pixels (both width and height)
         let menuConfig = null; // Force show/hide task selector menu ('show', 'hide', or null)
         let isEmbed = false; // Flag to hide header and buttons for iframe embeds
+        let isInitializingNewCourse = false; // Flag to track course initialization modal state
         let courseNamespace = "default"; // Namespace identifier based on loaded course config URL
 
         // Helper to namespace and get progress and passed test storage keys
@@ -696,16 +710,19 @@
                             if (btnConsole && btnTurtle && btnTests) {
                                 const isCurrentlyTurtleVisible = !btnTurtle.classList.contains("hidden");
 
+                                const testBtn = document.getElementById("btn-run-tests");
                                 if (isTurtle && !isCurrentlyTurtleVisible) {
                                     btnTurtle.classList.remove("hidden");
                                     btnConsole.classList.add("hidden");
                                     btnTests.classList.add("hidden");
+                                    if (testBtn) testBtn.classList.add("hidden");
                                     switchOutputSubTab('turtle');
                                     showToast("🐢 Turtle gedetecteerd: Canvas geopend!");
                                 } else if (!isTurtle && isCurrentlyTurtleVisible) {
                                     btnTurtle.classList.add("hidden");
                                     btnConsole.classList.remove("hidden");
                                     btnTests.classList.remove("hidden");
+                                    if (testBtn) testBtn.classList.remove("hidden");
                                     switchOutputSubTab('console');
                                     showToast("💻 Console geopend (geen turtle)");
                                 }
@@ -719,7 +736,7 @@
             window.addEventListener("keydown", function (e) {
                 if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
                     e.preventDefault();
-                    runPythonCode();
+                    togglePythonExecution();
                 }
             });
 
@@ -868,6 +885,16 @@
                     alert("Kon de geconfigureerde opdrachten niet laden van URL. We laden de ingebouwde demo-opdrachten.");
                     taskConfig = DEFAULT_CONFIG;
                 }
+            } else {
+                if (isEditMode) {
+                    taskConfig = {
+                        title: "Nieuwe Python Cursus",
+                        tabs: []
+                    };
+                    isInitializingNewCourse = true;
+                } else {
+                    taskConfig = DEFAULT_CONFIG;
+                }
             }
 
             if (taskConfig) {
@@ -940,6 +967,13 @@
             if (appMode === 'demo') {
                 setTimeout(() => {
                     runPythonCode();
+                }, 100);
+            }
+
+            // Auto-open modal to initialize the first assignment for new courses on load
+            if (isInitializingNewCourse && isEditMode) {
+                setTimeout(() => {
+                    createNewTaskInConfig();
                 }, 100);
             }
         }
@@ -1188,15 +1222,18 @@
                 const btnTurtle = document.getElementById("subtab-btn-turtle");
                 const btnTests = document.getElementById("subtab-btn-tests");
 
+                const testBtn = document.getElementById("btn-run-tests");
                 if (isTurtle) {
                     btnTurtle.classList.remove("hidden");
                     btnConsole.classList.add("hidden");
                     btnTests.classList.add("hidden");
+                    if (testBtn) testBtn.classList.add("hidden");
                     switchOutputSubTab('turtle');
                 } else {
                     btnTurtle.classList.add("hidden");
                     btnConsole.classList.remove("hidden");
                     btnTests.classList.remove("hidden");
+                    if (testBtn) testBtn.classList.remove("hidden");
                     switchOutputSubTab('console');
                 }
 
@@ -1260,11 +1297,12 @@
         }
 
         // Custom Promise-based Input Overlay System
-        function showInputModal(promptText, resolveCallback) {
+        function showInputModal(promptText, resolveCallback, rejectCallback) {
             const modal = document.getElementById("input-modal");
             const promptBox = document.getElementById("input-modal-prompt");
             const inputField = document.getElementById("input-modal-field");
             const submitBtn = document.getElementById("input-modal-submit");
+            const stopBtn = document.getElementById("input-modal-stop");
 
             promptBox.textContent = promptText || "Invoer vereist:";
             inputField.value = "";
@@ -1272,16 +1310,18 @@
             modal.classList.add("flex");
             inputField.focus();
 
-            const handleSubmit = () => {
-                const value = inputField.value;
+            const closeModal = () => {
                 modal.classList.add("hidden");
                 modal.classList.remove("flex");
-                appendToConsole(value + "\n");
-
-                // Clean up listeners to prevent double bindings
                 submitBtn.onclick = null;
                 inputField.onkeydown = null;
+                if (stopBtn) stopBtn.onclick = null;
+            };
 
+            const handleSubmit = () => {
+                const value = inputField.value;
+                closeModal();
+                appendToConsole(value + "\n");
                 resolveCallback(value);
             };
 
@@ -1291,6 +1331,137 @@
                     handleSubmit();
                 }
             };
+
+            if (stopBtn) {
+                stopBtn.onclick = () => {
+                    closeModal();
+                    interruptPythonCode();
+                    if (rejectCallback) {
+                        rejectCallback(new Error("Execution Interrupted"));
+                    }
+                };
+            }
+        }
+
+        function togglePythonExecution() {
+            if (isExecuting) {
+                interruptPythonCode();
+            } else {
+                runPythonCode();
+            }
+        }
+
+        function interruptPythonCode() {
+            executionInterrupted = true;
+            showToast("🛑 Uitvoering onderbroken...");
+        }
+
+        function setExecutionRunningState(running) {
+            isExecuting = running;
+            if (running) {
+                executionInterrupted = false;
+            }
+
+            const buttons = [
+                { id: "btn-run-code", isLarge: true },
+                { id: "btn-run-code-demo", isLarge: false },
+                { id: "btn-run-code-fullscreen", isLarge: false }
+            ];
+
+            buttons.forEach(btnInfo => {
+                const btn = document.getElementById(btnInfo.id);
+                if (!btn) return;
+
+                const icon = btn.querySelector("i");
+                const text = btn.querySelector("span");
+
+                if (running) {
+                    btn.classList.remove("from-emerald-500", "to-teal-600", "hover:from-emerald-400", "hover:to-teal-500", "text-slate-950");
+                    btn.classList.add("from-red-500", "to-rose-600", "hover:from-red-400", "hover:to-rose-500", "text-white");
+                    if (icon) {
+                        icon.className = btnInfo.isLarge ? "fa-solid fa-stop text-lg" : "fa-solid fa-stop";
+                    }
+                    if (text) {
+                        text.textContent = "Onderbreken";
+                    }
+                    btn.title = "Onderbreek het momenteel actieve programma";
+                } else {
+                    btn.classList.remove("from-red-500", "to-rose-600", "hover:from-red-400", "hover:to-rose-500", "text-white");
+                    btn.classList.add("from-emerald-500", "to-teal-600", "hover:from-emerald-400", "hover:to-teal-500", "text-slate-950");
+                    if (icon) {
+                        icon.className = btnInfo.isLarge ? "fa-solid fa-play text-lg" : "fa-solid fa-play";
+                    }
+                    if (text) {
+                        text.textContent = "Voer Code Uit";
+                    }
+                    btn.title = "Voer de Python code uit";
+                }
+            });
+
+            // Disable or enable Validate and Test buttons
+            const validateBtn = document.getElementById("btn-validate-code");
+            if (validateBtn) {
+                if (running) {
+                    validateBtn.classList.add("opacity-50", "pointer-events-none");
+                } else {
+                    validateBtn.classList.remove("opacity-50", "pointer-events-none");
+                }
+            }
+            const testBtn = document.getElementById("btn-run-tests");
+            if (testBtn) {
+                if (running) {
+                    testBtn.classList.add("opacity-50", "pointer-events-none");
+                } else {
+                    testBtn.classList.remove("opacity-50", "pointer-events-none");
+                }
+            }
+        }
+
+        function validatePythonCode() {
+            if (isExecuting) return;
+
+            // Save active tab code first
+            const workspace = getTaskWorkspace(currentTaskId);
+            if (workspace) {
+                workspace.files[workspace.activeFile] = editor.getValue();
+                userProgress[currentTaskId] = workspace;
+                localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
+            }
+
+            const activeFile = workspace ? workspace.activeFile : "main.py";
+            const codeToValidate = editor.getValue();
+
+            // Switch to console view to show output
+            switchOutputSubTab('console');
+            clearConsole();
+
+            appendToConsole(`-- Start validatie van ${activeFile}... --\n`);
+
+            try {
+                // Configure Skulpt compiler options before compiling
+                Sk.configure({
+                    read: function (file) {
+                        const cleanFilename = file.replace(/^\.\//, "");
+                        if (workspace && workspace.files[cleanFilename] !== undefined) {
+                            return workspace.files[cleanFilename];
+                        }
+                        if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][file] === undefined) {
+                            throw "Bestand niet gevonden: '" + file + "'";
+                        }
+                        return Sk.builtinFiles["files"][file];
+                    },
+                    __future__: Sk.python3
+                });
+
+                // Compile directly using Python code string to check syntax
+                Sk.compile(codeToValidate, activeFile, "exec", false);
+
+                appendToConsole("✅ Code is syntactisch correct! Geen fouten gevonden.\n");
+                showToast("✅ Code is syntactisch correct!");
+            } catch (err) {
+                appendToConsole("❌ Fout bij compileren:\n" + err.toString() + "\n");
+                showToast("❌ Validatie mislukt. Zie console.");
+            }
         }
 
         function runPythonCode() {
@@ -1305,6 +1476,7 @@
             const mainCode = workspace ? (workspace.files["main.py"] || "") : editor.getValue();
             const isTurtle = mainCode.includes("import turtle") || mainCode.includes("from turtle import");
             isRunningTest = false;
+            setExecutionRunningState(true);
 
             if (isTurtle) {
                 switchOutputSubTab('turtle');
@@ -1336,11 +1508,15 @@
                     return Sk.builtinFiles["files"][file];
                 },
                 inputfun: function (prompt) {
-                    return new Promise((resolve) => {
-                        showInputModal(prompt, resolve);
+                    return new Promise((resolve, reject) => {
+                        showInputModal(prompt, resolve, reject);
                     });
                 },
-                inputfunTakesPrompt: true
+                inputfunTakesPrompt: true,
+                yieldLimit: 100,
+                execLimit: 10000,
+                killableWhile: true,
+                killableFor: true
             });
 
             // Target the canvas element for turtle drawings
@@ -1350,14 +1526,37 @@
 
             const myPromise = Sk.misceval.asyncToPromise(function () {
                 return Sk.importMainWithBody("<stdin>", false, mainCode, true);
+            }, {
+                "*": function () {
+                    if (executionInterrupted) {
+                        throw new Error("Execution Interrupted");
+                    }
+                }
             });
 
             myPromise.then(
                 function (mod) {
                     appendToConsole("\n-- Uitvoering succesvol beëindigd --\n");
+                    setExecutionRunningState(false);
                 },
                 function (err) {
-                    appendToConsole("\nFoutmelding:\n" + err.toString() + "\n");
+                    if (err.toString().includes("Execution Interrupted") || err.message === "Execution Interrupted") {
+                        appendToConsole("\n-- Uitvoering onderbroken --\n");
+                    } else {
+                        appendToConsole("\nFoutmelding:\n" + err.toString() + "\n");
+                        // Switch output panel tab to Console on error
+                        switchOutputSubTab('console');
+                        // Close fullscreen turtle graphics if active
+                        const turtlePanel = document.getElementById("panel-turtle");
+                        if (turtlePanel && turtlePanel.classList.contains("turtle-fullscreen-active")) {
+                            toggleTurtleFullscreen();
+                        }
+                        // Focus output panel on mobile screens
+                        if (window.innerWidth < 1024) {
+                            switchMobileView('output');
+                        }
+                    }
+                    setExecutionRunningState(false);
                 }
             );
         }
@@ -1372,6 +1571,8 @@
                 return;
             }
 
+            setExecutionRunningState(true);
+
             // Switch view to tests panel
             switchOutputSubTab('tests');
 
@@ -1382,9 +1583,18 @@
 
             // Execute each test sequentially
             for (let i = 0; i < task.tests.length; i++) {
+                if (executionInterrupted) {
+                    break;
+                }
                 const testCase = task.tests[i];
                 const passed = await runSingleTestCase(task.initialCode, editor.getValue(), testCase);
                 results.push(passed);
+            }
+
+            if (executionInterrupted) {
+                listContainer.innerHTML = '<p class="text-sm text-red-400 font-semibold flex items-center gap-1.5"><i class="fa-solid fa-circle-xmark"></i> Testen onderbroken door gebruiker.</p>';
+                setExecutionRunningState(false);
+                return;
             }
 
             // Save passing state to localstorage
@@ -1395,6 +1605,8 @@
 
             // Display visual outcome summaries
             renderTestOutcomes(task, results);
+
+            setExecutionRunningState(false);
         }
 
         function runSingleTestCase(initialCode, studentCode, testCase) {
@@ -1439,12 +1651,22 @@
                             return "";
                         }
                     },
-                    inputfunTakesPrompt: true
+                    inputfunTakesPrompt: true,
+                    yieldLimit: 100,
+                    execLimit: 5000,
+                    killableWhile: true,
+                    killableFor: true
                 });
 
                 // Run Skulpt asynchronised to promise
                 const executionPromise = Sk.misceval.asyncToPromise(function () {
                     return Sk.importMainWithBody("<stdin>", false, mainCode, true);
+                }, {
+                    "*": function () {
+                        if (executionInterrupted) {
+                            throw new Error("Execution Interrupted");
+                        }
+                    }
                 });
 
                 executionPromise.then(
@@ -1467,7 +1689,7 @@
                             name: testCase.name,
                             inputs: testCase.inputs,
                             expected: testCase.expectedOutput,
-                            actual: "Foutmelding tijdens uitvoering: " + err.toString(),
+                            actual: err.message === "Execution Interrupted" ? "Uitvoering onderbroken" : "Foutmelding tijdens uitvoering: " + err.toString(),
                             passed: false
                         });
                     }
@@ -2659,6 +2881,70 @@
                 if (id === null) return;
                 id = id.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
                 if (!id) return;
+
+                // Verify duplicate IDs (only if not starting a new course from scratch)
+                if (!isInitializingNewCourse && taskConfig && taskConfig.tabs && taskConfig.tabs.find(t => t.id === id)) {
+                    alert(`Een opdracht met ID "${id}" bestaat al. Kies een ander ID.`);
+                    return;
+                }
+
+                if (isInitializingNewCourse) {
+                    taskConfig = {
+                        title: "Nieuwe Python Cursus",
+                        tabs: [
+                            {
+                                id: id,
+                                title: name,
+                                filename: id + ".py",
+                                instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>Titel van ${name}</h3><p class='mb-2'>Typ hier de opdrachten voor studenten.</p>`,
+                                files: [
+                                    {
+                                        filename: "main.py",
+                                        initialCode: "# Schrijf hier je begin-code\nprint('Hallo Wereld!')\n",
+                                        isMain: true
+                                    }
+                                ],
+                                tests: []
+                            }
+                        ]
+                    };
+
+                    currentTaskId = "";
+                    userProgress = {};
+                    localStorage.removeItem(getProgressStorageKey());
+
+                    document.getElementById("config-title").textContent = taskConfig.title;
+
+                    const filenameInput = document.getElementById("teacher-filename-input");
+                    if (filenameInput) {
+                        filenameInput.value = "nieuwe_cursus.json";
+                    }
+
+                    renderTaskSelector();
+                    selectTask(id);
+
+                    isInitializingNewCourse = false;
+                    showToast("✨ Nieuwe cursus gestart met eerste opdracht!");
+                } else {
+                    const newTask = {
+                        id: id,
+                        title: name,
+                        instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>${name}</h3><p class='mb-2'>Typ hier de instructies voor deze opdracht...</p>`,
+                        files: [
+                            {
+                                filename: "main.py",
+                                initialCode: "# Schrijf hier je Python-code...\n",
+                                isMain: true
+                            }
+                        ],
+                        tests: []
+                    };
+
+                    taskConfig.tabs.push(newTask);
+                    renderTaskSelector();
+                    selectTask(id);
+                    showToast(`✨ Opdracht ${name} aangemaakt!`);
+                }
                 return;
             }
 
@@ -2675,6 +2961,7 @@
                 submitBtn.onclick = null;
                 nameInput.onkeydown = null;
                 idInput.onkeydown = null;
+                isInitializingNewCourse = false;
             };
 
             cancelBtn.onclick = closeModal;
@@ -2692,31 +2979,75 @@
                     return;
                 }
 
-                // Verify no duplicates
-                if (taskConfig.tabs.find(t => t.id === id)) {
+                // Verify duplicate IDs (only if not starting a new course from scratch)
+                if (!isInitializingNewCourse && taskConfig && taskConfig.tabs && taskConfig.tabs.find(t => t.id === id)) {
                     alert(`Een opdracht met ID "${id}" bestaat al. Kies een ander ID.`);
                     return;
                 }
 
-                const newTask = {
-                    id: id,
-                    title: name,
-                    instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>${name}</h3><p class='mb-2'>Typ hier de instructies voor deze opdracht...</p>`,
-                    files: [
-                        {
-                            filename: "main.py",
-                            initialCode: "# Schrijf hier je Python-code...\n",
-                            isMain: true
-                        }
-                    ],
-                    tests: []
-                };
+                if (isInitializingNewCourse) {
+                    taskConfig = {
+                        title: "Nieuwe Python Cursus",
+                        tabs: [
+                            {
+                                id: id,
+                                title: name,
+                                filename: id + ".py",
+                                instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>Titel van ${name}</h3><p class='mb-2'>Typ hier de opdrachten voor studenten.</p>`,
+                                files: [
+                                    {
+                                        filename: "main.py",
+                                        initialCode: "# Schrijf hier je begin-code\nprint('Hallo Wereld!')\n",
+                                        isMain: true
+                                    }
+                                ],
+                                tests: []
+                            }
+                        ]
+                    };
 
-                taskConfig.tabs.push(newTask);
-                renderTaskSelector();
-                selectTask(id);
-                showToast(`✨ Opdracht ${name} aangemaakt!`);
-                closeModal();
+                    // Reset student session parameters to prevent state bleed
+                    currentTaskId = "";
+                    userProgress = {};
+                    localStorage.removeItem(getProgressStorageKey());
+
+                    // Apply new default title to title bar
+                    document.getElementById("config-title").textContent = taskConfig.title;
+
+                    // Set filename input to standard default
+                    const filenameInput = document.getElementById("teacher-filename-input");
+                    if (filenameInput) {
+                        filenameInput.value = "nieuwe_cursus.json";
+                    }
+
+                    // Render task selector and select the first assignment
+                    renderTaskSelector();
+                    selectTask(id);
+
+                    isInitializingNewCourse = false;
+                    showToast("✨ Nieuwe cursus gestart met eerste opdracht!");
+                    closeModal();
+                } else {
+                    const newTask = {
+                        id: id,
+                        title: name,
+                        instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>${name}</h3><p class='mb-2'>Typ hier de instructies voor deze opdracht...</p>`,
+                        files: [
+                            {
+                                filename: "main.py",
+                                initialCode: "# Schrijf hier je Python-code...\n",
+                                isMain: true
+                            }
+                        ],
+                        tests: []
+                    };
+
+                    taskConfig.tabs.push(newTask);
+                    renderTaskSelector();
+                    selectTask(id);
+                    showToast(`✨ Opdracht ${name} aangemaakt!`);
+                    closeModal();
+                }
             };
 
             submitBtn.onclick = handleSubmit;
@@ -3030,45 +3361,8 @@
         // Start a brand new, empty Course JSON from scratch
         function startNewCourse() {
             if (confirm("Weet je zeker dat je met een nieuwe cursus wilt beginnen? Alle niet-gedownloade wijzigingen aan de huidige cursus gaan verloren.")) {
-                taskConfig = {
-                    title: "Nieuwe Python Cursus",
-                    tabs: [
-                        {
-                            id: "opdracht_1",
-                            instruction: "<h3 class='text-lg font-semibold text-slate-100 mb-2'>Titel van Opdracht 1</h3><p class='mb-2'>Dit is de omschrijving in HTML-formaat. Typ hier de opdrachten voor studenten.</p>",
-                            files: [
-                                {
-                                    filename: "main.py",
-                                    initialCode: "# Schrijf hier je begin-code\nprint('Hallo Wereld!')\n",
-                                    isMain: true
-                                }
-                            ],
-                            tests: []
-                        }
-                    ]
-                };
-
-                // Reset student session parameters to prevent state bleed
-                currentTaskId = "";
-                userProgress = {};
-                localStorage.removeItem(getProgressStorageKey());
-
-                // Apply new default title to title bar
-                document.getElementById("config-title").textContent = taskConfig.title;
-
-                // Set filename input to standard default
-                const filenameInput = document.getElementById("teacher-filename-input");
-                if (filenameInput) {
-                    filenameInput.value = "nieuwe_cursus.json";
-                }
-
-                // Render task selector and select the first assignment
-                renderTaskSelector();
-                if (taskConfig.tabs.length > 0) {
-                    selectTask(taskConfig.tabs[0].id);
-                }
-
-                showToast("✨ Nieuwe cursus gestart! Pas de opdrachten en titel naar wens aan.");
+                isInitializingNewCourse = true;
+                createNewTaskInConfig();
             }
         }
 
