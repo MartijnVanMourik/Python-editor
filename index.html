@@ -1514,7 +1514,17 @@
                 },
                 inputfunTakesPrompt: true,
                 yieldLimit: 100,
-                execLimit: 10000,
+                execLimit: (() => {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const limitParam = urlParams.get('exec_limit') || urlParams.get('timeout');
+                    if (limitParam) {
+                        const parsed = parseInt(limitParam, 10);
+                        if (!isNaN(parsed) && parsed >= 0) {
+                            return parsed === 0 ? Infinity : (parsed < 1000 ? parsed * 1000 : parsed);
+                        }
+                    }
+                    return isTurtle ? 60000 : 30000;
+                })(),
                 killableWhile: true,
                 killableFor: true
             });
@@ -1653,7 +1663,7 @@
                     },
                     inputfunTakesPrompt: true,
                     yieldLimit: 100,
-                    execLimit: 5000,
+                    execLimit: 10000,
                     killableWhile: true,
                     killableFor: true
                 });
