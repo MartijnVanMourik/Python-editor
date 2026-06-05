@@ -1,11 +1,9 @@
 {
     "title": "Mijn Informatica Cursus - Python",
-    "tabs": [
+    "assignments": [
         {
             "id": "opdracht_naam_id",
-            "filename": "opdracht_1.py",
             "instruction": "<h3 class='text-lg font-semibold text-slate-100 mb-2'>Titel van Opdracht 1</h3><p class='mb-2'>Dit is de omschrijving in HTML-formaat. Je kunt Tailwind-klassen gebruiken voor styling.</p>",
-            "initialCode": "# Schrijf hier je begin-code\nnaam = input('Hoe heet je? ')\nprint('Hallo ' + naam)\n",
             "tests": [
                 {
                     "name": "Testgeval 1: Begroeting met Jan",
@@ -23,14 +21,14 @@
                     "expectedOutput": "Hallo Sophie",
                     "matchType": "exact"
                 }
+            ],
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "# Schrijf hier je begin-code\nnaam = input('Hoe heet je? ')\nprint('Hallo ' + naam)\n",
+                    "isMain": true
+                }
             ]
-        },
-        {
-            "id": "opdracht_turtle_id",
-            "filename": "tekening.py",
-            "instruction": "<h3 class='text-lg font-semibold text-slate-100 mb-2'>Teken een Vierkant</h3><p class='mb-2'>Gebruik turtle om een vierkant te tekenen.</p>",
-            "initialCode": "import turtle\nt = turtle.Turtle()\n\nfor i in range(4):\n    t.forward(100)\n    t.left(90)\n",
-            "tests": []
         }
     ]
 }

@@ -45,6 +45,11 @@ De URL-parser is slim en ondersteunt ook handmatige paden en externe URL's:
 *   **Submappen**: `index.html?config=opdrachten/opdracht1.json`
 *   **Externe hostings**: `index.html?config=https://mijnwebsite.nl/lesmateriaal.json`
 
+### 🎯 Specifieke Opdracht Direct Laden (`task=` / `id=`)
+Standaard opent de editor altijd de eerste opdracht uit de reeks. Je kunt echter een specifieke opdracht direct als actieve opdracht openen door de query-parameter `task` of `id` mee te geven met het ID van die opdracht:
+
+👉 `index.html?config=opdracht1&task=opdracht_turtle_id`
+
 ---
 
 ## 📝 Structuur van het JSON-Configuratiebestand
@@ -124,14 +129,38 @@ Maak een bestand genaamd `opdracht1.json` aan in de map `opdrachten/` en gebruik
 
 De Educatieve Python Editor bevat een ingebouwde, verborgen **Docentenmodus (Auteursmodus)**. Hiermee kun je direct in de browser opdrachten aanmaken, aanpassen, herordenen en unit tests ontwerpen zonder handmatig complexe JSON-bestanden te hoeven schrijven.
 
-### 🔌 Activeren van de Docentenmodus
+### 🔌 Activeren van de verschillende Modi (`mode=`)
 
-Je activeert de Docentenmodus door de query-parameter `&edit=true` toe te voegen aan de URL. 
+Je kunt de weergave en het gedrag van de editor aanpassen met de query-parameter `mode`. De volgende opties zijn beschikbaar:
 
-Bijvoorbeeld lokaal:
-👉 [http://localhost:8000/index.html?config=opdracht1&edit=true](http://localhost:8000/index.html?config=opdracht1&edit=true)
+*   **Docentenmodus** (`mode=teacher` of `mode=docent`): Hiermee kun je opdrachten bewerken, tests aanmaken en downloaden. (De oude parameter `edit=true` werkt ook nog voor achterwaartse compatibiliteit).
+    👉 [http://localhost:8000/index.html?config=opdracht1&mode=teacher](http://localhost:8000/index.html?config=opdracht1&mode=teacher)
+*   **Leerlingmodus** (`mode=student` of `mode=leerling`): Dit is de standaardmodus met de editor, opdrachtenlijst en console/canvas om code in te schrijven.
+    👉 [http://localhost:8000/index.html?config=opdracht1&mode=student](http://localhost:8000/index.html?config=opdracht1&mode=student)
+*   **Demonstratiemodus** (`mode=demo` of `mode=demonstratie`): Toont *alleen* het uitgevoerde programma (het resultaat op het canvas of in de console) en een "Voer Code Uit" knop. De code-editor en instructies worden volledig verborgen en de code wordt automatisch bij het laden gestart. Dit is ideaal voor het tonen van werkende voorbeelden of embeds.
+    👉 [http://localhost:8000/index.html?config=opdracht1&mode=demo](http://localhost:8000/index.html?config=opdracht1&mode=demo)
 
-Wanneer actief, verschijnt er een opvallende **paarse statusbalk** bovenin het scherm om aan te geven dat je in bewerkingsmodus bent.
+Wanneer de Docentenmodus actief is, verschijnt er een opvallende **paarse statusbalk** bovenin het scherm om aan te geven dat je in bewerkingsmodus bent.
+
+---
+
+### 🎨 Canvasgrootte Aanpassen (`canvas_size=`)
+
+Je kunt de grootte van het Turtle-tekengebied (het canvas) bepalen via de parameter `canvas_size` (of `size`). Standaard is dit `400`x`400` pixels. Je kunt hier een getal opgeven om de breedte en hoogte (vierkant) te bepalen, bijvoorbeeld `500` voor een canvas van 500x500 pixels.
+Dit is vooral handig in combinatie met de Demonstratiemodus om een specifiek formaat embed te tonen:
+
+👉 [http://localhost:8000/index.html?config=opdracht1&mode=demo&canvas_size=500](http://localhost:8000/index.html?config=opdracht1&mode=demo&canvas_size=500)
+
+---
+
+### 🗂️ Menu Tonen/Verbergen (`menu=`)
+
+Standaard wordt de opdrachtenlijst (het navigatiemenu) automatisch getoond als de cursus meerdere opdrachten bevat, en verborgen als er slechts één opdracht is. Je kunt dit gedrag handmatig overrulen met de `menu` parameter:
+
+*   **Menu forceren**: `menu=true` of `menu=show` (toont het menu altijd, zelfs bij 1 opdracht).
+    👉 [http://localhost:8000/index.html?config=opdracht1&id=opdracht_turtle_id&menu=show](http://localhost:8000/index.html?config=opdracht1&id=opdracht_turtle_id&menu=show)
+*   **Menu verbergen**: `menu=false` of `menu=hide` (verbergt het menu altijd, zelfs bij meerdere opdrachten).
+    👉 [http://localhost:8000/index.html?config=opdracht1&menu=hide](http://localhost:8000/index.html?config=opdracht1&menu=hide)
 
 ---
 

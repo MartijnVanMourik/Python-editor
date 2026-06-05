@@ -133,13 +133,33 @@
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
         }
+
+        /* Ensure lists inside the instruction box render correctly */
+        #assignment-instruction ul {
+            list-style-type: disc !important;
+            padding-left: 1.5rem !important;
+            margin-top: 0.5rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+
+        #assignment-instruction ol {
+            list-style-type: decimal !important;
+            padding-left: 1.5rem !important;
+            margin-top: 0.5rem !important;
+            margin-bottom: 0.5rem !important;
+        }
+
+        #assignment-instruction li {
+            margin-bottom: 0.25rem !important;
+            display: list-item !important;
+        }
     </style>
 </head>
 
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col overflow-x-hidden">
 
     <!-- Header / Navbar -->
-    <header
+    <header id="main-header"
         class="bg-slate-900 border-b border-slate-800 px-4 py-3 flex flex-wrap items-center justify-between gap-4 sticky top-0 z-50">
         <div class="flex items-center gap-3">
             <div class="bg-gradient-to-tr from-yellow-500 to-blue-500 p-2 rounded-lg shadow-md">
@@ -207,9 +227,9 @@
     <main class="flex-1 flex flex-col lg:flex-row overflow-hidden relative">
 
         <!-- LEFT PANEL: Instructions & Navigation (Dynamic Tasks) -->
-        <section
+        <section id="instructions-panel"
             class="w-full lg:w-1/3 bg-slate-900/60 border-r border-slate-800 flex flex-col p-4 overflow-y-auto max-h-[50vh] lg:max-h-none">
-            <div class="mb-4">
+            <div id="task-selector-wrapper" class="mb-4">
                 <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Kies je Opdracht</h2>
                 <!-- Task Selection Buttons Container -->
                 <div id="task-selector-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-2">
@@ -277,7 +297,7 @@
         <section class="flex-1 flex flex-col overflow-hidden min-h-[50vh] lg:min-h-0">
 
             <!-- Mobile Switch Tabs (Only visible on small screens to toggle between Code and Output Panels) -->
-            <div class="lg:hidden flex bg-slate-900 border-b border-slate-800 text-sm font-medium">
+            <div id="mobile-switch-tabs" class="lg:hidden flex bg-slate-900 border-b border-slate-800 text-sm font-medium">
                 <button id="tab-btn-editor" onclick="switchMobileView('editor')"
                     class="flex-1 py-3 text-center border-b-2 border-blue-500 text-blue-400">
                     <i class="fa-solid fa-code mr-1"></i> Editor
@@ -347,9 +367,30 @@
                 <!-- Output, Terminal, Canvas & Tests Window (lg:span-5) -->
                 <div id="output-wrapper-panel"
                     class="hidden lg:col-span-5 lg:flex flex-col h-full overflow-hidden bg-slate-950">
+                    
+                    <!-- Demo Mode Top Bar (Only visible in demo mode) -->
+                    <div id="demo-header" class="hidden bg-slate-900 border-b border-slate-800 px-4 py-3 items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-gradient-to-tr from-yellow-500 to-blue-500 p-2 rounded-lg shadow-md">
+                                <i class="fa-solid fa-play text-lg text-slate-950"></i>
+                            </div>
+                            <div>
+                                <h2 id="demo-title" class="font-bold text-sm tracking-wide text-slate-100">Demonstratie</h2>
+                                <p id="demo-subtitle" class="text-[10px] text-slate-400">Programma in uitvoering</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <!-- Run Code Button -->
+                            <button onclick="runPythonCode()"
+                                class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-4 py-2 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-2 text-xs">
+                                <i class="fa-solid fa-play"></i>
+                                <span>Voer Code Uit</span>
+                            </button>
+                        </div>
+                    </div>
 
                     <!-- Sub Tabs for Right Panel: Terminal Console vs Turtle Canvas vs Auto Tests -->
-                    <div class="bg-slate-900/80 border-b border-slate-800 flex text-xs font-semibold">
+                    <div id="output-subtabs-bar" class="bg-slate-900/80 border-b border-slate-800 flex text-xs font-semibold">
                         <button id="subtab-btn-console" onclick="switchOutputSubTab('console')"
                             class="flex-1 py-3 text-center border-b-2 border-emerald-500 text-emerald-400">
                             <i class="fa-solid fa-terminal mr-1"></i> Console
@@ -398,7 +439,7 @@
                                         <i class="fa-solid fa-expand text-blue-400"></i>
                                         <span>Volledig Scherm</span>
                                     </button>
-                                    <span
+                                    <span id="canvas-size-indicator"
                                         class="text-[10px] bg-amber-500/10 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/20">Canvas 400x400</span>
                                 </div>
                             </div>
@@ -509,6 +550,9 @@
         let activeMobileView = "editor"; // State tracking for mobile split screen
         let activeOutputSubTab = "console"; // Active subtab in the output panel
         let isEditMode = false; // Flag for teacher editing mode
+        let appMode = "student"; // State tracking for mode: teacher, student, or demo
+        let canvasSize = 400; // Default canvas size in pixels (both width and height)
+        let menuConfig = null; // Force show/hide task selector menu ('show', 'hide', or null)
         let courseNamespace = "default"; // Namespace identifier based on loaded course config URL
 
         // Helper to namespace and get progress and passed test storage keys
@@ -661,7 +705,55 @@
         async function loadConfiguration() {
             const urlParams = new URLSearchParams(window.location.search);
             const configUrl = urlParams.get('config');
-            isEditMode = urlParams.get('edit') === 'true';
+            
+            // Check mode parameter, fallback to edit=true for backward compatibility
+            const modeParam = urlParams.get('mode');
+            const editParam = urlParams.get('edit');
+            
+            if (modeParam === 'teacher' || modeParam === 'docent' || editParam === 'true') {
+                appMode = 'teacher';
+                isEditMode = true;
+            } else if (modeParam === 'demo' || modeParam === 'demonstratie' || modeParam === 'run') {
+                appMode = 'demo';
+                isEditMode = false;
+            } else {
+                appMode = 'student';
+                isEditMode = false;
+            }
+
+            // Check canvas size parameter (canvas_size or size)
+            const canvasSizeParam = urlParams.get('canvas_size') || urlParams.get('size');
+            if (canvasSizeParam) {
+                const parsedSize = parseInt(canvasSizeParam, 10);
+                if (!isNaN(parsedSize) && parsedSize > 0) {
+                    canvasSize = parsedSize;
+                }
+            }
+
+            // Check menu visibility parameter (menu=show/true/hide/false)
+            const menuParam = urlParams.get('menu');
+            if (menuParam === 'show' || menuParam === 'true') {
+                menuConfig = 'show';
+            } else if (menuParam === 'hide' || menuParam === 'false') {
+                menuConfig = 'hide';
+            }
+
+            // Apply canvas sizing
+            const canvasContainer = document.getElementById("turtle-canvas");
+            if (canvasContainer) {
+                canvasContainer.style.width = canvasSize + "px";
+                canvasContainer.style.maxWidth = "100%";
+                canvasContainer.style.aspectRatio = "1 / 1";
+                canvasContainer.style.height = "auto";
+            }
+            const sizeIndicator = document.getElementById("canvas-size-indicator");
+            if (sizeIndicator) {
+                sizeIndicator.textContent = `Canvas ${canvasSize}x${canvasSize}`;
+            }
+
+            // Configure Skulpt Engine canvas dimensions globally as fallback
+            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).width = canvasSize;
+            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).height = canvasSize;
 
             // Establish clean course namespace for project isolation
             if (configUrl) {
@@ -718,8 +810,16 @@
                     alert("Kon de geconfigureerde opdrachten niet laden van URL. We laden de ingebouwde demo-opdrachten.");
                     taskConfig = DEFAULT_CONFIG;
                 }
-            } else {
-                taskConfig = DEFAULT_CONFIG;
+            }
+
+            if (taskConfig) {
+                if (taskConfig.assignments && !taskConfig.tabs) {
+                    taskConfig.tabs = taskConfig.assignments;
+                } else if (taskConfig.tasks && !taskConfig.tabs) {
+                    taskConfig.tabs = taskConfig.tasks;
+                } else if (taskConfig.opdrachten && !taskConfig.tabs) {
+                    taskConfig.tabs = taskConfig.opdrachten;
+                }
             }
 
             // Initialize task titles if they don't exist
@@ -774,11 +874,38 @@
 
             // Render assignment list
             renderTaskSelector();
+
+            // Apply mode-specific layout styles
+            applyAppModeLayout();
+
+            // Auto-run in demo mode on load
+            if (appMode === 'demo') {
+                setTimeout(() => {
+                    runPythonCode();
+                }, 100);
+            }
         }
 
         function renderTaskSelector() {
+            const wrapper = document.getElementById("task-selector-wrapper");
             const container = document.getElementById("task-selector-container");
+            if (!container) return;
             container.innerHTML = "";
+
+            let shouldShowMenu = true;
+            if (menuConfig === 'show') {
+                shouldShowMenu = true;
+            } else if (menuConfig === 'hide') {
+                shouldShowMenu = false;
+            } else {
+                shouldShowMenu = !(taskConfig.tabs.length <= 1 && !isEditMode);
+            }
+
+            if (!shouldShowMenu) {
+                if (wrapper) wrapper.classList.add("hidden");
+            } else {
+                if (wrapper) wrapper.classList.remove("hidden");
+            }
 
             taskConfig.tabs.forEach((task, index) => {
                 const isPassed = checkIfPassed(task.id);
@@ -859,9 +986,17 @@
                 container.appendChild(addOpdrachtBtn);
             }
 
-            // Select initial task if none selected yet
+            // Select initial task if none selected yet (checking URL params first)
             if (taskConfig.tabs.length > 0 && !currentTaskId) {
-                selectTask(taskConfig.tabs[0].id);
+                const urlParams = new URLSearchParams(window.location.search);
+                const initialTaskId = urlParams.get('task') || urlParams.get('id');
+                const taskExists = initialTaskId && taskConfig.tabs.some(t => t.id === initialTaskId);
+                
+                if (taskExists) {
+                    selectTask(initialTaskId);
+                } else {
+                    selectTask(taskConfig.tabs[0].id);
+                }
             }
         }
 
@@ -888,6 +1023,12 @@
             renderTaskSelector();
 
             const task = taskConfig.tabs.find(t => t.id === taskId);
+
+            // Update demo title if in demo mode
+            const demoTitle = document.getElementById("demo-title");
+            if (demoTitle && task) {
+                demoTitle.textContent = task.title || "Python Demonstratie";
+            }
 
             if (task) {
                 // Reset WYSIWYG html raw view toggled state
@@ -1146,6 +1287,8 @@
 
             // Target the canvas element for turtle drawings
             (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = "turtle-canvas";
+            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).width = canvasSize;
+            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).height = canvasSize;
 
             const myPromise = Sk.misceval.asyncToPromise(function () {
                 return Sk.importMainWithBody("<stdin>", false, mainCode, true);
@@ -1597,30 +1740,116 @@
             tempCtx.fillStyle = "#ffffff";
             tempCtx.fillRect(0, 0, width, height);
 
-            // Draw all Skulpt canvas layers in order onto the temp canvas
+            // Calculate scale ratio between canvas internal resolution and screen layout size
+            const canvasContainer = document.getElementById("turtle-canvas");
+            const layoutWidth = canvasContainer ? canvasContainer.clientWidth : 400;
+            const layoutHeight = canvasContainer ? canvasContainer.clientHeight : 400;
+            const scaleX = layoutWidth > 0 ? (width / layoutWidth) : 1;
+            const scaleY = layoutHeight > 0 ? (height / layoutHeight) : 1;
+
+            const adjPanX = panX * scaleX;
+            const adjPanY = panY * scaleY;
+
+            // Draw all Skulpt canvas layers in order onto the temp canvas with active transform (zoom and pan)
             canvases.forEach(canvas => {
+                tempCtx.save();
+                // CSS transform origin is 'center center', so we translate to center first, apply shift and scale, then draw
+                tempCtx.translate(width / 2 + adjPanX, height / 2 + adjPanY);
+                tempCtx.scale(zoom, zoom);
+                tempCtx.translate(-width / 2, -height / 2);
+                
                 tempCtx.drawImage(canvas, 0, 0);
+                tempCtx.restore();
             });
 
-            // Export and download the combined image
+            // Export the combined image
             const dataURL = tempCanvas.toDataURL("image/png");
 
-            // Embed preview image directly in the current task if active
-            if (currentTaskId) {
-                const task = taskConfig.tabs.find(t => t.id === currentTaskId);
-                if (task) {
-                    task.previewImage = dataURL;
-                    loadAssignmentPreviewImage(task);
+            if (isEditMode) {
+                // In docent edit-mode: ONLY save to preview
+                if (currentTaskId) {
+                    const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+                    if (task) {
+                        task.previewImage = dataURL;
+                        loadAssignmentPreviewImage(task);
+                        showToast("📸 Afbeelding gekoppeld aan opdracht-preview!");
+                    }
+                } else {
+                    showToast("Geen actieve opdracht gevonden om preview aan te koppelen.");
                 }
+            } else {
+                // In leerling-mode: ONLY download as file
+                const link = document.createElement("a");
+                link.download = `${currentTaskId || 'turtle'}_tekening.png`;
+                link.href = dataURL;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                showToast("📸 Afbeelding succesvol gedownload!");
             }
+        }
 
-            const link = document.createElement("a");
-            link.download = `${currentTaskId || 'turtle'}_voorbeeld.png`;
-            link.href = dataURL;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("📸 Afbeelding gekoppeld en gedownload!");
+        function applyAppModeLayout() {
+            const header = document.getElementById("main-header");
+            const instructionsPanel = document.getElementById("instructions-panel");
+            const editorPanel = document.getElementById("editor-wrapper-panel");
+            const outputPanel = document.getElementById("output-wrapper-panel");
+            const subtabsBar = document.getElementById("output-subtabs-bar");
+            const demoHeader = document.getElementById("demo-header");
+            const mobileSwitchTabs = document.getElementById("mobile-switch-tabs");
+
+            if (appMode === 'demo') {
+                if (header) header.classList.add("hidden");
+                if (instructionsPanel) instructionsPanel.classList.add("hidden");
+                if (editorPanel) editorPanel.classList.add("hidden");
+                if (mobileSwitchTabs) mobileSwitchTabs.classList.add("hidden");
+                
+                if (outputPanel) {
+                    outputPanel.classList.remove("hidden", "lg:col-span-5");
+                    outputPanel.classList.add("flex", "lg:col-span-12");
+                }
+                if (subtabsBar) subtabsBar.classList.add("hidden");
+                if (demoHeader) {
+                    demoHeader.classList.remove("hidden");
+                    demoHeader.classList.add("flex");
+                }
+                // Hide normal inner headers for clean view in demo mode
+                const turtleNormalHeader = document.querySelector(".turtle-normal-only");
+                if (turtleNormalHeader) turtleNormalHeader.classList.add("hidden");
+                const consoleHeader = document.querySelector("#panel-console .text-xs.font-mono");
+                if (consoleHeader) consoleHeader.classList.add("hidden");
+            } else {
+                if (header) header.classList.remove("hidden");
+                if (instructionsPanel) instructionsPanel.classList.remove("hidden");
+                if (mobileSwitchTabs) mobileSwitchTabs.classList.remove("hidden");
+                
+                // Normal mode behavior for output and editor panels
+                if (editorPanel) editorPanel.classList.remove("hidden");
+                if (outputPanel) {
+                    outputPanel.classList.add("lg:col-span-5");
+                    outputPanel.classList.remove("lg:col-span-12");
+                    if (window.innerWidth < 1024) {
+                        if (activeMobileView === 'editor') {
+                            outputPanel.classList.add("hidden");
+                        } else {
+                            editorPanel.classList.add("hidden");
+                        }
+                    } else {
+                        outputPanel.classList.remove("hidden");
+                        outputPanel.classList.add("flex");
+                    }
+                }
+                if (subtabsBar) subtabsBar.classList.remove("hidden");
+                if (demoHeader) {
+                    demoHeader.classList.add("hidden");
+                    demoHeader.classList.remove("flex");
+                }
+                // Show normal inner headers
+                const turtleNormalHeader = document.querySelector(".turtle-normal-only");
+                if (turtleNormalHeader) turtleNormalHeader.classList.remove("hidden");
+                const consoleHeader = document.querySelector("#panel-console .text-xs.font-mono");
+                if (consoleHeader) consoleHeader.classList.remove("hidden");
+            }
         }
 
         function initInteractiveTurtle() {
@@ -2326,18 +2555,27 @@
             name = name.trim();
             if (!name) return;
 
-            const id = name.toLowerCase().replace(/[^a-z0-9]/g, "_") + "_" + Date.now();
+            // Generate default ID suggestion
+            const defaultId = name.toLowerCase().replace(/[^a-z0-9]/g, "_");
             
+            let id = prompt("Voer een uniek ID in voor de nieuwe opdracht (alleen kleine letters, cijfers en underscores):", defaultId);
+            if (id === null) return;
+            id = id.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
+            
+            if (!id) {
+                alert("ID mag niet leeg zijn.");
+                return;
+            }
+
             // Verify no duplicates
             if (taskConfig.tabs.find(t => t.id === id)) {
-                alert("Een opdracht met deze ID bestaat al.");
+                alert(`Een opdracht met ID "${id}" bestaat al. Kies een ander ID.`);
                 return;
             }
 
             const newTask = {
                 id: id,
                 title: name,
-                filename: "main.py",
                 instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>${name}</h3><p class='mb-2'>Typ hier de instructies voor deze opdracht...</p>`,
                 files: [
                     {
@@ -2400,7 +2638,7 @@
             const task = taskConfig.tabs.find(t => t.id === taskId);
             if (!task) return;
 
-            let newTitle = prompt(`Pas de naam van de opdracht aan:`, task.title || task.filename.replace(/\.py$/, ""));
+            let newTitle = prompt(`Pas de naam van de opdracht aan (ID: ${task.id} - niet aanpasbaar):`, task.title || task.filename.replace(/\.py$/, ""));
             if (newTitle === null) return;
             newTitle = newTitle.trim();
             if (!newTitle) return;
@@ -2600,7 +2838,7 @@
 
             const finalConfig = JSON.parse(JSON.stringify(taskConfig));
 
-            // Populate all tab codes into files array template
+            // Populate all codes into files array template
             finalConfig.tabs.forEach(task => {
                 const ws = getTaskWorkspace(task.id);
                 if (ws && ws.files) {
@@ -2609,10 +2847,18 @@
                         initialCode: ws.files[filename],
                         isMain: filename === "main.py"
                     }));
-                    task.initialCode = ws.files["main.py"] || "";
-                    task.filename = "main.py";
+                    
+                    // Remove legacy properties from the task root
+                    delete task.initialCode;
+                    delete task.filename;
                 }
             });
+
+            // If there is exactly 1 assignment, rename 'tabs' to a more logical 'assignments'
+            if (finalConfig.tabs && finalConfig.tabs.length === 1) {
+                finalConfig.assignments = finalConfig.tabs;
+                delete finalConfig.tabs;
+            }
 
             const jsonString = JSON.stringify(finalConfig, null, 4);
             const blob = new Blob([jsonString], { type: "application/json;charset=utf-8" });
@@ -2650,9 +2896,14 @@
                     tabs: [
                         {
                             id: "opdracht_1",
-                            filename: "opdracht_1.py",
                             instruction: "<h3 class='text-lg font-semibold text-slate-100 mb-2'>Titel van Opdracht 1</h3><p class='mb-2'>Dit is de omschrijving in HTML-formaat. Typ hier de opdrachten voor studenten.</p>",
-                            initialCode: "# Schrijf hier je begin-code\nprint('Hallo Wereld!')\n",
+                            files: [
+                                {
+                                    filename: "main.py",
+                                    initialCode: "# Schrijf hier je begin-code\nprint('Hallo Wereld!')\n",
+                                    isMain: true
+                                }
+                            ],
                             tests: []
                         }
                     ]
@@ -2744,6 +2995,8 @@
 
             const boldBtn = document.getElementById("wysiwyg-btn-bold");
             const italicBtn = document.getElementById("wysiwyg-btn-italic");
+            const listUlBtn = document.getElementById("wysiwyg-btn-list-ul");
+            const listOlBtn = document.getElementById("wysiwyg-btn-list-ol");
             const codeBtn = document.getElementById("wysiwyg-btn-code");
             const h3Btn = document.getElementById("wysiwyg-btn-h3");
             const tipBtn = document.getElementById("wysiwyg-btn-tip");
@@ -2761,11 +3014,13 @@
             // Reset standard button styling to defaults
             const defaultBtnClass = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-xs";
             const defaultItalicClass = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center italic text-xs";
+            const defaultListClass = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center text-xs";
             const defaultCodeClass = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-mono text-xs";
             const defaultH3Class = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-[10px]";
             
             const activeBtnClass = "w-7 h-7 rounded bg-slate-700 text-blue-400 font-bold border border-blue-500/20 transition flex items-center justify-center text-xs";
             const activeItalicClass = "w-7 h-7 rounded bg-slate-700 text-blue-400 italic border border-blue-500/20 transition flex items-center justify-center text-xs";
+            const activeListClass = "w-7 h-7 rounded bg-slate-700 text-blue-400 border border-blue-500/20 transition flex items-center justify-center text-xs";
             const activeCodeClass = "w-7 h-7 rounded bg-slate-700 text-blue-400 font-mono border border-blue-500/20 transition flex items-center justify-center text-xs";
             const activeH3Class = "w-7 h-7 rounded bg-slate-700 text-blue-400 font-bold border border-blue-500/20 transition flex items-center justify-center text-[10px]";
 
@@ -2779,6 +3034,8 @@
 
             if (boldBtn) boldBtn.className = defaultBtnClass;
             if (italicBtn) italicBtn.className = defaultItalicClass;
+            if (listUlBtn) listUlBtn.className = defaultListClass;
+            if (listOlBtn) listOlBtn.className = defaultListClass;
             if (codeBtn) codeBtn.className = defaultCodeClass;
             if (h3Btn) h3Btn.className = defaultH3Class;
 
@@ -2803,6 +3060,12 @@
                 }
                 if (nodeName === "i" || nodeName === "em") {
                     if (italicBtn) italicBtn.className = activeItalicClass;
+                }
+                if (nodeName === "ul") {
+                    if (listUlBtn) listUlBtn.className = activeListClass;
+                }
+                if (nodeName === "ol") {
+                    if (listOlBtn) listOlBtn.className = activeListClass;
                 }
                 if (nodeName === "code" || nodeName === "pre") {
                     if (codeBtn) codeBtn.className = activeCodeClass;
