@@ -137,8 +137,10 @@ Je kunt de weergave en het gedrag van de editor aanpassen met de query-parameter
     👉 [http://localhost:8000/index.html?config=opdracht1&mode=teacher](http://localhost:8000/index.html?config=opdracht1&mode=teacher)
 *   **Leerlingmodus** (`mode=student` of `mode=leerling`): Dit is de standaardmodus met de editor, opdrachtenlijst en console/canvas om code in te schrijven.
     👉 [http://localhost:8000/index.html?config=opdracht1&mode=student](http://localhost:8000/index.html?config=opdracht1&mode=student)
-*   **Demonstratiemodus** (`mode=demo` of `mode=demonstratie`): Toont *alleen* het uitgevoerde programma (het resultaat op het canvas of in de console) en een "Voer Code Uit" knop. De code-editor en instructies worden volledig verborgen en de code wordt automatisch bij het laden gestart. Dit is ideaal voor het tonen van werkende voorbeelden of embeds.
+*   **Demonstratiemodus** (`mode=demo` of `mode=demonstratie`): Toont *alleen* het uitgevoerde programma (het resultaat op het canvas of in de console) en een "Voer Code Uit" knop. De code-editor en instructies worden volledig verborgen en de code wordt automatisch bij het laden gestart. Dit is ideaal voor het tonen van werkende voorbeelden.
     👉 [http://localhost:8000/index.html?config=opdracht1&mode=demo](http://localhost:8000/index.html?config=opdracht1&mode=demo)
+*   **Iframe Embed-modus** (`mode=embed` of door `&embed=true` toe te voegen): Toont *alleen* het pure canvas of console-scherm. Alle knoppen, headers, de demo-balk en de zwevende pandoor-knoppen op het canvas zijn verborgen. Tevens is de padding weggenomen zodat het programma naadloos in een iframe van een andere website getoond kan worden.
+    👉 [http://localhost:8000/index.html?config=opdracht1&mode=embed](http://localhost:8000/index.html?config=opdracht1&mode=embed)
 
 Wanneer de Docentenmodus actief is, verschijnt er een opvallende **paarse statusbalk** bovenin het scherm om aan te geven dat je in bewerkingsmodus bent.
 

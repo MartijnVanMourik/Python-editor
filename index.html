@@ -410,7 +410,7 @@
                     </div>
 
                     <!-- Panel Display Areas -->
-                    <div class="flex-1 p-4 overflow-y-auto relative flex flex-col gap-4">
+                    <div id="output-panels-container" class="flex-1 p-4 overflow-y-auto relative flex flex-col gap-4">
 
                         <!-- Panel A: Console Terminal -->
                         <div id="panel-console" class="flex-1 flex flex-col h-full">
@@ -478,8 +478,8 @@
                                      <!-- Skulpt automatically injects HTML5 Canvas here -->
                                  </div>
                                  
-                                 <!-- Floating Controls (Zoom in, Zoom out, Reset, Download) -->
-                                 <div class="absolute bottom-3 right-3 flex flex-col gap-1.5 z-10 bg-slate-900/90 border border-slate-700/50 p-1.5 rounded-xl backdrop-blur-md shadow-lg opacity-40 group-hover:opacity-100 transition-opacity duration-200">
+                                  <!-- Floating Controls (Zoom in, Zoom out, Reset, Download) -->
+                                  <div id="turtle-floating-controls" class="absolute bottom-3 right-3 flex flex-col gap-1.5 z-10 bg-slate-900/90 border border-slate-700/50 p-1.5 rounded-xl backdrop-blur-md shadow-lg opacity-40 group-hover:opacity-100 transition-opacity duration-200">
                                      <button onclick="adjustZoom(0.1)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Zoom in"><i class="fa-solid fa-plus"></i></button>
                                      <button onclick="adjustZoom(-0.1)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Zoom uit"><i class="fa-solid fa-minus"></i></button>
                                      <button onclick="resetTurtleView()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Herstel weergave"><i class="fa-solid fa-arrows-to-dot"></i></button>
@@ -538,6 +538,44 @@
         </div>
     </div>
 
+    <!-- Custom Modal to Add New Assignment (Teacher Mode) -->
+    <div id="new-assignment-modal"
+        class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-[9999]">
+        <div
+            class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-250">
+            <div class="flex items-center gap-3 text-purple-400 mb-4 border-b border-slate-800 pb-3">
+                <i class="fa-solid fa-circle-plus text-2xl"></i>
+                <h3 class="text-lg font-bold text-slate-100">Nieuwe opdracht toevoegen</h3>
+            </div>
+            
+            <div class="flex flex-col gap-4 mb-6">
+                <div>
+                    <label for="new-assignment-name" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Naam van de opdracht</label>
+                    <input type="text" id="new-assignment-name"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                        placeholder="Bijv. Teken een Vierkant" autocomplete="off">
+                </div>
+                <div>
+                    <label for="new-assignment-id" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Uniek ID (automatisch gegenereerd, mag worden aangepast)</label>
+                    <input type="text" id="new-assignment-id"
+                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm"
+                        placeholder="Bijv. teken_een_vierkant" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3">
+                <button id="new-assignment-cancel"
+                    class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-sm">
+                    Annuleren
+                </button>
+                <button id="new-assignment-submit"
+                    class="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl transition shadow-lg active:scale-95 text-sm">
+                    Aanmaken
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Global variables state definition
         let editor; // CodeMirror Editor Instance
@@ -553,6 +591,7 @@
         let appMode = "student"; // State tracking for mode: teacher, student, or demo
         let canvasSize = 400; // Default canvas size in pixels (both width and height)
         let menuConfig = null; // Force show/hide task selector menu ('show', 'hide', or null)
+        let isEmbed = false; // Flag to hide header and buttons for iframe embeds
         let courseNamespace = "default"; // Namespace identifier based on loaded course config URL
 
         // Helper to namespace and get progress and passed test storage keys
@@ -689,6 +728,21 @@
 
             // Initialize Turtle pan/zoom event listeners
             initInteractiveTurtle();
+
+            // Bind real-time ID generator for new assignments modal
+            const newAssName = document.getElementById("new-assignment-name");
+            if (newAssName) {
+                newAssName.addEventListener("input", function (e) {
+                    const name = e.target.value;
+                    const idField = document.getElementById("new-assignment-id");
+                    if (idField) {
+                        idField.value = name.toLowerCase()
+                            .replace(/[^a-z0-9]/g, "_")
+                            .replace(/_+/g, "_")
+                            .replace(/^_+|_+$/g, "");
+                    }
+                });
+            }
         };
 
         let saveTimeout;
@@ -709,17 +763,21 @@
             // Check mode parameter, fallback to edit=true for backward compatibility
             const modeParam = urlParams.get('mode');
             const editParam = urlParams.get('edit');
+            const embedParam = urlParams.get('embed');
             
             if (modeParam === 'teacher' || modeParam === 'docent' || editParam === 'true') {
                 appMode = 'teacher';
                 isEditMode = true;
-            } else if (modeParam === 'demo' || modeParam === 'demonstratie' || modeParam === 'run') {
+            } else if (modeParam === 'demo' || modeParam === 'demonstratie' || modeParam === 'run' || modeParam === 'embed' || embedParam === 'true') {
                 appMode = 'demo';
                 isEditMode = false;
             } else {
                 appMode = 'student';
                 isEditMode = false;
             }
+
+            // Set isEmbed state
+            isEmbed = (modeParam === 'embed' || embedParam === 'true');
 
             // Check canvas size parameter (canvas_size or size)
             const canvasSizeParam = urlParams.get('canvas_size') || urlParams.get('size');
@@ -921,7 +979,7 @@
                     }`;
 
                 btn.innerHTML = `
-                    <span class="font-semibold text-sm truncate select-none mr-2">${task.title}</span>
+                    <span class="font-semibold text-sm truncate select-none mr-2">${task.title} <span class="text-xs font-normal opacity-60 font-mono">(${task.id})</span></span>
                     <span id="badge-${task.id}" class="shrink-0">
                         ${isPassed ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>' : '<i class="fa-regular fa-circle text-slate-500"></i>'}
                     </span>
@@ -1797,6 +1855,8 @@
             const subtabsBar = document.getElementById("output-subtabs-bar");
             const demoHeader = document.getElementById("demo-header");
             const mobileSwitchTabs = document.getElementById("mobile-switch-tabs");
+            const panelsContainer = document.getElementById("output-panels-container");
+            const floatingControls = document.getElementById("turtle-floating-controls");
 
             if (appMode === 'demo') {
                 if (header) header.classList.add("hidden");
@@ -1809,13 +1869,38 @@
                     outputPanel.classList.add("flex", "lg:col-span-12");
                 }
                 if (subtabsBar) subtabsBar.classList.add("hidden");
+                
                 if (demoHeader) {
-                    demoHeader.classList.remove("hidden");
-                    demoHeader.classList.add("flex");
+                    if (isEmbed) {
+                        demoHeader.classList.add("hidden");
+                        demoHeader.classList.remove("flex");
+                    } else {
+                        demoHeader.classList.remove("hidden");
+                        demoHeader.classList.add("flex");
+                    }
                 }
+
+                if (floatingControls) {
+                    if (isEmbed) {
+                        floatingControls.classList.add("hidden");
+                    } else {
+                        floatingControls.classList.remove("hidden");
+                    }
+                }
+
+                if (panelsContainer) {
+                    if (isEmbed) {
+                        panelsContainer.classList.remove("p-4");
+                        panelsContainer.classList.add("p-0");
+                    } else {
+                        panelsContainer.classList.remove("p-0");
+                        panelsContainer.classList.add("p-4");
+                    }
+                }
+
                 // Hide normal inner headers for clean view in demo mode
-                const turtleNormalHeader = document.querySelector(".turtle-normal-only");
-                if (turtleNormalHeader) turtleNormalHeader.classList.add("hidden");
+                const turtleNormalHeaders = document.querySelectorAll(".turtle-normal-only");
+                turtleNormalHeaders.forEach(el => el.classList.add("hidden"));
                 const consoleHeader = document.querySelector("#panel-console .text-xs.font-mono");
                 if (consoleHeader) consoleHeader.classList.add("hidden");
             } else {
@@ -1844,9 +1929,16 @@
                     demoHeader.classList.add("hidden");
                     demoHeader.classList.remove("flex");
                 }
+                if (floatingControls) {
+                    floatingControls.classList.remove("hidden");
+                }
+                if (panelsContainer) {
+                    panelsContainer.classList.remove("p-0");
+                    panelsContainer.classList.add("p-4");
+                }
                 // Show normal inner headers
-                const turtleNormalHeader = document.querySelector(".turtle-normal-only");
-                if (turtleNormalHeader) turtleNormalHeader.classList.remove("hidden");
+                const turtleNormalHeaders = document.querySelectorAll(".turtle-normal-only");
+                turtleNormalHeaders.forEach(el => el.classList.remove("hidden"));
                 const consoleHeader = document.querySelector("#panel-console .text-xs.font-mono");
                 if (consoleHeader) consoleHeader.classList.remove("hidden");
             }
@@ -2550,47 +2642,94 @@
 
         // Assignment Configuration Modifier Helpers
         function createNewTaskInConfig() {
-            let name = prompt("Voer de naam in voor de nieuwe opdracht (bijv. Teken een Vierkant):");
-            if (name === null) return;
-            name = name.trim();
-            if (!name) return;
+            const modal = document.getElementById("new-assignment-modal");
+            const nameInput = document.getElementById("new-assignment-name");
+            const idInput = document.getElementById("new-assignment-id");
+            const cancelBtn = document.getElementById("new-assignment-cancel");
+            const submitBtn = document.getElementById("new-assignment-submit");
 
-            // Generate default ID suggestion
-            const defaultId = name.toLowerCase().replace(/[^a-z0-9]/g, "_");
-            
-            let id = prompt("Voer een uniek ID in voor de nieuwe opdracht (alleen kleine letters, cijfers en underscores):", defaultId);
-            if (id === null) return;
-            id = id.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
-            
-            if (!id) {
-                alert("ID mag niet leeg zijn.");
+            if (!modal || !nameInput || !idInput || !cancelBtn || !submitBtn) {
+                // Fallback to prompt if modal elements not found
+                let name = prompt("Voer de naam in voor de nieuwe opdracht:");
+                if (name === null) return;
+                name = name.trim();
+                if (!name) return;
+                const defaultId = name.toLowerCase().replace(/[^a-z0-9]/g, "_");
+                let id = prompt("Voer een uniek ID in:", defaultId);
+                if (id === null) return;
+                id = id.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
+                if (!id) return;
                 return;
             }
 
-            // Verify no duplicates
-            if (taskConfig.tabs.find(t => t.id === id)) {
-                alert(`Een opdracht met ID "${id}" bestaat al. Kies een ander ID.`);
-                return;
-            }
+            nameInput.value = "";
+            idInput.value = "";
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+            nameInput.focus();
 
-            const newTask = {
-                id: id,
-                title: name,
-                instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>${name}</h3><p class='mb-2'>Typ hier de instructies voor deze opdracht...</p>`,
-                files: [
-                    {
-                        filename: "main.py",
-                        initialCode: "# Schrijf hier je Python-code...\n",
-                        isMain: true
-                    }
-                ],
-                tests: []
+            const closeModal = () => {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+                cancelBtn.onclick = null;
+                submitBtn.onclick = null;
+                nameInput.onkeydown = null;
+                idInput.onkeydown = null;
             };
 
-            taskConfig.tabs.push(newTask);
-            renderTaskSelector();
-            selectTask(id);
-            showToast(`✨ Opdracht ${name} aangemaakt!`);
+            cancelBtn.onclick = closeModal;
+
+            const handleSubmit = () => {
+                const name = nameInput.value.trim();
+                let id = idInput.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
+
+                if (!name) {
+                    alert("Naam mag niet leeg zijn.");
+                    return;
+                }
+                if (!id) {
+                    alert("ID mag niet leeg zijn.");
+                    return;
+                }
+
+                // Verify no duplicates
+                if (taskConfig.tabs.find(t => t.id === id)) {
+                    alert(`Een opdracht met ID "${id}" bestaat al. Kies een ander ID.`);
+                    return;
+                }
+
+                const newTask = {
+                    id: id,
+                    title: name,
+                    instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>${name}</h3><p class='mb-2'>Typ hier de instructies voor deze opdracht...</p>`,
+                    files: [
+                        {
+                            filename: "main.py",
+                            initialCode: "# Schrijf hier je Python-code...\n",
+                            isMain: true
+                        }
+                    ],
+                    tests: []
+                };
+
+                taskConfig.tabs.push(newTask);
+                renderTaskSelector();
+                selectTask(id);
+                showToast(`✨ Opdracht ${name} aangemaakt!`);
+                closeModal();
+            };
+
+            submitBtn.onclick = handleSubmit;
+            nameInput.onkeydown = (e) => {
+                if (e.key === "Enter") {
+                    handleSubmit();
+                }
+            };
+            idInput.onkeydown = (e) => {
+                if (e.key === "Enter") {
+                    handleSubmit();
+                }
+            };
         }
 
         function moveTask(index, offset) {
