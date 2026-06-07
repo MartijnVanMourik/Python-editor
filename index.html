@@ -369,6 +369,20 @@
                     <button id="wysiwyg-btn-info" onclick="insertInfoBox()" class="px-2 h-7 rounded bg-blue-500/20 border border-blue-500/30 hover:bg-blue-500/30 text-blue-300 transition flex items-center justify-center text-[10px] font-semibold" title="Infobox invoegen"><i class="fa-solid fa-info-circle mr-1"></i> Info</button>
                     <button id="wysiwyg-btn-table" onclick="insertTable()" class="px-2 h-7 rounded bg-purple-950/20 border border-purple-800/30 hover:bg-purple-950/40 text-purple-300 transition flex items-center justify-center text-[10px] font-semibold" title="Tabel invoegen"><i class="fa-solid fa-table mr-1"></i> Tabel</button>
 
+                    <span class="w-[1px] h-5 bg-slate-800 mx-1"></span>
+
+                    <!-- Templates -->
+                    <div class="flex items-center gap-1">
+                        <button onclick="insertInstructionTemplate('lezen')" class="px-1.5 h-7 rounded bg-sky-500/10 border border-sky-500/25 hover:bg-sky-500/20 text-sky-400 transition flex items-center justify-center text-[10px] font-semibold" title="Voeg 'Lezen' sectie toe"><i class="fa-solid fa-eye mr-1"></i> Lezen</button>
+                        <button onclick="insertInstructionTemplate('uitvoeren')" class="px-1.5 h-7 rounded bg-emerald-500/10 border border-emerald-500/25 hover:bg-emerald-500/20 text-emerald-400 transition flex items-center justify-center text-[10px] font-semibold" title="Voeg 'Uitvoeren' sectie toe"><i class="fa-solid fa-play mr-1"></i> Uitvoeren</button>
+                        <button onclick="insertInstructionTemplate('bewerken')" class="px-1.5 h-7 rounded bg-amber-500/10 border border-amber-500/25 hover:bg-amber-500/20 text-amber-400 transition flex items-center justify-center text-[10px] font-semibold" title="Voeg 'Bewerken' sectie toe"><i class="fa-solid fa-pen-to-square mr-1"></i> Bewerken</button>
+                    </div>
+
+                    <span class="w-[1px] h-5 bg-slate-800 mx-1"></span>
+
+                    <!-- Smart Paste -->
+                    <button onclick="openSmartPasteModal()" class="px-2 h-7 rounded bg-purple-500/20 border border-purple-500/35 hover:bg-purple-500/30 text-purple-300 transition flex items-center justify-center text-[10px] font-semibold" title="Plak platte tekst en zet om naar HTML"><i class="fa-solid fa-paste mr-1"></i> Slim Plakken</button>
+
                     <!-- Dynamic Table Controls (Visible only when selection inside a table) -->
                     <button id="wysiwyg-btn-add-row" onclick="addTableRow()" class="hidden bg-purple-950/80 hover:bg-purple-900 border border-purple-600/50 text-purple-200 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95" title="Rij eronder toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Rij</button>
                     <button id="wysiwyg-btn-add-col" onclick="addTableColumn()" class="hidden bg-purple-950/80 hover:bg-purple-900 border border-purple-600/50 text-purple-200 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95" title="Kolom ernaast toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Kolom</button>
@@ -695,6 +709,39 @@
                 <button id="new-assignment-submit"
                     class="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl transition shadow-lg active:scale-95 text-sm">
                     Aanmaken
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Modal for Smart Paste Plain Text Converter (Teacher Mode) -->
+    <div id="smart-paste-modal"
+        class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-[9999]">
+        <div
+            class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-250 flex flex-col max-h-[90vh]">
+            <div class="flex items-center gap-3 text-purple-400 mb-2 border-b border-slate-800 pb-3 shrink-0">
+                <i class="fa-solid fa-paste text-2xl"></i>
+                <h3 class="text-lg font-bold text-slate-100">Slim Instructies Plakken & Converteren</h3>
+            </div>
+            
+            <p class="text-xs text-slate-400 mb-3 shrink-0">
+                Plak hieronder je platte tekst (bijvoorbeeld gekopieerd uit Word of PDF). Koppen zoals <strong>Lezen:</strong>, <strong>Uitvoeren:</strong> of <strong>Bewerken:</strong> worden automatisch herkend en voorzien van icoontjes. Genummerde regels worden omgezet in genummerde lijsten, en methoden zoals <code class="text-amber-400 font-mono">goto()</code> of parameters tussen quotes worden automatisch code-tags.
+            </p>
+            
+            <div class="flex-1 min-h-0 mb-4">
+                <textarea id="smart-paste-textarea"
+                    class="w-full h-full min-h-[250px] bg-slate-950 border border-slate-800 rounded-xl p-4 text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm leading-relaxed"
+                    placeholder="Lezen:&#10;1. Regel 1 - Turtle importeren.&#10;2. Schildpad instellen.&#10;&#10;Bewerken:&#10;1. Teken een vierkant met goto(100,100)."></textarea>
+            </div>
+
+            <div class="flex justify-end gap-3 shrink-0">
+                <button onclick="closeSmartPasteModal()"
+                    class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-sm">
+                    Annuleren
+                </button>
+                <button onclick="applySmartPaste()"
+                    class="bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-bold px-5 py-2.5 rounded-xl transition shadow-lg active:scale-95 text-sm">
+                    Omzetten & Invoegen
                 </button>
             </div>
         </div>
@@ -3013,6 +3060,74 @@
             saveActiveInstruction();
         }
 
+        let savedSelectionRange = null;
+
+        function insertBlockAtSelection(htmlContent) {
+            const docBox = document.getElementById("assignment-instruction");
+            if (!docBox) return;
+
+            docBox.focus();
+            const selection = window.getSelection();
+            
+            let range = savedSelectionRange;
+            if (!range && selection.rangeCount) {
+                range = selection.getRangeAt(0);
+            }
+
+            if (range) {
+                selection.removeAllRanges();
+                selection.addRange(range);
+                
+                range.deleteContents();
+                
+                const tempDiv = document.createElement("div");
+                tempDiv.innerHTML = htmlContent;
+                
+                const frag = document.createDocumentFragment();
+                let node, lastNode;
+                while ((node = tempDiv.firstChild)) {
+                    lastNode = frag.appendChild(node);
+                }
+                
+                // Find closest block element directly under docBox to avoid nesting blocks inside paragraphs/headers
+                let insertBlock = range.commonAncestorContainer;
+                if (insertBlock.nodeType === Node.TEXT_NODE) {
+                    insertBlock = insertBlock.parentNode;
+                }
+                while (insertBlock && insertBlock.parentNode !== docBox && insertBlock !== docBox) {
+                    insertBlock = insertBlock.parentNode;
+                }
+                
+                if (insertBlock && insertBlock !== docBox) {
+                    const textVal = insertBlock.textContent.trim();
+                    // If the block is empty or contains only whitespace/br, we can replace it
+                    if (textVal === "" || textVal === "\u00a0") {
+                        const parent = insertBlock.parentNode;
+                        parent.insertBefore(frag, insertBlock);
+                        insertBlock.remove();
+                    } else {
+                        // Otherwise insert after it
+                        insertBlock.parentNode.insertBefore(frag, insertBlock.nextSibling);
+                    }
+                } else {
+                    range.insertNode(frag);
+                }
+                
+                if (lastNode) {
+                    const newRange = document.createRange();
+                    newRange.setStartAfter(lastNode);
+                    newRange.collapse(true);
+                    selection.removeAllRanges();
+                    selection.addRange(newRange);
+                }
+            } else {
+                docBox.innerHTML += htmlContent;
+            }
+            
+            // Clear the saved selection range after use
+            savedSelectionRange = null;
+        }
+
         function insertTipBox() {
             const selection = window.getSelection();
             if (!selection.rangeCount) return;
@@ -3032,17 +3147,9 @@
             }
 
             // Otherwise toggle on: insert new tip box
-            const tipBox = document.createElement("div");
-            tipBox.className = "wysiwyg-tip-box bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-xs text-amber-300 italic my-3";
             const selText = selection.toString().trim();
-            tipBox.innerHTML = `<i class="fa-solid fa-lightbulb mr-1.5 text-amber-400"></i>${selText || 'Tip: Typ hier je hulpmiddel...'}`;
-            range.insertNode(tipBox);
-            
-            // Insert empty space paragraph below the box so selection/cursor can escape easily
-            const p = document.createElement("p");
-            p.innerHTML = "&nbsp;";
-            tipBox.parentNode.insertBefore(p, tipBox.nextSibling);
-
+            const html = `<div class="wysiwyg-tip-box bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-xs text-amber-300 italic my-3"><i class="fa-solid fa-lightbulb mr-1.5 text-amber-400"></i>${selText || 'Tip: Typ hier je hulpmiddel...'}</div><p>&nbsp;</p>`;
+            insertBlockAtSelection(html);
             saveActiveInstruction();
         }
 
@@ -3065,52 +3172,31 @@
             }
 
             // Otherwise toggle on: insert new info box
-            const infoBox = document.createElement("div");
-            infoBox.className = "wysiwyg-info-box bg-blue-500/10 border border-blue-500/30 rounded-xl p-3 text-xs text-blue-300 my-3";
             const selText = selection.toString().trim();
-            infoBox.innerHTML = `<i class="fa-solid fa-info-circle mr-1.5 text-blue-400"></i>${selText || 'Opmerking: Typ hier je aanvullende informatie...'}`;
-            range.insertNode(infoBox);
-            
-            // Insert empty space paragraph below the box so selection/cursor can escape easily
-            const p = document.createElement("p");
-            p.innerHTML = "&nbsp;";
-            infoBox.parentNode.insertBefore(p, infoBox.nextSibling);
-
+            const html = `<div class="wysiwyg-info-box bg-blue-500/10 border border-blue-500/30 rounded-xl p-3 text-xs text-blue-300 my-3"><i class="fa-solid fa-info-circle mr-1.5 text-blue-400"></i>${selText || 'Opmerking: Typ hier je aanvullende informatie...'}</div><p>&nbsp;</p>`;
+            insertBlockAtSelection(html);
             saveActiveInstruction();
         }
 
         function insertTable() {
-            const selection = window.getSelection();
-            if (!selection.rangeCount) return;
-            const range = selection.getRangeAt(0);
-
-            const table = document.createElement("table");
-            table.className = "wysiwyg-table w-full border-collapse border border-slate-800 my-4 text-xs md:text-sm bg-slate-950/20";
-            table.style.borderRadius = "8px";
-            table.style.overflow = "hidden";
-            table.innerHTML = `
-                <thead>
-                    <tr class="bg-slate-900">
-                        <th class="border border-slate-800 p-2 text-left font-bold text-slate-200">Kop 1</th>
-                        <th class="border border-slate-800 p-2 text-left font-bold text-slate-200">Kop 2</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td class="border border-slate-800 p-2 text-slate-300">Cel 1</td>
-                        <td class="border border-slate-800 p-2 text-slate-300">Cel 2</td>
-                    </tr>
-                </tbody>
+            const html = `
+                <table class="wysiwyg-table w-full border-collapse border border-slate-800 my-4 text-xs md:text-sm bg-slate-950/20" style="border-radius: 8px; overflow: hidden;">
+                    <thead>
+                        <tr class="bg-slate-900">
+                            <th class="border border-slate-800 p-2 text-left font-bold text-slate-200">Kop 1</th>
+                            <th class="border border-slate-800 p-2 text-left font-bold text-slate-200">Kop 2</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="border border-slate-800 p-2 text-slate-300">Cel 1</td>
+                            <td class="border border-slate-800 p-2 text-slate-300">Cel 2</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>&nbsp;</p>
             `;
-
-            range.deleteContents();
-            range.insertNode(table);
-
-            // Spacing paragraph below table to allow easy cursor exit
-            const p = document.createElement("p");
-            p.innerHTML = "&nbsp;";
-            table.parentNode.insertBefore(p, table.nextSibling);
-
+            insertBlockAtSelection(html);
             saveActiveInstruction();
         }
 
@@ -3197,6 +3283,257 @@
                 saveActiveInstruction();
                 showToast("🗑️ Tabel verwijderd");
             }
+        }
+
+        function insertInstructionTemplate(type) {
+            const docBox = document.getElementById("assignment-instruction");
+            if (!docBox) return;
+
+            if (!isViewingHtml) {
+                const selection = window.getSelection();
+                if (selection.rangeCount) {
+                    const range = selection.getRangeAt(0);
+                    let container = range.commonAncestorContainer;
+                    if (container.nodeType === Node.TEXT_NODE) {
+                        container = container.parentNode;
+                    }
+                    const sectionElem = container.closest(`.wysiwyg-section-${type}`);
+                    if (sectionElem) {
+                        const sectionNameMap = {
+                            'lezen': 'Lezen',
+                            'uitvoeren': 'Uitvoeren',
+                            'bewerken': 'Bewerken'
+                        };
+                        const sectionName = sectionNameMap[type] || type;
+                        if (confirm(`Weet je zeker dat je de complete sectie '${sectionName}' (inclusief alle stappen) wilt verwijderen?`)) {
+                            const nextSib = sectionElem.nextSibling;
+                            if (nextSib && nextSib.nodeName.toLowerCase() === 'p' && (nextSib.innerHTML === '&nbsp;' || nextSib.textContent.trim() === '')) {
+                                nextSib.remove();
+                            }
+                            sectionElem.remove();
+                            saveActiveInstruction();
+                            showToast(`🗑️ Sectie '${sectionName}' verwijderd`);
+                        }
+                        return;
+                    }
+                }
+            }
+
+            let html = "";
+            if (type === 'lezen') {
+                html = `<div class="wysiwyg-section-lezen my-3"><div class="font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-eye text-sky-400"></i> Lezen:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Regel 1 - ...</li></ol></div><p>&nbsp;</p>`;
+            } else if (type === 'uitvoeren') {
+                html = `<div class="wysiwyg-section-uitvoeren my-3"><div class="font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-play text-emerald-400"></i> Uitvoeren:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Probeer te voorspellen...</li><li>Run de code...</li></ol></div><p>&nbsp;</p>`;
+            } else if (type === 'bewerken') {
+                html = `<div class="wysiwyg-section-bewerken my-3"><div class="font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-pen-to-square text-amber-400"></i> Bewerken:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Pas de code aan zodat...</li></ol></div><p>&nbsp;</p>`;
+            }
+
+            if (isViewingHtml) {
+                // If currently viewing raw HTML, append to textContent
+                docBox.textContent += html;
+                saveActiveInstruction();
+            } else {
+                insertBlockAtSelection(html);
+                saveActiveInstruction();
+            }
+            showToast(`📝 Template '${type}' ingevoegd`);
+        }
+
+        function openSmartPasteModal() {
+            // Save selection range if it's inside the assignment-instruction element
+            const selection = window.getSelection();
+            savedSelectionRange = null;
+            if (selection.rangeCount) {
+                const range = selection.getRangeAt(0);
+                const docBox = document.getElementById("assignment-instruction");
+                if (docBox && (docBox.contains(range.commonAncestorContainer) || docBox === range.commonAncestorContainer)) {
+                    savedSelectionRange = range.cloneRange();
+                }
+            }
+
+            const modal = document.getElementById("smart-paste-modal");
+            const textarea = document.getElementById("smart-paste-textarea");
+            if (modal) {
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+            }
+            if (textarea) {
+                textarea.value = "";
+                textarea.focus();
+            }
+        }
+
+        function closeSmartPasteModal() {
+            const modal = document.getElementById("smart-paste-modal");
+            if (modal) {
+                modal.classList.remove("flex");
+                modal.classList.add("hidden");
+            }
+            savedSelectionRange = null;
+        }
+
+        function stripHtml(html) {
+            // Regex matching standard HTML tags
+            const tagRegex = /<(\/?)(p|div|span|h[1-6]|ul|ol|li|strong|em|b|i|code|pre|table|tr|td|th|thead|tbody|tfoot|a|img|br|hr|section|header|footer|nav|aside|article|label|input|button|select|option|textarea|form|iframe|style|script|svg|path|g)\b[^>]*>/gi;
+            
+            // Replace block-level tags and breaks with newlines to preserve spacing
+            const blockRegex = /<\/(p|div|li|h[1-6]|tr|thead|tbody|tfoot|table|section|header|footer|nav|aside|article|form)>/gi;
+            const breakRegex = /<(br|hr)\b[^>]*>/gi;
+
+            let text = html
+                .replace(blockRegex, '\n')
+                .replace(breakRegex, '\n');
+            
+            // Strip remaining standard HTML tags
+            text = text.replace(tagRegex, '');
+            
+            // Decode standard HTML entities using the browser's native parser
+            const tempDiv = document.createElement("div");
+            tempDiv.innerHTML = text;
+            return tempDiv.textContent || tempDiv.innerText || text;
+        }
+
+        function applySmartPaste() {
+            const textarea = document.getElementById("smart-paste-textarea");
+            if (!textarea) return;
+
+            const text = textarea.value.trim();
+            if (!text) {
+                showToast("⚠️ Plak eerst wat tekst!");
+                return;
+            }
+
+            const cleanText = stripHtml(text);
+            const htmlContent = parseRawInstructionsToHTML(cleanText);
+            const docBox = document.getElementById("assignment-instruction");
+            if (docBox) {
+                if (isViewingHtml) {
+                    docBox.textContent += htmlContent;
+                    saveActiveInstruction();
+                } else {
+                    insertBlockAtSelection(htmlContent);
+                    saveActiveInstruction();
+                }
+                showToast("✨ Platte tekst succesvol omgezet & ingevoegd!");
+            }
+            closeSmartPasteModal();
+        }
+
+        function parseRawInstructionsToHTML(text) {
+            const lines = text.split('\n');
+            let html = '';
+            let inList = false;
+            let listType = ''; // 'ol' or 'ul'
+            let activeSectionType = null; // 'lezen', 'uitvoeren', 'bewerken' or null
+            let justMatchedHeading = false;
+
+            function closeList() {
+                if (inList) {
+                    html += `</${listType}>\n`;
+                    inList = false;
+                }
+            }
+
+            function closeSection() {
+                closeList();
+                if (activeSectionType) {
+                    html += `</div>\n`;
+                    activeSectionType = null;
+                }
+            }
+
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (line === '') {
+                    if (justMatchedHeading) {
+                        // Ignore blank line immediately following a heading
+                        continue;
+                    }
+                    closeList();
+                    html += `<p>&nbsp;</p>\n`;
+                    continue;
+                }
+
+                // Detect headings
+                const lowerLine = line.toLowerCase();
+                let headingMatched = false;
+                
+                if (lowerLine.startsWith('lezen') || lowerLine.includes('👁 lezen') || lowerLine.includes('lezen:')) {
+                    closeSection();
+                    activeSectionType = 'lezen';
+                    html += `<div class="wysiwyg-section-lezen my-3">\n<div class="font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-eye text-sky-400"></i> Lezen:</div>\n`;
+                    headingMatched = true;
+                    justMatchedHeading = true;
+                } else if (lowerLine.startsWith('uitvoeren') || lowerLine.includes('▶ uitvoeren') || lowerLine.includes('uitvoeren:')) {
+                    closeSection();
+                    activeSectionType = 'uitvoeren';
+                    html += `<div class="wysiwyg-section-uitvoeren my-3">\n<div class="font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-play text-emerald-400"></i> Uitvoeren:</div>\n`;
+                    headingMatched = true;
+                    justMatchedHeading = true;
+                } else if (lowerLine.startsWith('bewerken') || lowerLine.includes('📝 bewerken') || lowerLine.includes('bewerken:')) {
+                    closeSection();
+                    activeSectionType = 'bewerken';
+                    html += `<div class="wysiwyg-section-bewerken my-3">\n<div class="font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-pen-to-square text-amber-400"></i> Bewerken:</div>\n`;
+                    headingMatched = true;
+                    justMatchedHeading = true;
+                }
+
+                if (headingMatched) {
+                    continue;
+                }
+
+                // Since we found actual content line, reset heading matched flag
+                justMatchedHeading = false;
+
+                // Detect list items (e.g. "1. Item", "2) Item", "- Item", "* Item")
+                const olMatch = line.match(/^(\d+[\.\)]\s*)(.*)/);
+                const ulMatch = line.match(/^([\-\*\+]\s*)(.*)/);
+
+                if (olMatch) {
+                    const content = olMatch[2];
+                    if (!inList || listType !== 'ol') {
+                        closeList();
+                        html += `<ol class="list-decimal pl-6 space-y-1 mt-1 mb-2">\n`;
+                        inList = true;
+                        listType = 'ol';
+                    }
+                    html += `  <li>${formatInlineCode(content)}</li>\n`;
+                } else if (ulMatch) {
+                    const content = ulMatch[2];
+                    if (!inList || listType !== 'ul') {
+                        closeList();
+                        html += `<ul class="list-disc pl-6 space-y-1 mt-1 mb-2">\n`;
+                        inList = true;
+                        listType = 'ul';
+                    }
+                    html += `  <li>${formatInlineCode(content)}</li>\n`;
+                } else {
+                    // Standard paragraph text
+                    closeList();
+                    html += `<p class="mb-3">${formatInlineCode(line)}</p>\n`;
+                }
+            }
+            closeSection();
+            return html;
+        }
+
+        function formatInlineCode(text) {
+            // Escape HTML special characters
+            let escaped = text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+            
+            // Auto wrap functions/statements with code block (e.g. backwards(), goto(), right(90))
+            escaped = escaped.replace(/([a-zA-Z_][a-zA-Z0-9_]*\([^\)]*\))/g, '<code class="bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs">$1</code>');
+            
+            // Auto wrap quotes inside string parameter listings
+            escaped = escaped.replace(/(["'])([^"'\n\r\t]+)(["'])/g, '$1<code class="bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs">$2</code>$3');
+            
+            // Highlight "Run"
+            escaped = escaped.replace(/(Run|Voer uit|Voer Code Uit)/gi, '<span class="font-bold text-slate-800 dark:text-slate-200">$1</span>');
+
+            return escaped;
         }
 
         let isViewingHtml = false;
