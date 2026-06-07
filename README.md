@@ -21,6 +21,8 @@ Een moderne, interactieve en volledig cliënt-side Python-leeromgeving ontworpen
 *   **Slimme Automatische Unit Tests**:
     *   Evalueert studentencode automatisch op basis van gedefinieerde testcases.
     *   **Strikte scheiding**: De testrunner scheidt invoerprompts (zoals `Hoe heet je? `) van de daadwerkelijk geprinte waarden (`print()`). Hierdoor kunnen testen betrouwbaar op `"exact"` matchen, terwijl studenten toch duidelijke invoerprompts kunnen gebruiken.
+*   **Code Valideren (Zonder Uitvoeren)**: Met een "Valideer"-knop in de toolbar kunnen studenten of docenten de code direct controleren op syntaxfouten met behulp van Skulpt's parser en compiler, zonder de code uit te voeren of te testen.
+*   **Light & Dark Mode (Thema's)**: Volledige ondersteuning voor zowel een licht (wit, standaard) als donker (Dracula/slate) thema. Dit is configureerbaar met een URL-parameter en een wisselknop. In de lichte modus worden storende borders en schaduwen rond het canvas uitgezet voor een naadloze weergave.
 *   **Voortgangsbehoud & Project-Isolatie**: Code en testresultaten worden per opdracht automatisch in de `localStorage` opgeslagen. Dit is volledig **geïsoleerd per opdrachtenreeks (cursus)** op basis van het geladen JSON-bestand in de URL. Hierdoor kunnen studenten aan meerdere verschillende cursussen tegelijkertijd werken zonder dat hun voortgang botst of elkaar overschrijft!
 *   **Voortgang Exporteren/Importeren**: Studenten kunnen hun werk exporteren naar een compact `.json` inleverbestand en later weer importeren om verder te werken.
 
@@ -143,6 +145,28 @@ Je kunt de weergave en het gedrag van de editor aanpassen met de query-parameter
     👉 [http://localhost:8000/index.html?config=opdracht1&mode=embed](http://localhost:8000/index.html?config=opdracht1&mode=embed)
 
 Wanneer de Docentenmodus actief is, verschijnt er een opvallende **paarse statusbalk** bovenin het scherm om aan te geven dat je in bewerkingsmodus bent.
+
+---
+
+### 🎨 Thema Aanpassen (`theme=`)
+
+De editor ondersteunt een licht en donker thema. Standaard wordt de **lichte modus** (witte achtergrond) geladen. Je kunt de themamodus overrulen via de query-parameter `theme`:
+
+*   **Lichte modus (White theme)** (`theme=light`): De standaardweergave met een witte/lichtgrijze achtergrond. In de embed-modus (`mode=embed`) worden storende borders en schaduwen rondom het canvas automatisch uitgezet om een naadloze overgang te bieden met witte websites.
+*   **Donkere modus (Dark/Black theme)** (`theme=dark` of `theme=black`): Schakelt de editor en de outputpanels om naar een donkere interface met het Dracula-thema voor CodeMirror. Het canvas heeft in deze modus een subtiele border.
+
+👉 [http://localhost:8000/index.html?config=opdracht1&theme=dark](http://localhost:8000/index.html?config=opdracht1&theme=dark)
+
+---
+
+### ⏱️ Tijdslimiet/Timeout Configureren (`timeout=` / `exec_limit=`)
+
+Om oneindige lussen te voorkomen, hanteert de Skulpt-engine standaard een tijdslimiet voor de uitvoering van programma's. Je kunt deze limiet handmatig aanpassen of uitschakelen via de URL:
+
+*   **Tijdslimiet aanpassen**: Geef het gewenste aantal milliseconden op (bijv. `timeout=5000` voor 5 seconden).
+*   **Limiet uitschakelen (Oneindige tijd)**: Gebruik `timeout=0` of `exec_limit=0` om de tijdslimiet volledig uit te schakelen (het programma blijft dan lopen tot de browser of pagina opnieuw wordt geladen).
+
+👉 [http://localhost:8000/index.html?config=opdracht1&timeout=0](http://localhost:8000/index.html?config=opdracht1&timeout=0)
 
 ---
 

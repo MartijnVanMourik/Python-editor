@@ -55,9 +55,7 @@
             width: 400px;
             height: 400px;
             background-color: #ffffff;
-            border: 1px solid #334155;
             border-radius: 0.75rem;
-            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
             overflow: hidden;
             margin: 0 auto;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -153,10 +151,108 @@
             margin-bottom: 0.25rem !important;
             display: list-item !important;
         }
+
+        /* Responsive Scrollbar themes */
+        body.bg-slate-950 ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        body.bg-slate-50 ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        body.bg-slate-950 ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        body.bg-slate-50 ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+        }
+        body.bg-slate-950 ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        body.bg-slate-50 ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Instant Embed Mode Styles to prevent FOUC of the editor and layout shift */
+        .is-embed #main-header,
+        .is-embed #instructions-panel,
+        .is-embed #editor-wrapper-panel,
+        .is-embed #mobile-switch-tabs,
+        .is-embed #turtle-floating-controls {
+            display: none !important;
+        }
+
+        .is-embed #output-wrapper-panel {
+            display: flex !important;
+            grid-column: span 12 / span 12 !important;
+            background-color: transparent !important;
+        }
+
+        .is-embed #output-panels-container {
+            padding: 0 !important;
+        }
+
+        /* Default transition layout and theme-specific backgrounds */
+        body {
+            opacity: 0;
+            transition: opacity 150ms ease-in-out;
+        }
+        body.ready {
+            opacity: 1;
+        }
+
+        /* In embed mode, once ready, show instantly without transition */
+        .is-embed body.ready {
+            opacity: 1 !important;
+            transition: none !important;
+        }
+
+        /* Set theme-specific background colors on HTML and body elements */
+        html.theme-light,
+        .theme-light body,
+        .theme-light #output-wrapper-panel,
+        .theme-light #output-panels-container {
+            background-color: #ffffff !important;
+        }
+
+        html.theme-dark,
+        .theme-dark body,
+        .theme-dark #output-wrapper-panel,
+        .theme-dark #output-panels-container {
+            background-color: #020617 !important; /* bg-slate-950 */
+        }
+        
+        .theme-dark #turtle-canvas {
+            border: 1px solid #334155 !important;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06) !important;
+        }
+        .theme-light #turtle-canvas {
+            border: none !important;
+            box-shadow: none !important;
+        }
     </style>
+    <script>
+        // Early theme and layout parsing to prevent visual jump/flickering on load
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Resolve active theme
+            const themeParam = urlParams.get('theme') || localStorage.getItem('theme') || 'light';
+            const activeTheme = (themeParam === 'dark' || themeParam === 'black') ? 'dark' : 'light';
+            document.documentElement.classList.add(activeTheme === 'dark' ? 'theme-dark' : 'theme-light');
+            document.documentElement.setAttribute('data-theme', activeTheme);
+            
+            // Resolve layout mode (embed vs standard)
+            const modeParam = urlParams.get('mode');
+            const embedParam = urlParams.get('embed');
+            const isEmbed = (modeParam === 'embed' || embedParam === 'true');
+            if (isEmbed) {
+                document.documentElement.classList.add('is-embed');
+            }
+        })();
+    </script>
 </head>
 
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col overflow-x-hidden">
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col overflow-x-hidden opacity-0 transition-opacity duration-150">
 
     <!-- Header / Navbar -->
     <header id="main-header"
@@ -181,6 +277,11 @@
             </span>
 
             <!-- Global Action Buttons -->
+            <button onclick="toggleTheme()" id="btn-theme-toggle"
+                class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-700 transition flex items-center justify-center w-[38px] h-[38px]"
+                title="Wissel tussen licht en donker thema">
+                <i id="theme-toggle-icon" class="fa-solid fa-moon text-indigo-500 text-base"></i>
+            </button>
             <button onclick="exportToJSON()"
                 class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-700 transition flex items-center gap-2"
                 title="Exporteer je voortgang naar een JSON bestand">
@@ -607,6 +708,209 @@
         let isEmbed = false; // Flag to hide header and buttons for iframe embeds
         let isInitializingNewCourse = false; // Flag to track course initialization modal state
         let courseNamespace = "default"; // Namespace identifier based on loaded course config URL
+        let activeTheme = "light"; // Active theme mode: 'light' (default) or 'dark'
+
+        function applyTheme(theme) {
+            activeTheme = theme;
+            localStorage.setItem("theme", theme);
+            const isDark = (theme === "dark");
+
+            // 1. Toggle body colors and document element theme classes
+            if (isDark) {
+                document.body.classList.remove("bg-slate-50", "text-slate-900");
+                document.body.classList.add("bg-slate-950", "text-slate-100");
+                document.documentElement.classList.remove("theme-light");
+                document.documentElement.classList.add("theme-dark");
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.body.classList.remove("bg-slate-950", "text-slate-100");
+                document.body.classList.add("bg-slate-50", "text-slate-900");
+                document.documentElement.classList.remove("theme-dark");
+                document.documentElement.classList.add("theme-light");
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+
+            // 2. Toggle CodeMirror theme
+            if (editor) {
+                editor.setOption("theme", isDark ? "dracula" : "default");
+            }
+
+            // 3. Toggle main header
+            const header = document.getElementById("main-header");
+            if (header) {
+                if (isDark) {
+                    header.classList.remove("bg-white", "border-slate-200", "text-slate-800", "shadow-sm");
+                    header.classList.add("bg-slate-900", "border-slate-800", "text-slate-100");
+                } else {
+                    header.classList.remove("bg-slate-900", "border-slate-800", "text-slate-100");
+                    header.classList.add("bg-white", "border-slate-200", "text-slate-800", "shadow-sm");
+                }
+                const headerTitle = document.getElementById("config-title");
+                if (headerTitle) {
+                    if (isDark) {
+                        headerTitle.classList.remove("text-slate-800");
+                        headerTitle.classList.add("text-slate-100");
+                    } else {
+                        headerTitle.classList.remove("text-slate-100");
+                        headerTitle.classList.add("text-slate-800");
+                    }
+                }
+            }
+
+            // 4. Toggle instructions panel
+            const instructionsPanel = document.getElementById("instructions-panel");
+            if (instructionsPanel) {
+                if (isDark) {
+                    instructionsPanel.classList.remove("bg-white", "border-slate-200", "text-slate-800");
+                    instructionsPanel.classList.add("bg-slate-900/60", "border-slate-800");
+                } else {
+                    instructionsPanel.classList.remove("bg-slate-900/60", "border-slate-800");
+                    instructionsPanel.classList.add("bg-white", "border-slate-200", "text-slate-800");
+                }
+            }
+
+            // 5. Instruction box (inside instructions panel)
+            const instructionBox = document.querySelector("#instructions-panel > div.bg-slate-900") || document.querySelector("#instructions-panel > div.bg-slate-50") || (instructionsPanel ? instructionsPanel.querySelector("div") : null);
+            if (instructionBox) {
+                if (isDark) {
+                    instructionBox.classList.remove("bg-slate-55", "bg-slate-50", "border-slate-200", "text-slate-700");
+                    instructionBox.classList.add("bg-slate-900", "border-slate-800");
+                } else {
+                    instructionBox.classList.remove("bg-slate-909", "bg-slate-900", "border-slate-800");
+                    instructionBox.classList.add("bg-slate-50", "border-slate-200", "text-slate-700");
+                }
+            }
+
+            // 6. Editor Wrapper / tabs & toolbar
+            const editorWrapper = document.getElementById("editor-wrapper-panel");
+            if (editorWrapper) {
+                if (isDark) {
+                    editorWrapper.classList.remove("border-slate-200");
+                    editorWrapper.classList.add("border-slate-800");
+                } else {
+                    editorWrapper.classList.remove("border-slate-800");
+                    editorWrapper.classList.add("border-slate-200");
+                }
+                const tabsBar = editorWrapper.querySelector("div");
+                if (tabsBar) {
+                    if (isDark) {
+                        tabsBar.classList.remove("bg-slate-100", "border-slate-200", "text-slate-600");
+                        tabsBar.classList.add("bg-slate-900/80", "border-slate-800", "text-slate-400");
+                    } else {
+                        tabsBar.classList.remove("bg-slate-900/80", "border-slate-800", "text-slate-400");
+                        tabsBar.classList.add("bg-slate-100", "border-slate-200", "text-slate-600");
+                    }
+                }
+                const editorToolbar = document.querySelector("#editor-wrapper-panel > div:last-child");
+                if (editorToolbar) {
+                    if (isDark) {
+                        editorToolbar.classList.remove("bg-slate-100", "border-slate-200", "text-slate-700");
+                        editorToolbar.classList.add("bg-slate-900", "border-slate-800");
+                    } else {
+                        editorToolbar.classList.remove("bg-slate-900", "border-slate-800");
+                        editorToolbar.classList.add("bg-slate-100", "border-slate-200", "text-slate-700");
+                    }
+                }
+            }
+
+            // 7. Output Wrapper Panel
+            const outputWrapper = document.getElementById("output-wrapper-panel");
+            if (outputWrapper) {
+                if (isDark) {
+                    outputWrapper.classList.remove("bg-white", "text-slate-800");
+                    outputWrapper.classList.add("bg-slate-950");
+                } else {
+                    outputWrapper.classList.remove("bg-slate-950");
+                    outputWrapper.classList.add("bg-white", "text-slate-800");
+                }
+            }
+
+            const subtabsBar = document.getElementById("output-subtabs-bar");
+            if (subtabsBar) {
+                if (isDark) {
+                    subtabsBar.classList.remove("bg-slate-100", "border-slate-200", "text-slate-700");
+                    subtabsBar.classList.add("bg-slate-900/80", "border-slate-800");
+                } else {
+                    subtabsBar.classList.remove("bg-slate-900/80", "border-slate-800");
+                    subtabsBar.classList.add("bg-slate-100", "border-slate-200", "text-slate-700");
+                }
+            }
+
+            // 8. Console panel items
+            const consoleOutput = document.getElementById("console-output");
+            if (consoleOutput) {
+                if (isDark) {
+                    consoleOutput.classList.remove("bg-slate-50", "border-slate-200", "text-slate-800");
+                    consoleOutput.classList.add("bg-slate-900", "border-slate-800", "text-emerald-400");
+                } else {
+                    consoleOutput.classList.remove("bg-slate-900", "border-slate-800", "text-emerald-400");
+                    consoleOutput.classList.add("bg-slate-50", "border-slate-200", "text-slate-800");
+                }
+            }
+
+            // 9. Save indicator
+            const saveIndicator = document.getElementById("save-indicator");
+            if (saveIndicator) {
+                if (isDark) {
+                    saveIndicator.classList.remove("bg-slate-200", "text-slate-600", "border-slate-300");
+                    saveIndicator.classList.add("bg-slate-800", "text-slate-400", "border-slate-700");
+                } else {
+                    saveIndicator.classList.remove("bg-slate-800", "text-slate-400", "border-slate-700");
+                    saveIndicator.classList.add("bg-slate-200", "text-slate-600", "border-slate-300");
+                }
+            }
+
+            // 10. Global action buttons
+            const globalBtns = document.querySelectorAll("header button");
+            globalBtns.forEach(btn => {
+                if (btn.id === "btn-theme-toggle") return; // Keep specific style for toggle icon
+                if (isDark) {
+                    btn.classList.remove("bg-slate-100", "border-slate-200", "text-slate-700", "hover:bg-slate-200");
+                    btn.classList.add("bg-slate-800", "border-slate-700", "text-slate-200", "hover:bg-slate-700");
+                } else {
+                    btn.classList.remove("bg-slate-800", "border-slate-700", "text-slate-200", "hover:bg-slate-700");
+                    btn.classList.add("bg-slate-100", "border-slate-200", "text-slate-700", "hover:bg-slate-200");
+                }
+            });
+
+            // 11. Turtle canvas border & shadow (Turned off in white/light mode)
+            const canvasDiv = document.getElementById("turtle-canvas");
+            if (canvasDiv) {
+                if (isDark) {
+                    canvasDiv.style.border = "1px solid #334155";
+                    canvasDiv.style.boxShadow = "inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)";
+                } else {
+                    canvasDiv.style.border = "none";
+                    canvasDiv.style.boxShadow = "none";
+                }
+            }
+        }
+
+        function toggleTheme() {
+            const nextTheme = activeTheme === 'dark' ? 'light' : 'dark';
+            applyTheme(nextTheme);
+            updateThemeToggleIcon();
+            
+            // Re-render elements that depend on activeTheme
+            renderTaskSelector();
+            renderWorkspaceTabs();
+        }
+
+        function updateThemeToggleIcon() {
+            const icon = document.getElementById("theme-toggle-icon");
+            const btn = document.getElementById("btn-theme-toggle");
+            if (icon && btn) {
+                if (activeTheme === 'dark') {
+                    icon.className = "fa-solid fa-sun text-yellow-500 text-base";
+                    btn.title = "Wissel naar licht thema";
+                    btn.className = "bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-700 transition flex items-center justify-center w-[38px] h-[38px]";
+                } else {
+                    icon.className = "fa-solid fa-moon text-indigo-500 text-base";
+                    btn.title = "Wissel naar donker thema";
+                    btn.className = "bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-200 transition flex items-center justify-center w-[38px] h-[38px]";
+                }
+            }
+        }
 
         // Helper to namespace and get progress and passed test storage keys
         function getProgressStorageKey() {
@@ -678,16 +982,25 @@
         };
 
         window.onload = function () {
+            // Parse theme parameter first to initialize CodeMirror theme correctly
+            const urlParams = new URLSearchParams(window.location.search);
+            const themeParam = urlParams.get('theme') || localStorage.getItem('theme') || 'light';
+            activeTheme = (themeParam === 'dark' || themeParam === 'black') ? 'dark' : 'light';
+
             // Initialize CodeMirror instance on textarea
             editor = CodeMirror.fromTextArea(document.getElementById("code-editor"), {
                 mode: { name: "python", version: 3, singleLineStringErrors: false },
                 lineNumbers: true,
-                theme: "dracula",
+                theme: activeTheme === 'dark' ? "dracula" : "default",
                 indentUnit: 4,
                 tabSize: 4,
                 autoCloseBrackets: true,
                 viewportMargin: Infinity
             });
+
+            // Sync theme configuration visual classes
+            applyTheme(activeTheme);
+            updateThemeToggleIcon();
 
             // Auto-save changes in background when user types
             editor.on("change", () => {
@@ -976,6 +1289,10 @@
                     createNewTaskInConfig();
                 }, 100);
             }
+
+            // Finally make the document visible (smooth fade in, avoiding FOUC/flash)
+            document.body.classList.remove("opacity-0");
+            document.body.classList.add("ready");
         }
 
         function renderTaskSelector() {
@@ -1009,8 +1326,13 @@
                 const btn = document.createElement("button");
                 btn.id = `task-btn-${task.id}`;
                 btn.onclick = () => selectTask(task.id);
-                btn.className = `flex-1 text-left p-2.5 rounded-xl transition flex items-center justify-between min-w-0 ${isActive ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg' : 'bg-slate-800/80 hover:bg-slate-800 text-slate-300'
-                    }`;
+                btn.className = `flex-1 text-left p-2.5 rounded-xl transition flex items-center justify-between min-w-0 ${
+                    isActive 
+                        ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg' 
+                        : (activeTheme === 'dark' 
+                            ? 'bg-slate-800/80 hover:bg-slate-800 text-slate-300' 
+                            : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200')
+                }`;
 
                 btn.innerHTML = `
                     <span class="font-semibold text-sm truncate select-none mr-2">${task.title} <span class="text-xs font-normal opacity-60 font-mono">(${task.id})</span></span>
@@ -1032,7 +1354,11 @@
 
                     if (index > 0) {
                         const upBtn = document.createElement("button");
-                        upBtn.className = "w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 flex items-center justify-center text-[10px] transition";
+                        upBtn.className = `w-5 h-5 rounded flex items-center justify-center text-[10px] transition ${
+                            activeTheme === 'dark'
+                                ? 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200'
+                                : 'bg-slate-200 hover:bg-slate-300 text-slate-600 hover:text-slate-800'
+                        }`;
                         upBtn.innerHTML = '<i class="fa-solid fa-chevron-up"></i>';
                         upBtn.title = "Omhoog verplaatsen";
                         upBtn.onclick = (e) => {
@@ -1044,7 +1370,11 @@
 
                     if (index < taskConfig.tabs.length - 1) {
                         const downBtn = document.createElement("button");
-                        downBtn.className = "w-5 h-5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200 flex items-center justify-center text-[10px] transition";
+                        downBtn.className = `w-5 h-5 rounded flex items-center justify-center text-[10px] transition ${
+                            activeTheme === 'dark'
+                                ? 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200'
+                                : 'bg-slate-200 hover:bg-slate-300 text-slate-600 hover:text-slate-800'
+                        }`;
                         downBtn.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
                         downBtn.title = "Omlaag verplaatsen";
                         downBtn.onclick = (e) => {
@@ -1055,7 +1385,11 @@
                     }
 
                     const delBtn = document.createElement("button");
-                    delBtn.className = "w-5 h-5 rounded bg-slate-900 hover:bg-red-950 text-slate-500 hover:text-red-400 flex items-center justify-center text-[10px] transition";
+                    delBtn.className = `w-5 h-5 rounded flex items-center justify-center text-[10px] transition ${
+                        activeTheme === 'dark'
+                            ? 'bg-slate-900 hover:bg-red-950 text-slate-500 hover:text-red-400'
+                            : 'bg-slate-200 hover:bg-red-100 text-slate-500 hover:text-red-600'
+                    }`;
                     delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
                     delBtn.title = "Verwijder opdracht uit cursus";
                     delBtn.onclick = (e) => {
@@ -2091,21 +2425,7 @@
             const floatingControls = document.getElementById("turtle-floating-controls");
 
             if (appMode === 'demo') {
-                if (isEmbed) {
-                    document.body.classList.remove("bg-slate-950", "text-slate-100");
-                    document.body.classList.add("bg-white", "text-slate-900");
-                    if (outputPanel) {
-                        outputPanel.classList.remove("bg-slate-950");
-                        outputPanel.classList.add("bg-white");
-                    }
-                } else {
-                    document.body.classList.remove("bg-white", "text-slate-900");
-                    document.body.classList.add("bg-slate-950", "text-slate-100");
-                    if (outputPanel) {
-                        outputPanel.classList.remove("bg-white");
-                        outputPanel.classList.add("bg-slate-950");
-                    }
-                }
+                applyTheme(activeTheme);
                 if (header) header.classList.add("hidden");
                 if (instructionsPanel) instructionsPanel.classList.add("hidden");
                 if (editorPanel) editorPanel.classList.add("hidden");
@@ -2151,12 +2471,7 @@
                 const consoleHeader = document.querySelector("#panel-console .text-xs.font-mono");
                 if (consoleHeader) consoleHeader.classList.add("hidden");
             } else {
-                document.body.classList.remove("bg-white", "text-slate-900");
-                document.body.classList.add("bg-slate-950", "text-slate-100");
-                if (outputPanel) {
-                    outputPanel.classList.remove("bg-white");
-                    outputPanel.classList.add("bg-slate-950");
-                }
+                applyTheme(activeTheme);
                 if (header) header.classList.remove("hidden");
                 if (instructionsPanel) instructionsPanel.classList.remove("hidden");
                 if (mobileSwitchTabs) mobileSwitchTabs.classList.remove("hidden");
@@ -2313,8 +2628,12 @@
 
                 const tab = document.createElement("div");
                 tab.className = isActive 
-                    ? "bg-slate-800 text-blue-400 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-bold shadow-md cursor-pointer shrink-0 transition"
-                    : "bg-slate-900/60 hover:bg-slate-800/80 text-slate-400 hover:text-slate-200 border border-transparent px-3 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer shrink-0 transition";
+                    ? (activeTheme === 'dark' 
+                        ? "bg-slate-800 text-blue-400 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-bold shadow-md cursor-pointer shrink-0 transition"
+                        : "bg-white text-blue-600 border border-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-bold shadow-sm cursor-pointer shrink-0 transition")
+                    : (activeTheme === 'dark'
+                        ? "bg-slate-900/60 hover:bg-slate-800/80 text-slate-400 hover:text-slate-200 border border-transparent px-3 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer shrink-0 transition"
+                        : "bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 border border-slate-200/50 px-3 py-1.5 rounded-lg flex items-center gap-1.5 cursor-pointer shrink-0 transition");
 
                 // Click to activate tab
                 tab.onclick = (e) => {
@@ -2342,7 +2661,11 @@
                 // Delete button for custom files
                 if (!isMain) {
                     const deleteBtn = document.createElement("i");
-                    deleteBtn.className = "fa-solid fa-xmark text-[10px] text-slate-500 hover:text-red-400 hover:bg-slate-700/50 rounded p-0.5 ml-1 transition delete-tab-btn";
+                    deleteBtn.className = `fa-solid fa-xmark text-[10px] rounded p-0.5 ml-1 transition delete-tab-btn ${
+                        activeTheme === 'dark'
+                            ? 'text-slate-500 hover:text-red-400 hover:bg-slate-700/50'
+                            : 'text-slate-400 hover:text-red-600 hover:bg-slate-200'
+                    }`;
                     deleteBtn.title = "Verwijder bestand";
                     deleteBtn.onclick = (e) => {
                         e.stopPropagation();
@@ -2356,7 +2679,9 @@
 
             // Render a permanent '+' Add File Button
             const addBtn = document.createElement("button");
-            addBtn.className = "bg-slate-900/40 hover:bg-slate-800/80 text-slate-500 hover:text-slate-300 border border-dashed border-slate-800 hover:border-slate-700 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition active:scale-95";
+            addBtn.className = activeTheme === 'dark'
+                ? "bg-slate-900/40 hover:bg-slate-800/80 text-slate-500 hover:text-slate-300 border border-dashed border-slate-800 hover:border-slate-700 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition active:scale-95"
+                : "bg-slate-100 hover:bg-slate-200 text-slate-400 hover:text-slate-600 border border-dashed border-slate-200 hover:border-slate-300 w-8 h-8 rounded-lg flex items-center justify-center shrink-0 transition active:scale-95";
             addBtn.title = "Nieuw bestand toevoegen";
             addBtn.onclick = addNewFile;
             addBtn.innerHTML = '<i class="fa-solid fa-plus text-xs"></i>';
