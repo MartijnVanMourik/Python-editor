@@ -1523,7 +1523,7 @@
                             return parsed === 0 ? Infinity : (parsed < 1000 ? parsed * 1000 : parsed);
                         }
                     }
-                    return isTurtle ? 60000 : 30000;
+                    return Infinity; // Default to 0 (infinite timeout)
                 })(),
                 killableWhile: true,
                 killableFor: true
@@ -2091,6 +2091,21 @@
             const floatingControls = document.getElementById("turtle-floating-controls");
 
             if (appMode === 'demo') {
+                if (isEmbed) {
+                    document.body.classList.remove("bg-slate-950", "text-slate-100");
+                    document.body.classList.add("bg-white", "text-slate-900");
+                    if (outputPanel) {
+                        outputPanel.classList.remove("bg-slate-950");
+                        outputPanel.classList.add("bg-white");
+                    }
+                } else {
+                    document.body.classList.remove("bg-white", "text-slate-900");
+                    document.body.classList.add("bg-slate-950", "text-slate-100");
+                    if (outputPanel) {
+                        outputPanel.classList.remove("bg-white");
+                        outputPanel.classList.add("bg-slate-950");
+                    }
+                }
                 if (header) header.classList.add("hidden");
                 if (instructionsPanel) instructionsPanel.classList.add("hidden");
                 if (editorPanel) editorPanel.classList.add("hidden");
@@ -2136,6 +2151,12 @@
                 const consoleHeader = document.querySelector("#panel-console .text-xs.font-mono");
                 if (consoleHeader) consoleHeader.classList.add("hidden");
             } else {
+                document.body.classList.remove("bg-white", "text-slate-900");
+                document.body.classList.add("bg-slate-950", "text-slate-100");
+                if (outputPanel) {
+                    outputPanel.classList.remove("bg-white");
+                    outputPanel.classList.add("bg-slate-950");
+                }
                 if (header) header.classList.remove("hidden");
                 if (instructionsPanel) instructionsPanel.classList.remove("hidden");
                 if (mobileSwitchTabs) mobileSwitchTabs.classList.remove("hidden");
