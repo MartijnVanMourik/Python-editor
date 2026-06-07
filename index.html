@@ -3373,24 +3373,67 @@
         }
 
         function stripHtml(html) {
-            // Regex matching standard HTML tags
-            const tagRegex = /<(\/?)(p|div|span|h[1-6]|ul|ol|li|strong|em|b|i|code|pre|table|tr|td|th|thead|tbody|tfoot|a|img|br|hr|section|header|footer|nav|aside|article|label|input|button|select|option|textarea|form|iframe|style|script|svg|path|g)\b[^>]*>/gi;
-            
-            // Replace block-level tags and breaks with newlines to preserve spacing
-            const blockRegex = /<\/(p|div|li|h[1-6]|tr|thead|tbody|tfoot|table|section|header|footer|nav|aside|article|form)>/gi;
-            const breakRegex = /<(br|hr)\b[^>]*>/gi;
+            // Regex to check if text contains standard HTML tags
+            const containsHtml = /<(\/?)(p|div|span|h[1-6]|ul|ol|li|strong|em|b|i|code|pre|table|tr|td|th|thead|tbody|a|img|br|hr|section|header|footer|nav|aside|article|form)\b[^>]*>/i.test(html);
+            if (!containsHtml) {
+                return html;
+            }
 
-            let text = html
-                .replace(blockRegex, '\n')
-                .replace(breakRegex, '\n');
-            
-            // Strip remaining standard HTML tags
-            text = text.replace(tagRegex, '');
-            
-            // Decode standard HTML entities using the browser's native parser
-            const tempDiv = document.createElement("div");
-            tempDiv.innerHTML = text;
-            return tempDiv.textContent || tempDiv.innerText || text;
+            // Parse the HTML using browser DOMParser
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+            const body = doc.body;
+
+            // Prepend numbering/bullets to <li> elements if they don't already have them
+            const lis = body.querySelectorAll("li");
+            lis.forEach(li => {
+                const parent = li.parentElement;
+                const isOrdered = parent && parent.nodeName.toLowerCase() === "ol";
+                
+                // Get the inner text and see if it already starts with a list marker (number or bullet)
+                const text = li.textContent.trim();
+                const alreadyHasMarker = /^(\d+[\.\)]|[\-\*\+])\s*/.test(text);
+                
+                if (!alreadyHasMarker) {
+                    let index = 0;
+                    if (isOrdered) {
+                        const siblings = Array.from(parent.children).filter(c => c.nodeName.toLowerCase() === "li");
+                        index = siblings.indexOf(li);
+                    }
+                    const prefix = isOrdered ? `${index + 1}. ` : `- `;
+                    
+                    // Prepend list prefix (e.g. "1. " or "- ")
+                    li.insertBefore(doc.createTextNode(prefix), li.firstChild);
+                }
+            });
+
+            // Traverse the DOM recursively to build plain text with newlines for block elements
+            function getDomTextWithLayout(node) {
+                if (node.nodeType === Node.TEXT_NODE) {
+                    return node.textContent;
+                }
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    const tagName = node.nodeName.toLowerCase();
+                    let content = "";
+                    
+                    node.childNodes.forEach(child => {
+                        content += getDomTextWithLayout(child);
+                    });
+                    
+                    // Add newlines for block tags and breaks
+                    const blockTags = ["p", "div", "li", "h1", "h2", "h3", "h4", "h5", "h6", "tr", "thead", "tbody", "table", "section", "header", "footer", "nav", "aside", "article", "form"];
+                    if (blockTags.includes(tagName)) {
+                        content += "\n";
+                    } else if (tagName === "br" || tagName === "hr") {
+                        content += "\n";
+                    }
+                    
+                    return content;
+                }
+                return "";
+            }
+
+            return getDomTextWithLayout(body).trim();
         }
 
         function applySmartPaste() {
