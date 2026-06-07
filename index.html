@@ -152,24 +152,31 @@
             display: list-item !important;
         }
 
-        /* Responsive Scrollbar themes */
-        body.bg-slate-950 ::-webkit-scrollbar-track {
-            background: #1e293b;
-        }
-        body.bg-slate-50 ::-webkit-scrollbar-track {
+        /* Responsive Scrollbar themes for light and dark modes */
+        .theme-light::-webkit-scrollbar-track,
+        .theme-light ::-webkit-scrollbar-track {
             background: #f1f5f9;
         }
-        body.bg-slate-950 ::-webkit-scrollbar-thumb {
-            background: #475569;
-        }
-        body.bg-slate-50 ::-webkit-scrollbar-thumb {
+        .theme-light::-webkit-scrollbar-thumb,
+        .theme-light ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
         }
-        body.bg-slate-950 ::-webkit-scrollbar-thumb:hover {
-            background: #64748b;
-        }
-        body.bg-slate-50 ::-webkit-scrollbar-thumb:hover {
+        .theme-light::-webkit-scrollbar-thumb:hover,
+        .theme-light ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
+        }
+
+        .theme-dark::-webkit-scrollbar-track,
+        .theme-dark ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .theme-dark::-webkit-scrollbar-thumb,
+        .theme-dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        .theme-dark::-webkit-scrollbar-thumb:hover,
+        .theme-dark ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
         }
 
         /* Instant Embed Mode Styles to prevent FOUC of the editor and layout shift */
@@ -189,6 +196,11 @@
 
         .is-embed #output-panels-container {
             padding: 0 !important;
+        }
+
+        .is-embed body,
+        .is-embed html {
+            overflow: hidden !important;
         }
 
         /* Default transition layout and theme-specific backgrounds */
