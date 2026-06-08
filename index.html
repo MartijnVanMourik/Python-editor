@@ -419,6 +419,118 @@
                 display: none !important;
             }
         }
+
+        /* Compact Mode Centering & Layout overrides */
+        .mode-compact #main-header,
+        .mode-compact #teacher-banner,
+        .mode-compact main {
+            max-width: 900px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            width: 100% !important;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .theme-light.mode-compact main {
+            background-color: #ffffff !important;
+        }
+        .theme-dark.mode-compact main {
+            background-color: #020617 !important;
+        }
+
+        .theme-light.mode-compact body {
+            background-color: #f8fafc !important;
+        }
+        .theme-dark.mode-compact body {
+            background-color: #0b1329 !important;
+        }
+
+        .mode-compact main {
+            flex-direction: row !important;
+        }
+        .mode-compact #instructions-panel {
+            width: 33.333% !important;
+            min-width: 260px !important;
+            max-width: 320px !important;
+            max-height: none !important;
+            border-right: 1px solid #1e293b !important;
+            display: flex !important;
+        }
+        .theme-light.mode-compact #instructions-panel {
+            border-right: 1px solid #e2e8f0 !important;
+        }
+        .mode-compact main > section:last-child {
+            flex: 1 !important;
+            max-height: none !important;
+            display: flex !important;
+        }
+        .mode-compact #mobile-switch-tabs {
+            display: none !important;
+        }
+
+        .mode-compact #editor-wrapper-panel {
+            grid-column: span 12 / span 12 !important;
+            border-right: none !important;
+        }
+
+        .mode-compact #output-wrapper-panel {
+            position: absolute !important;
+            left: 0 !important;
+            right: 0 !important;
+            top: 0 !important;
+            bottom: var(--toolbar-height, 57px) !important;
+            height: auto !important;
+            width: 100% !important;
+            z-index: 40 !important;
+            transform: translateY(100%);
+            visibility: hidden;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.25s !important;
+            border-top: 1px solid #cbd5e1 !important;
+        }
+
+        .theme-dark.mode-compact #output-wrapper-panel,
+        .dark .mode-compact #output-wrapper-panel {
+            border-top: 1px solid #1e293b !important;
+        }
+
+        .mode-compact #output-wrapper-panel.drawer-open {
+            transform: translateY(0) !important;
+            visibility: visible !important;
+        }
+
+        .mode-compact #output-panels-container {
+            padding: 0.75rem !important;
+            gap: 0.75rem !important;
+        }
+
+        .mode-compact #turtle-console-panel,
+        .mode-compact #web-console-panel {
+            display: none !important;
+        }
+
+        .mode-compact #btn-close-drawer {
+            display: flex !important;
+        }
+
+        /* Hide fullscreen buttons in compact mode */
+        .mode-compact #btn-turtle-fullscreen,
+        .mode-compact #btn-web-fullscreen {
+            display: none !important;
+        }
+
+        /* Let turtle canvas expand to full drawer width/height minus console */
+        .mode-compact #turtle-canvas {
+            max-width: 100% !important;
+            max-height: 100% !important;
+            aspect-ratio: 1 / 1 !important;
+        }
+
+        /* Light mode: give the area behind the turtle canvas a subtle gray tint
+           so the white drawing canvas is clearly visible */
+        .theme-light #turtle-canvas-wrapper {
+            background-color: #f1f5f9;
+            border-radius: 0.5rem;
+        }
     </style>
     <script>
             // Early theme and layout parsing to prevent visual jump/flickering on load
@@ -441,6 +553,9 @@
                 const isEmbed = (modeParam === 'embed' || embedParam === 'true');
                 if (isEmbed) {
                     document.documentElement.classList.add('is-embed');
+                }
+                if (modeParam === 'compact') {
+                    document.documentElement.classList.add('mode-compact');
                 }
             })();
     </script>
@@ -788,6 +903,13 @@
                             class="flex-1 py-3 text-center border-b-2 border-transparent text-slate-400 flex items-center justify-center gap-1 hidden">
                             <i class="fa-solid fa-globe mr-1"></i> Web Preview
                         </button>
+                        <!-- Compact Mode Close Button -->
+                        <button id="btn-close-drawer" onclick="closeOutputDrawer()"
+                            class="hidden px-4 py-3 text-red-500 hover:text-red-650 dark:text-red-400 dark:hover:text-red-300 font-bold transition flex items-center gap-1.5 ml-auto border-l border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900"
+                            title="Sluit output venster">
+                            <i class="fa-solid fa-xmark text-sm"></i>
+                            <span>Sluiten</span>
+                        </button>
                     </div>
 
                     <!-- Panel Display Areas -->
@@ -816,7 +938,7 @@
                                 <span class="text-xs font-mono text-slate-500 dark:text-slate-400">TURTLE GRAPHICS
                                     CANVAS</span>
                                 <div class="flex items-center gap-2">
-                                    <button onclick="toggleTurtleFullscreen()"
+                                    <button id="btn-turtle-fullscreen" onclick="toggleTurtleFullscreen()"
                                         class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 hover:text-slate-900 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 dark:hover:text-slate-100 px-2.5 py-1.5 rounded-lg transition flex items-center gap-1.5"
                                         title="Vergroot het canvas naar volledig scherm">
                                         <i class="fa-solid fa-expand text-blue-500 dark:text-blue-400"></i>
@@ -859,7 +981,7 @@
                             </div>
 
                             <!-- Wrapper for interactive canvas container with grab cursor -->
-                            <div class="flex-1 flex items-center justify-center min-h-0 relative group">
+                            <div id="turtle-canvas-wrapper" class="flex-1 flex items-center justify-center min-h-0 relative group">
                                 <!-- Target element where Skulpt renders Canvas -->
                                 <div id="turtle-canvas" class="cursor-grab">
                                     <!-- Skulpt automatically injects HTML5 Canvas here -->
@@ -934,7 +1056,7 @@
                             <div class="w-full flex items-center justify-between mb-2 web-normal-only">
                                 <span class="text-xs font-mono text-slate-500 dark:text-slate-400">WEB PREVIEW</span>
                                 <div class="flex items-center gap-2">
-                                    <button onclick="toggleWebFullscreen()"
+                                    <button id="btn-web-fullscreen" onclick="toggleWebFullscreen()"
                                         class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 hover:text-slate-900 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 dark:hover:text-slate-100 px-2.5 py-1.5 rounded-lg transition flex items-center gap-1.5"
                                         title="Vergroot het voorbeeld naar volledig scherm">
                                         <i class="fa-solid fa-expand text-blue-500 dark:text-blue-400"></i>
@@ -1152,6 +1274,7 @@
         let canvasSize = 400; // Default canvas size in pixels (both width and height)
         let menuConfig = null; // Force show/hide task selector menu ('show', 'hide', or null)
         let isEmbed = false; // Flag to hide header and buttons for iframe embeds
+        let isCompactMode = false; // Flag for compact mode layout (width 800-900px with bottom sliding output drawer)
         let isInitializingNewCourse = false; // Flag to track course initialization modal state
         let courseNamespace = "default"; // Namespace identifier based on loaded course config URL
         let activeTheme = "light"; // Active theme mode: 'light' (default) or 'dark'
@@ -1385,6 +1508,56 @@
             }
         }
 
+        function resizeTurtleCanvasCompact() {
+            if (!isCompactMode) return;
+            const canvasContainer = document.getElementById("turtle-canvas");
+            if (!canvasContainer) return;
+            const parent = canvasContainer.parentElement;
+            if (!parent) return;
+            const rect = parent.getBoundingClientRect();
+            const size = Math.floor(Math.min(rect.width, rect.height) - 4);
+            if (size > 0) {
+                canvasContainer.style.setProperty("width", `${size}px`, "important");
+                canvasContainer.style.setProperty("height", `${size}px`, "important");
+            }
+        }
+
+        function updateToolbarHeight() {
+            if (!isCompactMode) return;
+            const toolbar = document.querySelector('#editor-wrapper-panel > div:last-child');
+            if (toolbar) {
+                const height = toolbar.offsetHeight;
+                document.documentElement.style.setProperty('--toolbar-height', `${height}px`);
+            }
+            resizeTurtleCanvasCompact();
+        }
+
+        function openOutputDrawer() {
+            if (!isCompactMode) return;
+            const outputPanel = document.getElementById("output-wrapper-panel");
+            if (outputPanel && !outputPanel.classList.contains("drawer-open")) {
+                outputPanel.classList.add("drawer-open");
+                // Force editor and canvas refresh after slide-up transition starts/completes
+                setTimeout(() => {
+                    if (editor) editor.refresh();
+                    resizeTurtleCanvasCompact();
+                }, 50);
+                setTimeout(() => {
+                    resizeTurtleCanvasCompact();
+                }, 300);
+            }
+        }
+
+        function closeOutputDrawer() {
+            const outputPanel = document.getElementById("output-wrapper-panel");
+            if (outputPanel) {
+                outputPanel.classList.remove("drawer-open");
+            }
+        }
+
+        // Window resize handler to keep drawer positioned accurately
+        window.addEventListener("resize", updateToolbarHeight);
+
         function toggleTheme() {
             const nextTheme = activeTheme === 'dark' ? 'light' : 'dark';
             applyTheme(nextTheme);
@@ -1600,6 +1773,10 @@
             } else if (modeParam === 'demo' || modeParam === 'demonstratie' || modeParam === 'run' || modeParam === 'embed' || embedParam === 'true') {
                 appMode = 'demo';
                 isEditMode = false;
+            } else if (modeParam === 'compact') {
+                appMode = 'student';
+                isEditMode = false;
+                isCompactMode = true;
             } else {
                 appMode = 'student';
                 isEditMode = false;
@@ -1789,6 +1966,9 @@
                     createNewTaskInConfig();
                 }, 100);
             }
+
+            // Initial toolbar height calculation for compact mode layout
+            setTimeout(updateToolbarHeight, 50);
 
             // Finally make the document visible (smooth fade in, avoiding FOUC/flash)
             document.body.classList.remove("opacity-0");
@@ -2063,7 +2243,11 @@
 
                 if (isWeb) {
                     if (btnTurtle) btnTurtle.classList.add("hidden");
-                    if (btnConsole) btnConsole.classList.add("hidden");
+                    if (isCompactMode) {
+                        if (btnConsole) btnConsole.classList.remove("hidden");
+                    } else {
+                        if (btnConsole) btnConsole.classList.add("hidden");
+                    }
                     if (btnTests) btnTests.classList.add("hidden");
                     if (btnWeb) btnWeb.classList.remove("hidden");
                     if (validateBtn) validateBtn.classList.remove("hidden");
@@ -2078,7 +2262,11 @@
                     const isTurtle = mainCode.includes("import turtle") || mainCode.includes("from turtle import");
                     if (isTurtle) {
                         if (btnTurtle) btnTurtle.classList.remove("hidden");
-                        if (btnConsole) btnConsole.classList.add("hidden");
+                        if (isCompactMode) {
+                            if (btnConsole) btnConsole.classList.remove("hidden");
+                        } else {
+                            if (btnConsole) btnConsole.classList.add("hidden");
+                        }
                         if (btnTests) btnTests.classList.add("hidden");
                         if (testBtn) testBtn.classList.add("hidden");
                         switchOutputSubTab('turtle');
@@ -2207,6 +2395,7 @@
         }
 
         function togglePythonExecution() {
+            openOutputDrawer();
             if (isWebModeActive()) {
                 runWebCode();
             } else {
@@ -2299,8 +2488,9 @@
             const codeToValidate = editor.getValue();
 
             // Switch to console view or stay on turtle canvas to show output
+            // In compact mode, validation always goes to console so the output is visible immediately
             const isTurtle = codeToValidate.includes("import turtle") || codeToValidate.includes("from turtle import") || activeOutputSubTab === 'turtle';
-            if (isTurtle) {
+            if (isTurtle && !isCompactMode) {
                 switchOutputSubTab('turtle');
             } else {
                 switchOutputSubTab('console');
@@ -2337,6 +2527,10 @@
         }
 
         function validateActiveCode() {
+            openOutputDrawer();
+            if (isCompactMode) {
+                switchOutputSubTab('console');
+            }
             if (isWebModeActive()) {
                 validateWebCode();
             } else {
@@ -2356,8 +2550,9 @@
             const activeFile = workspace.activeFile;
             const codeToValidate = editor.getValue();
 
-            // Clear web console
+            // Clear web console (and main console in compact mode for clean output)
             clearWebConsole();
+            if (isCompactMode) clearConsole();
 
             appendToWebConsole(`-- Start validatie van ${activeFile}... --`, 'system');
 
@@ -2803,6 +2998,7 @@
 
         // Execute automated unit tests
         async function runAssignmentTests() {
+            openOutputDrawer();
             const task = taskConfig.tabs.find(t => t.id === currentTaskId);
             if (!task) return;
 
@@ -3073,6 +3269,9 @@
                 }
             });
             activeOutputSubTab = tabId;
+            if (tabId === 'turtle') {
+                setTimeout(resizeTurtleCanvasCompact, 50);
+            }
         }
 
         function switchMobileView(viewId) {
@@ -3286,6 +3485,15 @@
         }
 
         function appendToWebConsole(text, type = 'log') {
+            if (isCompactMode) {
+                let prefix = "";
+                if (type === 'error' || type === 'web-error') prefix = "❌ [Web Fout] ";
+                else if (type === 'warn' || type === 'web-warn') prefix = "⚠️ [Web Waarschuwing] ";
+                else if (type === 'system') prefix = "⚙️ [Web Systeem] ";
+                else prefix = "🌐 [Web] ";
+                appendToConsole(prefix + text + "\n");
+            }
+
             const consoleBox = document.getElementById("web-console-output");
             if (!consoleBox) return;
 
@@ -3730,22 +3938,34 @@
                 applyTheme(activeTheme);
                 if (header) header.classList.remove("hidden");
                 if (instructionsPanel) instructionsPanel.classList.remove("hidden");
-                if (mobileSwitchTabs) mobileSwitchTabs.classList.remove("hidden");
 
-                // Normal mode behavior for output and editor panels
-                if (editorPanel) editorPanel.classList.remove("hidden");
-                if (outputPanel) {
-                    outputPanel.classList.add("lg:col-span-5");
-                    outputPanel.classList.remove("lg:col-span-12");
-                    if (window.innerWidth < 1024) {
-                        if (activeMobileView === 'editor') {
-                            outputPanel.classList.add("hidden");
-                        } else {
-                            editorPanel.classList.add("hidden");
-                        }
-                    } else {
+                if (isCompactMode) {
+                    if (mobileSwitchTabs) mobileSwitchTabs.classList.add("hidden");
+                    if (editorPanel) {
+                        editorPanel.classList.remove("hidden");
+                    }
+                    if (outputPanel) {
                         outputPanel.classList.remove("hidden");
-                        outputPanel.classList.add("flex");
+                        outputPanel.classList.remove("lg:col-span-5", "lg:col-span-12");
+                    }
+                } else {
+                    if (mobileSwitchTabs) mobileSwitchTabs.classList.remove("hidden");
+
+                    // Normal mode behavior for output and editor panels
+                    if (editorPanel) editorPanel.classList.remove("hidden");
+                    if (outputPanel) {
+                        outputPanel.classList.add("lg:col-span-5");
+                        outputPanel.classList.remove("lg:col-span-12");
+                        if (window.innerWidth < 1024) {
+                            if (activeMobileView === 'editor') {
+                                outputPanel.classList.add("hidden");
+                            } else {
+                                editorPanel.classList.add("hidden");
+                            }
+                        } else {
+                            outputPanel.classList.remove("hidden");
+                            outputPanel.classList.add("flex");
+                        }
                     }
                 }
                 if (subtabsBar) subtabsBar.classList.remove("hidden");
@@ -5620,6 +5840,7 @@
                 if (panel && panel.classList.contains("turtle-fullscreen-active")) {
                     toggleTurtleFullscreen();
                 }
+                closeOutputDrawer();
             }
         });
     </script>
