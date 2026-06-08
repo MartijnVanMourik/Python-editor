@@ -596,13 +596,13 @@
                 class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-700 transition flex items-center gap-2"
                 title="Exporteer je voortgang naar een JSON bestand">
                 <i class="fa-solid fa-file-export text-blue-400"></i>
-                <span>Inleverbestand (.json)</span>
+                <span>Exporteer</span>
             </button>
             <button onclick="triggerImport()"
                 class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg text-sm font-medium border border-slate-700 transition flex items-center gap-2"
                 title="Importeer een eerder opgeslagen JSON voortgangsbestand">
                 <i class="fa-solid fa-file-import text-purple-400"></i>
-                <span>Importeer Werk</span>
+                <span>Importeer</span>
             </button>
             <input type="file" id="import-file" class="hidden" accept=".json" onchange="importFromJSON(event)">
         </div>
@@ -2905,6 +2905,7 @@
 
             if (isTurtle) {
                 switchOutputSubTab('turtle');
+                clearConsole();
             } else {
                 switchOutputSubTab('console');
                 clearConsole();
@@ -3345,7 +3346,7 @@
             document.body.removeChild(link);
             URL.revokeObjectURL(url);
 
-            showToast("Inleverbestand succesvol geëxporteerd!");
+            showToast("✅ Voortgang geëxporteerd!");
         }
 
         // Trigger input file picker dialog
@@ -3594,6 +3595,7 @@
 
             // Clear the Web Console output
             clearWebConsole();
+            if (isCompactMode) clearConsole();
 
             // Get active task config to check requireManualLinking
             const task = taskConfig && taskConfig.tabs ? taskConfig.tabs.find(t => t.id === currentTaskId) : null;
@@ -3756,15 +3758,14 @@
                 }
             } else {
                 if (autoLinkedCss.length > 0 || autoLinkedJs.length > 0) {
-                    const filesStr = allLinked.map(f => `${f}`).join(' en ');
-                    appendToWebConsole(`[Systeem] ${filesStr} zijn automatisch gekoppeld aan ${htmlFilename}`, 'system');
-                    appendToWebConsole(`💡 Tip: Normaal moet je bestanden zelf handmatig koppelen! Gebruik hiervoor:`, 'system');
-                    if (autoLinkedCss.length > 0) {
-                        appendToWebConsole(`   <link rel="stylesheet" href="${autoLinkedCss[0]}"> (in de <head>)`, 'system');
-                    }
-                    if (autoLinkedJs.length > 0) {
-                        appendToWebConsole(`   <script src="${autoLinkedJs[0]}"><\/script> (onderaan de <body>)`, 'system');
-                    }
+                    // Show the actual HTML lines the student would need to type manually
+                    appendToWebConsole(`ℹ️ Automatisch gekoppeld. Handmatig koppelen doe je zo:`, 'system');
+                    autoLinkedCss.forEach(f => {
+                        appendToWebConsole(`<link rel="stylesheet" href="${f}">`, 'system');
+                    });
+                    autoLinkedJs.forEach(f => {
+                        appendToWebConsole(`<script src="${f}"><\/script>`, 'system');
+                    });
                 }
             }
 
