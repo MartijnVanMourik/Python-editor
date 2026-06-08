@@ -599,7 +599,7 @@
                                 <span>Voer Code Uit</span>
                             </button>
                             <!-- Validate Code Button -->
-                            <button id="btn-validate-code" onclick="validatePythonCode()"
+                            <button id="btn-validate-code" onclick="validateActiveCode()"
                                 class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 font-bold px-4 py-2.5 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-2"
                                 title="Controleer de code op syntaxfouten zonder deze uit te voeren">
                                 <i class="fa-solid fa-clipboard-check text-lg text-slate-500 dark:text-slate-400"></i>
@@ -813,12 +813,18 @@
                             </div>
 
                             <!-- Embedded Web Console Logs at bottom -->
-                            <div class="mt-3 flex flex-col bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 h-[180px] shrink-0">
+                            <div id="web-console-panel" class="mt-3 flex flex-col bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 h-[180px] shrink-0 transition-all duration-300">
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-mono text-slate-500 dark:text-slate-400">WEB CONSOLE OUTPUT</span>
-                                    <button onclick="clearWebConsole()" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition">
-                                        <i class="fa-solid fa-trash-can mr-1"></i> Schoonmaken
-                                    </button>
+                                    <div class="flex items-center gap-3">
+                                        <button onclick="clearWebConsole()" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition flex items-center gap-1">
+                                            <i class="fa-solid fa-trash-can"></i> Schoonmaken
+                                        </button>
+                                        <span class="w-[1px] h-3 bg-slate-300 dark:bg-slate-700"></span>
+                                        <button id="btn-toggle-console-size" onclick="toggleWebConsoleSize()" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition flex items-center gap-1" title="Vergroot/verklein console">
+                                            <i class="fa-solid fa-up-right-and-down-left-from-center text-[10px]"></i> <span id="console-size-label">Vergroten</span>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div id="web-console-output" class="flex-1 font-mono text-[11px] overflow-y-auto whitespace-pre-wrap leading-relaxed select-text p-2 bg-white dark:bg-slate-950 rounded-lg text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-900"></div>
                             </div>
@@ -1876,7 +1882,7 @@
                     if (btnConsole) btnConsole.classList.add("hidden");
                     if (btnTests) btnTests.classList.add("hidden");
                     if (btnWeb) btnWeb.classList.remove("hidden");
-                    if (validateBtn) validateBtn.classList.add("hidden");
+                    if (validateBtn) validateBtn.classList.remove("hidden");
                     if (testBtn) testBtn.classList.add("hidden");
                     switchOutputSubTab('web');
                     // Automatically run web code preview on load
@@ -2130,6 +2136,364 @@
                 appendToConsole("❌ Fout bij compileren:\n" + err.toString() + "\n");
                 showToast("❌ Validatie mislukt. Zie console.");
             }
+        }
+
+        function validateActiveCode() {
+            if (isWebModeActive()) {
+                validateWebCode();
+            } else {
+                validatePythonCode();
+            }
+        }
+
+        function validateWebCode() {
+            const workspace = getTaskWorkspace(currentTaskId);
+            if (!workspace) return;
+
+            // Save active tab code first
+            workspace.files[workspace.activeFile] = editor.getValue();
+            userProgress[currentTaskId] = workspace;
+            localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
+
+            const activeFile = workspace.activeFile;
+            const codeToValidate = editor.getValue();
+
+            // Clear web console
+            clearWebConsole();
+
+            appendToWebConsole(`-- Start validatie van ${activeFile}... --`, 'system');
+
+            let errors = [];
+            const ext = activeFile.split('.').pop().toLowerCase();
+
+            if (ext === 'html' || ext === 'htm') {
+                errors = validateHTML(codeToValidate);
+            } else if (ext === 'css') {
+                errors = validateCSS(codeToValidate);
+            } else if (ext === 'js') {
+                errors = validateJS(codeToValidate);
+            } else {
+                appendToWebConsole(`Geen validator beschikbaar voor dit bestandstype (.${ext}).`, 'warn');
+                return;
+            }
+
+            if (errors.length > 0) {
+                errors.forEach(err => {
+                    appendToWebConsole(err, 'error');
+                });
+                showToast(`❌ Fouten gevonden in ${activeFile}!`);
+            } else {
+                appendToWebConsole("✅ Code is syntactisch correct! Geen fouten gevonden.", 'system');
+                showToast("✅ Code is syntactisch correct!");
+            }
+        }
+
+        function validateHTML(html) {
+            const errors = [];
+
+            // ── Phase 1: check for unclosed/missing angle brackets and unclosed quotes ──
+            (function checkTokenErrors() {
+                let inTag = false;          // inside < … >
+                let quoteChar = null;       // current open quote character (' or ")
+                let tagStartLine = -1;      // line where current < was opened
+                let quoteStartLine = -1;    // line where current quote was opened
+                let i = 0;
+
+                while (i < html.length) {
+                    const ch = html[i];
+                    const lineNum = calculateLineNumber(html, i);
+
+                    if (!inTag && !quoteChar) {
+                        if (ch === '<') {
+                            // Peek: skip comments <!-- … -->
+                            if (html.substr(i, 4) === '<!--') {
+                                const end = html.indexOf('-->', i + 4);
+                                if (end === -1) {
+                                    // unclosed comment – silently skip to end
+                                    break;
+                                }
+                                i = end + 3;
+                                continue;
+                            }
+                            // Peek: skip CDATA / DOCTYPE
+                            if (html.substr(i, 2) === '<!') {
+                                const end = html.indexOf('>', i + 2);
+                                if (end === -1) { errors.push(`Ontbrekende sluitende '>' voor '<!' op regel ${lineNum}.`); break; }
+                                i = end + 1;
+                                continue;
+                            }
+                            inTag = true;
+                            tagStartLine = lineNum;
+                        } else if (ch === '>') {
+                            errors.push(`Ontbrekende openende '<' voor '>' op regel ${lineNum}.`);
+                        }
+                    } else if (inTag && !quoteChar) {
+                        if (ch === '>') {
+                            inTag = false;
+                            tagStartLine = -1;
+                        } else if (ch === '<') {
+                            // a new < while still inside a tag – previous < was never closed
+                            errors.push(`Ontbrekende sluitende '>' voor tag die begon op regel ${tagStartLine}.`);
+                            tagStartLine = lineNum; // start fresh
+                        } else if (ch === '"' || ch === "'") {
+                            quoteChar = ch;
+                            quoteStartLine = lineNum;
+                        }
+                    } else if (quoteChar) {
+                        if (ch === quoteChar) {
+                            quoteChar = null;
+                            quoteStartLine = -1;
+                        } else if (ch === '>' && inTag) {
+                            // '>' inside an unclosed quote closes the tag in browsers,
+                            // but warn the student about the missing quote
+                            errors.push(`Ontbrekend sluitend aanhalingsteken (${quoteChar}) dat begon op regel ${quoteStartLine}.`);
+                            quoteChar = null;
+                            inTag = false;
+                        }
+                    }
+                    i++;
+                }
+
+                // EOF checks
+                if (inTag) {
+                    errors.push(`Ontbrekende sluitende '>' voor tag die begon op regel ${tagStartLine}.`);
+                }
+                if (quoteChar) {
+                    errors.push(`Ontbrekend sluitend aanhalingsteken (${quoteChar}) dat begon op regel ${quoteStartLine}.`);
+                }
+            })();
+
+            // ── Phase 2: check for attribute values without any quotes at all ──
+            // e.g.  id=tekst  instead of  id="tekst"
+            (function checkUnquotedAttributes() {
+                // Match tag contents (opening tags only, strip comments first)
+                const noComments = html.replace(/<!--[\s\S]*?-->/g, '');
+                // Match opening tag bodies: <tagname ...attrs...>
+                const openTagRe = /<([a-zA-Z][a-zA-Z0-9]*)(\s[^>]*)?>/g;
+                let m;
+                while ((m = openTagRe.exec(noComments)) !== null) {
+                    const attrs = m[2] || '';
+                    const lineNum = calculateLineNumber(noComments, m.index);
+                    // Find attr=value patterns where value is NOT quoted
+                    const unquotedRe = /\b([a-zA-Z][a-zA-Z0-9-]*)=([^"'][^\s>]*)/g;
+                    let am;
+                    while ((am = unquotedRe.exec(attrs)) !== null) {
+                        errors.push(`Attribuutwaarde van '${am[1]}' op regel ${lineNum} staat niet tussen aanhalingstekens (gebruik bijv. ${am[1]}="${am[2]}").`);
+                    }
+                }
+            })();
+
+            // If structural (angle-bracket / quote) errors were already found,
+            // skip the tag-nesting phase – it would produce confusing cascade errors.
+            if (errors.length > 0) return errors;
+
+            // ── Phase 3: tag nesting (original logic) ──
+            let cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '');
+            
+            const selfClosingTags = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']);
+            const tagRegex = /<\/?([a-zA-Z0-9:-]+)(?:\s+[^>]*)?>/g;
+            const stack = [];
+            let match;
+            
+            while ((match = tagRegex.exec(cleanHtml)) !== null) {
+                const tag = match[1].toLowerCase();
+                const isClosing = match[0].startsWith('</');
+                const line = calculateLineNumber(cleanHtml, match.index);
+                
+                if (selfClosingTags.has(tag)) {
+                    if (isClosing) {
+                        errors.push(`Zelfsluitende tag <${tag}> mag geen sluitingstag </${tag}> hebben op regel ${line}.`);
+                    }
+                    continue;
+                }
+                
+                if (isClosing) {
+                    const stackIndex = stack.map(item => item.tag).lastIndexOf(tag);
+                    if (stackIndex === -1) {
+                        errors.push(`Onverwachte sluitingstag </${tag}> op regel ${line} zonder bijbehorende openingstag.`);
+                    } else {
+                        for (let k = stack.length - 1; k > stackIndex; k--) {
+                            const unclosed = stack[k];
+                            errors.push(`Tag <${unclosed.tag}> geopend op regel ${unclosed.line} is niet gesloten voor </${tag}> op regel ${line}.`);
+                        }
+                        stack.splice(stackIndex);
+                    }
+                } else {
+                    stack.push({ tag, line });
+                }
+            }
+            
+            while (stack.length > 0) {
+                const open = stack.pop();
+                errors.push(`Niet-gesloten tag <${open.tag}> geopend op regel ${open.line}.`);
+            }
+            
+            return errors;
+        }
+
+        function validateCSS(css) {
+            const errors = [];
+            let braceCount = 0;
+            let commentOpen = false;
+            const lines = css.split('\n');
+            
+            // 1. Line-by-line check for missing semicolons inside declarations
+            let commentActive = false;
+            for (let i = 0; i < lines.length; i++) {
+                const lineNum = i + 1;
+                let rawLine = lines[i];
+                let line = rawLine.trim();
+                
+                if (commentActive) {
+                    const closeIdx = line.indexOf('*/');
+                    if (closeIdx !== -1) {
+                        commentActive = false;
+                        line = line.substring(closeIdx + 2).trim();
+                    } else {
+                        continue;
+                    }
+                }
+                
+                let openIdx = line.indexOf('/*');
+                while (openIdx !== -1) {
+                    const closeIdx = line.indexOf('*/', openIdx + 2);
+                    if (closeIdx !== -1) {
+                        line = line.substring(0, openIdx) + line.substring(closeIdx + 2);
+                        openIdx = line.indexOf('/*');
+                    } else {
+                        commentActive = true;
+                        line = line.substring(0, openIdx);
+                        break;
+                    }
+                }
+                
+                line = line.trim();
+                if (!line) continue;
+                
+                // Track brace level for semicolon checks
+                for (let j = 0; j < line.length; j++) {
+                    if (line[j] === '{') braceCount++;
+                    else if (line[j] === '}') {
+                        braceCount--;
+                        if (braceCount < 0) braceCount = 0;
+                    }
+                }
+                
+                if (braceCount > 0 && line.includes(':') && !line.endsWith(';') && !line.endsWith('{') && !line.endsWith('}')) {
+                    // Check if the next non-empty, non-comment line starts a new declaration or rule
+                    let nextLineNum = i + 1;
+                    let nextLine = null;
+                    let nextCommentActive = commentActive;
+                    
+                    while (nextLineNum < lines.length) {
+                        let tempLine = lines[nextLineNum].trim();
+                        if (nextCommentActive) {
+                            const closeIdx = tempLine.indexOf('*/');
+                            if (closeIdx !== -1) {
+                                nextCommentActive = false;
+                                tempLine = tempLine.substring(closeIdx + 2).trim();
+                            } else {
+                                nextLineNum++;
+                                continue;
+                            }
+                        }
+                        
+                        let tempOpenIdx = tempLine.indexOf('/*');
+                        while (tempOpenIdx !== -1) {
+                            const closeIdx = tempLine.indexOf('*/', tempOpenIdx + 2);
+                            if (closeIdx !== -1) {
+                                tempLine = tempLine.substring(0, tempOpenIdx) + tempLine.substring(closeIdx + 2);
+                                tempOpenIdx = tempLine.indexOf('/*');
+                            } else {
+                                nextCommentActive = true;
+                                tempLine = tempLine.substring(0, tempOpenIdx);
+                                break;
+                            }
+                        }
+                        
+                        tempLine = tempLine.trim();
+                        if (tempLine) {
+                            nextLine = tempLine;
+                            break;
+                        }
+                        nextLineNum++;
+                    }
+                    
+                    if (nextLine && (nextLine.includes(':') || nextLine.startsWith('}') || nextLine.includes('{'))) {
+                        errors.push(`Ontbrekende puntkomma (;) aan het einde van regel ${lineNum}.`);
+                    }
+                }
+            }
+
+            // 2. Full match check for braces and comments
+            braceCount = 0;
+            commentOpen = false;
+            for (let i = 0; i < lines.length; i++) {
+                const lineNum = i + 1;
+                let line = lines[i];
+                
+                if (commentOpen) {
+                    const closeIdx = line.indexOf('*/');
+                    if (closeIdx !== -1) {
+                        commentOpen = false;
+                        line = line.substring(closeIdx + 2);
+                    } else {
+                        continue;
+                    }
+                }
+                
+                let openIdx = line.indexOf('/*');
+                while (openIdx !== -1) {
+                    const closeIdx = line.indexOf('*/', openIdx + 2);
+                    if (closeIdx !== -1) {
+                        line = line.substring(0, openIdx) + line.substring(closeIdx + 2);
+                        openIdx = line.indexOf('/*');
+                    } else {
+                        commentOpen = true;
+                        line = line.substring(0, openIdx);
+                        break;
+                    }
+                }
+                
+                for (let j = 0; j < line.length; j++) {
+                    if (line[j] === '{') {
+                        braceCount++;
+                    } else if (line[j] === '}') {
+                        braceCount--;
+                        if (braceCount < 0) {
+                            errors.push(`Onverwachte sluit-accolade '}' op regel ${lineNum}.`);
+                            braceCount = 0;
+                        }
+                    }
+                }
+            }
+            
+            if (commentOpen) {
+                errors.push(`Niet-gesloten CSS-commentaar (/*).`);
+            }
+            if (braceCount > 0) {
+                errors.push(`Ontbrekende sluit-accolade '}' (er zijn ${braceCount} accolade(s) niet gesloten).`);
+            }
+            
+            return errors;
+        }
+
+        function validateJS(js) {
+            try {
+                new Function(js);
+                return [];
+            } catch (e) {
+                let msg = e.message;
+                let lineMatch = e.stack && e.stack.match(/<anonymous>:(\d+):(\d+)/);
+                if (lineMatch) {
+                    msg += ` op regel ${lineMatch[1]} kolom ${lineMatch[2]}`;
+                }
+                return [msg];
+            }
+        }
+
+        function calculateLineNumber(text, index) {
+            return text.substring(0, index).split('\n').length;
         }
 
         function runPythonCode() {
@@ -2746,6 +3110,34 @@
         function clearWebConsole() {
             const consoleBox = document.getElementById("web-console-output");
             if (consoleBox) consoleBox.innerHTML = "";
+        }
+
+        let isConsoleExpanded = false;
+        function toggleWebConsoleSize() {
+            const panel = document.getElementById("web-console-panel");
+            const btn = document.getElementById("btn-toggle-console-size");
+            const label = document.getElementById("console-size-label");
+            if (!panel || !btn || !label) return;
+
+            isConsoleExpanded = !isConsoleExpanded;
+
+            const icon = btn.querySelector("i");
+
+            if (isConsoleExpanded) {
+                panel.classList.remove("h-[180px]");
+                panel.classList.add("h-[480px]");
+                label.textContent = "Verkleinen";
+                if (icon) {
+                    icon.className = "fa-solid fa-down-left-and-up-right-to-center text-[10px]";
+                }
+            } else {
+                panel.classList.remove("h-[480px]");
+                panel.classList.add("h-[180px]");
+                label.textContent = "Vergroten";
+                if (icon) {
+                    icon.className = "fa-solid fa-up-right-and-down-left-from-center text-[10px]";
+                }
+            }
         }
 
         function toggleWebFullscreen() {
