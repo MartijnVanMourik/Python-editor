@@ -89,7 +89,7 @@
             position: fixed !important;
             inset: 0 !important;
             z-index: 9999 !important;
-            background-color: rgba(2, 6, 23, 0.95) !important;
+            background-color: rgba(248, 250, 252, 0.96) !important;
             backdrop-filter: blur(16px) !important;
             -webkit-backdrop-filter: blur(16px) !important;
             display: flex !important;
@@ -100,11 +100,20 @@
             animation: turtleFadeIn 0.25s ease-out;
         }
 
+        .dark .turtle-fullscreen-active {
+            background-color: rgba(2, 6, 23, 0.95) !important;
+        }
+
         .turtle-fullscreen-active #turtle-canvas {
             width: min(75vh, 75vw) !important;
             height: min(75vh, 75vw) !important;
             max-width: 800px !important;
             max-height: 800px !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
+            border-color: #cbd5e1 !important;
+        }
+
+        .dark .turtle-fullscreen-active #turtle-canvas {
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
             border-color: #475569 !important;
         }
@@ -138,7 +147,7 @@
             position: fixed !important;
             inset: 0 !important;
             z-index: 9999 !important;
-            background-color: rgba(2, 6, 23, 0.95) !important;
+            background-color: rgba(248, 250, 252, 0.96) !important;
             backdrop-filter: blur(16px) !important;
             -webkit-backdrop-filter: blur(16px) !important;
             display: flex !important;
@@ -149,11 +158,20 @@
             animation: webFadeIn 0.25s ease-out;
         }
 
+        .dark .web-fullscreen-active {
+            background-color: rgba(2, 6, 23, 0.95) !important;
+        }
+
         .web-fullscreen-active iframe {
             width: 100% !important;
             height: 100% !important;
             max-width: 1200px !important;
             max-height: 80vh !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15) !important;
+            border: 1px solid #cbd5e1 !important;
+        }
+
+        .dark .web-fullscreen-active iframe {
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
             border: 1px solid #475569 !important;
         }
@@ -415,25 +433,25 @@
     </header>
 
     <!-- Teacher Mode Pinned Banner -->
-    <div id="teacher-banner" class="hidden bg-purple-950 border-b border-purple-800 px-4 py-2 flex flex-col md:flex-row items-center justify-between gap-3 z-40 sticky top-[68px] animate-in slide-in-from-top duration-200 shadow-md">
-        <div class="flex items-center gap-2 text-purple-200 text-xs md:text-sm font-semibold tracking-wider">
-            <i class="fa-solid fa-graduation-cap text-purple-400 text-base animate-pulse"></i>
+    <div id="teacher-banner" class="hidden bg-purple-100 dark:bg-purple-950 border-b border-purple-200 dark:border-purple-800 px-4 py-2 flex flex-col md:flex-row items-center justify-between gap-3 z-40 sticky top-[68px] animate-in slide-in-from-top duration-200 shadow-md">
+        <div class="flex items-center gap-2 text-purple-800 dark:text-purple-200 text-xs md:text-sm font-semibold tracking-wider">
+            <i class="fa-solid fa-graduation-cap text-purple-600 dark:text-purple-400 text-base animate-pulse"></i>
             <span>DOCENTENMODUS ACTIEF &mdash; Opdrachten en tests inline bewerken</span>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-            <div class="flex items-center gap-1.5 bg-slate-900 border border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-300">
-                <span class="text-slate-400 font-mono">Bestand:</span>
+            <div class="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-800 dark:text-slate-300">
+                <span class="text-slate-500 dark:text-slate-400 font-mono">Bestand:</span>
                 <input type="text" id="teacher-filename-input" 
-                    class="bg-transparent text-slate-200 font-mono focus:outline-none w-36" 
+                    class="bg-transparent text-slate-800 dark:text-slate-200 font-mono focus:outline-none w-36" 
                     placeholder="opdracht1.json" title="De bestandsnaam van het te downloaden configuratiebestand">
             </div>
             
-            <button onclick="startNewCourse()" class="bg-purple-900/60 hover:bg-purple-800 border border-purple-700/50 text-purple-200 font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5" title="Start een lege cursus">
+            <button onclick="startNewCourse()" class="bg-purple-200 hover:bg-purple-300 border border-purple-300 text-purple-800 dark:bg-purple-900/60 dark:hover:bg-purple-800 dark:border-purple-700/50 dark:text-purple-200 font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5" title="Start een lege cursus">
                 <i class="fa-solid fa-file-circle-plus"></i>
                 <span>Nieuwe Cursus</span>
             </button>
 
-            <button onclick="downloadCourseJSON()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5">
+            <button onclick="downloadCourseJSON()" class="bg-purple-600 hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5">
                 <i class="fa-solid fa-cloud-arrow-down"></i>
                 <span>Download Cursus JSON</span>
             </button>
@@ -447,7 +465,7 @@
         <section id="instructions-panel"
             class="w-full lg:w-1/3 bg-slate-900/60 border-r border-slate-800 flex flex-col p-4 overflow-y-auto max-h-[50vh] lg:max-h-none">
             <div id="task-selector-wrapper" class="mb-4">
-                <h2 class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-2">Kies je Opdracht</h2>
+                <h2 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Kies je Opdracht</h2>
                 <!-- Task Selection Buttons Container -->
                 <div id="task-selector-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-2">
                     <!-- Dynamic tabs will insert here -->
@@ -462,13 +480,13 @@
                 </div>
                 <!-- WYSIWYG Toolbar (Visible only in edit mode) -->
                 <div id="wysiwyg-toolbar" class="hidden flex flex-wrap items-center gap-1 bg-slate-950 border border-slate-800 p-1.5 rounded-lg mb-3">
-                    <button id="wysiwyg-btn-bold" onclick="execStyle('bold')" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-xs" title="Vet (B)"><i class="fa-solid fa-bold"></i></button>
-                    <button id="wysiwyg-btn-italic" onclick="execStyle('italic')" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center italic text-xs" title="Cursief (I)"><i class="fa-solid fa-italic"></i></button>
-                    <button id="wysiwyg-btn-list-ul" onclick="execStyle('insertUnorderedList')" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center text-xs" title="Opsomming"><i class="fa-solid fa-list-ul"></i></button>
-                    <button id="wysiwyg-btn-list-ol" onclick="execStyle('insertOrderedList')" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center text-xs" title="Genummerde lijst"><i class="fa-solid fa-list-ol"></i></button>
-                    <button id="wysiwyg-btn-code" onclick="insertCodeBlock()" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-mono text-xs" title="Code-regel"><i class="fa-solid fa-code"></i></button>
-                    <button id="wysiwyg-btn-h3" onclick="insertHeader()" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-[10px]" title="Koptekst (H3)">H3</button>
-                    <button id="wysiwyg-btn-p" onclick="insertParagraph()" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center text-xs" title="Standaard tekst"><i class="fa-solid fa-paragraph"></i></button>
+                    <button id="wysiwyg-btn-bold" onclick="execStyle('bold')" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-bold text-xs" title="Vet (B)"><i class="fa-solid fa-bold"></i></button>
+                    <button id="wysiwyg-btn-italic" onclick="execStyle('italic')" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center italic text-xs" title="Cursief (I)"><i class="fa-solid fa-italic"></i></button>
+                    <button id="wysiwyg-btn-list-ul" onclick="execStyle('insertUnorderedList')" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs" title="Opsomming"><i class="fa-solid fa-list-ul"></i></button>
+                    <button id="wysiwyg-btn-list-ol" onclick="execStyle('insertOrderedList')" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs" title="Genummerde lijst"><i class="fa-solid fa-list-ol"></i></button>
+                    <button id="wysiwyg-btn-code" onclick="insertCodeBlock()" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-mono text-xs" title="Code-regel"><i class="fa-solid fa-code"></i></button>
+                    <button id="wysiwyg-btn-h3" onclick="insertHeader()" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-bold text-[10px]" title="Koptekst (H3)">H3</button>
+                    <button id="wysiwyg-btn-p" onclick="insertParagraph()" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs" title="Standaard tekst"><i class="fa-solid fa-paragraph"></i></button>
                     <button id="wysiwyg-btn-tip" onclick="insertTipBox()" class="px-2 h-7 rounded bg-amber-100 border border-amber-300 text-amber-800 hover:bg-amber-200 dark:bg-amber-500/20 dark:border-amber-500/30 dark:hover:bg-amber-500/30 dark:text-amber-300 transition flex items-center justify-center text-[10px] font-semibold" title="Tipbox invoegen"><i class="fa-solid fa-lightbulb mr-1"></i> Tip</button>
                     <button id="wysiwyg-btn-info" onclick="insertInfoBox()" class="px-2 h-7 rounded bg-blue-100 border border-blue-300 text-blue-800 hover:bg-blue-200 dark:bg-blue-500/20 dark:border-blue-500/30 dark:hover:bg-blue-500/30 dark:text-blue-300 transition flex items-center justify-center text-[10px] font-semibold" title="Infobox invoegen"><i class="fa-solid fa-info-circle mr-1"></i> Info</button>
                     <button id="wysiwyg-btn-table" onclick="insertTable()" class="px-2 h-7 rounded bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/20 dark:border-purple-800/30 dark:hover:bg-purple-950/40 dark:text-purple-300 transition flex items-center justify-center text-[10px] font-semibold" title="Tabel invoegen"><i class="fa-solid fa-table mr-1"></i> Tabel</button>
@@ -494,15 +512,15 @@
                     
                     <!-- Text Color Selector -->
                     <div class="relative inline-block ml-auto">
-                        <button onclick="toggleColorPalette(event)" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center text-xs" title="Tekstkleur">
-                            <i class="fa-solid fa-palette text-amber-400"></i>
+                        <button onclick="toggleColorPalette(event)" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs" title="Tekstkleur">
+                            <i class="fa-solid fa-palette text-amber-500 dark:text-amber-400"></i>
                         </button>
                         <div id="wysiwyg-color-palette" class="hidden absolute right-0 top-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2 shadow-2xl z-50 grid grid-cols-4 gap-1 w-32">
                             <!-- Curated 16 colors loaded dynamically -->
                         </div>
                     </div>
 
-                    <button onclick="toggleHtmlView()" id="btn-toggle-html" class="w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition flex items-center justify-center text-xs" title="Toggle HTML Weergave"><i class="fa-solid fa-code-compare"></i></button>
+                    <button onclick="toggleHtmlView()" id="btn-toggle-html" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition flex items-center justify-center text-xs" title="Toggle HTML Weergave"><i class="fa-solid fa-code-compare"></i></button>
                 </div>
                 
                 <div id="assignment-instruction-container" class="flex-1 flex flex-col min-h-0 min-w-0">
@@ -557,10 +575,10 @@
                                 title="Herstel de code naar de beginopstelling">
                                 <i class="fa-solid fa-rotate-left"></i> Reset code
                             </button>
-                            <button onclick="exportSinglePy()"
+                            <button id="btn-export-file" onclick="exportSinglePy()"
                                 class="text-slate-400 hover:text-blue-400 transition flex items-center gap-1"
-                                title="Download alleen dit .py bestand">
-                                <i class="fa-solid fa-download"></i> .py export
+                                title="Download alleen dit bestand">
+                                <i class="fa-solid fa-download"></i> <span id="export-file-label">.py export</span>
                             </button>
                         </div>
                     </div>
@@ -657,9 +675,9 @@
                         <!-- Panel A: Console Terminal -->
                         <div id="panel-console" class="flex-1 flex flex-col h-full">
                             <div class="flex items-center justify-between mb-2">
-                                <span class="text-xs font-mono text-slate-400">CONSOLE OUTPUT</span>
+                                <span class="text-xs font-mono text-slate-500 dark:text-slate-400">CONSOLE OUTPUT</span>
                                 <button onclick="clearConsole()"
-                                    class="text-xs text-slate-500 hover:text-slate-300 transition">
+                                    class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition">
                                     <i class="fa-solid fa-trash-can mr-1"></i> Schoonmaken
                                 </button>
                             </div>
@@ -693,8 +711,8 @@
                                         <i class="fa-solid fa-compass-drafting text-lg text-slate-950"></i>
                                     </div>
                                     <div>
-                                        <h3 class="font-bold text-slate-100 text-base">Turtle Graphics - Volledig Scherm</h3>
-                                        <p class="text-xs text-slate-400">Druk op 'Escape' of klik op sluiten om terug te gaan</p>
+                                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base">Turtle Graphics - Volledig Scherm</h3>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400">Druk op 'Escape' of klik op sluiten om terug te gaan</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
@@ -706,7 +724,7 @@
                                         <span>Voer Code Uit</span>
                                     </button>
                                     <button onclick="toggleTurtleFullscreen()"
-                                        class="bg-slate-800 hover:bg-slate-700 hover:text-red-400 text-slate-300 px-4 py-2 rounded-xl border border-slate-700 transition flex items-center gap-2 font-medium shadow-lg text-sm">
+                                        class="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:text-red-600 dark:hover:text-red-400 transition flex items-center gap-2 font-medium shadow-lg text-sm">
                                         <i class="fa-solid fa-compress"></i>
                                         <span>Sluiten</span>
                                     </button>
@@ -752,12 +770,12 @@
                         <div id="panel-web" class="hidden flex-1 flex flex-col h-full transition-all duration-300">
                             <!-- Normal Header -->
                             <div class="w-full flex items-center justify-between mb-2 web-normal-only">
-                                <span class="text-xs font-mono text-slate-400">WEB PREVIEW</span>
+                                <span class="text-xs font-mono text-slate-500 dark:text-slate-400">WEB PREVIEW</span>
                                 <div class="flex items-center gap-2">
                                     <button onclick="toggleWebFullscreen()"
-                                        class="text-xs bg-slate-800 hover:bg-slate-700 hover:text-slate-100 text-slate-300 px-2.5 py-1.5 rounded-lg border border-slate-700 transition flex items-center gap-1.5"
+                                        class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 hover:text-slate-900 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 dark:hover:text-slate-100 px-2.5 py-1.5 rounded-lg transition flex items-center gap-1.5"
                                         title="Vergroot het voorbeeld naar volledig scherm">
-                                        <i class="fa-solid fa-expand text-blue-400"></i>
+                                        <i class="fa-solid fa-expand text-blue-500 dark:text-blue-400"></i>
                                         <span>Volledig Scherm</span>
                                     </button>
                                 </div>
@@ -770,8 +788,8 @@
                                         <i class="fa-solid fa-globe text-lg text-slate-950"></i>
                                     </div>
                                     <div>
-                                        <h3 class="font-bold text-slate-100 text-base">Web Voorbeeld - Volledig Scherm</h3>
-                                        <p class="text-xs text-slate-400">Druk op 'Escape' of klik op sluiten om terug te gaan</p>
+                                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base">Web Voorbeeld - Volledig Scherm</h3>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400">Druk op 'Escape' of klik op sluiten om terug te gaan</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
@@ -782,7 +800,7 @@
                                         <span>Verversen</span>
                                     </button>
                                     <button onclick="toggleWebFullscreen()"
-                                        class="bg-slate-800 hover:bg-slate-700 hover:text-red-400 text-slate-300 px-4 py-2 rounded-xl border border-slate-700 transition flex items-center gap-2 font-medium shadow-lg text-sm">
+                                        class="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:text-red-600 dark:hover:text-red-400 transition flex items-center gap-2 font-medium shadow-lg text-sm">
                                         <i class="fa-solid fa-compress"></i>
                                         <span>Sluiten</span>
                                     </button>
@@ -797,8 +815,8 @@
                             <!-- Embedded Web Console Logs at bottom -->
                             <div class="mt-3 flex flex-col bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 h-[180px] shrink-0">
                                 <div class="flex items-center justify-between mb-1">
-                                    <span class="text-xs font-mono text-slate-400">WEB CONSOLE OUTPUT</span>
-                                    <button onclick="clearWebConsole()" class="text-xs text-slate-500 hover:text-slate-300 transition">
+                                    <span class="text-xs font-mono text-slate-500 dark:text-slate-400">WEB CONSOLE OUTPUT</span>
+                                    <button onclick="clearWebConsole()" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition">
                                         <i class="fa-solid fa-trash-can mr-1"></i> Schoonmaken
                                     </button>
                                 </div>
@@ -818,20 +836,20 @@
     <div id="input-modal"
         class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-[9999]">
         <div
-            class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-250">
-            <div class="flex items-center gap-3 text-emerald-400 mb-4">
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-250">
+            <div class="flex items-center gap-3 text-emerald-500 dark:text-emerald-400 mb-4">
                 <i class="fa-solid fa-terminal text-2xl"></i>
-                <h3 class="text-lg font-bold text-slate-100">Invoer gevraagd</h3>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Invoer gevraagd</h3>
             </div>
             <p id="input-modal-prompt"
-                class="text-sm text-slate-300 mb-4 font-mono bg-slate-950 p-3 rounded-lg border border-slate-800 whitespace-pre-wrap">
+                class="text-sm text-slate-700 dark:text-slate-300 mb-4 font-mono bg-slate-50 dark:bg-slate-950 p-3 rounded-lg border border-slate-200 dark:border-slate-800 whitespace-pre-wrap">
             </p>
             <input type="text" id="input-modal-field"
-                class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono mb-4 text-base"
+                class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-3 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-mono mb-4 text-base"
                 placeholder="Typ je antwoord hier..." autofocus>
             <div class="flex justify-end gap-3">
                 <button id="input-modal-stop"
-                    class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-medium px-4 py-2.5 rounded-xl transition active:scale-95 text-sm flex items-center gap-1.5 shadow border border-slate-700">
+                    class="bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium px-4 py-2.5 rounded-xl transition active:scale-95 text-sm flex items-center gap-1.5 shadow border border-slate-300 dark:border-slate-700">
                     Stop <i class="fa-solid fa-stop text-red-500"></i>
                 </button>
                 <button id="input-modal-submit"
@@ -846,30 +864,38 @@
     <div id="new-assignment-modal"
         class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-[9999]">
         <div
-            class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-250">
-            <div class="flex items-center gap-3 text-purple-400 mb-4 border-b border-slate-800 pb-3">
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-250">
+            <div class="flex items-center gap-3 text-purple-500 dark:text-purple-400 mb-4 border-b border-slate-200 dark:border-slate-800 pb-3">
                 <i class="fa-solid fa-circle-plus text-2xl"></i>
-                <h3 class="text-lg font-bold text-slate-100">Nieuwe opdracht toevoegen</h3>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Nieuwe opdracht toevoegen</h3>
             </div>
             
             <div class="flex flex-col gap-4 mb-6">
+                <div id="new-assignment-type-container">
+                    <label for="new-assignment-type" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Type Cursus</label>
+                    <select id="new-assignment-type"
+                        class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
+                        <option value="python">Python Cursus (main.py, Turtle)</option>
+                        <option value="web">Web Development Cursus (HTML, CSS, JS)</option>
+                    </select>
+                </div>
                 <div>
-                    <label for="new-assignment-name" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Naam van de opdracht</label>
+                    <label for="new-assignment-name" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Naam van de opdracht</label>
                     <input type="text" id="new-assignment-name"
-                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                        class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                         placeholder="Bijv. Teken een Vierkant" autocomplete="off">
                 </div>
                 <div>
-                    <label for="new-assignment-id" class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Uniek ID (automatisch gegenereerd, mag worden aangepast)</label>
+                    <label for="new-assignment-id" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Uniek ID (automatisch gegenereerd, mag worden aangepast)</label>
                     <input type="text" id="new-assignment-id"
-                        class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm"
+                        class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm"
                         placeholder="Bijv. teken_een_vierkant" autocomplete="off">
                 </div>
             </div>
 
             <div class="flex justify-end gap-3">
                 <button id="new-assignment-cancel"
-                    class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-sm">
+                    class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition text-sm">
                     Annuleren
                 </button>
                 <button id="new-assignment-submit"
@@ -884,25 +910,25 @@
     <div id="smart-paste-modal"
         class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-[9999]">
         <div
-            class="bg-slate-900 border border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-250 flex flex-col max-h-[90vh]">
-            <div class="flex items-center gap-3 text-purple-400 mb-2 border-b border-slate-800 pb-3 shrink-0">
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-250 flex flex-col max-h-[90vh]">
+            <div class="flex items-center gap-3 text-purple-500 dark:text-purple-400 mb-2 border-b border-slate-200 dark:border-slate-800 pb-3 shrink-0">
                 <i class="fa-solid fa-paste text-2xl"></i>
-                <h3 class="text-lg font-bold text-slate-100">Slim Instructies Plakken & Converteren</h3>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Slim Instructies Plakken & Converteren</h3>
             </div>
             
-            <p class="text-xs text-slate-400 mb-3 shrink-0">
-                Plak hieronder je platte tekst (bijvoorbeeld gekopieerd uit Word of PDF). Koppen zoals <strong>Lezen:</strong>, <strong>Uitvoeren:</strong> of <strong>Bewerken:</strong> worden automatisch herkend en voorzien van icoontjes. Genummerde regels worden omgezet in genummerde lijsten, en methoden zoals <code class="text-amber-400 font-mono">goto()</code> of parameters tussen quotes worden automatisch code-tags.
+            <p class="text-xs text-slate-500 dark:text-slate-400 mb-3 shrink-0">
+                Plak hieronder je platte tekst (bijvoorbeeld gekopieerd uit Word of PDF). Koppen zoals <strong>Lezen:</strong>, <strong>Uitvoeren:</strong> of <strong>Bewerken:</strong> worden automatisch herkend en voorzien van icoontjes. Genummerde regels worden omgezet in genummerde lijsten, en methoden zoals <code class="text-amber-700 dark:text-amber-400 font-mono">goto()</code> of parameters tussen quotes worden automatisch code-tags.
             </p>
             
             <div class="flex-1 min-h-0 mb-4">
                 <textarea id="smart-paste-textarea"
-                    class="w-full h-full min-h-[250px] bg-slate-950 border border-slate-800 rounded-xl p-4 text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm leading-relaxed"
+                    class="w-full h-full min-h-[250px] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm leading-relaxed"
                     placeholder="Lezen:&#10;1. Regel 1 - Turtle importeren.&#10;2. Schildpad instellen.&#10;&#10;Bewerken:&#10;1. Teken een vierkant met goto(100,100)."></textarea>
             </div>
 
             <div class="flex justify-end gap-3 shrink-0">
                 <button onclick="closeSmartPasteModal()"
-                    class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-sm">
+                    class="px-4 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition text-sm">
                     Annuleren
                 </button>
                 <button onclick="applySmartPaste()"
@@ -1039,25 +1065,6 @@
                     wysiwygToolbar.classList.remove("bg-slate-950", "border-slate-800");
                     wysiwygToolbar.classList.add("bg-slate-100", "border-slate-200");
                 }
-                
-                // Toggle buttons inside toolbar
-                const wysiwygBtns = wysiwygToolbar.querySelectorAll("button");
-                wysiwygBtns.forEach(btn => {
-                    // Skip specialized colored buttons
-                    if (btn.id && (btn.id.startsWith("wysiwyg-btn-tip") || btn.id.startsWith("wysiwyg-btn-info") || btn.id.startsWith("wysiwyg-btn-table") || btn.id.startsWith("wysiwyg-btn-add") || btn.id.startsWith("wysiwyg-btn-del"))) {
-                        return; 
-                    }
-                    if (btn.innerText === "Lezen" || btn.innerText === "Uitvoeren" || btn.innerText === "Bewerken" || btn.innerText === " Slim Plakken" || btn.querySelector(".fa-lightbulb") || btn.querySelector(".fa-info-circle") || btn.querySelector(".fa-table") || btn.querySelector(".fa-eye") || btn.querySelector(".fa-play") || btn.querySelector(".fa-pen-to-square") || btn.querySelector(".fa-paste")) {
-                        return;
-                    }
-                    if (isDark) {
-                        btn.classList.remove("bg-slate-200", "hover:bg-slate-300", "text-slate-700");
-                        btn.classList.add("bg-slate-800", "hover:bg-slate-700", "text-slate-200");
-                    } else {
-                        btn.classList.remove("bg-slate-800", "hover:bg-slate-700", "text-slate-200");
-                        btn.classList.add("bg-slate-200", "hover:bg-slate-300", "text-slate-700");
-                    }
-                });
             }
 
             // Toggle assignment-instruction typography colors (Tailwind Prose & basic colors)
@@ -1522,8 +1529,8 @@
             if (taskConfig && taskConfig.tabs) {
                 taskConfig.tabs.forEach((task, idx) => {
                     if (!task.title) {
-                        if (task.filename && task.filename !== "main.py") {
-                            task.title = task.filename.replace(/\.py$/, "");
+                        if (task.filename && task.filename !== "main.py" && task.filename !== "index.html") {
+                            task.title = task.filename.replace(/\.(py|html)$/, "");
                         } else {
                             task.title = `Opdracht ${idx + 1}`;
                         }
@@ -1762,7 +1769,10 @@
                 // Reset WYSIWYG html raw view toggled state
                 isViewingHtml = false;
                 const toggleBtn = document.getElementById("btn-toggle-html");
-                if (toggleBtn) toggleBtn.classList.remove("text-blue-400", "bg-slate-700");
+                if (toggleBtn) {
+                    toggleBtn.classList.remove("bg-slate-300", "text-blue-600", "dark:bg-slate-700", "dark:text-blue-400");
+                    toggleBtn.classList.add("bg-slate-200", "text-slate-500", "dark:bg-slate-800", "dark:text-slate-400");
+                }
 
                 // Set instruction panel content
                 const docBox = document.getElementById("assignment-instruction");
@@ -2643,7 +2653,28 @@
             }
         }
 
+        function getCourseType() {
+            if (taskConfig && taskConfig.courseType) {
+                return taskConfig.courseType;
+            }
+            if (taskConfig && taskConfig.tabs && taskConfig.tabs.length > 0) {
+                const firstTab = taskConfig.tabs[0];
+                if (firstTab && firstTab.files) {
+                    const filesList = Array.isArray(firstTab.files) ? firstTab.files : Object.keys(firstTab.files);
+                    const hasHtml = filesList.some(f => {
+                        const name = typeof f === "string" ? f : f.filename;
+                        return name && name.endsWith('.html');
+                    });
+                    if (hasHtml) return "web";
+                }
+            }
+            return "python";
+        }
+
         function isWebModeActive() {
+            if (taskConfig && taskConfig.courseType) {
+                return taskConfig.courseType === "web";
+            }
             if (!currentTaskId) return false;
             const workspace = getTaskWorkspace(currentTaskId);
             if (!workspace) return false;
@@ -2664,6 +2695,14 @@
                 mode = { name: "python", version: 3, singleLineStringErrors: false };
             }
             editor.setOption("mode", mode);
+
+            // Update export file label and title to match the active tab file type
+            const exportLabel = document.getElementById("export-file-label");
+            const exportBtn = document.getElementById("btn-export-file");
+            if (exportLabel && exportBtn) {
+                exportLabel.textContent = `.${ext} export`;
+                exportBtn.title = `Download alleen dit .${ext} bestand`;
+            }
         }
 
         function escapeRegExp(string) {
@@ -3455,7 +3494,9 @@
         }
 
         function deleteFile(filename) {
-            if (filename === "main.py") return; // cannot delete main.py
+            const isWeb = isWebModeActive();
+            const entrypoint = isWeb ? "index.html" : "main.py";
+            if (filename === entrypoint) return; // cannot delete entrypoint file
 
             const workspace = getTaskWorkspace(currentTaskId);
             if (!workspace) return;
@@ -3464,9 +3505,9 @@
                 // Delete file
                 delete workspace.files[filename];
 
-                // Fallback active pointer to main.py if active file was deleted
+                // Fallback active pointer to entrypoint if active file was deleted
                 if (workspace.activeFile === filename) {
-                    workspace.activeFile = "main.py";
+                    workspace.activeFile = entrypoint;
                 }
 
                 // Save state
@@ -4171,12 +4212,18 @@
                 // Display raw HTML code
                 docBox.textContent = docBox.innerHTML;
                 docBox.contentEditable = "false";
-                if (btn) btn.classList.add("text-blue-400", "bg-slate-700");
+                if (btn) {
+                    btn.classList.remove("bg-slate-200", "text-slate-500", "dark:bg-slate-800", "dark:text-slate-400");
+                    btn.classList.add("bg-slate-300", "text-blue-600", "dark:bg-slate-700", "dark:text-blue-400");
+                }
             } else {
                 // Render HTML
                 docBox.innerHTML = docBox.textContent;
                 docBox.contentEditable = "true";
-                if (btn) btn.classList.remove("text-blue-400", "bg-slate-700");
+                if (btn) {
+                    btn.classList.remove("bg-slate-300", "text-blue-600", "dark:bg-slate-700", "dark:text-blue-400");
+                    btn.classList.add("bg-slate-200", "text-slate-500", "dark:bg-slate-800", "dark:text-slate-400");
+                }
                 docBox.focus();
             }
         }
@@ -4197,6 +4244,8 @@
             const idInput = document.getElementById("new-assignment-id");
             const cancelBtn = document.getElementById("new-assignment-cancel");
             const submitBtn = document.getElementById("new-assignment-submit");
+            const typeSelect = document.getElementById("new-assignment-type");
+            const typeContainer = document.getElementById("new-assignment-type-container");
 
             if (!modal || !nameInput || !idInput || !cancelBtn || !submitBtn) {
                 // Fallback to prompt if modal elements not found
@@ -4210,6 +4259,13 @@
                 id = id.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
                 if (!id) return;
 
+                let type = "python";
+                if (isInitializingNewCourse) {
+                    type = confirm("Wil je een Web Development cursus starten? (OK = Ja, Web / Annuleren = Nee, Python)") ? "web" : "python";
+                } else {
+                    type = getCourseType();
+                }
+
                 // Verify duplicate IDs (only if not starting a new course from scratch)
                 if (!isInitializingNewCourse && taskConfig && taskConfig.tabs && taskConfig.tabs.find(t => t.id === id)) {
                     alert(`Een opdracht met ID "${id}" bestaat al. Kies een ander ID.`);
@@ -4217,15 +4273,33 @@
                 }
 
                 if (isInitializingNewCourse) {
+                    const isWeb = (type === "web");
                     taskConfig = {
-                        title: "Nieuwe Python Cursus",
+                        title: isWeb ? "Nieuwe Web Cursus" : "Nieuwe Python Cursus",
+                        courseType: type,
                         tabs: [
                             {
                                 id: id,
                                 title: name,
-                                filename: id + ".py",
-                                instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>Titel van ${name}</h3><p class='mb-2'>Typ hier de opdrachten voor studenten.</p>`,
-                                files: [
+                                filename: isWeb ? "index.html" : id + ".py",
+                                instruction: isWeb
+                                    ? `<h3 class='text-lg font-semibold text-slate-100 mb-2'>Titel van ${name}</h3><p class='mb-2'>Typ hier de instructies voor de HTML/CSS/JS webopdracht.</p>`
+                                    : `<h3 class='text-lg font-semibold text-slate-100 mb-2'>Titel van ${name}</h3><p class='mb-2'>Typ hier de opdrachten voor studenten.</p>`,
+                                files: isWeb ? [
+                                    {
+                                        filename: "index.html",
+                                        initialCode: "<!DOCTYPE html>\n<html>\n<head>\n    <title>Mijn Webpagina</title>\n</head>\n<body>\n    <h1>Hallo Wereld!</h1>\n</body>\n</html>",
+                                        isMain: true
+                                    },
+                                    {
+                                        filename: "style.css",
+                                        initialCode: "body {\n    font-family: sans-serif;\n    padding: 2rem;\n}\n"
+                                    },
+                                    {
+                                        filename: "script.js",
+                                        initialCode: "console.log('Hallo Wereld!');\n"
+                                    }
+                                ] : [
                                     {
                                         filename: "main.py",
                                         initialCode: "# Schrijf hier je begin-code\nprint('Hallo Wereld!')\n",
@@ -4245,7 +4319,7 @@
 
                     const filenameInput = document.getElementById("teacher-filename-input");
                     if (filenameInput) {
-                        filenameInput.value = "nieuwe_cursus.json";
+                        filenameInput.value = isWeb ? "nieuwe_web_cursus.json" : "nieuwe_python_cursus.json";
                     }
 
                     renderTaskSelector();
@@ -4254,11 +4328,26 @@
                     isInitializingNewCourse = false;
                     showToast("✨ Nieuwe cursus gestart met eerste opdracht!");
                 } else {
+                    const isWeb = (getCourseType() === "web");
                     const newTask = {
                         id: id,
                         title: name,
                         instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>${name}</h3><p class='mb-2'>Typ hier de instructies voor deze opdracht...</p>`,
-                        files: [
+                        files: isWeb ? [
+                            {
+                                filename: "index.html",
+                                initialCode: "<!DOCTYPE html>\n<html>\n<head>\n    <title>Nieuwe Webpagina</title>\n</head>\n<body>\n    <h1>Nieuwe opdracht</h1>\n</body>\n</html>",
+                                isMain: true
+                            },
+                            {
+                                filename: "style.css",
+                                initialCode: "/* CSS Stijlen hier */\n"
+                            },
+                            {
+                                filename: "script.js",
+                                initialCode: "// JavaScript Code hier\n"
+                            }
+                        ] : [
                             {
                                 filename: "main.py",
                                 initialCode: "# Schrijf hier je Python-code...\n",
@@ -4278,6 +4367,20 @@
 
             nameInput.value = "";
             idInput.value = "";
+            
+            // Adjust modal details based on course initialization state
+            const modalHeader = modal.querySelector("h3");
+            if (modalHeader) {
+                modalHeader.textContent = isInitializingNewCourse ? "Nieuwe cursus starten" : "Nieuwe opdracht toevoegen";
+            }
+            if (typeContainer) {
+                if (isInitializingNewCourse) {
+                    typeContainer.classList.remove("hidden");
+                } else {
+                    typeContainer.classList.add("hidden");
+                }
+            }
+
             modal.classList.remove("hidden");
             modal.classList.add("flex");
             nameInput.focus();
@@ -4297,6 +4400,7 @@
             const handleSubmit = () => {
                 const name = nameInput.value.trim();
                 let id = idInput.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
+                const type = typeSelect ? typeSelect.value : "python";
 
                 if (!name) {
                     alert("Naam mag niet leeg zijn.");
@@ -4314,15 +4418,33 @@
                 }
 
                 if (isInitializingNewCourse) {
+                    const isWeb = (type === "web");
                     taskConfig = {
-                        title: "Nieuwe Python Cursus",
+                        title: isWeb ? "Nieuwe Web Cursus" : "Nieuwe Python Cursus",
+                        courseType: type,
                         tabs: [
                             {
                                 id: id,
                                 title: name,
-                                filename: id + ".py",
-                                instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>Titel van ${name}</h3><p class='mb-2'>Typ hier de opdrachten voor studenten.</p>`,
-                                files: [
+                                filename: isWeb ? "index.html" : id + ".py",
+                                instruction: isWeb
+                                    ? `<h3 class='text-lg font-semibold text-slate-100 mb-2'>Titel van ${name}</h3><p class='mb-2'>Typ hier de instructies voor de HTML/CSS/JS webopdracht.</p>`
+                                    : `<h3 class='text-lg font-semibold text-slate-100 mb-2'>Titel van ${name}</h3><p class='mb-2'>Typ hier de opdrachten voor studenten.</p>`,
+                                files: isWeb ? [
+                                    {
+                                        filename: "index.html",
+                                        initialCode: "<!DOCTYPE html>\n<html>\n<head>\n    <title>Mijn Webpagina</title>\n</head>\n<body>\n    <h1>Hallo Wereld!</h1>\n</body>\n</html>",
+                                        isMain: true
+                                    },
+                                    {
+                                        filename: "style.css",
+                                        initialCode: "body {\n    font-family: sans-serif;\n    padding: 2rem;\n}\n"
+                                    },
+                                    {
+                                        filename: "script.js",
+                                        initialCode: "console.log('Hallo Wereld!');\n"
+                                    }
+                                ] : [
                                     {
                                         filename: "main.py",
                                         initialCode: "# Schrijf hier je begin-code\nprint('Hallo Wereld!')\n",
@@ -4345,7 +4467,7 @@
                     // Set filename input to standard default
                     const filenameInput = document.getElementById("teacher-filename-input");
                     if (filenameInput) {
-                        filenameInput.value = "nieuwe_cursus.json";
+                        filenameInput.value = isWeb ? "nieuwe_web_cursus.json" : "nieuwe_python_cursus.json";
                     }
 
                     // Render task selector and select the first assignment
@@ -4356,11 +4478,26 @@
                     showToast("✨ Nieuwe cursus gestart met eerste opdracht!");
                     closeModal();
                 } else {
+                    const isWeb = (getCourseType() === "web");
                     const newTask = {
                         id: id,
                         title: name,
                         instruction: `<h3 class='text-lg font-semibold text-slate-100 mb-2'>${name}</h3><p class='mb-2'>Typ hier de instructies voor deze opdracht...</p>`,
-                        files: [
+                        files: isWeb ? [
+                            {
+                                filename: "index.html",
+                                initialCode: "<!DOCTYPE html>\n<html>\n<head>\n    <title>Nieuwe Webpagina</title>\n</head>\n<body>\n    <h1>Nieuwe opdracht</h1>\n</body>\n</html>",
+                                isMain: true
+                            },
+                            {
+                                filename: "style.css",
+                                initialCode: "/* CSS Stijlen hier */\n"
+                            },
+                            {
+                                filename: "script.js",
+                                initialCode: "// JavaScript Code hier\n"
+                            }
+                        ] : [
                             {
                                 filename: "main.py",
                                 initialCode: "# Schrijf hier je Python-code...\n",
@@ -4594,8 +4731,8 @@
             // 3. Fallback to probed image file on disk
             // Prioritize task ID to prevent main.png collisions on multi-file workspace entrypoints
             let filenameWithoutPy = task.id || "opdracht";
-            if (task.filename && task.filename !== "main.py") {
-                filenameWithoutPy = task.filename.replace(/\.py$/, "");
+            if (task.filename && task.filename !== "main.py" && task.filename !== "index.html") {
+                filenameWithoutPy = task.filename.replace(/\.(py|html)$/, "");
             }
             const targetSrc = `opdrachten/${filenameWithoutPy}.png`;
 
@@ -4635,6 +4772,7 @@
             }
 
             const finalConfig = JSON.parse(JSON.stringify(taskConfig));
+            finalConfig.courseType = getCourseType();
 
             // Populate all codes into files array template
             finalConfig.tabs.forEach(task => {
@@ -4643,7 +4781,7 @@
                     task.files = Object.keys(ws.files).map(filename => ({
                         filename: filename,
                         initialCode: ws.files[filename],
-                        isMain: filename === "main.py"
+                        isMain: filename === "main.py" || filename === "index.html"
                     }));
                     
                     // Remove legacy properties from the task root
@@ -4773,17 +4911,17 @@
             if (delTableBtn) delTableBtn.classList.add("hidden");
 
             // Reset standard button styling to defaults
-            const defaultBtnClass = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-xs";
-            const defaultItalicClass = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center italic text-xs";
-            const defaultListClass = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center text-xs";
-            const defaultCodeClass = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-mono text-xs";
-            const defaultH3Class = "w-7 h-7 rounded bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-[10px]";
+            const defaultBtnClass = "w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-bold text-xs";
+            const defaultItalicClass = "w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center italic text-xs";
+            const defaultListClass = "w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs";
+            const defaultCodeClass = "w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-mono text-xs";
+            const defaultH3Class = "w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-bold text-[10px]";
             
-            const activeBtnClass = "w-7 h-7 rounded bg-slate-700 text-blue-400 font-bold border border-blue-500/20 transition flex items-center justify-center text-xs";
-            const activeItalicClass = "w-7 h-7 rounded bg-slate-700 text-blue-400 italic border border-blue-500/20 transition flex items-center justify-center text-xs";
-            const activeListClass = "w-7 h-7 rounded bg-slate-700 text-blue-400 border border-blue-500/20 transition flex items-center justify-center text-xs";
-            const activeCodeClass = "w-7 h-7 rounded bg-slate-700 text-blue-400 font-mono border border-blue-500/20 transition flex items-center justify-center text-xs";
-            const activeH3Class = "w-7 h-7 rounded bg-slate-700 text-blue-400 font-bold border border-blue-500/20 transition flex items-center justify-center text-[10px]";
+            const activeBtnClass = "w-7 h-7 rounded bg-slate-300 text-blue-600 border border-blue-500/30 dark:bg-slate-700 dark:text-blue-400 dark:border-blue-500/20 transition flex items-center justify-center font-bold text-xs";
+            const activeItalicClass = "w-7 h-7 rounded bg-slate-300 text-blue-600 italic border border-blue-500/30 dark:bg-slate-700 dark:text-blue-400 dark:border-blue-500/20 transition flex items-center justify-center text-xs";
+            const activeListClass = "w-7 h-7 rounded bg-slate-300 text-blue-600 border border-blue-500/30 dark:bg-slate-700 dark:text-blue-400 dark:border-blue-500/20 transition flex items-center justify-center text-xs";
+            const activeCodeClass = "w-7 h-7 rounded bg-slate-300 text-blue-600 font-mono border border-blue-500/30 dark:bg-slate-700 dark:text-blue-400 dark:border-blue-500/20 transition flex items-center justify-center text-xs";
+            const activeH3Class = "w-7 h-7 rounded bg-slate-300 text-blue-600 font-bold border border-blue-500/30 dark:bg-slate-700 dark:text-blue-400 dark:border-blue-500/20 transition flex items-center justify-center text-[10px]";
 
             // Reset callout buttons styling to defaults
             if (tipBtn) {
