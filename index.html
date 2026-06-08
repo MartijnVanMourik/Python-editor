@@ -62,8 +62,11 @@
         /* Turtle canvas container adjustments */
         #turtle-canvas {
             position: relative;
-            width: 400px;
-            height: 400px;
+            width: min(100%, 400px);
+            height: min(100%, 400px);
+            max-width: 100%;
+            max-height: 100%;
+            aspect-ratio: 1 / 1;
             background-color: #ffffff;
             border-radius: 0.75rem;
             overflow: hidden;
@@ -136,6 +139,7 @@
                 opacity: 0;
                 transform: scale(0.98);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -201,6 +205,7 @@
                 opacity: 0;
                 transform: scale(0.98);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -211,9 +216,12 @@
         .scrollbar-none::-webkit-scrollbar {
             display: none;
         }
+
         .scrollbar-none {
-            -ms-overflow-style: none;  /* IE and Edge */
-            scrollbar-width: none;  /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
         }
 
         /* Ensure lists inside the instruction box render correctly */
@@ -243,7 +251,8 @@
         .theme-light #assignment-instruction h4,
         .theme-light #assignment-instruction h5,
         .theme-light #assignment-instruction h6 {
-            color: #0f172a !important; /* text-slate-900 */
+            color: #0f172a !important;
+            /* text-slate-900 */
         }
 
         .theme-light #assignment-instruction,
@@ -251,11 +260,13 @@
         .theme-light #assignment-instruction li,
         .theme-light #assignment-instruction span,
         .theme-light #assignment-instruction div {
-            color: #334155 !important; /* text-slate-700 */
+            color: #334155 !important;
+            /* text-slate-700 */
         }
 
         .theme-light #assignment-instruction code {
-            color: #b45309 !important; /* text-amber-700 */
+            color: #b45309 !important;
+            /* text-amber-700 */
             background-color: #f1f5f9 !important;
             border-color: #e2e8f0 !important;
         }
@@ -275,10 +286,12 @@
         .theme-light ::-webkit-scrollbar-track {
             background: #f1f5f9;
         }
+
         .theme-light::-webkit-scrollbar-thumb,
         .theme-light ::-webkit-scrollbar-thumb {
             background: #cbd5e1;
         }
+
         .theme-light::-webkit-scrollbar-thumb:hover,
         .theme-light ::-webkit-scrollbar-thumb:hover {
             background: #94a3b8;
@@ -288,10 +301,12 @@
         .theme-dark ::-webkit-scrollbar-track {
             background: #1e293b;
         }
+
         .theme-dark::-webkit-scrollbar-thumb,
         .theme-dark ::-webkit-scrollbar-thumb {
             background: #475569;
         }
+
         .theme-dark::-webkit-scrollbar-thumb:hover,
         .theme-dark ::-webkit-scrollbar-thumb:hover {
             background: #64748b;
@@ -326,6 +341,7 @@
             opacity: 0;
             transition: opacity 150ms ease-in-out;
         }
+
         body.ready {
             opacity: 1;
         }
@@ -348,45 +364,90 @@
         .theme-dark body,
         .theme-dark #output-wrapper-panel,
         .theme-dark #output-panels-container {
-            background-color: #020617 !important; /* bg-slate-950 */
+            background-color: #020617 !important;
+            /* bg-slate-950 */
         }
-        
+
         .theme-dark #turtle-canvas {
             border: 1px solid #334155 !important;
             box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06) !important;
         }
+
         .theme-light #turtle-canvas {
             border: none !important;
             box-shadow: none !important;
         }
+
+        /* Prevent outer vertical scroll and force flex layouts for web/turtle outputs */
+        #output-panels-container:has(#panel-turtle:not(.hidden)),
+        #output-panels-container:has(#panel-web:not(.hidden)) {
+            overflow: hidden !important;
+        }
+
+        /* Lock layout to viewport height on desktop to keep columns aligned and prevent page scrolling */
+        @media (min-width: 1024px) {
+
+            html,
+            body {
+                height: 100vh !important;
+                height: 100dvh !important;
+                overflow: hidden !important;
+            }
+        }
+
+        /* Register editor wrapper panel as a container for queries */
+        #editor-wrapper-panel {
+            container-type: inline-size;
+            container-name: editor;
+        }
+
+        /* If the test button is visible, change container name to use a wider breakpoint */
+        #editor-wrapper-panel:has(#btn-run-tests:not(.hidden)) {
+            container-name: editor-with-tests;
+        }
+
+        /* Hide shortcut hint at 550px if tests button is hidden */
+        @container editor (max-width: 550px) {
+            #editor-shortcut-hint {
+                display: none !important;
+            }
+        }
+
+        /* Hide shortcut hint at 680x if tests button is visible */
+        @container editor-with-tests (max-width: 680px) {
+            #editor-shortcut-hint {
+                display: none !important;
+            }
+        }
     </style>
     <script>
-        // Early theme and layout parsing to prevent visual jump/flickering on load
-        (function() {
-            const urlParams = new URLSearchParams(window.location.search);
-            
-            // Resolve active theme
-            const themeParam = urlParams.get('theme') || localStorage.getItem('theme') || 'light';
-            const activeTheme = (themeParam === 'dark' || themeParam === 'black') ? 'dark' : 'light';
-            if (activeTheme === 'dark') {
-                document.documentElement.classList.add('theme-dark', 'dark');
-            } else {
-                document.documentElement.classList.add('theme-light');
-            }
-            document.documentElement.setAttribute('data-theme', activeTheme);
-            
-            // Resolve layout mode (embed vs standard)
-            const modeParam = urlParams.get('mode');
-            const embedParam = urlParams.get('embed');
-            const isEmbed = (modeParam === 'embed' || embedParam === 'true');
-            if (isEmbed) {
-                document.documentElement.classList.add('is-embed');
-            }
-        })();
+            // Early theme and layout parsing to prevent visual jump/flickering on load
+            (function () {
+                const urlParams = new URLSearchParams(window.location.search);
+
+                // Resolve active theme
+                const themeParam = urlParams.get('theme') || localStorage.getItem('theme') || 'light';
+                const activeTheme = (themeParam === 'dark' || themeParam === 'black') ? 'dark' : 'light';
+                if (activeTheme === 'dark') {
+                    document.documentElement.classList.add('theme-dark', 'dark');
+                } else {
+                    document.documentElement.classList.add('theme-light');
+                }
+                document.documentElement.setAttribute('data-theme', activeTheme);
+
+                // Resolve layout mode (embed vs standard)
+                const modeParam = urlParams.get('mode');
+                const embedParam = urlParams.get('embed');
+                const isEmbed = (modeParam === 'embed' || embedParam === 'true');
+                if (isEmbed) {
+                    document.documentElement.classList.add('is-embed');
+                }
+            })();
     </script>
 </head>
 
-<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col overflow-x-hidden opacity-0 transition-opacity duration-150">
+<body
+    class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col overflow-x-hidden opacity-0 transition-opacity duration-150">
 
     <!-- Header / Navbar -->
     <header id="main-header"
@@ -433,25 +494,31 @@
     </header>
 
     <!-- Teacher Mode Pinned Banner -->
-    <div id="teacher-banner" class="hidden bg-purple-100 dark:bg-purple-950 border-b border-purple-200 dark:border-purple-800 px-4 py-2 flex flex-col md:flex-row items-center justify-between gap-3 z-40 sticky top-[68px] animate-in slide-in-from-top duration-200 shadow-md">
-        <div class="flex items-center gap-2 text-purple-800 dark:text-purple-200 text-xs md:text-sm font-semibold tracking-wider">
+    <div id="teacher-banner"
+        class="hidden bg-purple-100 dark:bg-purple-950 border-b border-purple-200 dark:border-purple-800 px-4 py-2 flex flex-col md:flex-row items-center justify-between gap-3 z-40 sticky top-[68px] animate-in slide-in-from-top duration-200 shadow-md">
+        <div
+            class="flex items-center gap-2 text-purple-800 dark:text-purple-200 text-xs md:text-sm font-semibold tracking-wider">
             <i class="fa-solid fa-graduation-cap text-purple-600 dark:text-purple-400 text-base animate-pulse"></i>
             <span>DOCENTENMODUS ACTIEF &mdash; Opdrachten en tests inline bewerken</span>
         </div>
         <div class="flex flex-wrap items-center gap-2">
-            <div class="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-800 dark:text-slate-300">
+            <div
+                class="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-800 dark:text-slate-300">
                 <span class="text-slate-500 dark:text-slate-400 font-mono">Bestand:</span>
-                <input type="text" id="teacher-filename-input" 
-                    class="bg-transparent text-slate-800 dark:text-slate-200 font-mono focus:outline-none w-36" 
+                <input type="text" id="teacher-filename-input"
+                    class="bg-transparent text-slate-800 dark:text-slate-200 font-mono focus:outline-none w-36"
                     placeholder="opdracht1.json" title="De bestandsnaam van het te downloaden configuratiebestand">
             </div>
-            
-            <button onclick="startNewCourse()" class="bg-purple-200 hover:bg-purple-300 border border-purple-300 text-purple-800 dark:bg-purple-900/60 dark:hover:bg-purple-800 dark:border-purple-700/50 dark:text-purple-200 font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5" title="Start een lege cursus">
+
+            <button onclick="startNewCourse()"
+                class="bg-purple-200 hover:bg-purple-300 border border-purple-300 text-purple-800 dark:bg-purple-900/60 dark:hover:bg-purple-800 dark:border-purple-700/50 dark:text-purple-200 font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5"
+                title="Start een lege cursus">
                 <i class="fa-solid fa-file-circle-plus"></i>
                 <span>Nieuwe Cursus</span>
             </button>
 
-            <button onclick="downloadCourseJSON()" class="bg-purple-600 hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5">
+            <button onclick="downloadCourseJSON()"
+                class="bg-purple-600 hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5">
                 <i class="fa-solid fa-cloud-arrow-down"></i>
                 <span>Download Cursus JSON</span>
             </button>
@@ -465,7 +532,8 @@
         <section id="instructions-panel"
             class="w-full lg:w-1/3 bg-slate-900/60 border-r border-slate-800 flex flex-col p-4 overflow-y-auto max-h-[50vh] lg:max-h-none">
             <div id="task-selector-wrapper" class="mb-4">
-                <h2 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Kies je Opdracht</h2>
+                <h2 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Kies
+                    je Opdracht</h2>
                 <!-- Task Selection Buttons Container -->
                 <div id="task-selector-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-2">
                     <!-- Dynamic tabs will insert here -->
@@ -479,64 +547,112 @@
                     <h3 class="font-bold text-slate-100">Opdrachtomschrijving</h3>
                 </div>
                 <!-- WYSIWYG Toolbar (Visible only in edit mode) -->
-                <div id="wysiwyg-toolbar" class="hidden flex flex-wrap items-center gap-1 bg-slate-950 border border-slate-800 p-1.5 rounded-lg mb-3">
-                    <button id="wysiwyg-btn-bold" onclick="execStyle('bold')" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-bold text-xs" title="Vet (B)"><i class="fa-solid fa-bold"></i></button>
-                    <button id="wysiwyg-btn-italic" onclick="execStyle('italic')" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center italic text-xs" title="Cursief (I)"><i class="fa-solid fa-italic"></i></button>
-                    <button id="wysiwyg-btn-list-ul" onclick="execStyle('insertUnorderedList')" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs" title="Opsomming"><i class="fa-solid fa-list-ul"></i></button>
-                    <button id="wysiwyg-btn-list-ol" onclick="execStyle('insertOrderedList')" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs" title="Genummerde lijst"><i class="fa-solid fa-list-ol"></i></button>
-                    <button id="wysiwyg-btn-code" onclick="insertCodeBlock()" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-mono text-xs" title="Code-regel"><i class="fa-solid fa-code"></i></button>
-                    <button id="wysiwyg-btn-h3" onclick="insertHeader()" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-bold text-[10px]" title="Koptekst (H3)">H3</button>
-                    <button id="wysiwyg-btn-p" onclick="insertParagraph()" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs" title="Standaard tekst"><i class="fa-solid fa-paragraph"></i></button>
-                    <button id="wysiwyg-btn-tip" onclick="insertTipBox()" class="px-2 h-7 rounded bg-amber-100 border border-amber-300 text-amber-800 hover:bg-amber-200 dark:bg-amber-500/20 dark:border-amber-500/30 dark:hover:bg-amber-500/30 dark:text-amber-300 transition flex items-center justify-center text-[10px] font-semibold" title="Tipbox invoegen"><i class="fa-solid fa-lightbulb mr-1"></i> Tip</button>
-                    <button id="wysiwyg-btn-info" onclick="insertInfoBox()" class="px-2 h-7 rounded bg-blue-100 border border-blue-300 text-blue-800 hover:bg-blue-200 dark:bg-blue-500/20 dark:border-blue-500/30 dark:hover:bg-blue-500/30 dark:text-blue-300 transition flex items-center justify-center text-[10px] font-semibold" title="Infobox invoegen"><i class="fa-solid fa-info-circle mr-1"></i> Info</button>
-                    <button id="wysiwyg-btn-table" onclick="insertTable()" class="px-2 h-7 rounded bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/20 dark:border-purple-800/30 dark:hover:bg-purple-950/40 dark:text-purple-300 transition flex items-center justify-center text-[10px] font-semibold" title="Tabel invoegen"><i class="fa-solid fa-table mr-1"></i> Tabel</button>
+                <div id="wysiwyg-toolbar"
+                    class="hidden flex flex-wrap items-center gap-1 bg-slate-950 border border-slate-800 p-1.5 rounded-lg mb-3">
+                    <button id="wysiwyg-btn-bold" onclick="execStyle('bold')"
+                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-bold text-xs"
+                        title="Vet (B)"><i class="fa-solid fa-bold"></i></button>
+                    <button id="wysiwyg-btn-italic" onclick="execStyle('italic')"
+                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center italic text-xs"
+                        title="Cursief (I)"><i class="fa-solid fa-italic"></i></button>
+                    <button id="wysiwyg-btn-list-ul" onclick="execStyle('insertUnorderedList')"
+                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
+                        title="Opsomming"><i class="fa-solid fa-list-ul"></i></button>
+                    <button id="wysiwyg-btn-list-ol" onclick="execStyle('insertOrderedList')"
+                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
+                        title="Genummerde lijst"><i class="fa-solid fa-list-ol"></i></button>
+                    <button id="wysiwyg-btn-code" onclick="insertCodeBlock()"
+                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-mono text-xs"
+                        title="Code-regel"><i class="fa-solid fa-code"></i></button>
+                    <button id="wysiwyg-btn-h3" onclick="insertHeader()"
+                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-bold text-[10px]"
+                        title="Koptekst (H3)">H3</button>
+                    <button id="wysiwyg-btn-p" onclick="insertParagraph()"
+                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
+                        title="Standaard tekst"><i class="fa-solid fa-paragraph"></i></button>
+                    <button id="wysiwyg-btn-tip" onclick="insertTipBox()"
+                        class="px-2 h-7 rounded bg-amber-100 border border-amber-300 text-amber-800 hover:bg-amber-200 dark:bg-amber-500/20 dark:border-amber-500/30 dark:hover:bg-amber-500/30 dark:text-amber-300 transition flex items-center justify-center text-[10px] font-semibold"
+                        title="Tipbox invoegen"><i class="fa-solid fa-lightbulb mr-1"></i> Tip</button>
+                    <button id="wysiwyg-btn-info" onclick="insertInfoBox()"
+                        class="px-2 h-7 rounded bg-blue-100 border border-blue-300 text-blue-800 hover:bg-blue-200 dark:bg-blue-500/20 dark:border-blue-500/30 dark:hover:bg-blue-500/30 dark:text-blue-300 transition flex items-center justify-center text-[10px] font-semibold"
+                        title="Infobox invoegen"><i class="fa-solid fa-info-circle mr-1"></i> Info</button>
+                    <button id="wysiwyg-btn-table" onclick="insertTable()"
+                        class="px-2 h-7 rounded bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/20 dark:border-purple-800/30 dark:hover:bg-purple-950/40 dark:text-purple-300 transition flex items-center justify-center text-[10px] font-semibold"
+                        title="Tabel invoegen"><i class="fa-solid fa-table mr-1"></i> Tabel</button>
 
                     <span class="w-[1px] h-5 bg-slate-300 dark:bg-slate-800 mx-1"></span>
 
                     <!-- Templates -->
                     <div class="flex items-center gap-1">
-                        <button onclick="insertInstructionTemplate('lezen')" class="px-1.5 h-7 rounded bg-sky-100 border border-sky-300 text-sky-800 hover:bg-sky-200 dark:bg-sky-500/10 dark:border-sky-500/25 dark:hover:bg-sky-500/20 dark:text-sky-400 transition flex items-center justify-center text-[10px] font-semibold" title="Voeg 'Lezen' sectie toe"><i class="fa-solid fa-eye mr-1"></i> Lezen</button>
-                        <button onclick="insertInstructionTemplate('uitvoeren')" class="px-1.5 h-7 rounded bg-emerald-100 border border-emerald-300 text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-500/10 dark:border-emerald-500/25 dark:hover:bg-emerald-500/20 dark:text-emerald-400 transition flex items-center justify-center text-[10px] font-semibold" title="Voeg 'Uitvoeren' sectie toe"><i class="fa-solid fa-play mr-1"></i> Uitvoeren</button>
-                        <button onclick="insertInstructionTemplate('bewerken')" class="px-1.5 h-7 rounded bg-amber-100 border border-amber-300 text-amber-800 hover:bg-amber-200 dark:bg-amber-500/10 dark:border-amber-500/25 dark:hover:bg-amber-500/20 dark:text-amber-400 transition flex items-center justify-center text-[10px] font-semibold" title="Voeg 'Bewerken' sectie toe"><i class="fa-solid fa-pen-to-square mr-1"></i> Bewerken</button>
+                        <button onclick="insertInstructionTemplate('lezen')"
+                            class="px-1.5 h-7 rounded bg-sky-100 border border-sky-300 text-sky-800 hover:bg-sky-200 dark:bg-sky-500/10 dark:border-sky-500/25 dark:hover:bg-sky-500/20 dark:text-sky-400 transition flex items-center justify-center text-[10px] font-semibold"
+                            title="Voeg 'Lezen' sectie toe"><i class="fa-solid fa-eye mr-1"></i> Lezen</button>
+                        <button onclick="insertInstructionTemplate('uitvoeren')"
+                            class="px-1.5 h-7 rounded bg-emerald-100 border border-emerald-300 text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-500/10 dark:border-emerald-500/25 dark:hover:bg-emerald-500/20 dark:text-emerald-400 transition flex items-center justify-center text-[10px] font-semibold"
+                            title="Voeg 'Uitvoeren' sectie toe"><i class="fa-solid fa-play mr-1"></i> Uitvoeren</button>
+                        <button onclick="insertInstructionTemplate('bewerken')"
+                            class="px-1.5 h-7 rounded bg-amber-100 border border-amber-300 text-amber-800 hover:bg-amber-200 dark:bg-amber-500/10 dark:border-amber-500/25 dark:hover:bg-amber-500/20 dark:text-amber-400 transition flex items-center justify-center text-[10px] font-semibold"
+                            title="Voeg 'Bewerken' sectie toe"><i class="fa-solid fa-pen-to-square mr-1"></i>
+                            Bewerken</button>
                     </div>
 
                     <span class="w-[1px] h-5 bg-slate-300 dark:bg-slate-800 mx-1"></span>
 
                     <!-- Smart Paste -->
-                    <button onclick="openSmartPasteModal()" class="px-2 h-7 rounded bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-500/20 dark:border-purple-500/35 dark:hover:bg-purple-500/30 dark:text-purple-300 transition flex items-center justify-center text-[10px] font-semibold" title="Plak platte tekst en zet om naar HTML"><i class="fa-solid fa-paste mr-1"></i> Slim Plakken</button>
+                    <button onclick="openSmartPasteModal()"
+                        class="px-2 h-7 rounded bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-500/20 dark:border-purple-500/35 dark:hover:bg-purple-500/30 dark:text-purple-300 transition flex items-center justify-center text-[10px] font-semibold"
+                        title="Plak platte tekst en zet om naar HTML"><i class="fa-solid fa-paste mr-1"></i> Slim
+                        Plakken</button>
 
                     <!-- Dynamic Table Controls (Visible only when selection inside a table) -->
-                    <button id="wysiwyg-btn-add-row" onclick="addTableRow()" class="hidden bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/80 dark:border-purple-600/50 dark:text-purple-200 dark:hover:bg-purple-900 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95" title="Rij eronder toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Rij</button>
-                    <button id="wysiwyg-btn-add-col" onclick="addTableColumn()" class="hidden bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/80 dark:border-purple-600/50 dark:text-purple-200 dark:hover:bg-purple-900 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95" title="Kolom ernaast toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Kolom</button>
-                    <button id="wysiwyg-btn-del-table" onclick="deleteTable()" class="hidden bg-red-100 border border-red-300 text-red-800 hover:bg-red-200 dark:bg-red-950/60 dark:border-red-800/40 dark:text-red-300 dark:hover:bg-red-950 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95" title="Tabel verwijderen"><i class="fa-solid fa-trash-can text-[8px]"></i> Tabel</button>
-                    
+                    <button id="wysiwyg-btn-add-row" onclick="addTableRow()"
+                        class="hidden bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/80 dark:border-purple-600/50 dark:text-purple-200 dark:hover:bg-purple-900 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
+                        title="Rij eronder toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Rij</button>
+                    <button id="wysiwyg-btn-add-col" onclick="addTableColumn()"
+                        class="hidden bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/80 dark:border-purple-600/50 dark:text-purple-200 dark:hover:bg-purple-900 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
+                        title="Kolom ernaast toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Kolom</button>
+                    <button id="wysiwyg-btn-del-table" onclick="deleteTable()"
+                        class="hidden bg-red-100 border border-red-300 text-red-800 hover:bg-red-200 dark:bg-red-950/60 dark:border-red-800/40 dark:text-red-300 dark:hover:bg-red-950 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
+                        title="Tabel verwijderen"><i class="fa-solid fa-trash-can text-[8px]"></i> Tabel</button>
+
                     <!-- Text Color Selector -->
                     <div class="relative inline-block ml-auto">
-                        <button onclick="toggleColorPalette(event)" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs" title="Tekstkleur">
+                        <button onclick="toggleColorPalette(event)"
+                            class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
+                            title="Tekstkleur">
                             <i class="fa-solid fa-palette text-amber-500 dark:text-amber-400"></i>
                         </button>
-                        <div id="wysiwyg-color-palette" class="hidden absolute right-0 top-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2 shadow-2xl z-50 grid grid-cols-4 gap-1 w-32">
+                        <div id="wysiwyg-color-palette"
+                            class="hidden absolute right-0 top-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2 shadow-2xl z-50 grid grid-cols-4 gap-1 w-32">
                             <!-- Curated 16 colors loaded dynamically -->
                         </div>
                     </div>
 
-                    <button onclick="toggleHtmlView()" id="btn-toggle-html" class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition flex items-center justify-center text-xs" title="Toggle HTML Weergave"><i class="fa-solid fa-code-compare"></i></button>
+                    <button onclick="toggleHtmlView()" id="btn-toggle-html"
+                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition flex items-center justify-center text-xs"
+                        title="Toggle HTML Weergave"><i class="fa-solid fa-code-compare"></i></button>
                 </div>
-                
+
                 <div id="assignment-instruction-container" class="flex-1 flex flex-col min-h-0 min-w-0">
                     <div id="assignment-instruction"
                         class="text-sm text-slate-300 leading-relaxed prose prose-invert overflow-y-auto max-h-48 lg:max-h-none mb-4 select-text">
                         Selecteer een opdracht om de instructies te laden...
                     </div>
                     <!-- Dynamic Target Preview Image Container -->
-                    <div id="assignment-preview-container" class="hidden bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2 mt-auto shrink-0 relative">
+                    <div id="assignment-preview-container"
+                        class="hidden bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2 mt-auto shrink-0 relative">
                         <div class="flex justify-between items-center mb-1">
-                            <span class="text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase block">Verwacht resultaat:</span>
-                            <button id="delete-preview-btn" onclick="deletePreviewImage()" class="hidden text-red-500 hover:text-red-400 text-xs font-semibold px-1 transition" title="Verwijder verwacht resultaat">
+                            <span
+                                class="text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase block">Verwacht
+                                resultaat:</span>
+                            <button id="delete-preview-btn" onclick="deletePreviewImage()"
+                                class="hidden text-red-500 hover:text-red-400 text-xs font-semibold px-1 transition"
+                                title="Verwijder verwacht resultaat">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
-                        <img id="assignment-preview-img" src="" class="rounded-lg shadow-md max-w-full h-auto max-h-[160px] mx-auto object-contain border border-slate-200 dark:border-slate-900" />
+                        <img id="assignment-preview-img" src=""
+                            class="rounded-lg shadow-md max-w-full h-auto max-h-[160px] mx-auto object-contain border border-slate-200 dark:border-slate-900" />
                     </div>
                 </div>
             </div>
@@ -546,7 +662,8 @@
         <section class="flex-1 flex flex-col overflow-hidden min-h-[50vh] lg:min-h-0">
 
             <!-- Mobile Switch Tabs (Only visible on small screens to toggle between Code and Output Panels) -->
-            <div id="mobile-switch-tabs" class="lg:hidden flex bg-slate-900 border-b border-slate-800 text-sm font-medium">
+            <div id="mobile-switch-tabs"
+                class="lg:hidden flex bg-slate-900 border-b border-slate-800 text-sm font-medium">
                 <button id="tab-btn-editor" onclick="switchMobileView('editor')"
                     class="flex-1 py-3 text-center border-b-2 border-blue-500 text-blue-400">
                     <i class="fa-solid fa-code mr-1"></i> Editor
@@ -566,7 +683,8 @@
                     <div
                         class="bg-slate-900/80 px-4 py-1.5 flex items-center justify-between border-b border-slate-800 text-xs text-slate-400 font-mono min-h-[44px]">
                         <!-- Left: Tab Container -->
-                        <div id="editor-tabs-container" class="flex items-center gap-1.5 overflow-x-auto max-w-[70%] py-0.5 scrollbar-none">
+                        <div id="editor-tabs-container"
+                            class="flex items-center gap-1.5 overflow-x-auto max-w-[70%] py-0.5 scrollbar-none">
                             <!-- Tabs dynamically rendered here -->
                         </div>
                         <div class="flex items-center gap-3">
@@ -594,25 +712,25 @@
                         <div class="flex gap-2">
                             <!-- Run Code Button -->
                             <button id="btn-run-code" onclick="togglePythonExecution()"
-                                class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/20 active:scale-95 transition flex items-center gap-2">
-                                <i class="fa-solid fa-play text-lg"></i>
+                                class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-4 py-2 rounded-xl shadow-lg shadow-emerald-950/20 active:scale-95 transition flex items-center gap-1.5 text-sm">
+                                <i class="fa-solid fa-play text-sm"></i>
                                 <span>Voer Code Uit</span>
                             </button>
                             <!-- Validate Code Button -->
                             <button id="btn-validate-code" onclick="validateActiveCode()"
-                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 font-bold px-4 py-2.5 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-2"
+                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 font-bold px-3 py-2 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-1.5 text-sm"
                                 title="Controleer de code op syntaxfouten zonder deze uit te voeren">
-                                <i class="fa-solid fa-clipboard-check text-lg text-slate-500 dark:text-slate-400"></i>
+                                <i class="fa-solid fa-clipboard-check text-sm text-slate-500 dark:text-slate-400"></i>
                                 <span>Valideer</span>
                             </button>
                             <!-- Run Unit Tests Button -->
                             <button id="btn-run-tests" onclick="runAssignmentTests()"
-                                class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-4 py-2.5 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-2">
-                                <i class="fa-solid fa-circle-check text-lg"></i>
+                                class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-2 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-1.5 text-sm">
+                                <i class="fa-solid fa-circle-check text-sm"></i>
                                 <span>Test Code</span>
                             </button>
                         </div>
-                        <div class="text-xs text-slate-500 dark:text-slate-400 font-mono">
+                        <div id="editor-shortcut-hint" class="text-xs text-slate-500 dark:text-slate-400 font-mono">
                             Druk op <kbd
                                 class="bg-slate-100 border border-slate-300 text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 px-1 py-0.5 rounded">Ctrl+Enter</kbd>
                             om uit te voeren
@@ -623,15 +741,17 @@
                 <!-- Output, Terminal, Canvas & Tests Window (lg:span-5) -->
                 <div id="output-wrapper-panel"
                     class="hidden lg:col-span-5 lg:flex flex-col h-full overflow-hidden bg-slate-950">
-                    
+
                     <!-- Demo Mode Top Bar (Only visible in demo mode) -->
-                    <div id="demo-header" class="hidden bg-slate-900 border-b border-slate-800 px-4 py-3 items-center justify-between gap-4">
+                    <div id="demo-header"
+                        class="hidden bg-slate-900 border-b border-slate-800 px-4 py-3 items-center justify-between gap-4">
                         <div class="flex items-center gap-3">
                             <div class="bg-gradient-to-tr from-yellow-500 to-blue-500 p-2 rounded-lg shadow-md">
                                 <i class="fa-solid fa-play text-lg text-slate-950"></i>
                             </div>
                             <div>
-                                <h2 id="demo-title" class="font-bold text-sm tracking-wide text-slate-100">Demonstratie</h2>
+                                <h2 id="demo-title" class="font-bold text-sm tracking-wide text-slate-100">Demonstratie
+                                </h2>
                                 <p id="demo-subtitle" class="text-[10px] text-slate-400">Programma in uitvoering</p>
                             </div>
                         </div>
@@ -646,7 +766,8 @@
                     </div>
 
                     <!-- Sub Tabs for Right Panel: Terminal Console vs Turtle Canvas vs Auto Tests -->
-                    <div id="output-subtabs-bar" class="bg-slate-900/80 border-b border-slate-800 flex text-xs font-semibold">
+                    <div id="output-subtabs-bar"
+                        class="bg-slate-900/80 border-b border-slate-800 flex text-xs font-semibold">
                         <button id="subtab-btn-console" onclick="switchOutputSubTab('console')"
                             class="flex-1 py-3 text-center border-b-2 border-emerald-500 text-emerald-400">
                             <i class="fa-solid fa-terminal mr-1"></i> Console
@@ -687,11 +808,13 @@
                         </div>
 
                         <!-- Panel B: Turtle Graphics Canvas (Hidden by default, shown when import turtle) -->
-                        <div id="panel-turtle" class="hidden flex-1 flex flex-col items-center justify-start transition-all duration-300">
-                            
+                        <div id="panel-turtle"
+                            class="hidden flex-1 flex flex-col transition-all duration-300 h-full w-full overflow-hidden">
+
                             <!-- Normal header -->
                             <div class="w-full flex items-center justify-between mb-2 turtle-normal-only">
-                                <span class="text-xs font-mono text-slate-500 dark:text-slate-400">TURTLE GRAPHICS CANVAS</span>
+                                <span class="text-xs font-mono text-slate-500 dark:text-slate-400">TURTLE GRAPHICS
+                                    CANVAS</span>
                                 <div class="flex items-center gap-2">
                                     <button onclick="toggleTurtleFullscreen()"
                                         class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 hover:text-slate-900 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 dark:hover:text-slate-100 px-2.5 py-1.5 rounded-lg transition flex items-center gap-1.5"
@@ -700,19 +823,23 @@
                                         <span>Volledig Scherm</span>
                                     </button>
                                     <span id="canvas-size-indicator"
-                                        class="text-[10px] bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20 px-2 py-0.5 rounded-full">Canvas 400x400</span>
+                                        class="text-[10px] bg-amber-100 text-amber-800 border border-amber-300 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20 px-2 py-0.5 rounded-full">Canvas
+                                        400x400</span>
                                 </div>
                             </div>
 
                             <!-- Fullscreen Header (only visible when expanded) -->
-                            <div class="w-full max-w-2xl lg:max-w-3xl flex items-center justify-between mb-4 turtle-fullscreen-only px-2">
+                            <div
+                                class="w-full max-w-2xl lg:max-w-3xl flex items-center justify-between mb-4 turtle-fullscreen-only px-2">
                                 <div class="flex items-center gap-3">
                                     <div class="bg-gradient-to-tr from-yellow-500 to-blue-500 p-2 rounded-lg shadow-md">
                                         <i class="fa-solid fa-compass-drafting text-lg text-slate-950"></i>
                                     </div>
                                     <div>
-                                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base">Turtle Graphics - Volledig Scherm</h3>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400">Druk op 'Escape' of klik op sluiten om terug te gaan</p>
+                                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base">Turtle
+                                            Graphics - Volledig Scherm</h3>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400">Druk op 'Escape' of klik
+                                            op sluiten om terug te gaan</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
@@ -731,26 +858,60 @@
                                 </div>
                             </div>
 
-                             <!-- Wrapper for interactive canvas container with grab cursor -->
-                             <div class="relative group">
-                                 <!-- Target element where Skulpt renders Canvas -->
-                                 <div id="turtle-canvas" class="cursor-grab">
-                                     <!-- Skulpt automatically injects HTML5 Canvas here -->
-                                 </div>
-                                 
-                                  <!-- Floating Controls (Zoom in, Zoom out, Reset, Download) -->
-                                  <div id="turtle-floating-controls" class="absolute bottom-3 right-3 flex flex-col gap-1.5 z-10 bg-slate-900/90 border border-slate-700/50 p-1.5 rounded-xl backdrop-blur-md shadow-lg opacity-40 group-hover:opacity-100 transition-opacity duration-200">
-                                     <button onclick="adjustZoom(0.1)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Zoom in"><i class="fa-solid fa-plus"></i></button>
-                                     <button onclick="adjustZoom(-0.1)" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Zoom uit"><i class="fa-solid fa-minus"></i></button>
-                                     <button onclick="resetTurtleView()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Herstel weergave"><i class="fa-solid fa-arrows-to-dot"></i></button>
-                                     <button onclick="downloadCanvasImage()" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm" title="Download tekening (PNG)"><i class="fa-solid fa-camera"></i></button>
-                                 </div>
-                             </div>
-                            
+                            <!-- Wrapper for interactive canvas container with grab cursor -->
+                            <div class="flex-1 flex items-center justify-center min-h-0 relative group">
+                                <!-- Target element where Skulpt renders Canvas -->
+                                <div id="turtle-canvas" class="cursor-grab">
+                                    <!-- Skulpt automatically injects HTML5 Canvas here -->
+                                </div>
+
+                                <!-- Floating Controls (Zoom in, Zoom out, Reset, Download) -->
+                                <div id="turtle-floating-controls"
+                                    class="absolute bottom-3 right-3 flex flex-col gap-1.5 z-10 bg-slate-900/90 border border-slate-700/50 p-1.5 rounded-xl backdrop-blur-md shadow-lg opacity-40 group-hover:opacity-100 transition-opacity duration-200">
+                                    <button onclick="adjustZoom(0.1)"
+                                        class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm"
+                                        title="Zoom in"><i class="fa-solid fa-plus"></i></button>
+                                    <button onclick="adjustZoom(-0.1)"
+                                        class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm"
+                                        title="Zoom uit"><i class="fa-solid fa-minus"></i></button>
+                                    <button onclick="resetTurtleView()"
+                                        class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm"
+                                        title="Herstel weergave"><i class="fa-solid fa-arrows-to-dot"></i></button>
+                                    <button onclick="downloadCanvasImage()"
+                                        class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 transition flex items-center justify-center font-bold text-sm"
+                                        title="Download tekening (PNG)"><i class="fa-solid fa-camera"></i></button>
+                                </div>
+                            </div>
+
                             <p class="text-[11px] text-slate-400 mt-2 text-center turtle-normal-only">
                                 <i class="fa-solid fa-circle-info text-blue-400"></i> Als turtle herstart, wordt het
                                 canvas automatisch opnieuw getekend.
                             </p>
+
+                            <!-- Embedded Turtle Console Logs at bottom -->
+                            <div id="turtle-console-panel"
+                                class="w-full mt-3 flex flex-col bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 h-[180px] shrink-0 transition-all duration-300 turtle-normal-only">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="text-xs font-mono text-slate-500 dark:text-slate-400">CONSOLE
+                                        OUTPUT</span>
+                                    <div class="flex items-center gap-3">
+                                        <button onclick="clearConsole()"
+                                            class="text-xs text-slate-500 hover:text-slate-850 dark:hover:text-slate-350 transition flex items-center gap-1">
+                                            <i class="fa-solid fa-trash-can"></i> Schoonmaken
+                                        </button>
+                                        <span class="w-[1px] h-3 bg-slate-300 dark:bg-slate-700"></span>
+                                        <button id="btn-toggle-turtle-console-size" onclick="toggleTurtleConsoleSize()"
+                                            class="text-xs text-slate-500 hover:text-slate-850 dark:hover:text-slate-350 transition flex items-center gap-1"
+                                            title="Vergroot/verklein console">
+                                            <i class="fa-solid fa-up-right-and-down-left-from-center text-[10px]"></i>
+                                            <span id="turtle-console-size-label">Vergroten</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="turtle-console-output"
+                                    class="flex-1 font-mono text-[11px] overflow-y-auto whitespace-pre-wrap leading-relaxed select-text p-2 bg-white dark:bg-slate-950 rounded-lg text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-900">
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Panel C: Automated Test Suite Results -->
@@ -767,7 +928,8 @@
                         </div>
 
                         <!-- Panel D: Web Preview (HTML/CSS/JS) -->
-                        <div id="panel-web" class="hidden flex-1 flex flex-col h-full transition-all duration-300">
+                        <div id="panel-web"
+                            class="hidden flex-1 flex flex-col h-full transition-all duration-300 overflow-hidden">
                             <!-- Normal Header -->
                             <div class="w-full flex items-center justify-between mb-2 web-normal-only">
                                 <span class="text-xs font-mono text-slate-500 dark:text-slate-400">WEB PREVIEW</span>
@@ -782,14 +944,17 @@
                             </div>
 
                             <!-- Fullscreen Header (only visible when expanded) -->
-                            <div class="w-full max-w-2xl lg:max-w-4xl flex items-center justify-between mb-4 web-fullscreen-only px-2">
+                            <div
+                                class="w-full max-w-2xl lg:max-w-4xl flex items-center justify-between mb-4 web-fullscreen-only px-2">
                                 <div class="flex items-center gap-3">
                                     <div class="bg-gradient-to-tr from-yellow-500 to-blue-500 p-2 rounded-lg shadow-md">
                                         <i class="fa-solid fa-globe text-lg text-slate-950"></i>
                                     </div>
                                     <div>
-                                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base">Web Voorbeeld - Volledig Scherm</h3>
-                                        <p class="text-xs text-slate-500 dark:text-slate-400">Druk op 'Escape' of klik op sluiten om terug te gaan</p>
+                                        <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base">Web Voorbeeld
+                                            - Volledig Scherm</h3>
+                                        <p class="text-xs text-slate-500 dark:text-slate-400">Druk op 'Escape' of klik
+                                            op sluiten om terug te gaan</p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
@@ -808,25 +973,35 @@
                             </div>
 
                             <!-- Preview Container / IFrame Wrapper -->
-                            <div class="flex-1 min-h-[300px] flex flex-col bg-white border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-inner relative web-preview-container">
-                                <iframe id="web-preview-iframe" class="w-full flex-1 bg-white border-0" sandbox="allow-scripts"></iframe>
+                            <div
+                                class="flex-1 min-h-[100px] flex flex-col bg-white border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-inner relative web-preview-container">
+                                <iframe id="web-preview-iframe" class="w-full flex-1 bg-white border-0"
+                                    sandbox="allow-scripts"></iframe>
                             </div>
 
                             <!-- Embedded Web Console Logs at bottom -->
-                            <div id="web-console-panel" class="mt-3 flex flex-col bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 h-[180px] shrink-0 transition-all duration-300">
+                            <div id="web-console-panel"
+                                class="mt-3 flex flex-col bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 h-[180px] shrink-0 transition-all duration-300">
                                 <div class="flex items-center justify-between mb-1">
-                                    <span class="text-xs font-mono text-slate-500 dark:text-slate-400">WEB CONSOLE OUTPUT</span>
+                                    <span class="text-xs font-mono text-slate-500 dark:text-slate-400">WEB CONSOLE
+                                        OUTPUT</span>
                                     <div class="flex items-center gap-3">
-                                        <button onclick="clearWebConsole()" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition flex items-center gap-1">
+                                        <button onclick="clearWebConsole()"
+                                            class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition flex items-center gap-1">
                                             <i class="fa-solid fa-trash-can"></i> Schoonmaken
                                         </button>
                                         <span class="w-[1px] h-3 bg-slate-300 dark:bg-slate-700"></span>
-                                        <button id="btn-toggle-console-size" onclick="toggleWebConsoleSize()" class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition flex items-center gap-1" title="Vergroot/verklein console">
-                                            <i class="fa-solid fa-up-right-and-down-left-from-center text-[10px]"></i> <span id="console-size-label">Vergroten</span>
+                                        <button id="btn-toggle-console-size" onclick="toggleWebConsoleSize()"
+                                            class="text-xs text-slate-500 hover:text-slate-800 dark:hover:text-slate-300 transition flex items-center gap-1"
+                                            title="Vergroot/verklein console">
+                                            <i class="fa-solid fa-up-right-and-down-left-from-center text-[10px]"></i>
+                                            <span id="console-size-label">Vergroten</span>
                                         </button>
                                     </div>
                                 </div>
-                                <div id="web-console-output" class="flex-1 font-mono text-[11px] overflow-y-auto whitespace-pre-wrap leading-relaxed select-text p-2 bg-white dark:bg-slate-950 rounded-lg text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-900"></div>
+                                <div id="web-console-output"
+                                    class="flex-1 font-mono text-[11px] overflow-y-auto whitespace-pre-wrap leading-relaxed select-text p-2 bg-white dark:bg-slate-950 rounded-lg text-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-900">
+                                </div>
                             </div>
                         </div>
 
@@ -871,14 +1046,17 @@
         class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-[9999]">
         <div
             class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-250">
-            <div class="flex items-center gap-3 text-purple-500 dark:text-purple-400 mb-4 border-b border-slate-200 dark:border-slate-800 pb-3">
+            <div
+                class="flex items-center gap-3 text-purple-500 dark:text-purple-400 mb-4 border-b border-slate-200 dark:border-slate-800 pb-3">
                 <i class="fa-solid fa-circle-plus text-2xl"></i>
                 <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Nieuwe opdracht toevoegen</h3>
             </div>
-            
+
             <div class="flex flex-col gap-4 mb-6">
                 <div id="new-assignment-type-container">
-                    <label for="new-assignment-type" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Type Cursus</label>
+                    <label for="new-assignment-type"
+                        class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Type
+                        Cursus</label>
                     <select id="new-assignment-type"
                         class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm">
                         <option value="python">Python Cursus (main.py, Turtle)</option>
@@ -886,13 +1064,17 @@
                     </select>
                 </div>
                 <div>
-                    <label for="new-assignment-name" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Naam van de opdracht</label>
+                    <label for="new-assignment-name"
+                        class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Naam
+                        van de opdracht</label>
                     <input type="text" id="new-assignment-name"
                         class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                         placeholder="Bijv. Teken een Vierkant" autocomplete="off">
                 </div>
                 <div>
-                    <label for="new-assignment-id" class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Uniek ID (automatisch gegenereerd, mag worden aangepast)</label>
+                    <label for="new-assignment-id"
+                        class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Uniek
+                        ID (automatisch gegenereerd, mag worden aangepast)</label>
                     <input type="text" id="new-assignment-id"
                         class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm"
                         placeholder="Bijv. teken_een_vierkant" autocomplete="off">
@@ -917,15 +1099,21 @@
         class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-[9999]">
         <div
             class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-2xl w-full p-6 shadow-2xl animate-in fade-in zoom-in-95 duration-250 flex flex-col max-h-[90vh]">
-            <div class="flex items-center gap-3 text-purple-500 dark:text-purple-400 mb-2 border-b border-slate-200 dark:border-slate-800 pb-3 shrink-0">
+            <div
+                class="flex items-center gap-3 text-purple-500 dark:text-purple-400 mb-2 border-b border-slate-200 dark:border-slate-800 pb-3 shrink-0">
                 <i class="fa-solid fa-paste text-2xl"></i>
-                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Slim Instructies Plakken & Converteren</h3>
+                <h3 class="text-lg font-bold text-slate-800 dark:text-slate-100">Slim Instructies Plakken & Converteren
+                </h3>
             </div>
-            
+
             <p class="text-xs text-slate-500 dark:text-slate-400 mb-3 shrink-0">
-                Plak hieronder je platte tekst (bijvoorbeeld gekopieerd uit Word of PDF). Koppen zoals <strong>Lezen:</strong>, <strong>Uitvoeren:</strong> of <strong>Bewerken:</strong> worden automatisch herkend en voorzien van icoontjes. Genummerde regels worden omgezet in genummerde lijsten, en methoden zoals <code class="text-amber-700 dark:text-amber-400 font-mono">goto()</code> of parameters tussen quotes worden automatisch code-tags.
+                Plak hieronder je platte tekst (bijvoorbeeld gekopieerd uit Word of PDF). Koppen zoals
+                <strong>Lezen:</strong>, <strong>Uitvoeren:</strong> of <strong>Bewerken:</strong> worden automatisch
+                herkend en voorzien van icoontjes. Genummerde regels worden omgezet in genummerde lijsten, en methoden
+                zoals <code class="text-amber-700 dark:text-amber-400 font-mono">goto()</code> of parameters tussen
+                quotes worden automatisch code-tags.
             </p>
-            
+
             <div class="flex-1 min-h-0 mb-4">
                 <textarea id="smart-paste-textarea"
                     class="w-full h-full min-h-[250px] bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-4 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent font-mono text-sm leading-relaxed"
@@ -1201,7 +1389,7 @@
             const nextTheme = activeTheme === 'dark' ? 'light' : 'dark';
             applyTheme(nextTheme);
             updateThemeToggleIcon();
-            
+
             // Re-render elements that depend on activeTheme
             renderTaskSelector();
             renderWorkspaceTabs();
@@ -1400,12 +1588,12 @@
         async function loadConfiguration() {
             const urlParams = new URLSearchParams(window.location.search);
             const configUrl = urlParams.get('config');
-            
+
             // Check mode parameter, fallback to edit=true for backward compatibility
             const modeParam = urlParams.get('mode');
             const editParam = urlParams.get('edit');
             const embedParam = urlParams.get('embed');
-            
+
             if (modeParam === 'teacher' || modeParam === 'docent' || editParam === 'true') {
                 appMode = 'teacher';
                 isEditMode = true;
@@ -1440,10 +1628,11 @@
             // Apply canvas sizing
             const canvasContainer = document.getElementById("turtle-canvas");
             if (canvasContainer) {
-                canvasContainer.style.width = canvasSize + "px";
+                canvasContainer.style.width = `min(100%, ${canvasSize}px)`;
+                canvasContainer.style.height = `min(100%, ${canvasSize}px)`;
                 canvasContainer.style.maxWidth = "100%";
+                canvasContainer.style.maxHeight = "100%";
                 canvasContainer.style.aspectRatio = "1 / 1";
-                canvasContainer.style.height = "auto";
             }
             const sizeIndicator = document.getElementById("canvas-size-indicator");
             if (sizeIndicator) {
@@ -1472,7 +1661,7 @@
                     configTitle.contentEditable = "true";
                     configTitle.classList.add("border-b", "border-dashed", "border-slate-500", "focus:outline-none", "focus:border-blue-500", "cursor-pointer");
                     configTitle.title = "Klik om de cursustitel aan te passen";
-                    configTitle.oninput = function() {
+                    configTitle.oninput = function () {
                         taskConfig.title = this.textContent.trim();
                     };
                 }
@@ -1637,13 +1826,12 @@
                 const btn = document.createElement("button");
                 btn.id = `task-btn-${task.id}`;
                 btn.onclick = () => selectTask(task.id);
-                btn.className = `flex-1 text-left p-2.5 rounded-xl transition flex items-center justify-between min-w-0 ${
-                    isActive 
-                        ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg' 
-                        : (activeTheme === 'dark' 
-                            ? 'bg-slate-800/80 hover:bg-slate-800 text-slate-300' 
-                            : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200')
-                }`;
+                btn.className = `flex-1 text-left p-2.5 rounded-xl transition flex items-center justify-between min-w-0 ${isActive
+                    ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg'
+                    : (activeTheme === 'dark'
+                        ? 'bg-slate-800/80 hover:bg-slate-800 text-slate-300'
+                        : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200')
+                    }`;
 
                 btn.innerHTML = `
                     <span class="font-semibold text-sm truncate select-none mr-2">${task.title} <span class="text-xs font-normal opacity-60 font-mono">(${task.id})</span></span>
@@ -1665,11 +1853,10 @@
 
                     if (index > 0) {
                         const upBtn = document.createElement("button");
-                        upBtn.className = `w-5 h-5 rounded flex items-center justify-center text-[10px] transition ${
-                            activeTheme === 'dark'
-                                ? 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200'
-                                : 'bg-slate-200 hover:bg-slate-300 text-slate-600 hover:text-slate-800'
-                        }`;
+                        upBtn.className = `w-5 h-5 rounded flex items-center justify-center text-[10px] transition ${activeTheme === 'dark'
+                            ? 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200'
+                            : 'bg-slate-200 hover:bg-slate-300 text-slate-600 hover:text-slate-800'
+                            }`;
                         upBtn.innerHTML = '<i class="fa-solid fa-chevron-up"></i>';
                         upBtn.title = "Omhoog verplaatsen";
                         upBtn.onclick = (e) => {
@@ -1681,11 +1868,10 @@
 
                     if (index < taskConfig.tabs.length - 1) {
                         const downBtn = document.createElement("button");
-                        downBtn.className = `w-5 h-5 rounded flex items-center justify-center text-[10px] transition ${
-                            activeTheme === 'dark'
-                                ? 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200'
-                                : 'bg-slate-200 hover:bg-slate-300 text-slate-600 hover:text-slate-800'
-                        }`;
+                        downBtn.className = `w-5 h-5 rounded flex items-center justify-center text-[10px] transition ${activeTheme === 'dark'
+                            ? 'bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-slate-200'
+                            : 'bg-slate-200 hover:bg-slate-300 text-slate-600 hover:text-slate-800'
+                            }`;
                         downBtn.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
                         downBtn.title = "Omlaag verplaatsen";
                         downBtn.onclick = (e) => {
@@ -1696,11 +1882,10 @@
                     }
 
                     const delBtn = document.createElement("button");
-                    delBtn.className = `w-5 h-5 rounded flex items-center justify-center text-[10px] transition ${
-                        activeTheme === 'dark'
-                            ? 'bg-slate-900 hover:bg-red-950 text-slate-500 hover:text-red-400'
-                            : 'bg-slate-200 hover:bg-red-100 text-slate-500 hover:text-red-600'
-                    }`;
+                    delBtn.className = `w-5 h-5 rounded flex items-center justify-center text-[10px] transition ${activeTheme === 'dark'
+                        ? 'bg-slate-900 hover:bg-red-950 text-slate-500 hover:text-red-400'
+                        : 'bg-slate-200 hover:bg-red-100 text-slate-500 hover:text-red-600'
+                        }`;
                     delBtn.innerHTML = '<i class="fa-solid fa-trash-can"></i>';
                     delBtn.title = "Verwijder opdracht uit cursus";
                     delBtn.onclick = (e) => {
@@ -1717,11 +1902,10 @@
 
             if (isEditMode) {
                 const addOpdrachtBtn = document.createElement("button");
-                addOpdrachtBtn.className = `w-full py-2.5 rounded-xl border border-dashed font-semibold text-xs tracking-wider transition flex items-center justify-center gap-2 active:scale-95 mt-2 ${
-                    activeTheme === 'dark'
-                        ? 'border-purple-800 hover:border-purple-600 bg-purple-950/20 hover:bg-purple-950/40 text-purple-300'
-                        : 'border-purple-300 hover:border-purple-400 bg-purple-50 hover:bg-purple-100/80 text-purple-700'
-                }`;
+                addOpdrachtBtn.className = `w-full py-2.5 rounded-xl border border-dashed font-semibold text-xs tracking-wider transition flex items-center justify-center gap-2 active:scale-95 mt-2 ${activeTheme === 'dark'
+                    ? 'border-purple-800 hover:border-purple-600 bg-purple-950/20 hover:bg-purple-950/40 text-purple-300'
+                    : 'border-purple-300 hover:border-purple-400 bg-purple-50 hover:bg-purple-100/80 text-purple-700'
+                    }`;
                 addOpdrachtBtn.innerHTML = '<i class="fa-solid fa-circle-plus"></i> NIEUWE OPDRACHT';
                 addOpdrachtBtn.onclick = createNewTaskInConfig;
                 container.appendChild(addOpdrachtBtn);
@@ -1732,7 +1916,7 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 const initialTaskId = urlParams.get('task') || urlParams.get('id');
                 const taskExists = initialTaskId && taskConfig.tabs.some(t => t.id === initialTaskId);
-                
+
                 if (taskExists) {
                     selectTask(initialTaskId);
                 } else {
@@ -1787,7 +1971,7 @@
                     if (isEditMode) {
                         docBox.contentEditable = "true";
                         docBox.oninput = saveActiveInstruction;
-                        docBox.onkeydown = function(e) {
+                        docBox.onkeydown = function (e) {
                             if (e.key === "Enter") {
                                 const selection = window.getSelection();
                                 if (selection.rangeCount) {
@@ -1802,19 +1986,19 @@
                                     // If inside an inline <code> but NOT a <pre> block code
                                     if (codeElem && !preElem) {
                                         e.preventDefault();
-                                        
+
                                         // Convert inline code to pre block
                                         const pre = document.createElement("pre");
                                         pre.className = "bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs text-yellow-400 my-3 block whitespace-pre-wrap";
-                                        
+
                                         const newCode = document.createElement("code");
                                         newCode.className = "font-mono";
-                                        
+
                                         const text = codeElem.textContent;
                                         const offset = range.startOffset;
                                         const newText = text.slice(0, offset) + "\n" + text.slice(offset);
                                         newCode.textContent = newText;
-                                        
+
                                         pre.appendChild(newCode);
                                         codeElem.replaceWith(pre);
 
@@ -1842,7 +2026,7 @@
                                 }
                             }
                         };
-                        docBox.onpaste = function(e) {
+                        docBox.onpaste = function (e) {
                             e.preventDefault();
                             const text = (e.clipboardData || window.clipboardData).getData("text/plain");
                             document.execCommand("insertText", false, text);
@@ -1945,7 +2129,7 @@
                     // Reset the user's progress for this task entirely to trigger getTaskWorkspace re-initialization
                     delete userProgress[currentTaskId];
                     localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
-                    
+
                     const workspace = getTaskWorkspace(currentTaskId);
                     editor.setValue(workspace.files[workspace.activeFile] || "");
                     renderWorkspaceTabs();
@@ -1956,13 +2140,22 @@
 
         function clearConsole() {
             document.getElementById("console-output").innerText = "";
+            const turtleBox = document.getElementById("turtle-console-output");
+            if (turtleBox) turtleBox.innerText = "";
             runOutputs = [];
         }
 
         function appendToConsole(text) {
             const consoleBox = document.getElementById("console-output");
-            consoleBox.innerText += text;
-            consoleBox.scrollTop = consoleBox.scrollHeight;
+            if (consoleBox) {
+                consoleBox.innerText += text;
+                consoleBox.scrollTop = consoleBox.scrollHeight;
+            }
+            const turtleBox = document.getElementById("turtle-console-output");
+            if (turtleBox) {
+                turtleBox.innerText += text;
+                turtleBox.scrollTop = turtleBox.scrollHeight;
+            }
             runOutputs.push(text);
         }
 
@@ -2105,8 +2298,13 @@
             const activeFile = workspace ? workspace.activeFile : "main.py";
             const codeToValidate = editor.getValue();
 
-            // Switch to console view to show output
-            switchOutputSubTab('console');
+            // Switch to console view or stay on turtle canvas to show output
+            const isTurtle = codeToValidate.includes("import turtle") || codeToValidate.includes("from turtle import") || activeOutputSubTab === 'turtle';
+            if (isTurtle) {
+                switchOutputSubTab('turtle');
+            } else {
+                switchOutputSubTab('console');
+            }
             clearConsole();
 
             appendToConsole(`-- Start validatie van ${activeFile}... --\n`);
@@ -2289,24 +2487,24 @@
 
             // ── Phase 3: tag nesting (original logic) ──
             let cleanHtml = html.replace(/<!--[\s\S]*?-->/g, '');
-            
+
             const selfClosingTags = new Set(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']);
             const tagRegex = /<\/?([a-zA-Z0-9:-]+)(?:\s+[^>]*)?>/g;
             const stack = [];
             let match;
-            
+
             while ((match = tagRegex.exec(cleanHtml)) !== null) {
                 const tag = match[1].toLowerCase();
                 const isClosing = match[0].startsWith('</');
                 const line = calculateLineNumber(cleanHtml, match.index);
-                
+
                 if (selfClosingTags.has(tag)) {
                     if (isClosing) {
                         errors.push(`Zelfsluitende tag <${tag}> mag geen sluitingstag </${tag}> hebben op regel ${line}.`);
                     }
                     continue;
                 }
-                
+
                 if (isClosing) {
                     const stackIndex = stack.map(item => item.tag).lastIndexOf(tag);
                     if (stackIndex === -1) {
@@ -2322,12 +2520,12 @@
                     stack.push({ tag, line });
                 }
             }
-            
+
             while (stack.length > 0) {
                 const open = stack.pop();
                 errors.push(`Niet-gesloten tag <${open.tag}> geopend op regel ${open.line}.`);
             }
-            
+
             return errors;
         }
 
@@ -2336,14 +2534,14 @@
             let braceCount = 0;
             let commentOpen = false;
             const lines = css.split('\n');
-            
+
             // 1. Line-by-line check for missing semicolons inside declarations
             let commentActive = false;
             for (let i = 0; i < lines.length; i++) {
                 const lineNum = i + 1;
                 let rawLine = lines[i];
                 let line = rawLine.trim();
-                
+
                 if (commentActive) {
                     const closeIdx = line.indexOf('*/');
                     if (closeIdx !== -1) {
@@ -2353,7 +2551,7 @@
                         continue;
                     }
                 }
-                
+
                 let openIdx = line.indexOf('/*');
                 while (openIdx !== -1) {
                     const closeIdx = line.indexOf('*/', openIdx + 2);
@@ -2366,10 +2564,10 @@
                         break;
                     }
                 }
-                
+
                 line = line.trim();
                 if (!line) continue;
-                
+
                 // Track brace level for semicolon checks
                 for (let j = 0; j < line.length; j++) {
                     if (line[j] === '{') braceCount++;
@@ -2378,13 +2576,13 @@
                         if (braceCount < 0) braceCount = 0;
                     }
                 }
-                
+
                 if (braceCount > 0 && line.includes(':') && !line.endsWith(';') && !line.endsWith('{') && !line.endsWith('}')) {
                     // Check if the next non-empty, non-comment line starts a new declaration or rule
                     let nextLineNum = i + 1;
                     let nextLine = null;
                     let nextCommentActive = commentActive;
-                    
+
                     while (nextLineNum < lines.length) {
                         let tempLine = lines[nextLineNum].trim();
                         if (nextCommentActive) {
@@ -2397,7 +2595,7 @@
                                 continue;
                             }
                         }
-                        
+
                         let tempOpenIdx = tempLine.indexOf('/*');
                         while (tempOpenIdx !== -1) {
                             const closeIdx = tempLine.indexOf('*/', tempOpenIdx + 2);
@@ -2410,7 +2608,7 @@
                                 break;
                             }
                         }
-                        
+
                         tempLine = tempLine.trim();
                         if (tempLine) {
                             nextLine = tempLine;
@@ -2418,7 +2616,7 @@
                         }
                         nextLineNum++;
                     }
-                    
+
                     if (nextLine && (nextLine.includes(':') || nextLine.startsWith('}') || nextLine.includes('{'))) {
                         errors.push(`Ontbrekende puntkomma (;) aan het einde van regel ${lineNum}.`);
                     }
@@ -2431,7 +2629,7 @@
             for (let i = 0; i < lines.length; i++) {
                 const lineNum = i + 1;
                 let line = lines[i];
-                
+
                 if (commentOpen) {
                     const closeIdx = line.indexOf('*/');
                     if (closeIdx !== -1) {
@@ -2441,7 +2639,7 @@
                         continue;
                     }
                 }
-                
+
                 let openIdx = line.indexOf('/*');
                 while (openIdx !== -1) {
                     const closeIdx = line.indexOf('*/', openIdx + 2);
@@ -2454,7 +2652,7 @@
                         break;
                     }
                 }
-                
+
                 for (let j = 0; j < line.length; j++) {
                     if (line[j] === '{') {
                         braceCount++;
@@ -2467,14 +2665,14 @@
                     }
                 }
             }
-            
+
             if (commentOpen) {
                 errors.push(`Niet-gesloten CSS-commentaar (/*).`);
             }
             if (braceCount > 0) {
                 errors.push(`Ontbrekende sluit-accolade '}' (er zijn ${braceCount} accolade(s) niet gesloten).`);
             }
-            
+
             return errors;
         }
 
@@ -2765,7 +2963,7 @@
             if (!task.tests || task.tests.length === 0) {
                 listContainer.innerHTML = `
                     <div class="text-center py-8 text-slate-500">
-                        <i class="fa-solid fa-wand-magic-sparkles text-3xl mb-2 text-slate-600"></i>
+                        <i class="fa-solid fa-wand-magic-sparkles text-3xl mb-2 text-slate-400 dark:text-slate-600"></i>
                         <p class="text-sm">Geen automatische tests vereist voor deze opdracht.</p>
                         <p class="text-xs mt-1">Tekening kun je visueel beoordelen in het Turtle Canvas.</p>
                     </div>
@@ -2776,18 +2974,18 @@
 
             badge.classList.remove("hidden");
             badge.textContent = `0/${task.tests.length}`;
-            badge.className = "px-1.5 py-0.5 rounded text-[10px] bg-slate-800 text-slate-400";
+            badge.className = "px-1.5 py-0.5 rounded text-[10px] bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium";
 
             listContainer.innerHTML = "";
             task.tests.forEach((test) => {
                 const card = document.createElement("div");
-                card.className = "bg-slate-900 border border-slate-800 rounded-xl p-3 flex items-center justify-between";
+                card.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex items-center justify-between gap-2";
                 card.innerHTML = `
-                    <div>
-                        <h5 class="text-sm font-semibold text-slate-300">${test.name}</h5>
-                        <p class="text-xs text-slate-500 mt-0.5">Invoer: [${test.inputs.join(", ")}]</p>
+                    <div class="min-w-0 flex-1">
+                        <h5 class="text-xs font-semibold text-slate-800 dark:text-slate-200 break-words">${test.name}</h5>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Invoer: <span class="font-mono bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-slate-600 dark:text-slate-400">[${test.inputs.join(", ")}]</span></p>
                     </div>
-                    <i class="fa-regular fa-circle-question text-slate-600 text-lg"></i>
+                    <i class="fa-regular fa-circle-question text-slate-400 dark:text-slate-600 text-lg shrink-0"></i>
                 `;
                 listContainer.appendChild(card);
             });
@@ -2800,7 +2998,7 @@
             // Prepend a "Back to Editor" button if in teacher edit mode
             if (isEditMode) {
                 const backBtn = document.createElement("button");
-                backBtn.className = "w-full py-2 bg-slate-900 border border-slate-800 text-purple-400 hover:text-purple-300 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 mb-3 active:scale-95";
+                backBtn.className = "w-full py-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 mb-3 active:scale-95";
                 backBtn.innerHTML = '<i class="fa-solid fa-arrow-left-long"></i> Terug naar bewerken';
                 backBtn.onclick = () => renderTestEditor(task);
                 listContainer.appendChild(backBtn);
@@ -2812,31 +3010,33 @@
                 if (res.passed) passedCount++;
 
                 const card = document.createElement("div");
-                card.className = `bg-slate-900 border rounded-xl p-4 transition flex flex-col gap-2 ${res.passed ? 'border-emerald-500/30 shadow-md shadow-emerald-950/10' : 'border-red-500/30 shadow-md shadow-red-950/10'
+                card.className = `bg-white dark:bg-slate-900 border rounded-xl p-4 transition flex flex-col gap-2 ${res.passed
+                    ? 'border-emerald-500/30 dark:border-emerald-500/30 shadow-md shadow-emerald-500/5 dark:shadow-emerald-950/10'
+                    : 'border-red-500/30 dark:border-red-500/30 shadow-md shadow-red-500/5 dark:shadow-red-950/10'
                     }`;
 
                 card.innerHTML = `
-                    <div class="flex items-start justify-between">
-                        <div>
-                            <h5 class="text-sm font-bold text-slate-200">${res.name}</h5>
-                            <p class="text-[11px] text-slate-500 mt-0.5">Test invoer gebruikt: <span class="font-mono bg-slate-950 px-1 py-0.5 rounded text-slate-400">[${res.inputs.join(", ")}]</span></p>
+                    <div class="flex items-start justify-between gap-2">
+                        <div class="min-w-0 flex-1">
+                            <h5 class="text-xs font-bold text-slate-850 dark:text-slate-200 break-words">${res.name}</h5>
+                            <p class="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">Test invoer: <span class="font-mono bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-slate-600 dark:text-slate-400">[${res.inputs.join(", ")}]</span></p>
                         </div>
-                        <div>
+                        <div class="shrink-0">
                             ${res.passed
-                        ? '<span class="bg-emerald-500/10 text-emerald-400 text-xs font-bold px-2 py-1 rounded-full border border-emerald-500/20"><i class="fa-solid fa-check mr-1"></i> Goedgekeurd</span>'
-                        : '<span class="bg-red-500/10 text-red-400 text-xs font-bold px-2 py-1 rounded-full border border-red-500/20"><i class="fa-solid fa-xmark mr-1"></i> Fout</span>'
+                        ? '<span class="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/20 whitespace-nowrap"><i class="fa-solid fa-check mr-1"></i> Goedgekeurd</span>'
+                        : '<span class="bg-red-500/10 text-red-600 dark:text-red-400 text-[10px] font-bold px-2 py-0.5 rounded-full border border-red-500/20 whitespace-nowrap"><i class="fa-solid fa-xmark mr-1"></i> Fout</span>'
                     }
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2 text-xs font-mono">
-                        <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
-                            <span class="text-[10px] text-slate-500 uppercase block mb-1">Verwachte Output:</span>
-                            <div class="text-slate-300 whitespace-pre-wrap">${res.expected}</div>
+                        <div class="bg-slate-50 dark:bg-slate-950 p-2.5 rounded border border-slate-150 dark:border-slate-850">
+                            <span class="text-[10px] text-slate-500 dark:text-slate-400 uppercase block mb-1">Verwachte Output:</span>
+                            <div class="text-slate-700 dark:text-slate-300 whitespace-pre-wrap">${res.expected}</div>
                         </div>
-                        <div class="bg-slate-950 p-2.5 rounded border border-slate-800">
-                            <span class="text-[10px] text-slate-500 uppercase block mb-1">Jouw Output:</span>
-                            <div class="${res.passed ? 'text-emerald-400' : 'text-red-400'} whitespace-pre-wrap">${res.actual || '[Niets geprint]'}</div>
+                        <div class="bg-slate-50 dark:bg-slate-950 p-2.5 rounded border border-slate-150 dark:border-slate-850">
+                            <span class="text-[10px] text-slate-500 dark:text-slate-400 uppercase block mb-1">Jouw Output:</span>
+                            <div class="${res.passed ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'} whitespace-pre-wrap">${res.actual || '[Niets geprint]'}</div>
                         </div>
                     </div>
                 `;
@@ -2851,7 +3051,7 @@
                 badge.className = "px-1.5 py-0.5 rounded text-[10px] bg-emerald-500 text-slate-950 font-bold animate-bounce";
                 showToast("🏆 Gefeliciteerd! Alle tests voor deze opdracht zijn geslaagd!");
             } else {
-                badge.className = "px-1.5 py-0.5 rounded text-[10px] bg-red-500/20 text-red-400 border border-red-500/30";
+                badge.className = "px-1.5 py-0.5 rounded text-[10px] bg-red-100 dark:bg-red-500/20 text-red-650 dark:text-red-400 border border-red-200 dark:border-red-500/30 font-medium";
             }
         }
 
@@ -2999,8 +3199,8 @@
         // Simple floating notification feedback
         function showToast(message) {
             const toast = document.createElement("div");
-            toast.className = "fixed bottom-5 right-5 bg-slate-900 border border-slate-700 text-slate-100 px-4 py-3 rounded-xl shadow-2xl z-[999999] flex items-center gap-2 max-w-sm text-sm animate-bounce";
-            toast.innerHTML = `<i class="fa-solid fa-circle-info text-emerald-400"></i> <span>${message}</span>`;
+            toast.className = "fixed bottom-5 right-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-xl shadow-2xl z-[999999] flex items-center gap-2 max-w-sm text-sm animate-bounce";
+            toast.innerHTML = `<i class="fa-solid fa-circle-info text-emerald-600 dark:text-emerald-400"></i> <span>${message}</span>`;
             document.body.appendChild(toast);
 
             setTimeout(() => {
@@ -3091,7 +3291,7 @@
 
             const div = document.createElement("div");
             div.className = "py-0.5 font-mono text-[11px] border-b border-slate-100 dark:border-slate-900/50";
-            
+
             if (type === 'system') {
                 div.className += " text-blue-700 dark:text-blue-400 font-semibold";
             } else if (type === 'error' || type === 'web-error') {
@@ -3124,6 +3324,34 @@
             const icon = btn.querySelector("i");
 
             if (isConsoleExpanded) {
+                panel.classList.remove("h-[180px]");
+                panel.classList.add("h-[480px]");
+                label.textContent = "Verkleinen";
+                if (icon) {
+                    icon.className = "fa-solid fa-down-left-and-up-right-to-center text-[10px]";
+                }
+            } else {
+                panel.classList.remove("h-[480px]");
+                panel.classList.add("h-[180px]");
+                label.textContent = "Vergroten";
+                if (icon) {
+                    icon.className = "fa-solid fa-up-right-and-down-left-from-center text-[10px]";
+                }
+            }
+        }
+
+        let isTurtleConsoleExpanded = false;
+        function toggleTurtleConsoleSize() {
+            const panel = document.getElementById("turtle-console-panel");
+            const btn = document.getElementById("btn-toggle-turtle-console-size");
+            const label = document.getElementById("turtle-console-size-label");
+            if (!panel || !btn || !label) return;
+
+            isTurtleConsoleExpanded = !isTurtleConsoleExpanded;
+
+            const icon = btn.querySelector("i");
+
+            if (isTurtleConsoleExpanded) {
                 panel.classList.remove("h-[180px]");
                 panel.classList.add("h-[480px]");
                 label.textContent = "Verkleinen";
@@ -3336,7 +3564,7 @@
         }
 
         // Register postMessage handler for capturing console logs
-        window.addEventListener("message", function(event) {
+        window.addEventListener("message", function (event) {
             if (event.data && typeof event.data === 'object') {
                 const { type, data } = event.data;
                 if (['web-log', 'web-error', 'web-warn', 'web-info'].includes(type)) {
@@ -3409,7 +3637,7 @@
                 tempCtx.translate(width / 2 + adjPanX, height / 2 + adjPanY);
                 tempCtx.scale(zoom, zoom);
                 tempCtx.translate(-width / 2, -height / 2);
-                
+
                 tempCtx.drawImage(canvas, 0, 0);
                 tempCtx.restore();
             });
@@ -3458,13 +3686,13 @@
                 if (instructionsPanel) instructionsPanel.classList.add("hidden");
                 if (editorPanel) editorPanel.classList.add("hidden");
                 if (mobileSwitchTabs) mobileSwitchTabs.classList.add("hidden");
-                
+
                 if (outputPanel) {
                     outputPanel.classList.remove("hidden", "lg:col-span-5");
                     outputPanel.classList.add("flex", "lg:col-span-12");
                 }
                 if (subtabsBar) subtabsBar.classList.add("hidden");
-                
+
                 if (demoHeader) {
                     if (isEmbed) {
                         demoHeader.classList.add("hidden");
@@ -3503,7 +3731,7 @@
                 if (header) header.classList.remove("hidden");
                 if (instructionsPanel) instructionsPanel.classList.remove("hidden");
                 if (mobileSwitchTabs) mobileSwitchTabs.classList.remove("hidden");
-                
+
                 // Normal mode behavior for output and editor panels
                 if (editorPanel) editorPanel.classList.remove("hidden");
                 if (outputPanel) {
@@ -3654,15 +3882,15 @@
 
             // Get filenames array
             const filenames = Object.keys(workspace.files);
-            
+
             // Render each tab
             filenames.forEach(filename => {
                 const isActive = workspace.activeFile === filename;
                 const isMain = filename === "main.py" || filename === "index.html";
 
                 const tab = document.createElement("div");
-                tab.className = isActive 
-                    ? (activeTheme === 'dark' 
+                tab.className = isActive
+                    ? (activeTheme === 'dark'
                         ? "bg-slate-800 text-blue-400 border border-slate-700 px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-bold shadow-md cursor-pointer shrink-0 transition"
                         : "bg-white text-blue-600 border border-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 font-bold shadow-sm cursor-pointer shrink-0 transition")
                     : (activeTheme === 'dark'
@@ -3706,11 +3934,10 @@
                 // Delete button for custom files
                 if (!isMain) {
                     const deleteBtn = document.createElement("i");
-                    deleteBtn.className = `fa-solid fa-xmark text-[10px] rounded p-0.5 ml-1 transition delete-tab-btn ${
-                        activeTheme === 'dark'
-                            ? 'text-slate-500 hover:text-red-400 hover:bg-slate-700/50'
-                            : 'text-slate-400 hover:text-red-600 hover:bg-slate-200'
-                    }`;
+                    deleteBtn.className = `fa-solid fa-xmark text-[10px] rounded p-0.5 ml-1 transition delete-tab-btn ${activeTheme === 'dark'
+                        ? 'text-slate-500 hover:text-red-400 hover:bg-slate-700/50'
+                        : 'text-slate-400 hover:text-red-600 hover:bg-slate-200'
+                        }`;
                     deleteBtn.title = "Verwijder bestand";
                     deleteBtn.onclick = (e) => {
                         e.stopPropagation();
@@ -3760,8 +3987,8 @@
             if (!workspace) return;
 
             const isWeb = isWebModeActive();
-            let name = prompt(isWeb 
-                ? "Voer de naam van het nieuwe bestand in (bijv. index.html, style.css, script.js):" 
+            let name = prompt(isWeb
+                ? "Voer de naam van het nieuwe bestand in (bijv. index.html, style.css, script.js):"
                 : "Voer de naam van het nieuwe bestand in (bijv. dier.py):");
             if (name === null) return; // user cancelled
 
@@ -4020,10 +4247,10 @@
                 // Toggle off: replace the element with its plain contents
                 const targetToRemove = preElem || codeElem;
                 const parent = targetToRemove.parentNode;
-                
+
                 // If it is a pre block containing code, let's grab the inner code node or text content
                 const contentNode = preElem ? (preElem.querySelector("code") || preElem) : codeElem;
-                
+
                 while (contentNode.firstChild) {
                     parent.insertBefore(contentNode.firstChild, targetToRemove);
                 }
@@ -4040,11 +4267,11 @@
                 // Multi-line selection: Create a beautiful block-level pre container
                 const preElement = document.createElement("pre");
                 preElement.className = "bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs text-yellow-400 my-3 block whitespace-pre-wrap";
-                
+
                 const codeElement = document.createElement("code");
                 codeElement.className = "font-mono";
                 codeElement.textContent = selText;
-                
+
                 preElement.appendChild(codeElement);
                 range.deleteContents();
                 range.insertNode(preElement);
@@ -4081,7 +4308,7 @@
 
             docBox.focus();
             const selection = window.getSelection();
-            
+
             let range = savedSelectionRange;
             if (!range && selection.rangeCount) {
                 range = selection.getRangeAt(0);
@@ -4090,18 +4317,18 @@
             if (range) {
                 selection.removeAllRanges();
                 selection.addRange(range);
-                
+
                 range.deleteContents();
-                
+
                 const tempDiv = document.createElement("div");
                 tempDiv.innerHTML = htmlContent;
-                
+
                 const frag = document.createDocumentFragment();
                 let node, lastNode;
                 while ((node = tempDiv.firstChild)) {
                     lastNode = frag.appendChild(node);
                 }
-                
+
                 // Find closest block element directly under docBox to avoid nesting blocks inside paragraphs/headers
                 let insertBlock = range.commonAncestorContainer;
                 if (insertBlock.nodeType === Node.TEXT_NODE) {
@@ -4110,7 +4337,7 @@
                 while (insertBlock && insertBlock.parentNode !== docBox && insertBlock !== docBox) {
                     insertBlock = insertBlock.parentNode;
                 }
-                
+
                 if (insertBlock && insertBlock !== docBox) {
                     const textVal = insertBlock.textContent.trim();
                     // If the block is empty or contains only whitespace/br, we can replace it
@@ -4125,7 +4352,7 @@
                 } else {
                     range.insertNode(frag);
                 }
-                
+
                 if (lastNode) {
                     const newRange = document.createRange();
                     newRange.setStartAfter(lastNode);
@@ -4136,7 +4363,7 @@
             } else {
                 docBox.innerHTML += htmlContent;
             }
-            
+
             // Clear the saved selection range after use
             savedSelectionRange = null;
         }
@@ -4227,7 +4454,7 @@
 
             // Create new row
             const newTr = document.createElement("tr");
-            
+
             // Count number of cells in the current row
             const cellsCount = tr.cells.length;
             for (let i = 0; i < cellsCount; i++) {
@@ -4402,11 +4629,11 @@
             lis.forEach(li => {
                 const parent = li.parentElement;
                 const isOrdered = parent && parent.nodeName.toLowerCase() === "ol";
-                
+
                 // Get the inner text and see if it already starts with a list marker (number or bullet)
                 const text = li.textContent.trim();
                 const alreadyHasMarker = /^(\d+[\.\)]|[\-\*\+])\s*/.test(text);
-                
+
                 if (!alreadyHasMarker) {
                     let index = 0;
                     if (isOrdered) {
@@ -4414,7 +4641,7 @@
                         index = siblings.indexOf(li);
                     }
                     const prefix = isOrdered ? `${index + 1}. ` : `- `;
-                    
+
                     // Prepend list prefix (e.g. "1. " or "- ")
                     li.insertBefore(doc.createTextNode(prefix), li.firstChild);
                 }
@@ -4428,11 +4655,11 @@
                 if (node.nodeType === Node.ELEMENT_NODE) {
                     const tagName = node.nodeName.toLowerCase();
                     let content = "";
-                    
+
                     node.childNodes.forEach(child => {
                         content += getDomTextWithLayout(child);
                     });
-                    
+
                     // Add newlines for block tags and breaks
                     const blockTags = ["p", "div", "li", "h1", "h2", "h3", "h4", "h5", "h6", "tr", "thead", "tbody", "table", "section", "header", "footer", "nav", "aside", "article", "form"];
                     if (blockTags.includes(tagName)) {
@@ -4440,7 +4667,7 @@
                     } else if (tagName === "br" || tagName === "hr") {
                         content += "\n";
                     }
-                    
+
                     return content;
                 }
                 return "";
@@ -4513,7 +4740,7 @@
                 // Detect headings
                 const lowerLine = line.toLowerCase();
                 let headingMatched = false;
-                
+
                 if (lowerLine.startsWith('lezen') || lowerLine.includes('👁 lezen') || lowerLine.includes('lezen:')) {
                     closeSection();
                     activeSectionType = 'lezen';
@@ -4579,13 +4806,13 @@
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;");
-            
+
             // Auto wrap functions/statements with code block (e.g. backwards(), goto(), right(90))
             escaped = escaped.replace(/([a-zA-Z_][a-zA-Z0-9_]*\([^\)]*\))/g, '<code class="bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs">$1</code>');
-            
+
             // Auto wrap quotes inside string parameter listings
             escaped = escaped.replace(/(["'])([^"'\n\r\t]+)(["'])/g, '$1<code class="bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs">$2</code>$3');
-            
+
             // Highlight "Run"
             escaped = escaped.replace(/(Run|Voer uit|Voer Code Uit)/gi, '<span class="font-bold text-slate-800 dark:text-slate-200">$1</span>');
 
@@ -4759,7 +4986,7 @@
 
             nameInput.value = "";
             idInput.value = "";
-            
+
             // Adjust modal details based on course initialization state
             const modalHeader = modal.querySelector("h3");
             if (modalHeader) {
@@ -4940,7 +5167,7 @@
             if (confirm(`Weet je zeker dat je de opdracht "${task.title || task.filename}" volledig wilt verwijderen uit de cursus?`)) {
                 // Remove from list
                 taskConfig.tabs = taskConfig.tabs.filter(t => t.id !== taskId);
-                
+
                 // Clear progress inside localStorage if needed
                 delete userProgress[taskId];
                 localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
@@ -4979,13 +5206,13 @@
         function renderTestEditor(task) {
             const listContainer = document.getElementById("tests-list");
             const badge = document.getElementById("test-summary-badge");
-            
+
             if (!listContainer || !badge) return;
 
             badge.classList.remove("hidden");
             const testsCount = task.tests ? task.tests.length : 0;
             badge.textContent = `Editor: ${testsCount}`;
-            badge.className = "px-1.5 py-0.5 rounded text-[10px] bg-purple-900 text-purple-200 font-bold";
+            badge.className = "px-1.5 py-0.5 rounded text-[10px] bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-200 font-bold";
 
             listContainer.innerHTML = "";
 
@@ -4993,35 +5220,35 @@
 
             task.tests.forEach((test, testIndex) => {
                 const card = document.createElement("div");
-                card.className = "bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col gap-3 shadow-md";
+                card.className = "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-4 flex flex-col gap-3 shadow-md";
 
                 card.innerHTML = `
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-                        <span class="text-xs font-bold text-purple-400">TESTCASE #${testIndex + 1}</span>
-                        <button onclick="deleteTestFromTask(${testIndex})" class="text-xs text-red-500 hover:text-red-400 transition" title="Verwijder deze testcase">
+                    <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-2">
+                        <span class="text-xs font-bold text-purple-600 dark:text-purple-400">TESTCASE #${testIndex + 1}</span>
+                        <button onclick="deleteTestFromTask(${testIndex})" class="text-xs text-red-650 hover:text-red-750 dark:text-red-500 dark:hover:text-red-400 transition font-medium" title="Verwijder deze testcase">
                             <i class="fa-solid fa-trash-can mr-1"></i> Verwijder
                         </button>
                     </div>
 
                     <div class="flex flex-col gap-1 text-xs">
-                        <label class="text-slate-400 font-medium">Test Naam:</label>
+                        <label class="text-slate-650 dark:text-slate-400 font-medium">Test Naam:</label>
                         <input type="text" value="${test.name || ''}" oninput="updateTestField(${testIndex}, 'name', this.value)" 
-                            class="bg-slate-950 border border-slate-800 focus:border-blue-500 focus:outline-none rounded-lg px-2.5 py-1.5 text-slate-200 font-semibold" 
+                            class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-blue-500 focus:outline-none rounded-lg px-2.5 py-1.5 text-slate-800 dark:text-slate-200 font-semibold" 
                             placeholder="bijv. Eenvoudig optellen (5 + 10)" />
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
                         <div class="flex flex-col gap-1">
-                            <label class="text-slate-400 font-medium" title="Kommagescheiden lijst van invoerwaarden voor input()">Invoerwaarden (comma-gescheiden):</label>
+                            <label class="text-slate-650 dark:text-slate-400 font-medium" title="Kommagescheiden lijst van invoerwaarden voor input()">Invoerwaarden (comma-gescheiden):</label>
                             <input type="text" value="${test.inputs ? test.inputs.join(', ') : ''}" oninput="updateTestField(${testIndex}, 'inputs', this.value)" 
-                                class="bg-slate-950 border border-slate-800 focus:border-blue-500 focus:outline-none rounded-lg px-2.5 py-1.5 text-slate-200 font-mono" 
+                                class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-blue-500 focus:outline-none rounded-lg px-2.5 py-1.5 text-slate-850 dark:text-slate-200 font-mono" 
                                 placeholder="bijv. 5, 10" />
                         </div>
 
                         <div class="flex flex-col gap-1">
-                            <label class="text-slate-400 font-medium">Vergelijkingsmethode (Match):</label>
+                            <label class="text-slate-650 dark:text-slate-400 font-medium">Vergelijkingsmethode (Match):</label>
                             <select onchange="updateTestField(${testIndex}, 'matchType', this.value)" 
-                                class="bg-slate-950 border border-slate-800 focus:border-blue-500 focus:outline-none rounded-lg px-2.5 py-1.5 text-slate-200 font-semibold cursor-pointer">
+                                class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-blue-500 focus:outline-none rounded-lg px-2.5 py-1.5 text-slate-800 dark:text-slate-200 font-semibold cursor-pointer">
                                 <option value="exact" ${test.matchType === 'exact' ? 'selected' : ''}>Exact match (Aanbevolen)</option>
                                 <option value="contains" ${test.matchType === 'contains' ? 'selected' : ''}>Bevat substring (contains)</option>
                             </select>
@@ -5029,9 +5256,9 @@
                     </div>
 
                     <div class="flex flex-col gap-1 text-xs">
-                        <label class="text-slate-400 font-medium">Verwachte Output (geprinte waarde):</label>
+                        <label class="text-slate-650 dark:text-slate-400 font-medium">Verwachte Output (geprinte waarde):</label>
                         <textarea oninput="updateTestField(${testIndex}, 'expectedOutput', this.value)" rows="2"
-                            class="bg-slate-950 border border-slate-800 focus:border-blue-500 focus:outline-none rounded-lg px-2.5 py-1.5 text-slate-200 font-mono whitespace-pre resize-y" 
+                            class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 focus:border-blue-500 focus:outline-none rounded-lg px-2.5 py-1.5 text-slate-850 dark:text-slate-200 font-mono whitespace-pre resize-y" 
                             placeholder="Typ hier de exacte verwachte geprinte output...">${test.expectedOutput || ''}</textarea>
                     </div>
                 `;
@@ -5040,7 +5267,7 @@
             });
 
             const addTestBtn = document.createElement("button");
-            addTestBtn.className = "w-full py-2.5 rounded-xl border border-dashed border-purple-800 hover:border-purple-600 bg-purple-950/20 hover:bg-purple-950/40 text-purple-300 font-semibold text-xs tracking-wider transition flex items-center justify-center gap-2 active:scale-95 mt-2";
+            addTestBtn.className = "w-full py-2.5 rounded-xl border border-dashed border-purple-300 dark:border-purple-800 hover:border-purple-400 dark:hover:border-purple-600 bg-purple-50 dark:bg-purple-950/20 hover:bg-purple-100 dark:hover:bg-purple-950/40 text-purple-600 dark:text-purple-300 font-semibold text-xs tracking-wider transition flex items-center justify-center gap-2 active:scale-95 mt-2";
             addTestBtn.innerHTML = '<i class="fa-solid fa-circle-plus"></i> NIEUWE TESTCASE TOEVOEGEN';
             addTestBtn.onclick = createNewTestCaseInTask;
             listContainer.appendChild(addTestBtn);
@@ -5090,7 +5317,7 @@
             const previewContainer = document.getElementById("assignment-preview-container");
             const previewImg = document.getElementById("assignment-preview-img");
             const deleteBtn = document.getElementById("delete-preview-btn");
-            
+
             if (!previewContainer || !previewImg) return;
 
             // Helper to toggle delete button visibility in edit mode
@@ -5130,12 +5357,12 @@
 
             // Probe image exists dynamically
             const tempImg = new Image();
-            tempImg.onload = function() {
+            tempImg.onload = function () {
                 previewImg.src = targetSrc;
                 previewContainer.classList.remove("hidden");
                 updateDeleteButtonVisibility(true); // Allow clearing/overriding probed image as well
             };
-            tempImg.onerror = function() {
+            tempImg.onerror = function () {
                 previewImg.src = "";
                 previewContainer.classList.add("hidden");
                 updateDeleteButtonVisibility(false);
@@ -5175,7 +5402,7 @@
                         initialCode: ws.files[filename],
                         isMain: filename === "main.py" || filename === "index.html"
                     }));
-                    
+
                     // Remove legacy properties from the task root
                     delete task.initialCode;
                     delete task.filename;
@@ -5292,7 +5519,7 @@
             const h3Btn = document.getElementById("wysiwyg-btn-h3");
             const tipBtn = document.getElementById("wysiwyg-btn-tip");
             const infoBtn = document.getElementById("wysiwyg-btn-info");
-            
+
             const addRowBtn = document.getElementById("wysiwyg-btn-add-row");
             const addColBtn = document.getElementById("wysiwyg-btn-add-col");
             const delTableBtn = document.getElementById("wysiwyg-btn-del-table");
@@ -5308,7 +5535,7 @@
             const defaultListClass = "w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs";
             const defaultCodeClass = "w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-mono text-xs";
             const defaultH3Class = "w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-bold text-[10px]";
-            
+
             const activeBtnClass = "w-7 h-7 rounded bg-slate-300 text-blue-600 border border-blue-500/30 dark:bg-slate-700 dark:text-blue-400 dark:border-blue-500/20 transition flex items-center justify-center font-bold text-xs";
             const activeItalicClass = "w-7 h-7 rounded bg-slate-300 text-blue-600 italic border border-blue-500/30 dark:bg-slate-700 dark:text-blue-400 dark:border-blue-500/20 transition flex items-center justify-center text-xs";
             const activeListClass = "w-7 h-7 rounded bg-slate-300 text-blue-600 border border-blue-500/30 dark:bg-slate-700 dark:text-blue-400 dark:border-blue-500/20 transition flex items-center justify-center text-xs";
@@ -5345,7 +5572,7 @@
             let curr = container;
             while (curr && curr !== docBox) {
                 const nodeName = curr.nodeName.toLowerCase();
-                
+
                 if (nodeName === "b" || nodeName === "strong") {
                     if (boldBtn) boldBtn.className = activeBtnClass;
                 }
