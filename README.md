@@ -18,6 +18,15 @@ Een moderne, interactieve en volledig cliënt-side Python-leeromgeving ontworpen
     *   **Slimme Auto-Save**: Alle geopende bestanden worden per opdracht real-time in de browser (`localStorage`) opgeslagen.
 *   **Turtle Auto-detectie & Reactieve Omgeving**:
     *   Zodra er `import turtle` of `from turtle import` in de code wordt getypt, schakelt de editor automatisch over naar de **Turtle Canvas**-weergave. Zodra deze imports worden verwijderd, keert het scherm direct terug naar de standaard **Console**-weergave.
+*   **HTML/CSS/JS (Web) Mode**:
+    *   **Auto-detectie**: Zodra een opdracht een bestand met een `.html`-extensie bevat, activeert de editor automatisch de **Web Preview**-weergave in plaats van de Python console of het canvas.
+    *   **Interactieve Web Preview & Console**: Bekijk direct het resultaat van je webpagina met een geïntegreerd console-venster onderaan om `console.log` logs en runtime-fouten te inspecteren.
+    *   **Pedagogische Resource-koppeling**:
+        *   **Standaardkoppeling**: Als `style.css` of `script.js` aanwezig is maar niet handmatig is gekoppeld, koppelt de editor deze automatisch (zodat de pagina direct werkt) en logt een vriendelijke educatieve tip in de webconsole met de benodigde HTML-tags.
+        *   **Strenge Modus**: Via `"requireManualLinking": true` in de opdracht-JSON schakelt de editor de automatische koppeling uit. De leerling moet de tags dan zelf schrijven, anders toont de webconsole een duidelijke foutmelding met instructies.
+        *   **Slimme Interceptie**: Om de code correct uit te voeren op de sandbox Blob-URL (waar normale relatieve paden 404-fouten geven), scant de editor handmatige `<link>` en `<script>` tags en vervangt deze achter de schermen door inlined code.
+    *   **Strikte Sandboxed Beveiliging**: De preview draait in een unieke null-origin sandbox (`sandbox="allow-scripts"`), waardoor scripts nooit bij de cookies, `localStorage` of parent-DOM van de editor kunnen komen.
+    *   **Volledig Scherm met Verversen**: Open de webpagina op volledig scherm en gebruik de ingebouwde "Verversen" knop om de status te resetten.
 *   **Slimme Automatische Unit Tests**:
     *   Evalueert studentencode automatisch op basis van gedefinieerde testcases.
     *   **Strikte scheiding**: De testrunner scheidt invoerprompts (zoals `Hoe heet je? `) van de daadwerkelijk geprinte waarden (`print()`). Hierdoor kunnen testen betrouwbaar op `"exact"` matchen, terwijl studenten toch duidelijke invoerprompts kunnen gebruiken.
@@ -71,10 +80,11 @@ Een opdrachtenbestand is een JSON-bestand dat een titel en een lijst met opdrach
 *   **`initialCode`** *(string)*: De startcode die in de editor klaarstaat voor de student. Gebruik `\n` voor nieuwe regels (alleen gebruikt als er geen `files` array is gedefinieerd).
 *   **`tests`** *(array)*: Een lijst met testgevallen die de code van de student automatisch controleren (leeg laten `[]` voor Turtle-opdrachten).
 *   **`previewImage`** *(string, optioneel)*: Een Base64-gecodeerde afbeelding (DataURL, bijv. `data:image/png;base64,...`) die als verwacht resultaat onder de opdrachtomschrijving wordt weergegeven. Dit maakt de opdrachtenreeks volledig zelfvoorzienend en offline-compatible zonder extra losse bestanden.
+*   **`requireManualLinking`** *(boolean, optioneel)*: Indien ingesteld op `true` (alleen van toepassing in Web Mode), koppelt de editor `style.css` en `script.js` niet meer automatisch. De leerling moet deze dan zelf handmatig koppelen met `<link>` en `<script>` tags. Zo niet, dan verschijnt er een duidelijke foutmelding in de webconsole.
 *   **`files`** *(array, optioneel)*: Een lijst met startbestanden voor multi-bestand (Trinket-stijl) opdrachten. Elk bestandsobject bevat:
-    *   **`filename`** *(string)*: De bestandsnaam van dit bestand (bijv. `dier.py`).
+    *   **`filename`** *(string)*: De bestandsnaam van dit bestand (bijv. `dier.py`, `index.html`, `style.css` of `script.js`).
     *   **`initialCode`** *(string)*: De begin-code die in dit bestand staat.
-    *   **`isMain`** *(boolean)*: Moet `true` zijn voor exact één bestand (meestal `main.py`), wat de hoofdingang is van de code-uitvoering en tests.
+    *   **`isMain`** *(boolean)*: Moet `true` zijn voor het hoofdbestand (bijv. `main.py` voor Python-taken, of `index.html` voor Web-taken), wat de hoofdingang is van de code-uitvoering.
 
 #### Testgeval-object (binnen `tests`):
 *   **`name`** *(string)*: De naam van de test die de student ziet (bijv. `Test met Jan (16)`).

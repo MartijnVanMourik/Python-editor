@@ -1,0 +1,48 @@
+{
+    "title": "Web Development Cursus",
+    "assignments": [
+        {
+            "id": "web_01",
+            "title": "Mijn Eerste Webpagina",
+            "instruction": "<h3 class='text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2'>Hallo Wereld in HTML</h3><p class='mb-2 text-slate-800 dark:text-slate-300'>In deze opdracht gaan we een simpele webpagina maken met HTML, CSS en JavaScript!</p><p class='mb-2 text-slate-800 dark:text-slate-300'>De editor heeft automatisch <code>style.css</code> en <code>script.js</code> gekoppeld aan <code>index.html</code>. Kijk in de webconsole hieronder voor een tip hoe je dit normaal gesproken zelf doet.</p>",
+            "files": [
+                {
+                    "filename": "index.html",
+                    "initialCode": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Mijn Webpagina</title>\n</head>\n<body>\n    <h1>Hallo Wereld!</h1>\n    <p id=\"tekst\">Dit is een paragraaf op mijn webpagina.</p>\n    <button id=\"knop\">Klik op mij</button>\n</body>\n</html>",
+                    "isMain": true
+                },
+                {
+                    "filename": "style.css",
+                    "initialCode": "body {\n    background-color: #0f172a;\n    color: #f8fafc;\n    font-family: sans-serif;\n    padding: 2rem;\n    text-align: center;\n}\n\nh1 {\n    color: #38bdf8;\n}\n\nbutton {\n    background-color: #38bdf8;\n    border: none;\n    border-radius: 0.5rem;\n    color: #0f172a;\n    cursor: pointer;\n    font-weight: bold;\n    padding: 0.5rem 1rem;\n    transition: background-color 0.2s;\n}\n\nbutton:hover {\n    background-color: #7dd3fc;\n}"
+                },
+                {
+                    "filename": "script.js",
+                    "initialCode": "console.log(\"Hallo vanuit de console!\");\n\nconst knop = document.getElementById(\"knop\");\nconst tekst = document.getElementById(\"tekst\");\n\nif (knop) {\n    knop.addEventListener(\"click\", () => {\n        console.log(\"Er is op de knop geklikt!\");\n        if (tekst) {\n            tekst.textContent = \"Je hebt succesvol de JavaScript interactie getest!\";\n            tekst.style.color = \"#4ade80\";\n        }\n    });\n}"
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "web_02",
+            "title": "Handmatig Bestanden Koppelen",
+            "instruction": "<h3 class='text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2'>Koppelen van CSS en JS</h3><p class='mb-2 text-slate-800 dark:text-slate-300'>Voor deze opdracht is de strenge modus geactiveerd. De editor koppelt <code>style.css</code> en <code>script.js</code> niet meer automatisch!</p><p class='mb-2 text-slate-800 dark:text-slate-300'>Koppel de stylesheet handmatig in de <code>&lt;head&gt;</code> en voeg het scriptbestand handmatig toe onderaan de <code>&lt;body&gt;</code>.</p>",
+            "requireManualLinking": true,
+            "files": [
+                {
+                    "filename": "index.html",
+                    "initialCode": "<!DOCTYPE html>\n<html>\n<head>\n    <title>Mijn Handmatig Gekoppelde Pagina</title>\n    <!-- Koppel hier style.css -->\n</head>\n<body>\n    <h1>Handmatig Gekoppeld!</h1>\n    <p id=\"tekst\">Dit is een paragraaf op mijn handmatig gekoppelde pagina.</p>\n    <button id=\"knop\">Klik op mij</button>\n\n    <!-- Voeg hier script.js toe -->\n</body>\n</html>",
+                    "isMain": true
+                },
+                {
+                    "filename": "style.css",
+                    "initialCode": "body {\n    background-color: #1e1b4b;\n    color: #e0e7ff;\n    font-family: sans-serif;\n    padding: 2rem;\n    text-align: center;\n}\n\nh1 {\n    color: #a78bfa;\n}\n\nbutton {\n    background-color: #a78bfa;\n    border: none;\n    border-radius: 0.5rem;\n    color: #1e1b4b;\n    cursor: pointer;\n    font-weight: bold;\n    padding: 0.5rem 1rem;\n}\n\nbutton:hover {\n    background-color: #c084fc;\n}"
+                },
+                {
+                    "filename": "script.js",
+                    "initialCode": "console.log(\"Hallo vanuit de handmatig gekoppelde console!\");\n\nconst knop = document.getElementById(\"knop\");\nconst tekst = document.getElementById(\"tekst\");\n\nif (knop) {\n    knop.addEventListener(\"click\", () => {\n        console.log(\"Knop geklikt in strenge modus!\");\n        if (tekst) {\n            tekst.textContent = \"Super, het script werkt ook!\";\n            tekst.style.color = \"#c084fc\";\n        }\n    });\n}"
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

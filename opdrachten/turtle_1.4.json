@@ -1,0 +1,18 @@
+{
+    "title": "Nieuwe Python Cursus",
+    "assignments": [
+        {
+            "id": "1_01",
+            "title": "1.01: Je eerste programma",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Je ziet in het linker scherm het eerste <i>programma</i>.</li>\n  <li>Een programma bestaat uit meerdere <i>instructies</i>.</li>\n  <li>Iedere regel bestaat uit 1 simpele instructie.</li>\n  <li>Soms is er een lege regel. Dit is om de code overzichtelijk te houden.</li>\n</ol>\n<p>&nbsp;</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Klik op \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\"><span class=\"font-bold text-slate-800 dark:text-slate-200\">Voer code uit</span></code>\" en bekijk het resultaat.</li>\n  <li>Ga naar de volgende opdracht door op de grote blauwe pijl te klikken.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\ncolor(\"black\")\nspeed(2)\n\nforward(100)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}
