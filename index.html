@@ -74,6 +74,7 @@
         #assignment-instruction font[color="#60a5fa"] {
             color: var(--editor-color-blue) !important;
         }
+
         #assignment-instruction font[color="#fb923c"] {
             color: var(--editor-color-orange) !important;
         }
@@ -338,32 +339,45 @@
 
         /* Overrides for hardcoded dark-mode elements inside assignment instructions (e.g. from JSON config) */
         .theme-light #assignment-instruction .bg-slate-950 {
-            background-color: #f1f5f9 !important; /* bg-slate-100 */
-            border-color: #cbd5e1 !important; /* border-slate-300 */
+            background-color: #f1f5f9 !important;
+            /* bg-slate-100 */
+            border-color: #cbd5e1 !important;
+            /* border-slate-300 */
         }
+
         .theme-light #assignment-instruction .border-slate-800 {
             border-color: #cbd5e1 !important;
         }
+
         .theme-light #assignment-instruction .text-slate-300,
         .theme-light #assignment-instruction .text-slate-400 {
-            color: #475569 !important; /* text-slate-600 */
+            color: #475569 !important;
+            /* text-slate-600 */
         }
 
         /* Light theme overrides for WYSIWYG Tip and Info Boxes */
         .theme-light #assignment-instruction .wysiwyg-tip-box {
-            background-color: #fffbeb !important; /* bg-amber-50 */
-            border-color: #fde68a !important; /* border-amber-200 */
-            color: #b45309 !important; /* text-amber-700 */
+            background-color: #fffbeb !important;
+            /* bg-amber-50 */
+            border-color: #fde68a !important;
+            /* border-amber-200 */
+            color: #b45309 !important;
+            /* text-amber-700 */
         }
+
         .theme-light #assignment-instruction .wysiwyg-tip-box i {
             color: #d97706 !important;
         }
 
         .theme-light #assignment-instruction .wysiwyg-info-box {
-            background-color: #f0f9ff !important; /* bg-sky-50 */
-            border-color: #bae6fd !important; /* border-sky-200 */
-            color: #0369a1 !important; /* text-sky-700 */
+            background-color: #f0f9ff !important;
+            /* bg-sky-50 */
+            border-color: #bae6fd !important;
+            /* border-sky-200 */
+            color: #0369a1 !important;
+            /* text-sky-700 */
         }
+
         .theme-light #assignment-instruction .wysiwyg-info-box i {
             color: #0284c7 !important;
         }
@@ -373,20 +387,30 @@
         .theme-light #assignment-instruction tr,
         .theme-light #assignment-instruction th,
         .theme-light #assignment-instruction td {
-            border-color: #cbd5e1 !important; /* border-slate-300 */
+            border-color: #cbd5e1 !important;
+            /* border-slate-300 */
         }
+
         .theme-light #assignment-instruction table {
-            background-color: rgba(241, 245, 249, 0.5) !important; /* bg-slate-100/50 */
+            background-color: rgba(241, 245, 249, 0.5) !important;
+            /* bg-slate-100/50 */
         }
+
         .theme-light #assignment-instruction tr.bg-slate-900 {
-            background-color: #f1f5f9 !important; /* bg-slate-100 */
+            background-color: #f1f5f9 !important;
+            /* bg-slate-100 */
         }
+
         .theme-light #assignment-instruction th {
-            color: #0f172a !important; /* text-slate-900 */
-            background-color: #f8fafc !important; /* bg-slate-50 */
+            color: #0f172a !important;
+            /* text-slate-900 */
+            background-color: #f8fafc !important;
+            /* bg-slate-50 */
         }
+
         .theme-light #assignment-instruction td {
-            color: #334155 !important; /* text-slate-700 */
+            color: #334155 !important;
+            /* text-slate-700 */
         }
 
         /* Responsive Scrollbar themes for light and dark modes */
@@ -542,6 +566,7 @@
         .theme-light.mode-compact main {
             background-color: #ffffff !important;
         }
+
         .theme-dark.mode-compact main {
             background-color: #020617 !important;
         }
@@ -549,6 +574,7 @@
         .theme-light.mode-compact body {
             background-color: #f8fafc !important;
         }
+
         .theme-dark.mode-compact body {
             background-color: #0b1329 !important;
         }
@@ -556,6 +582,7 @@
         .mode-compact main {
             flex-direction: row !important;
         }
+
         .mode-compact #instructions-panel {
             width: 33.333% !important;
             min-width: 260px !important;
@@ -564,14 +591,17 @@
             border-right: 1px solid #1e293b !important;
             display: flex !important;
         }
+
         .theme-light.mode-compact #instructions-panel {
             border-right: 1px solid #e2e8f0 !important;
         }
-        .mode-compact main > section:last-child {
+
+        .mode-compact main>section:last-child {
             flex: 1 !important;
             max-height: none !important;
             display: flex !important;
         }
+
         .mode-compact #mobile-switch-tabs {
             display: none !important;
         }
@@ -583,7 +613,7 @@
         }
 
         /* Set z-index and position on the new top toolbar in compact mode */
-        .mode-compact #editor-wrapper-panel > div:first-child {
+        .mode-compact #editor-wrapper-panel>div:first-child {
             z-index: 50 !important;
             position: relative !important;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
@@ -598,7 +628,8 @@
             height: auto !important;
             width: 100% !important;
             z-index: 40 !important;
-            transform: translateY(100%); /* Slide up from bottom */
+            transform: translateY(100%);
+            /* Slide up from bottom */
             visibility: hidden;
             transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.25s !important;
             border-top: 1px solid #cbd5e1 !important;
@@ -763,7 +794,8 @@
                 <i class="fa-solid fa-file-import text-purple-600 dark:text-purple-400"></i>
                 <span>Importeer Cursus</span>
             </button>
-            <input type="file" id="import-course-file" class="hidden" accept=".json" onchange="importCourseFromJSON(event)">
+            <input type="file" id="import-course-file" class="hidden" accept=".json"
+                onchange="importCourseFromJSON(event)">
 
             <button onclick="downloadCourseJSON()"
                 class="bg-purple-600 hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5">
@@ -781,7 +813,8 @@
             class="w-full lg:w-1/3 bg-slate-900/60 border-r border-slate-800 flex flex-col p-4 overflow-y-auto max-h-[70vh] lg:max-h-none">
             <div id="task-selector-wrapper" class="mb-4 shrink-0">
                 <div class="flex items-center justify-between mb-2">
-                    <h2 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Kies je Opdracht</h2>
+                    <h2 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Kies
+                        je Opdracht</h2>
                     <button onclick="toggleTaskSelectorCollapse()" id="btn-toggle-task-selector"
                         class="text-xs text-slate-500 hover:text-slate-850 dark:hover:text-slate-200 transition flex items-center gap-1 font-semibold"
                         title="Verklein de opdrachtenlijst">
@@ -897,12 +930,12 @@
                         Selecteer een opdracht om de instructies te laden...
                     </div>
                     <!-- Dynamic Target Preview Image Container -->
-                    <div id="assignment-preview-container"
-                        class="hidden my-4 border-t border-slate-800/80 pt-3">
-                        <div class="font-semibold flex items-center justify-between mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none">
+                    <div id="assignment-preview-container" class="hidden my-4 border-t border-slate-800/80 pt-3">
+                        <div
+                            class="font-semibold flex items-center justify-between mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none">
                             <div class="flex items-center gap-2">
                                 <i class="fa-solid fa-image text-emerald-400"></i>
-                                <span>Preview:</span>
+                                <span>Verwacht resultaat:</span>
                             </div>
                             <button id="delete-preview-btn" onclick="deletePreviewImage()"
                                 class="hidden text-red-500 hover:text-red-400 text-xs font-semibold px-1 transition"
@@ -910,7 +943,8 @@
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
-                        <div class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2 mt-2 relative">
+                        <div
+                            class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2 mt-2 relative">
                             <img id="assignment-preview-img" src=""
                                 class="rounded-lg shadow-md max-w-full h-auto max-h-[220px] mx-auto object-contain border border-slate-200 dark:border-slate-900" />
                         </div>
@@ -942,37 +976,38 @@
                     class="lg:col-span-7 flex flex-col border-b lg:border-b-0 lg:border-r border-slate-800 h-full overflow-hidden">
                     <!-- Editor Control Toolbar -->
                     <div id="editor-control-toolbar"
-                        class="bg-slate-900 border-b border-slate-800 p-3 flex flex-wrap items-center justify-between gap-3 shrink-0">
+                        class="bg-slate-900 border-b border-slate-800 p-2.5 sm:p-3 flex flex-nowrap items-center justify-between gap-2 shrink-0 overflow-x-auto scrollbar-none">
                         <div class="flex gap-2">
                             <!-- Run Code Button -->
                             <button id="btn-run-code" onclick="togglePythonExecution()"
-                                class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-4 py-2 rounded-xl shadow-lg shadow-emerald-950/20 active:scale-95 transition flex items-center gap-1.5 text-sm">
-                                <i class="fa-solid fa-play text-sm"></i>
+                                class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-xl shadow-lg shadow-emerald-950/20 active:scale-95 transition flex items-center gap-1.5 text-xs sm:text-sm">
+                                <i class="fa-solid fa-play text-xs sm:text-sm"></i>
                                 <span>Run</span>
                             </button>
                             <!-- Validate Code Button -->
                             <button id="btn-validate-code" onclick="validateActiveCode()"
-                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 font-bold px-3 py-2 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-1.5 text-sm"
+                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 font-bold px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-1.5 text-xs sm:text-sm"
                                 title="Controleer de code op syntaxfouten zonder deze uit te voeren">
-                                <i class="fa-solid fa-clipboard-check text-sm text-slate-500 dark:text-slate-400"></i>
+                                <i
+                                    class="fa-solid fa-clipboard-check text-xs sm:text-sm text-slate-500 dark:text-slate-400"></i>
                                 <span>Valideer</span>
                             </button>
                             <!-- Run Unit Tests Button -->
                             <button id="btn-run-tests" onclick="runAssignmentTests()"
-                                class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-2 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-1.5 text-sm">
-                                <i class="fa-solid fa-circle-check text-sm"></i>
+                                class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-1.5 text-xs sm:text-sm">
+                                <i class="fa-solid fa-circle-check text-xs sm:text-sm"></i>
                                 <span>Test</span>
                             </button>
                         </div>
                         <div class="flex items-center gap-2">
                             <button onclick="resetCurrentCode()"
-                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 font-medium px-3 py-2 rounded-xl active:scale-95 transition flex items-center gap-1.5 text-sm"
+                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 font-medium px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl active:scale-95 transition flex items-center gap-1.5 text-xs sm:text-sm"
                                 title="Herstel de code naar de beginopstelling">
                                 <i class="fa-solid fa-rotate-left text-red-400"></i>
                                 <span>Reset code</span>
                             </button>
                             <button id="btn-export-file" onclick="exportSinglePy()"
-                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 font-medium px-3 py-2 rounded-xl active:scale-95 transition flex items-center gap-1.5 text-sm"
+                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 font-medium px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl active:scale-95 transition flex items-center gap-1.5 text-xs sm:text-sm"
                                 title="Download alleen dit bestand">
                                 <i class="fa-solid fa-download text-blue-400"></i>
                                 <span id="export-file-label">.py export</span>
@@ -1005,7 +1040,9 @@
                         class="hidden bg-slate-900 border-b border-slate-800 px-4 py-2.5 items-center justify-between gap-4 shrink-0">
                         <div class="flex items-center gap-2">
                             <i id="compact-output-icon" class="fa-solid fa-terminal text-emerald-400"></i>
-                            <span id="compact-output-title" class="font-bold text-xs uppercase tracking-wider text-slate-200">Programma Output</span>
+                            <span id="compact-output-title"
+                                class="font-bold text-xs uppercase tracking-wider text-slate-200">Programma
+                                Output</span>
                         </div>
                         <button onclick="closeOutputDrawer()"
                             class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-2.5 py-1.5 rounded-lg transition flex items-center gap-1.5"
@@ -1139,7 +1176,8 @@
                             </div>
 
                             <!-- Wrapper for interactive canvas container with grab cursor -->
-                            <div id="turtle-canvas-wrapper" class="flex-1 flex items-center justify-center min-h-0 relative group">
+                            <div id="turtle-canvas-wrapper"
+                                class="flex-1 flex items-center justify-center min-h-0 relative group">
                                 <!-- Target element where Skulpt renders Canvas -->
                                 <div id="turtle-canvas" class="cursor-grab">
                                     <!-- Skulpt automatically injects HTML5 Canvas here -->
@@ -5005,26 +5043,26 @@
             const selectedText = range ? range.toString().trim() : "";
             const label = prompt("Voer de tekst van de link in:", selectedText || "Link naar website");
             if (label === null) return;
-            
+
             const url = prompt("Voer de URL van de website in (bijv. https://google.com):", "https://");
             if (url === null || url.trim() === "" || url.trim() === "https://") return;
 
             const linkHtml = `<a href="${url.trim()}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline font-medium">${label.trim()}</a>`;
-            
+
             const docBox = document.getElementById("assignment-instruction");
             if (!docBox) return;
             docBox.focus();
-            
+
             if (range) {
                 selection.removeAllRanges();
                 selection.addRange(range);
                 range.deleteContents();
-                
+
                 const tempDiv = document.createElement("div");
                 tempDiv.innerHTML = linkHtml;
                 const node = tempDiv.firstChild;
                 range.insertNode(node);
-                
+
                 const newRange = document.createRange();
                 newRange.setStartAfter(node);
                 newRange.collapse(true);
