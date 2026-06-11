@@ -2275,7 +2275,10 @@
 
                 if (isEditMode && !isTaskSelectorCollapsed) {
                     const controls = document.createElement("div");
-                    controls.className = "flex flex-col gap-0.5 shrink-0";
+                    controls.className = "flex items-center gap-1 shrink-0";
+
+                    const arrowsContainer = document.createElement("div");
+                    arrowsContainer.className = "flex flex-col gap-0.5 shrink-0";
 
                     if (index > 0) {
                         const upBtn = document.createElement("button");
@@ -2289,7 +2292,7 @@
                             e.stopPropagation();
                             moveTask(index, -1);
                         };
-                        controls.appendChild(upBtn);
+                        arrowsContainer.appendChild(upBtn);
                     }
 
                     if (index < taskConfig.tabs.length - 1) {
@@ -2304,7 +2307,11 @@
                             e.stopPropagation();
                             moveTask(index, 1);
                         };
-                        controls.appendChild(downBtn);
+                        arrowsContainer.appendChild(downBtn);
+                    }
+
+                    if (arrowsContainer.children.length > 0) {
+                        controls.appendChild(arrowsContainer);
                     }
 
                     const delBtn = document.createElement("button");
