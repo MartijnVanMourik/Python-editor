@@ -543,17 +543,17 @@
             height: auto !important;
             width: 100% !important;
             z-index: 40 !important;
-            transform: translateY(-100%); /* Slide down from behind top toolbar */
+            transform: translateY(100%); /* Slide up from bottom */
             visibility: hidden;
             transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.25s !important;
-            border-bottom: 1px solid #cbd5e1 !important;
-            border-top: none !important;
+            border-top: 1px solid #cbd5e1 !important;
+            border-bottom: none !important;
         }
 
         .theme-dark.mode-compact #output-wrapper-panel,
         .dark .mode-compact #output-wrapper-panel {
-            border-bottom: 1px solid #1e293b !important;
-            border-top: none !important;
+            border-top: 1px solid #1e293b !important;
+            border-bottom: none !important;
         }
 
         .mode-compact #output-wrapper-panel.drawer-open {
@@ -722,9 +722,16 @@
         <!-- LEFT PANEL: Instructions & Navigation (Dynamic Tasks) -->
         <section id="instructions-panel"
             class="w-full lg:w-1/3 bg-slate-900/60 border-r border-slate-800 flex flex-col p-4 overflow-y-auto max-h-[70vh] lg:max-h-none">
-            <div id="task-selector-wrapper" class="mb-4">
-                <h2 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Kies
-                    je Opdracht</h2>
+            <div id="task-selector-wrapper" class="mb-4 shrink-0">
+                <div class="flex items-center justify-between mb-2">
+                    <h2 class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-widest">Kies je Opdracht</h2>
+                    <button onclick="toggleTaskSelectorCollapse()" id="btn-toggle-task-selector"
+                        class="text-xs text-slate-500 hover:text-slate-850 dark:hover:text-slate-200 transition flex items-center gap-1 font-semibold"
+                        title="Verklein de opdrachtenlijst">
+                        <i class="fa-solid fa-compress text-[10px]"></i>
+                        <span id="btn-toggle-task-selector-text">Inklappen</span>
+                    </button>
+                </div>
                 <!-- Task Selection Buttons Container -->
                 <div id="task-selector-container" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-2">
                     <!-- Dynamic tabs will insert here -->
@@ -1945,11 +1952,13 @@
         let saveTimeout;
         function showSavingState() {
             const indicator = document.getElementById("save-indicator");
-            indicator.innerHTML = '<span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> Opgesteld opslaan...';
+            const savingText = isCompactMode ? "Opslaan..." : "Opgesteld opslaan...";
+            indicator.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> ${savingText}`;
 
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => {
-                indicator.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Automatisch opgeslagen';
+                const savedText = isCompactMode ? "Opgeslagen" : "Automatisch opgeslagen";
+                indicator.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> ${savedText}`;
             }, 800);
         }
 
@@ -2115,6 +2124,13 @@
             // Apply title
             document.getElementById("config-title").textContent = taskConfig.title || "Python Leeromgeving";
 
+            // Update save indicator text initially based on compact mode
+            const indicator = document.getElementById("save-indicator");
+            if (indicator) {
+                const savedText = isCompactMode ? "Opgeslagen" : "Automatisch opgeslagen";
+                indicator.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-500"></span> ${savedText}`;
+            }
+
             // Restore saved workspace from namespaced localStorage, with backwards-compatible migration fallback
             const namespacedKey = getProgressStorageKey();
             let saved = localStorage.getItem(namespacedKey);
@@ -2184,6 +2200,23 @@
             document.body.classList.add("ready");
         }
 
+        let isTaskSelectorCollapsed = false;
+        function toggleTaskSelectorCollapse() {
+            isTaskSelectorCollapsed = !isTaskSelectorCollapsed;
+            const btnText = document.getElementById("btn-toggle-task-selector-text");
+            const btnIcon = document.querySelector("#btn-toggle-task-selector i");
+            if (btnText && btnIcon) {
+                if (isTaskSelectorCollapsed) {
+                    btnText.textContent = "Uitklappen";
+                    btnIcon.className = "fa-solid fa-expand text-[10px]";
+                } else {
+                    btnText.textContent = "Inklappen";
+                    btnIcon.className = "fa-solid fa-compress text-[10px]";
+                }
+            }
+            renderTaskSelector();
+        }
+
         function renderTaskSelector() {
             const wrapper = document.getElementById("task-selector-wrapper");
             const container = document.getElementById("task-selector-container");
@@ -2208,6 +2241,10 @@
             taskConfig.tabs.forEach((task, index) => {
                 const isPassed = checkIfPassed(task.id);
                 const isActive = task.id === currentTaskId;
+
+                if (isTaskSelectorCollapsed && !isActive) {
+                    return;
+                }
 
                 const wrapper = document.createElement("div");
                 wrapper.className = "flex items-center gap-1.5 group w-full";
@@ -2236,7 +2273,7 @@
 
                 wrapper.appendChild(btn);
 
-                if (isEditMode) {
+                if (isEditMode && !isTaskSelectorCollapsed) {
                     const controls = document.createElement("div");
                     controls.className = "flex flex-col gap-0.5 shrink-0";
 
@@ -2289,7 +2326,7 @@
                 container.appendChild(wrapper);
             });
 
-            if (isEditMode) {
+            if (isEditMode && !isTaskSelectorCollapsed) {
                 const addOpdrachtBtn = document.createElement("button");
                 addOpdrachtBtn.className = `w-full py-2.5 rounded-xl border border-dashed font-semibold text-xs tracking-wider transition flex items-center justify-center gap-2 active:scale-95 mt-2 ${activeTheme === 'dark'
                     ? 'border-purple-800 hover:border-purple-600 bg-purple-950/20 hover:bg-purple-950/40 text-purple-300'
