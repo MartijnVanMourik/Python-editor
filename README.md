@@ -11,7 +11,7 @@ Een moderne, interactieve en volledig cliënt-side Python-leeromgeving ontworpen
     *   **Volledig Scherm**: Vergroot het tekengebied met vloeiende animaties.
     *   **Interactief Zoomen & Pannen**: Versleep de tekening met je muis (of vinger op mobiel) en zoom in/out met het muiswiel.
     *   **Zwevend Bedieningspaneel**: Snel inzoomen, uitzoomen en de weergave centreren met één klik.
-    *   **Live Run in Fullscreen**: Voer code uit en bekijk de animatie direct terwijl je in volledig scherm bent.
+    *   **Live Run in Fullscreen**: Run code en bekijk de animatie direct terwijl je in volledig scherm bent.
 *   **Trinket-Style Multi-bestand Projecten (OOP)**:
     *   **Tabbladen-UI**: Direct bestanden aanmaken (`+`), hernoemen (dubbelklik) of verwijderen via een vloeiende tabbladenbalk boven de editor.
     *   **Virtueel Importsysteem**: Skulpt is zo uitgebreid dat studenten hun eigen klassen en bestanden kunnen importeren (bijv. `from dier import Dier`), wat volwaardig objectgeoriënteerd programmeren lokaal in de browser mogelijk maakt!
@@ -149,7 +149,7 @@ Je kunt de weergave en het gedrag van de editor aanpassen met de query-parameter
     👉 [http://localhost:8000/index.html?config=opdracht1&mode=teacher](http://localhost:8000/index.html?config=opdracht1&mode=teacher)
 *   **Leerlingmodus** (`mode=student` of `mode=leerling`): Dit is de standaardmodus met de editor, opdrachtenlijst en console/canvas om code in te schrijven.
     👉 [http://localhost:8000/index.html?config=opdracht1&mode=student](http://localhost:8000/index.html?config=opdracht1&mode=student)
-*   **Demonstratiemodus** (`mode=demo` of `mode=demonstratie`): Toont *alleen* het uitgevoerde programma (het resultaat op het canvas of in de console) en een "Voer Code Uit" knop. De code-editor en instructies worden volledig verborgen en de code wordt automatisch bij het laden gestart. Dit is ideaal voor het tonen van werkende voorbeelden.
+*   **Demonstratiemodus** (`mode=demo` of `mode=demonstratie`): Toont *alleen* het uitgevoerde programma (het resultaat op het canvas of in de console) en een "Run" knop. De code-editor en instructies worden volledig verborgen en de code wordt automatisch bij het laden gestart. Dit is ideaal voor het tonen van werkende voorbeelden.
     👉 [http://localhost:8000/index.html?config=opdracht1&mode=demo](http://localhost:8000/index.html?config=opdracht1&mode=demo)
 *   **Iframe Embed-modus** (`mode=embed` of door `&embed=true` toe te voegen): Toont *alleen* het pure canvas of console-scherm. Alle knoppen, headers, de demo-balk en de zwevende pandoor-knoppen op het canvas zijn verborgen. Tevens is de padding weggenomen zodat het programma naadloos in een iframe van een andere website getoond kan worden.
     👉 [http://localhost:8000/index.html?config=opdracht1&mode=embed](http://localhost:8000/index.html?config=opdracht1&mode=embed)

@@ -471,26 +471,36 @@
         .mode-compact #editor-wrapper-panel {
             grid-column: span 12 / span 12 !important;
             border-right: none !important;
+            position: relative !important;
+        }
+
+        /* Set z-index and position on the new top toolbar in compact mode */
+        .mode-compact #editor-wrapper-panel > div:first-child {
+            z-index: 50 !important;
+            position: relative !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
         }
 
         .mode-compact #output-wrapper-panel {
             position: absolute !important;
             left: 0 !important;
             right: 0 !important;
-            top: 0 !important;
-            bottom: var(--toolbar-height, 57px) !important;
+            top: var(--toolbar-height, 56px) !important;
+            bottom: 0 !important;
             height: auto !important;
             width: 100% !important;
             z-index: 40 !important;
-            transform: translateY(100%);
+            transform: translateY(-100%); /* Slide down from behind top toolbar */
             visibility: hidden;
             transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.25s !important;
-            border-top: 1px solid #cbd5e1 !important;
+            border-bottom: 1px solid #cbd5e1 !important;
+            border-top: none !important;
         }
 
         .theme-dark.mode-compact #output-wrapper-panel,
         .dark .mode-compact #output-wrapper-panel {
-            border-top: 1px solid #1e293b !important;
+            border-bottom: 1px solid #1e293b !important;
+            border-top: none !important;
         }
 
         .mode-compact #output-wrapper-panel.drawer-open {
@@ -503,9 +513,14 @@
             gap: 0.75rem !important;
         }
 
-        .mode-compact #turtle-console-panel,
-        .mode-compact #web-console-panel {
+        /* Hide the default subtabs switcher in compact mode */
+        .mode-compact #output-subtabs-bar {
             display: none !important;
+        }
+
+        /* Show the custom compact header in compact mode */
+        .mode-compact #compact-output-header {
+            display: flex !important;
         }
 
         .mode-compact #btn-close-drawer {
@@ -632,6 +647,14 @@
                 <span>Nieuwe Cursus</span>
             </button>
 
+            <button onclick="triggerCourseImport()"
+                class="bg-purple-200 hover:bg-purple-300 border border-purple-300 text-purple-800 dark:bg-purple-900/60 dark:hover:bg-purple-800 dark:border-purple-700/50 dark:text-purple-200 font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5"
+                title="Importeer een bestaand Cursus JSON bestand">
+                <i class="fa-solid fa-file-import text-purple-600 dark:text-purple-400"></i>
+                <span>Importeer Cursus</span>
+            </button>
+            <input type="file" id="import-course-file" class="hidden" accept=".json" onchange="importCourseFromJSON(event)">
+
             <button onclick="downloadCourseJSON()"
                 class="bg-purple-600 hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5">
                 <i class="fa-solid fa-cloud-arrow-down"></i>
@@ -748,26 +771,29 @@
                         title="Toggle HTML Weergave"><i class="fa-solid fa-code-compare"></i></button>
                 </div>
 
-                <div id="assignment-instruction-container" class="flex-1 flex flex-col min-h-0 min-w-0">
+                <div id="assignment-instruction-container" class="flex-1 overflow-y-auto pr-1 min-h-0 min-w-0">
                     <div id="assignment-instruction"
                         class="text-sm text-slate-300 leading-relaxed prose prose-invert mb-4 select-text">
                         Selecteer een opdracht om de instructies te laden...
                     </div>
                     <!-- Dynamic Target Preview Image Container -->
                     <div id="assignment-preview-container"
-                        class="hidden bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2 mt-auto shrink-0 relative">
-                        <div class="flex justify-between items-center mb-1">
-                            <span
-                                class="text-[10px] font-mono text-slate-500 dark:text-slate-400 uppercase block">Verwacht
-                                resultaat:</span>
+                        class="hidden my-4 border-t border-slate-800/80 pt-3">
+                        <div class="font-semibold flex items-center justify-between mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none">
+                            <div class="flex items-center gap-2">
+                                <i class="fa-solid fa-image text-emerald-400"></i>
+                                <span>Preview:</span>
+                            </div>
                             <button id="delete-preview-btn" onclick="deletePreviewImage()"
                                 class="hidden text-red-500 hover:text-red-400 text-xs font-semibold px-1 transition"
                                 title="Verwijder verwacht resultaat">
                                 <i class="fa-solid fa-trash-can"></i>
                             </button>
                         </div>
-                        <img id="assignment-preview-img" src=""
-                            class="rounded-lg shadow-md max-w-full h-auto max-h-[160px] mx-auto object-contain border border-slate-200 dark:border-slate-900" />
+                        <div class="bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl p-2 mt-2 relative">
+                            <img id="assignment-preview-img" src=""
+                                class="rounded-lg shadow-md max-w-full h-auto max-h-[220px] mx-auto object-contain border border-slate-200 dark:border-slate-900" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -794,42 +820,15 @@
                 <!-- Code Mirror Editor Window (lg:span-7) -->
                 <div id="editor-wrapper-panel"
                     class="lg:col-span-7 flex flex-col border-b lg:border-b-0 lg:border-r border-slate-800 h-full overflow-hidden">
-                    <!-- Tab-bar for active files within the task if multiple files are used (or just current file indicator) -->
-                    <div
-                        class="bg-slate-900/80 px-4 py-1.5 flex items-center justify-between border-b border-slate-800 text-xs text-slate-400 font-mono min-h-[44px]">
-                        <!-- Left: Tab Container -->
-                        <div id="editor-tabs-container"
-                            class="flex items-center gap-1.5 overflow-x-auto max-w-[70%] py-0.5 scrollbar-none">
-                            <!-- Tabs dynamically rendered here -->
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <button onclick="resetCurrentCode()"
-                                class="text-slate-400 hover:text-red-400 transition flex items-center gap-1"
-                                title="Herstel de code naar de beginopstelling">
-                                <i class="fa-solid fa-rotate-left"></i> Reset code
-                            </button>
-                            <button id="btn-export-file" onclick="exportSinglePy()"
-                                class="text-slate-400 hover:text-blue-400 transition flex items-center gap-1"
-                                title="Download alleen dit bestand">
-                                <i class="fa-solid fa-download"></i> <span id="export-file-label">.py export</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- CodeMirror target div -->
-                    <div class="flex-1 relative min-h-[250px] lg:min-h-0">
-                        <textarea id="code-editor" class="hidden"></textarea>
-                    </div>
-
                     <!-- Editor Control Toolbar -->
-                    <div
-                        class="bg-slate-900 border-t border-slate-800 p-3 flex flex-wrap items-center justify-between gap-3">
+                    <div id="editor-control-toolbar"
+                        class="bg-slate-900 border-b border-slate-800 p-3 flex flex-wrap items-center justify-between gap-3 shrink-0">
                         <div class="flex gap-2">
                             <!-- Run Code Button -->
                             <button id="btn-run-code" onclick="togglePythonExecution()"
                                 class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-4 py-2 rounded-xl shadow-lg shadow-emerald-950/20 active:scale-95 transition flex items-center gap-1.5 text-sm">
                                 <i class="fa-solid fa-play text-sm"></i>
-                                <span>Voer Code Uit</span>
+                                <span>Run</span>
                             </button>
                             <!-- Validate Code Button -->
                             <button id="btn-validate-code" onclick="validateActiveCode()"
@@ -842,20 +841,59 @@
                             <button id="btn-run-tests" onclick="runAssignmentTests()"
                                 class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-3 py-2 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-1.5 text-sm">
                                 <i class="fa-solid fa-circle-check text-sm"></i>
-                                <span>Test Code</span>
+                                <span>Test</span>
                             </button>
                         </div>
-                        <div id="editor-shortcut-hint" class="text-xs text-slate-500 dark:text-slate-400 font-mono">
-                            Druk op <kbd
-                                class="bg-slate-100 border border-slate-300 text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300 px-1 py-0.5 rounded">Ctrl+Enter</kbd>
-                            om uit te voeren
+                        <div class="flex items-center gap-2">
+                            <button onclick="resetCurrentCode()"
+                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 font-medium px-3 py-2 rounded-xl active:scale-95 transition flex items-center gap-1.5 text-sm"
+                                title="Herstel de code naar de beginopstelling">
+                                <i class="fa-solid fa-rotate-left text-red-400"></i>
+                                <span>Reset code</span>
+                            </button>
+                            <button id="btn-export-file" onclick="exportSinglePy()"
+                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 font-medium px-3 py-2 rounded-xl active:scale-95 transition flex items-center gap-1.5 text-sm"
+                                title="Download alleen dit bestand">
+                                <i class="fa-solid fa-download text-blue-400"></i>
+                                <span id="export-file-label">.py export</span>
+                            </button>
                         </div>
+                    </div>
+
+                    <!-- Tab-bar for active files within the task if multiple files are used (or just current file indicator) -->
+                    <div id="editor-tabs-bar"
+                        class="bg-slate-900/80 px-4 py-1.5 flex items-center border-b border-slate-800 text-xs text-slate-400 font-mono min-h-[44px] shrink-0">
+                        <!-- Left: Tab Container -->
+                        <div id="editor-tabs-container"
+                            class="flex items-center gap-1.5 overflow-x-auto w-full py-0.5 scrollbar-none">
+                            <!-- Tabs dynamically rendered here -->
+                        </div>
+                    </div>
+
+                    <!-- CodeMirror target div -->
+                    <div class="flex-1 relative min-h-[250px] lg:min-h-0">
+                        <textarea id="code-editor" class="hidden"></textarea>
                     </div>
                 </div>
 
                 <!-- Output, Terminal, Canvas & Tests Window (lg:span-5) -->
                 <div id="output-wrapper-panel"
                     class="hidden lg:col-span-5 lg:flex flex-col h-full overflow-hidden bg-slate-950">
+
+                    <!-- Compact Mode Header (Only visible in compact mode) -->
+                    <div id="compact-output-header"
+                        class="hidden bg-slate-900 border-b border-slate-800 px-4 py-2.5 items-center justify-between gap-4 shrink-0">
+                        <div class="flex items-center gap-2">
+                            <i id="compact-output-icon" class="fa-solid fa-terminal text-emerald-400"></i>
+                            <span id="compact-output-title" class="font-bold text-xs uppercase tracking-wider text-slate-200">Programma Output</span>
+                        </div>
+                        <button onclick="closeOutputDrawer()"
+                            class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-2.5 py-1.5 rounded-lg transition flex items-center gap-1.5"
+                            title="Sluit output venster">
+                            <i class="fa-solid fa-xmark"></i>
+                            <span>Sluiten</span>
+                        </button>
+                    </div>
 
                     <!-- Demo Mode Top Bar (Only visible in demo mode) -->
                     <div id="demo-header"
@@ -875,7 +913,7 @@
                             <button id="btn-run-code-demo" onclick="togglePythonExecution()"
                                 class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-4 py-2 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-2 text-xs">
                                 <i class="fa-solid fa-play"></i>
-                                <span>Voer Code Uit</span>
+                                <span>Run</span>
                             </button>
                         </div>
                     </div>
@@ -968,9 +1006,9 @@
                                     <!-- Run Code Button in Fullscreen -->
                                     <button id="btn-run-code-fullscreen" onclick="togglePythonExecution()"
                                         class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-4 py-2 rounded-xl transition flex items-center gap-2 shadow-lg active:scale-95 text-sm"
-                                        title="Voer de Python code uit">
+                                        title="Run de Python code">
                                         <i class="fa-solid fa-play"></i>
-                                        <span>Voer Code Uit</span>
+                                        <span>Run</span>
                                     </button>
                                     <button onclick="toggleTurtleFullscreen()"
                                         class="bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-700 hover:text-red-600 dark:hover:text-red-400 transition flex items-center gap-2 font-medium shadow-lg text-sm">
@@ -1406,7 +1444,7 @@
                     editorWrapper.classList.remove("border-slate-800");
                     editorWrapper.classList.add("border-slate-200");
                 }
-                const tabsBar = editorWrapper.querySelector("div");
+                const tabsBar = document.getElementById("editor-tabs-bar");
                 if (tabsBar) {
                     if (isDark) {
                         tabsBar.classList.remove("bg-slate-100", "border-slate-200", "text-slate-600");
@@ -1416,7 +1454,7 @@
                         tabsBar.classList.add("bg-slate-100", "border-slate-200", "text-slate-600");
                     }
                 }
-                const editorToolbar = document.querySelector("#editor-wrapper-panel > div:last-child");
+                const editorToolbar = document.getElementById("editor-control-toolbar");
                 if (editorToolbar) {
                     if (isDark) {
                         editorToolbar.classList.remove("bg-slate-100", "border-slate-200", "text-slate-700");
@@ -1524,7 +1562,7 @@
 
         function updateToolbarHeight() {
             if (!isCompactMode) return;
-            const toolbar = document.querySelector('#editor-wrapper-panel > div:last-child');
+            const toolbar = document.getElementById('editor-control-toolbar');
             if (toolbar) {
                 const height = toolbar.offsetHeight;
                 document.documentElement.style.setProperty('--toolbar-height', `${height}px`);
@@ -1532,12 +1570,56 @@
             resizeTurtleCanvasCompact();
         }
 
+        // Handle compact mode layout configuration based on active project type
+        function updateCompactOutputLayout() {
+            if (!isCompactMode) return;
+
+            const isWeb = isWebModeActive();
+            const workspace = getTaskWorkspace(currentTaskId);
+            const mainCode = workspace ? (workspace.files["main.py"] || "") : "";
+            const isTurtle = mainCode.includes("import turtle") || mainCode.includes("from turtle import");
+
+            const panelConsole = document.getElementById("panel-console");
+            const panelTurtle = document.getElementById("panel-turtle");
+            const panelTests = document.getElementById("panel-tests");
+            const panelWeb = document.getElementById("panel-web");
+
+            const headerIcon = document.getElementById("compact-output-icon");
+            const headerTitle = document.getElementById("compact-output-title");
+
+            // Hide all panels by default
+            if (panelConsole) panelConsole.classList.add("hidden");
+            if (panelTurtle) panelTurtle.classList.add("hidden");
+            if (panelTests) panelTests.classList.add("hidden");
+            if (panelWeb) panelWeb.classList.add("hidden");
+
+            if (isWeb) {
+                // Web mode: Show Web Preview (which contains both Web IFrame and Web Console)
+                if (panelWeb) panelWeb.classList.remove("hidden");
+                if (headerIcon) headerIcon.className = "fa-solid fa-globe text-blue-400";
+                if (headerTitle) headerTitle.textContent = "Web Preview & Console";
+            } else if (isTurtle) {
+                // Turtle mode: Show Turtle Canvas & Console Output
+                if (panelTurtle) panelTurtle.classList.remove("hidden");
+                if (headerIcon) headerIcon.className = "fa-solid fa-compass-drafting text-emerald-400";
+                if (headerTitle) headerTitle.textContent = "Turtle Canvas & Console";
+                setTimeout(resizeTurtleCanvasCompact, 50);
+            } else {
+                // Console mode: Show both Console Output and Tests stacked vertically
+                if (panelConsole) panelConsole.classList.remove("hidden");
+                if (panelTests) panelTests.classList.remove("hidden");
+                if (headerIcon) headerIcon.className = "fa-solid fa-terminal text-yellow-400";
+                if (headerTitle) headerTitle.textContent = "Console & Test Resultaten";
+            }
+        }
+
         function openOutputDrawer() {
             if (!isCompactMode) return;
+            updateCompactOutputLayout();
             const outputPanel = document.getElementById("output-wrapper-panel");
             if (outputPanel && !outputPanel.classList.contains("drawer-open")) {
                 outputPanel.classList.add("drawer-open");
-                // Force editor and canvas refresh after slide-up transition starts/completes
+                // Force editor and canvas refresh after slide transition starts/completes
                 setTimeout(() => {
                     if (editor) editor.refresh();
                     resizeTurtleCanvasCompact();
@@ -1646,7 +1728,7 @@
                 {
                     "id": "turtle_spiraal",
                     "filename": "spiraal.py",
-                    "instruction": "<h3 class='text-lg font-semibold text-slate-100 mb-2'>Kleurrijke Turtle Spiraal</h3><p class='mb-2'>In deze opdracht gaan we aan de slag met de <b>Turtle</b> grafische bibliotheek!</p><p class='mb-2'>Schrijf een programma dat met een lus een spiraalvormig patroon tekent. Gebruik verschillende kleuren om een spectaculair figuur te maken!</p><p class='font-semibold text-amber-400 mb-1'>Probeer het volgende:</p><ul class='list-disc list-inside space-y-1 mb-3 text-slate-300'><li>Importeer turtle met: <code class='text-yellow-400'>import turtle</code></li><li>Gebruik een lus die minstens 20 keer herhaalt</li><li>Verander de kleur bij elke iteratie</li><li>Klik op 'Voer Code Uit' en bekijk het resultaat in het <b>Turtle Canvas</b> tabblad!</li></ul>",
+                    "instruction": "<h3 class='text-lg font-semibold text-slate-100 mb-2'>Kleurrijke Turtle Spiraal</h3><p class='mb-2'>In deze opdracht gaan we aan de slag met de <b>Turtle</b> grafische bibliotheek!</p><p class='mb-2'>Schrijf een programma dat met een lus een spiraalvormig patroon tekent. Gebruik verschillende kleuren om een spectaculair figuur te maken!</p><p class='font-semibold text-amber-400 mb-1'>Probeer het volgende:</p><ul class='list-disc list-inside space-y-1 mb-3 text-slate-300'><li>Importeer turtle met: <code class='text-yellow-400'>import turtle</code></li><li>Gebruik een lus die minstens 20 keer herhaalt</li><li>Verander de kleur bij elke iteratie</li><li>Klik op 'Run' en bekijk het resultaat in het <b>Turtle Canvas</b> tabblad!</li></ul>",
                     "initialCode": "import turtle\n\n# Setup van de turtle\nt = turtle.Turtle()\nt.speed(10) # Snel tekenen\n\n# Teken een geometrisch spiraalpatroon\nkleuren = [\"red\", \"blue\", \"green\", \"orange\", \"purple\", \"cyan\"]\n\nfor x in range(50):\n    t.pencolor(kleuren[x % 6])\n    t.forward(x * 3)\n    t.left(59) # Hoek zorgt voor spiraaleffect\n",
                     "tests": [] // Turtle assignments usually don't have unit tests
                 }
@@ -1888,6 +1970,13 @@
             }
 
             if (taskConfig) {
+                initializeConfigLoaded(false);
+            }
+        }
+
+        // Shared helper to initialize or refresh workspace when a config is loaded or imported
+        function initializeConfigLoaded(skipMigration = false) {
+            if (taskConfig) {
                 if (taskConfig.assignments && !taskConfig.tabs) {
                     taskConfig.tabs = taskConfig.assignments;
                 } else if (taskConfig.tasks && !taskConfig.tabs) {
@@ -1916,7 +2005,7 @@
             // Restore saved workspace from namespaced localStorage, with backwards-compatible migration fallback
             const namespacedKey = getProgressStorageKey();
             let saved = localStorage.getItem(namespacedKey);
-            if (!saved) {
+            if (!saved && !skipMigration) {
                 const oldSaved = localStorage.getItem("edu_py_editor_progress");
                 if (oldSaved) {
                     try {
@@ -1945,6 +2034,13 @@
                 } catch (e) {
                     userProgress = {};
                 }
+            } else {
+                userProgress = {};
+            }
+
+            // Reset active task selection state if importing/loading a new course structure
+            if (skipMigration) {
+                currentTaskId = null;
             }
 
             // Render assignment list
@@ -2448,9 +2544,9 @@
                         icon.className = btnInfo.isLarge ? "fa-solid fa-play text-lg" : "fa-solid fa-play";
                     }
                     if (text) {
-                        text.textContent = "Voer Code Uit";
+                        text.textContent = "Run";
                     }
-                    btn.title = "Voer de Python code uit";
+                    btn.title = "Run de Python code";
                 }
             });
 
@@ -3253,6 +3349,11 @@
         }
 
         function switchOutputSubTab(tabId) {
+            if (isCompactMode) {
+                activeOutputSubTab = tabId;
+                updateCompactOutputLayout();
+                return;
+            }
             const tabs = ['console', 'turtle', 'tests', 'web'];
             const isDark = (activeTheme === 'dark');
             tabs.forEach(t => {
@@ -5034,8 +5135,8 @@
             // Auto wrap quotes inside string parameter listings
             escaped = escaped.replace(/(["'])([^"'\n\r\t]+)(["'])/g, '$1<code class="bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs">$2</code>$3');
 
-            // Highlight "Run"
-            escaped = escaped.replace(/(Run|Voer uit|Voer Code Uit)/gi, '<span class="font-bold text-slate-800 dark:text-slate-200">$1</span>');
+            // Highlight "Run" and "Test"
+            escaped = escaped.replace(/(Run|Test|Voer uit|Voer Code Uit|Test Code)/gi, '<span class="font-bold text-slate-800 dark:text-slate-200">$1</span>');
 
             return escaped;
         }
@@ -5670,6 +5771,56 @@
                 isInitializingNewCourse = true;
                 createNewTaskInConfig();
             }
+        }
+
+        // Trigger course configuration import file dialog
+        function triggerCourseImport() {
+            const picker = document.getElementById("import-course-file");
+            if (picker) picker.click();
+        }
+
+        // Import course configuration from chosen JSON file
+        function importCourseFromJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+
+                    // A valid course configuration must contain tabs, assignments, tasks, or opdrachten
+                    const tabs = data.tabs || data.assignments || data.tasks || data.opdrachten;
+                    if (!tabs || !Array.isArray(tabs)) {
+                        throw new Error("Ongeldig cursusbestand. Kan geen opdrachtenlijst ('tabs') vinden.");
+                    }
+
+                    if (confirm("Weet je zeker dat je deze cursus wilt importeren? Alle onopgeslagen wijzigingen aan de huidige cursus gaan verloren.")) {
+                        taskConfig = data;
+
+                        // Autofill bestandsnaam input field if elements exist
+                        const filenameInput = document.getElementById("teacher-filename-input");
+                        if (filenameInput) {
+                            filenameInput.value = file.name || "opdracht.json";
+                        }
+
+                        // Establish dynamic namespace from imported config filename if possible
+                        if (file.name) {
+                            const configBase = file.name.replace(/\.json$/i, "");
+                            courseNamespace = configBase.replace(/[^a-z0-9]/gi, "_").toLowerCase();
+                            progressStorageKey = `edu_py_editor_progress_${courseNamespace}`;
+                        }
+
+                        isInitializingNewCourse = false;
+                        initializeConfigLoaded(true);
+                        showToast("📚 Cursus succesvol geïmporteerd!");
+                    }
+                } catch (err) {
+                    alert("Fout bij het importeren van de cursus: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = "";
         }
 
         // Color palette controls for WYSIWYG
