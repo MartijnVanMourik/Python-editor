@@ -32,6 +32,57 @@
     <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
 
     <style>
+        :root {
+            --editor-color-default: #334155;
+            --editor-color-white-black: #0f172a;
+            --editor-color-gray: #64748b;
+            --editor-color-red: #e11d48;
+            --editor-color-pink: #db2777;
+            --editor-color-orange: #ea580c;
+            --editor-color-amber: #d97706;
+            --editor-color-yellow: #ca8a04;
+            --editor-color-lime: #65a30d;
+            --editor-color-green: #16a34a;
+            --editor-color-emerald: #059669;
+            --editor-color-cyan: #0891b2;
+            --editor-color-sky: #0284c7;
+            --editor-color-blue: #2563eb;
+            --editor-color-purple: #9333ea;
+            --editor-color-fuchsia: #c084fc;
+        }
+
+        .dark {
+            --editor-color-default: #cbd5e1;
+            --editor-color-white-black: #ffffff;
+            --editor-color-gray: #94a3b8;
+            --editor-color-red: #f87171;
+            --editor-color-pink: #fb7185;
+            --editor-color-orange: #fb923c;
+            --editor-color-amber: #fbbf24;
+            --editor-color-yellow: #facc15;
+            --editor-color-lime: #a3e635;
+            --editor-color-green: #4ade80;
+            --editor-color-emerald: #34d399;
+            --editor-color-cyan: #22d3ee;
+            --editor-color-sky: #38bdf8;
+            --editor-color-blue: #60a5fa;
+            --editor-color-purple: #a78bfa;
+            --editor-color-fuchsia: #f472b6;
+        }
+
+        /* Legacy font color overrides mapping to active theme variables */
+        #assignment-instruction font[color="#60a5fa"] {
+            color: var(--editor-color-blue) !important;
+        }
+        #assignment-instruction font[color="#fb923c"] {
+            color: var(--editor-color-orange) !important;
+        }
+
+        /* Ensure code inside colored font tags inherits font color */
+        #assignment-instruction font[color] code {
+            color: inherit !important;
+        }
+
         /* Custom scrollbar styles for premium look */
         ::-webkit-scrollbar {
             width: 8px;
@@ -777,6 +828,9 @@
                     <button id="wysiwyg-btn-table" onclick="insertTable()"
                         class="px-2 h-7 rounded bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/20 dark:border-purple-800/30 dark:hover:bg-purple-950/40 dark:text-purple-300 transition flex items-center justify-center text-[10px] font-semibold"
                         title="Tabel invoegen"><i class="fa-solid fa-table mr-1"></i> Tabel</button>
+                    <button id="wysiwyg-btn-link" onclick="insertHyperlink()"
+                        class="px-2 h-7 rounded bg-sky-100 border border-sky-300 text-sky-800 hover:bg-sky-200 dark:bg-sky-950/20 dark:border-sky-800/30 dark:hover:bg-sky-950/40 dark:text-sky-300 transition flex items-center justify-center text-[10px] font-semibold"
+                        title="Link invoegen"><i class="fa-solid fa-link mr-1"></i> Link</button>
 
                     <span class="w-[1px] h-5 bg-slate-300 dark:bg-slate-800 mx-1"></span>
 
@@ -2251,7 +2305,16 @@
 
                 const btn = document.createElement("button");
                 btn.id = `task-btn-${task.id}`;
-                btn.onclick = () => selectTask(task.id);
+                btn.onclick = () => {
+                    isTaskSelectorCollapsed = true;
+                    const btnText = document.getElementById("btn-toggle-task-selector-text");
+                    const btnIcon = document.querySelector("#btn-toggle-task-selector i");
+                    if (btnText && btnIcon) {
+                        btnText.textContent = "Uitklappen";
+                        btnIcon.className = "fa-solid fa-expand text-[10px]";
+                    }
+                    selectTask(task.id);
+                };
                 btn.className = `flex-1 text-left p-2.5 rounded-xl transition flex items-center justify-between min-w-0 ${isActive
                     ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-lg'
                     : (activeTheme === 'dark'
@@ -4621,6 +4684,9 @@
 
         // WYSIWYG HTML Toolbar Handlers for Auteursmodus
         function execStyle(command, value = null) {
+            if (command === "foreColor") {
+                document.execCommand("styleWithCSS", false, true);
+            }
             document.execCommand(command, false, value);
             saveActiveInstruction();
         }
@@ -4919,6 +4985,51 @@
             saveActiveInstruction();
         }
 
+        function insertHyperlink() {
+            const selection = window.getSelection();
+            let range = null;
+            if (selection.rangeCount) {
+                const docBox = document.getElementById("assignment-instruction");
+                const currentRange = selection.getRangeAt(0);
+                if (docBox && (docBox.contains(currentRange.commonAncestorContainer) || docBox === currentRange.commonAncestorContainer)) {
+                    range = currentRange.cloneRange();
+                }
+            }
+
+            const selectedText = range ? range.toString().trim() : "";
+            const label = prompt("Voer de tekst van de link in:", selectedText || "Link naar website");
+            if (label === null) return;
+            
+            const url = prompt("Voer de URL van de website in (bijv. https://google.com):", "https://");
+            if (url === null || url.trim() === "" || url.trim() === "https://") return;
+
+            const linkHtml = `<a href="${url.trim()}" target="_blank" rel="noopener noreferrer" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline font-medium">${label.trim()}</a>`;
+            
+            const docBox = document.getElementById("assignment-instruction");
+            if (!docBox) return;
+            docBox.focus();
+            
+            if (range) {
+                selection.removeAllRanges();
+                selection.addRange(range);
+                range.deleteContents();
+                
+                const tempDiv = document.createElement("div");
+                tempDiv.innerHTML = linkHtml;
+                const node = tempDiv.firstChild;
+                range.insertNode(node);
+                
+                const newRange = document.createRange();
+                newRange.setStartAfter(node);
+                newRange.collapse(true);
+                selection.removeAllRanges();
+                selection.addRange(newRange);
+            } else {
+                docBox.innerHTML += linkHtml;
+            }
+            saveActiveInstruction();
+        }
+
         function addTableRow() {
             const selection = window.getSelection();
             if (!selection.rangeCount) return;
@@ -5040,11 +5151,11 @@
 
             let html = "";
             if (type === 'lezen') {
-                html = `<div class="wysiwyg-section-lezen my-3"><div class="font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-eye text-sky-400"></i> Lezen:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Regel 1 - ...</li></ol></div><p>&nbsp;</p>`;
+                html = `<div class="wysiwyg-section-lezen my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-eye text-sky-400"></i> Lezen:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Regel 1 - ...</li></ol></div><p>&nbsp;</p>`;
             } else if (type === 'uitvoeren') {
-                html = `<div class="wysiwyg-section-uitvoeren my-3"><div class="font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-play text-emerald-400"></i> Uitvoeren:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Probeer te voorspellen...</li><li>Run de code...</li></ol></div><p>&nbsp;</p>`;
+                html = `<div class="wysiwyg-section-uitvoeren my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-play text-emerald-400"></i> Uitvoeren:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Probeer te voorspellen...</li><li>Run de code...</li></ol></div><p>&nbsp;</p>`;
             } else if (type === 'bewerken') {
-                html = `<div class="wysiwyg-section-bewerken my-3"><div class="font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-pen-to-square text-amber-400"></i> Bewerken:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Pas de code aan zodat...</li></ol></div><p>&nbsp;</p>`;
+                html = `<div class="wysiwyg-section-bewerken my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-pen-to-square text-amber-400"></i> Bewerken:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Pas de code aan zodat...</li></ol></div><p>&nbsp;</p>`;
             }
 
             if (isViewingHtml) {
@@ -5169,14 +5280,24 @@
             const htmlContent = parseRawInstructionsToHTML(cleanText);
             const docBox = document.getElementById("assignment-instruction");
             if (docBox) {
-                if (isViewingHtml) {
-                    docBox.textContent += htmlContent;
+                const overwrite = confirm("Wilt u de bestaande inhoud van de editor overschrijven?\n\n- OK: Overschrijven\n- Annuleren: Invoegen op de cursor");
+                if (overwrite) {
+                    if (isViewingHtml) {
+                        docBox.textContent = htmlContent;
+                    } else {
+                        docBox.innerHTML = htmlContent;
+                    }
                     saveActiveInstruction();
+                    showToast("✨ Bestaande inhoud overschreven!");
                 } else {
-                    insertBlockAtSelection(htmlContent);
+                    if (isViewingHtml) {
+                        docBox.textContent += htmlContent;
+                    } else {
+                        insertBlockAtSelection(htmlContent);
+                    }
                     saveActiveInstruction();
+                    showToast("✨ Platte tekst succesvol omgezet & ingevoegd!");
                 }
-                showToast("✨ Platte tekst succesvol omgezet & ingevoegd!");
             }
             closeSmartPasteModal();
         }
@@ -5223,19 +5344,19 @@
                 if (lowerLine.startsWith('lezen') || lowerLine.includes('👁 lezen') || lowerLine.includes('lezen:')) {
                     closeSection();
                     activeSectionType = 'lezen';
-                    html += `<div class="wysiwyg-section-lezen my-3">\n<div class="font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-eye text-sky-400"></i> Lezen:</div>\n`;
+                    html += `<div class="wysiwyg-section-lezen my-3">\n<div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-eye text-sky-400"></i> Lezen:</div>\n`;
                     headingMatched = true;
                     justMatchedHeading = true;
                 } else if (lowerLine.startsWith('uitvoeren') || lowerLine.includes('▶ uitvoeren') || lowerLine.includes('uitvoeren:')) {
                     closeSection();
                     activeSectionType = 'uitvoeren';
-                    html += `<div class="wysiwyg-section-uitvoeren my-3">\n<div class="font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-play text-emerald-400"></i> Uitvoeren:</div>\n`;
+                    html += `<div class="wysiwyg-section-uitvoeren my-3">\n<div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-play text-emerald-400"></i> Uitvoeren:</div>\n`;
                     headingMatched = true;
                     justMatchedHeading = true;
                 } else if (lowerLine.startsWith('bewerken') || lowerLine.includes('📝 bewerken') || lowerLine.includes('bewerken:')) {
                     closeSection();
                     activeSectionType = 'bewerken';
-                    html += `<div class="wysiwyg-section-bewerken my-3">\n<div class="font-semibold flex items-center gap-2 mt-3 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-pen-to-square text-amber-400"></i> Bewerken:</div>\n`;
+                    html += `<div class="wysiwyg-section-bewerken my-3">\n<div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-pen-to-square text-amber-400"></i> Bewerken:</div>\n`;
                     headingMatched = true;
                     justMatchedHeading = true;
                 }
@@ -5994,22 +6115,22 @@
             if (!palette) return;
 
             const colors = [
-                { hex: "#cbd5e1", name: "Standaard" },
-                { hex: "#ffffff", name: "Wit" },
-                { hex: "#94a3b8", name: "Grijs" },
-                { hex: "#f87171", name: "Rood" },
-                { hex: "#fb7185", name: "Roze" },
-                { hex: "#fb923c", name: "Oranje" },
-                { hex: "#fbbf24", name: "Amber" },
-                { hex: "#facc15", name: "Geel" },
-                { hex: "#a3e635", name: "Lime" },
-                { hex: "#4ade80", name: "Groen" },
-                { hex: "#34d399", name: "Smaragd" },
-                { hex: "#22d3ee", name: "Cyaan" },
-                { hex: "#38bdf8", name: "Sky" },
-                { hex: "#60a5fa", name: "Blauw" },
-                { hex: "#a78bfa", name: "Paars" },
-                { hex: "#f472b6", name: "Fuchsia" }
+                { varName: "--editor-color-default", name: "Standaard" },
+                { varName: "--editor-color-white-black", name: "Wit/Zwart" },
+                { varName: "--editor-color-gray", name: "Grijs" },
+                { varName: "--editor-color-red", name: "Rood" },
+                { varName: "--editor-color-pink", name: "Roze" },
+                { varName: "--editor-color-orange", name: "Oranje" },
+                { varName: "--editor-color-amber", name: "Amber" },
+                { varName: "--editor-color-yellow", name: "Geel" },
+                { varName: "--editor-color-lime", name: "Lime" },
+                { varName: "--editor-color-green", name: "Groen" },
+                { varName: "--editor-color-emerald", name: "Smaragd" },
+                { varName: "--editor-color-cyan", name: "Cyaan" },
+                { varName: "--editor-color-sky", name: "Sky" },
+                { varName: "--editor-color-blue", name: "Blauw" },
+                { varName: "--editor-color-purple", name: "Paars" },
+                { varName: "--editor-color-fuchsia", name: "Fuchsia" }
             ];
 
             palette.innerHTML = "";
@@ -6017,11 +6138,11 @@
                 const btn = document.createElement("button");
                 btn.type = "button";
                 btn.className = "w-6 h-6 rounded-full border border-slate-300 dark:border-slate-800 hover:border-slate-500 dark:hover:border-white transition active:scale-90 flex-shrink-0";
-                btn.style.backgroundColor = color.hex;
+                btn.style.backgroundColor = `var(${color.varName})`;
                 btn.title = color.name;
                 btn.onclick = (e) => {
                     e.stopPropagation();
-                    execStyle("foreColor", color.hex);
+                    execStyle("foreColor", `var(${color.varName})`);
                     palette.classList.add("hidden");
                 };
                 palette.appendChild(btn);
