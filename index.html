@@ -281,6 +281,59 @@
             background-color: transparent !important;
         }
 
+        /* Overrides for hardcoded dark-mode elements inside assignment instructions (e.g. from JSON config) */
+        .theme-light #assignment-instruction .bg-slate-950 {
+            background-color: #f1f5f9 !important; /* bg-slate-100 */
+            border-color: #cbd5e1 !important; /* border-slate-300 */
+        }
+        .theme-light #assignment-instruction .border-slate-800 {
+            border-color: #cbd5e1 !important;
+        }
+        .theme-light #assignment-instruction .text-slate-300,
+        .theme-light #assignment-instruction .text-slate-400 {
+            color: #475569 !important; /* text-slate-600 */
+        }
+
+        /* Light theme overrides for WYSIWYG Tip and Info Boxes */
+        .theme-light #assignment-instruction .wysiwyg-tip-box {
+            background-color: #fffbeb !important; /* bg-amber-50 */
+            border-color: #fde68a !important; /* border-amber-200 */
+            color: #b45309 !important; /* text-amber-700 */
+        }
+        .theme-light #assignment-instruction .wysiwyg-tip-box i {
+            color: #d97706 !important;
+        }
+
+        .theme-light #assignment-instruction .wysiwyg-info-box {
+            background-color: #f0f9ff !important; /* bg-sky-50 */
+            border-color: #bae6fd !important; /* border-sky-200 */
+            color: #0369a1 !important; /* text-sky-700 */
+        }
+        .theme-light #assignment-instruction .wysiwyg-info-box i {
+            color: #0284c7 !important;
+        }
+
+        /* Light theme overrides for WYSIWYG Tables and content tables */
+        .theme-light #assignment-instruction table,
+        .theme-light #assignment-instruction tr,
+        .theme-light #assignment-instruction th,
+        .theme-light #assignment-instruction td {
+            border-color: #cbd5e1 !important; /* border-slate-300 */
+        }
+        .theme-light #assignment-instruction table {
+            background-color: rgba(241, 245, 249, 0.5) !important; /* bg-slate-100/50 */
+        }
+        .theme-light #assignment-instruction tr.bg-slate-900 {
+            background-color: #f1f5f9 !important; /* bg-slate-100 */
+        }
+        .theme-light #assignment-instruction th {
+            color: #0f172a !important; /* text-slate-900 */
+            background-color: #f8fafc !important; /* bg-slate-50 */
+        }
+        .theme-light #assignment-instruction td {
+            color: #334155 !important; /* text-slate-700 */
+        }
+
         /* Responsive Scrollbar themes for light and dark modes */
         .theme-light::-webkit-scrollbar-track,
         .theme-light ::-webkit-scrollbar-track {
@@ -1475,6 +1528,66 @@
                 } else {
                     outputWrapper.classList.remove("bg-slate-950");
                     outputWrapper.classList.add("bg-white", "text-slate-800");
+                }
+            }
+
+            // Toggle compact output header theme classes
+            const compactHeader = document.getElementById("compact-output-header");
+            if (compactHeader) {
+                const title = document.getElementById("compact-output-title");
+                const closeBtn = compactHeader.querySelector("button");
+                if (isDark) {
+                    compactHeader.classList.remove("bg-slate-100", "border-slate-200");
+                    compactHeader.classList.add("bg-slate-900", "border-slate-800");
+                    if (title) {
+                        title.classList.remove("text-slate-700");
+                        title.classList.add("text-slate-200");
+                    }
+                    if (closeBtn) {
+                        closeBtn.classList.remove("bg-slate-200", "hover:bg-slate-300", "text-slate-700", "border-slate-300");
+                        closeBtn.classList.add("bg-slate-800", "hover:bg-slate-700", "text-slate-300", "border-slate-700");
+                    }
+                } else {
+                    compactHeader.classList.remove("bg-slate-900", "border-slate-800");
+                    compactHeader.classList.add("bg-slate-100", "border-slate-200");
+                    if (title) {
+                        title.classList.remove("text-slate-200");
+                        title.classList.add("text-slate-700");
+                    }
+                    if (closeBtn) {
+                        closeBtn.classList.remove("bg-slate-800", "hover:bg-slate-700", "text-slate-300", "border-slate-700");
+                        closeBtn.classList.add("bg-slate-200", "hover:bg-slate-300", "text-slate-700", "border-slate-300");
+                    }
+                }
+            }
+
+            // Toggle demo header theme classes
+            const demoHeader = document.getElementById("demo-header");
+            if (demoHeader) {
+                const title = document.getElementById("demo-title");
+                const subtitle = document.getElementById("demo-subtitle");
+                if (isDark) {
+                    demoHeader.classList.remove("bg-slate-100", "border-slate-200");
+                    demoHeader.classList.add("bg-slate-900", "border-slate-800");
+                    if (title) {
+                        title.classList.remove("text-slate-800");
+                        title.classList.add("text-slate-100");
+                    }
+                    if (subtitle) {
+                        subtitle.classList.remove("text-slate-500");
+                        subtitle.classList.add("text-slate-400");
+                    }
+                } else {
+                    demoHeader.classList.remove("bg-slate-900", "border-slate-800");
+                    demoHeader.classList.add("bg-slate-100", "border-slate-200");
+                    if (title) {
+                        title.classList.remove("text-slate-100");
+                        title.classList.add("text-slate-800");
+                    }
+                    if (subtitle) {
+                        subtitle.classList.remove("text-slate-400");
+                        subtitle.classList.add("text-slate-550");
+                    }
                 }
             }
 
