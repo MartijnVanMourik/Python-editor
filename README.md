@@ -31,9 +31,12 @@ Een moderne, interactieve en volledig cliënt-side Python-leeromgeving ontworpen
     *   Evalueert studentencode automatisch op basis van gedefinieerde testcases.
     *   **Strikte scheiding**: De testrunner scheidt invoerprompts (zoals `Hoe heet je? `) van de daadwerkelijk geprinte waarden (`print()`). Hierdoor kunnen testen betrouwbaar op `"exact"` matchen, terwijl studenten toch duidelijke invoerprompts kunnen gebruiken.
 *   **Code Valideren (Zonder Uitvoeren)**: Met een "Valideer"-knop in de toolbar kunnen studenten of docenten de code direct controleren op syntaxfouten met behulp van Skulpt's parser en compiler, zonder de code uit te voeren of te testen.
-*   **Light & Dark Mode (Thema's)**: Volledige ondersteuning voor zowel een licht (wit, standaard) als donker (Dracula/slate) thema. Dit is configureerbaar met een URL-parameter en een wisselknop. In de lichte modus worden storende borders en schaduwen rond het canvas uitgezet voor een naadloze weergave.
+*   **Light & Dark Mode (Thema's)**: Volledige ondersteuning voor zowel een licht (wit, standaard) als donker (Dracula/slate) thema. Dit is configureerbaar met een URL-parameter en een wisselknop.
+    *   **Thema-gevoelige Kleuren & Overrides**: Het kleurenpalet in de WYSIWYG-editor past zich automatisch aan het gekozen thema aan. Gekozen kleuren worden opgeslagen als responsive CSS-variabelen (`var(...)`) zodat gekleurde teksten en codeblokken (zoals `setheading()`) altijd perfect leesbaar blijven en van tint veranderen bij een themaswitch.
+*   **Compacte Modus & Sliding Drawer**: In de compacte modus (`?mode=compact`) bevindt de output zich in een panel dat soepel omhoog schuift. Dit panel past zijn lay-out automatisch aan op basis van het projecttype (Canvas+Console voor Turtle, Preview+Console voor Web, of Console+Tests gestapeld voor console-projecten).
+*   **Auto-inklappende Opdrachtenlijst**: Zodra een leerling een opdracht kiest uit het linkermenu, klapt de opdrachtenlijst automatisch in om maximaal ruimte te bieden aan de editor en omschrijving.
 *   **Voortgangsbehoud & Project-Isolatie**: Code en testresultaten worden per opdracht automatisch in de `localStorage` opgeslagen. Dit is volledig **geïsoleerd per opdrachtenreeks (cursus)** op basis van het geladen JSON-bestand in de URL. Hierdoor kunnen studenten aan meerdere verschillende cursussen tegelijkertijd werken zonder dat hun voortgang botst of elkaar overschrijft!
-*   **Voortgang Exporteren/Importeren**: Studenten kunnen hun werk exporteren naar een compact `.json` inleverbestand en later weer importeren om verder te werken.
+*   **Voortgang Exporteren/Importeren**: Studenten kunnen hun werk exporteren naar een compact `.json` inleverbestand en later weer importeren om verder te werken. Docenten kunnen bovendien een complete cursus JSON direct in de browser importeren via de **Importeer Cursus**-knop in de Docentenmodus.
 
 ---
 
