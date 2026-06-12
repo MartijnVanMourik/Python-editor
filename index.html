@@ -2035,11 +2035,18 @@
                 if (headerTitle) headerTitle.textContent = "Turtle Canvas & Console";
                 setTimeout(resizeTurtleCanvasCompact, 50);
             } else {
-                // Console mode: Show both Console Output and Tests stacked vertically
-                if (panelConsole) panelConsole.classList.remove("hidden");
-                if (panelTests) panelTests.classList.remove("hidden");
-                if (headerIcon) headerIcon.className = "fa-solid fa-terminal text-yellow-400";
-                if (headerTitle) headerTitle.textContent = "Console & Test Resultaten";
+                // Console mode: Show active tab
+                if (activeOutputSubTab === 'tests') {
+                    if (panelConsole) panelConsole.classList.add("hidden");
+                    if (panelTests) panelTests.classList.remove("hidden");
+                    if (headerIcon) headerIcon.className = "fa-solid fa-circle-check text-blue-400";
+                    if (headerTitle) headerTitle.textContent = "Test Resultaten";
+                } else {
+                    if (panelConsole) panelConsole.classList.remove("hidden");
+                    if (panelTests) panelTests.classList.add("hidden");
+                    if (headerIcon) headerIcon.className = "fa-solid fa-terminal text-yellow-400";
+                    if (headerTitle) headerTitle.textContent = "Console Output";
+                }
             }
         }
 
@@ -3105,6 +3112,10 @@
             } catch (err) {
                 appendToConsole("❌ Fout bij compileren:\n" + err.toString() + "\n");
                 showToast("❌ Validatie mislukt. Zie console.");
+                if (isCompactMode) {
+                    openOutputDrawer();
+                    enlargeCompactConsole();
+                }
                 let lineNo = undefined;
                 if (err.traceback && err.traceback.length > 0) {
                     const activeFrame = err.traceback.find(f => f.filename === "<stdin>" || f.filename === (workspace ? workspace.activeFile : "main.py")) || err.traceback[err.traceback.length - 1];
@@ -3121,6 +3132,7 @@
             openOutputDrawer();
             if (isCompactMode) {
                 switchOutputSubTab('console');
+                enlargeCompactConsole();
             }
             if (isWebModeActive()) {
                 validateWebCode();
@@ -3166,6 +3178,10 @@
                     appendToWebConsole(err, 'error');
                 });
                 showToast(`❌ Fouten gevonden in ${activeFile}!`);
+                if (isCompactMode) {
+                    openOutputDrawer();
+                    enlargeCompactConsole();
+                }
             } else {
                 appendToWebConsole("✅ Code is syntactisch correct! Geen fouten gevonden.", 'system');
                 showToast("✅ Code is syntactisch correct!");
@@ -3495,6 +3511,10 @@
             isRunningTest = false;
             setExecutionRunningState(true);
 
+            if (isCompactMode) {
+                shrinkCompactConsole();
+            }
+
             if (isTurtle) {
                 switchOutputSubTab('turtle');
                 clearConsole();
@@ -3566,6 +3586,9 @@
                 function (mod) {
                     appendToConsole("\n-- Uitvoering succesvol beëindigd --\n");
                     setExecutionRunningState(false);
+                    if (isCompactMode) {
+                        shrinkCompactConsole();
+                    }
                 },
                 function (err) {
                     if (err.toString().includes("Execution Interrupted") || err.message === "Execution Interrupted") {
@@ -3582,6 +3605,10 @@
                         // Focus output panel on mobile screens (only in standard non-fullscreen mode)
                         if (window.innerWidth < 1024 && !isCompactMode && !document.fullscreenElement) {
                             switchMobileView('output');
+                        }
+                        if (isCompactMode) {
+                            openOutputDrawer();
+                            enlargeCompactConsole();
                         }
                         // Highlight error line in editor
                         let lineNo = undefined;
@@ -4224,6 +4251,38 @@
             setTimeout(resizeTurtleCanvasCompact, 300);
         }
 
+        function enlargeCompactConsole() {
+            if (!isCompactMode) return;
+            
+            // For Turtle mode
+            const turtleConsole = document.getElementById("turtle-console-panel");
+            if (turtleConsole && !isTurtleConsoleExpanded) {
+                toggleTurtleConsoleSize();
+            }
+
+            // For Web mode
+            const webConsole = document.getElementById("web-console-panel");
+            if (webConsole && !isConsoleExpanded) {
+                toggleWebConsoleSize();
+            }
+        }
+
+        function shrinkCompactConsole() {
+            if (!isCompactMode) return;
+            
+            // For Turtle mode
+            const turtleConsole = document.getElementById("turtle-console-panel");
+            if (turtleConsole && isTurtleConsoleExpanded) {
+                toggleTurtleConsoleSize();
+            }
+
+            // For Web mode
+            const webConsole = document.getElementById("web-console-panel");
+            if (webConsole && isConsoleExpanded) {
+                toggleWebConsoleSize();
+            }
+        }
+
         function toggleWebFullscreen() {
             const panel = document.getElementById("panel-web");
             if (panel) {
@@ -4242,7 +4301,10 @@
 
             // Clear the Web Console output
             clearWebConsole();
-            if (isCompactMode) clearConsole();
+            if (isCompactMode) {
+                clearConsole();
+                shrinkCompactConsole();
+            }
 
             // Get active task config to check requireManualLinking
             const task = taskConfig && taskConfig.tabs ? taskConfig.tabs.find(t => t.id === currentTaskId) : null;
@@ -4400,6 +4462,10 @@
                         appendToWebConsole(`- ${missingJs.join(', ')} is niet gekoppeld.`, 'error');
                         appendToWebConsole(`👉 Voeg dit toe onderaan de <body>:\n   <script src="${missingJs[0]}"><\/script>`, 'error');
                     }
+                    if (isCompactMode) {
+                        openOutputDrawer();
+                        enlargeCompactConsole();
+                    }
                 } else {
                     appendToWebConsole(`[Systeem]  Alle bestanden zijn succesvol handmatig gekoppeld!`, 'system');
                 }
@@ -4425,6 +4491,10 @@
                 const { type, data } = event.data;
                 if (['web-log', 'web-error', 'web-warn', 'web-info'].includes(type)) {
                     appendToWebConsole(data, type);
+                    if (type === 'web-error' && isCompactMode) {
+                        openOutputDrawer();
+                        enlargeCompactConsole();
+                    }
                 }
             }
         });
