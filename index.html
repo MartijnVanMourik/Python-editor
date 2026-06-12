@@ -150,6 +150,22 @@
             container-type: size;
         }
 
+        @container (max-height: 240px) {
+            #turtle-floating-controls {
+                flex-direction: row !important;
+                bottom: 0.5rem !important;
+                right: 0.5rem !important;
+                gap: 0.25rem !important;
+                padding: 0.25rem !important;
+                border-radius: 0.75rem !important;
+            }
+            #turtle-floating-controls button {
+                width: 1.75rem !important;
+                height: 1.75rem !important;
+                border-radius: 0.5rem !important;
+            }
+        }
+
         /* Turtle canvas container adjustments */
         #turtle-canvas {
             position: relative;
@@ -768,12 +784,14 @@
                 height: 75vh !important;
                 min-height: 620px !important;
             }
-            .mode-compact #editor-workspace-container.drawer-active #editor-wrapper-panel {
+            .mode-compact #editor-workspace-container.drawer-active #editor-tabs-bar,
+            .mode-compact #editor-workspace-container.drawer-active .CodeMirror,
+            .mode-compact #editor-workspace-container.drawer-active #editor-wrapper-panel > div:not(#editor-control-toolbar) {
                 display: none !important;
             }
             .mode-compact #editor-workspace-container.drawer-active #output-wrapper-panel {
-                top: 0 !important;
-                height: 100% !important;
+                top: var(--toolbar-height, 56px) !important;
+                height: calc(100% - var(--toolbar-height, 56px)) !important;
             }
             /* Shrink instructions panel on mobile when the drawer is active to fit everything on screen */
             .mode-compact main:has(.drawer-active) #instructions-panel {
@@ -1901,6 +1919,27 @@
                 } else {
                     saveIndicator.classList.remove("bg-slate-800", "text-slate-400", "border-slate-700");
                     saveIndicator.classList.add("bg-slate-200", "text-slate-600", "border-slate-300");
+                }
+            }
+
+            // 9b. Fullscreen hint
+            const fullscreenHint = document.getElementById("fullscreen-hint");
+            if (fullscreenHint) {
+                const kbd = fullscreenHint.querySelector("kbd");
+                if (isDark) {
+                    fullscreenHint.classList.remove("bg-slate-200", "text-slate-600", "border-slate-300");
+                    fullscreenHint.classList.add("bg-slate-800", "text-slate-400", "border-slate-700");
+                    if (kbd) {
+                        kbd.classList.remove("bg-slate-100", "text-slate-700", "border-slate-300");
+                        kbd.classList.add("bg-slate-700", "text-slate-200", "border-slate-600");
+                    }
+                } else {
+                    fullscreenHint.classList.remove("bg-slate-800", "text-slate-400", "border-slate-700");
+                    fullscreenHint.classList.add("bg-slate-200", "text-slate-600", "border-slate-300");
+                    if (kbd) {
+                        kbd.classList.remove("bg-slate-700", "text-slate-200", "border-slate-600");
+                        kbd.classList.add("bg-slate-100", "text-slate-700", "border-slate-300");
+                    }
                 }
             }
 
@@ -4145,6 +4184,11 @@
                     icon.className = "fa-solid fa-up-right-and-down-left-from-center text-[10px]";
                 }
             }
+
+            // Trigger canvas resizing during transition
+            setTimeout(resizeTurtleCanvasCompact, 50);
+            setTimeout(resizeTurtleCanvasCompact, 150);
+            setTimeout(resizeTurtleCanvasCompact, 300);
         }
 
         let isTurtleConsoleExpanded = false;
@@ -4173,6 +4217,11 @@
                     icon.className = "fa-solid fa-up-right-and-down-left-from-center text-[10px]";
                 }
             }
+
+            // Trigger canvas resizing during transition
+            setTimeout(resizeTurtleCanvasCompact, 50);
+            setTimeout(resizeTurtleCanvasCompact, 150);
+            setTimeout(resizeTurtleCanvasCompact, 300);
         }
 
         function toggleWebFullscreen() {
