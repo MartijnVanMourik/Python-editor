@@ -84,6 +84,41 @@
             color: inherit !important;
         }
 
+        /* Hide scrollbar utility for the toolbar */
+        .scrollbar-none::-webkit-scrollbar {
+            display: none !important;
+        }
+        .scrollbar-none {
+            -ms-overflow-style: none !important;  /* IE and Edge */
+            scrollbar-width: none !important;  /* Firefox */
+        }
+
+        /* Ensure both panels are always visible on desktop and override mobile hidden toggles */
+        @media (min-width: 1024px) {
+            #editor-wrapper-panel {
+                display: flex !important;
+            }
+            #output-wrapper-panel {
+                display: flex !important;
+            }
+        }
+
+        /* Error line highlight in CodeMirror */
+        .cm-error-line {
+            background-color: rgba(239, 68, 68, 0.2) !important;
+            border-left: 4px solid #ef4444 !important;
+        }
+
+        /* Prevent compact mode maximized console from overflowing downwards */
+        .mode-compact #turtle-console-panel.h-\[480px\] {
+            height: calc(100% - 150px) !important;
+            max-height: 480px !important;
+        }
+        .mode-compact #web-console-panel.h-\[480px\] {
+            height: calc(100% - 150px) !important;
+            max-height: 480px !important;
+        }
+
         /* Custom scrollbar styles for premium look */
         ::-webkit-scrollbar {
             width: 8px;
@@ -266,6 +301,33 @@
                 opacity: 1;
                 transform: scale(1);
             }
+        }
+
+        /* Fullscreen style for editor wrapper panel */
+        #editor-wrapper-panel:fullscreen,
+        .editor-fullscreen-active {
+            position: fixed !important;
+            inset: 0 !important;
+            z-index: 9999 !important;
+            background-color: #f8fafc !important;
+            display: flex !important;
+            flex-direction: column !important;
+            padding: 1rem !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+        }
+
+        .dark #editor-wrapper-panel:fullscreen,
+        .dark .editor-fullscreen-active {
+            background-color: #020617 !important;
+        }
+
+        /* Ensure editor takes full height in fullscreen mode */
+        #editor-wrapper-panel:fullscreen .CodeMirror,
+        .editor-fullscreen-active .CodeMirror {
+            flex: 1 !important;
+            height: auto !important;
         }
 
         /* Hide scrollbars for clean look in tabs */
@@ -513,17 +575,27 @@
         /* Prevent outer vertical scroll and force flex layouts for web/turtle outputs */
         #output-panels-container:has(#panel-turtle:not(.hidden)),
         #output-panels-container:has(#panel-web:not(.hidden)) {
+            height: 100% !important;
             overflow: hidden !important;
         }
 
-        /* Lock layout to viewport height on desktop to keep columns aligned and prevent page scrolling */
-        @media (min-width: 1024px) {
+        /* Lock layout to viewport height on desktop and tablet to keep columns aligned and prevent page scrolling */
+        @media (min-width: 768px) {
 
             html,
             body {
                 height: 100vh !important;
                 height: 100dvh !important;
                 overflow: hidden !important;
+            }
+
+            main {
+                height: 0 !important;
+                flex: 1 1 0% !important;
+            }
+
+            main > section {
+                height: 100% !important;
             }
         }
 
@@ -579,31 +651,70 @@
             background-color: #0b1329 !important;
         }
 
-        .mode-compact main {
-            flex-direction: row !important;
+        /* Compact Mode Centering & Layout overrides - Desktop/Tablet (>= 768px) */
+        @media (min-width: 768px) {
+            .mode-compact main {
+                flex-direction: row !important;
+            }
+
+            .mode-compact #instructions-panel {
+                width: 33.333% !important;
+                min-width: 260px !important;
+                max-width: 320px !important;
+                max-height: none !important;
+                border-right: 1px solid #1e293b !important;
+                border-bottom: none !important;
+                display: flex !important;
+            }
+
+            .theme-light.mode-compact #instructions-panel {
+                border-right: 1px solid #e2e8f0 !important;
+                border-bottom: none !important;
+            }
+
+            .mode-compact main>section:last-child {
+                flex: 1 !important;
+                max-height: none !important;
+                display: flex !important;
+            }
         }
 
-        .mode-compact #instructions-panel {
-            width: 33.333% !important;
-            min-width: 260px !important;
-            max-width: 320px !important;
-            max-height: none !important;
-            border-right: 1px solid #1e293b !important;
-            display: flex !important;
-        }
+        /* Compact Mode Centering & Layout overrides - Mobile (< 768px) */
+        @media (max-width: 767px) {
+            .mode-compact main {
+                flex-direction: column !important;
+                overflow-y: auto !important;
+            }
 
-        .theme-light.mode-compact #instructions-panel {
-            border-right: 1px solid #e2e8f0 !important;
-        }
+            .mode-compact #instructions-panel {
+                width: 100% !important;
+                max-width: 100% !important;
+                min-width: 0 !important;
+                max-height: 45vh !important;
+                border-right: none !important;
+                border-bottom: 1px solid #1e293b !important;
+                display: flex !important;
+            }
 
-        .mode-compact main>section:last-child {
-            flex: 1 !important;
-            max-height: none !important;
-            display: flex !important;
+            .theme-light.mode-compact #instructions-panel {
+                border-right: none !important;
+                border-bottom: 1px solid #e2e8f0 !important;
+            }
+
+            .mode-compact main>section:last-child {
+                width: 100% !important;
+                flex: 1 !important;
+                max-height: none !important;
+                display: flex !important;
+            }
         }
 
         .mode-compact #mobile-switch-tabs {
             display: none !important;
+        }
+
+        .mode-compact #editor-workspace-container {
+            position: relative !important;
         }
 
         .mode-compact #editor-wrapper-panel {
@@ -625,7 +736,7 @@
             right: 0 !important;
             top: var(--toolbar-height, 56px) !important;
             bottom: 0 !important;
-            height: auto !important;
+            height: calc(100% - var(--toolbar-height, 56px)) !important;
             width: 100% !important;
             z-index: 40 !important;
             transform: translateY(100%);
@@ -645,6 +756,29 @@
         .mode-compact #output-wrapper-panel.drawer-open {
             transform: translateY(0) !important;
             visibility: visible !important;
+        }
+
+        /* Height constraints for editor workspace area on mobile (< 768px) */
+        @media (max-width: 767px) {
+            .mode-compact #editor-workspace-container {
+                height: 60vh !important;
+                min-height: 480px !important;
+            }
+            .mode-compact #editor-workspace-container.drawer-active {
+                height: 75vh !important;
+                min-height: 620px !important;
+            }
+            .mode-compact #editor-workspace-container.drawer-active #editor-wrapper-panel {
+                display: none !important;
+            }
+            .mode-compact #editor-workspace-container.drawer-active #output-wrapper-panel {
+                top: 0 !important;
+                height: 100% !important;
+            }
+            /* Shrink instructions panel on mobile when the drawer is active to fit everything on screen */
+            .mode-compact main:has(.drawer-active) #instructions-panel {
+                max-height: 30vh !important;
+            }
         }
 
         .mode-compact #output-panels-container {
@@ -735,6 +869,13 @@
         </div>
 
         <div class="flex flex-wrap items-center gap-2">
+            <!-- Fullscreen Hint -->
+            <span id="fullscreen-hint"
+                class="hidden text-xs bg-slate-800 text-slate-400 px-2.5 py-1.5 rounded-full border border-slate-700 flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-info text-blue-400"></i>
+                Sluit volledig scherm met <kbd class="px-1.5 py-0.5 rounded bg-slate-700 text-slate-200 border border-slate-600 font-mono text-[10px]">Esc</kbd>
+            </span>
+
             <!-- Progress Status -->
             <span id="save-indicator"
                 class="text-xs bg-slate-800 text-slate-400 px-2.5 py-1.5 rounded-full border border-slate-700 flex items-center gap-1.5">
@@ -969,7 +1110,7 @@
                 </button>
             </div>
 
-            <div class="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden h-full">
+            <div id="editor-workspace-container" class="flex-1 grid grid-cols-1 lg:grid-cols-12 overflow-hidden h-full">
 
                 <!-- Code Mirror Editor Window (lg:span-7) -->
                 <div id="editor-wrapper-panel"
@@ -1006,11 +1147,22 @@
                                 <i class="fa-solid fa-rotate-left text-red-400"></i>
                                 <span>Reset code</span>
                             </button>
-                            <button id="btn-export-file" onclick="exportSinglePy()"
-                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 font-medium px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl active:scale-95 transition flex items-center gap-1.5 text-xs sm:text-sm"
-                                title="Download alleen dit bestand">
-                                <i class="fa-solid fa-download text-blue-400"></i>
-                                <span id="export-file-label">.py export</span>
+                            <button id="btn-editor-zoom-out" onclick="zoomEditor(-1)"
+                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 w-8 h-8 sm:w-9 sm:h-9 rounded-xl active:scale-95 transition flex items-center justify-center relative"
+                                title="Verklein lettertype">
+                                <i class="fa-solid fa-font text-[10px] sm:text-xs"></i>
+                                <i class="fa-solid fa-minus text-[6px] sm:text-[7px] absolute top-1.5 right-1.5 sm:top-2 sm:right-2"></i>
+                            </button>
+                            <button id="btn-editor-zoom-in" onclick="zoomEditor(1)"
+                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 w-8 h-8 sm:w-9 sm:h-9 rounded-xl active:scale-95 transition flex items-center justify-center relative"
+                                title="Vergroot lettertype">
+                                <i class="fa-solid fa-font text-[10px] sm:text-xs"></i>
+                                <i class="fa-solid fa-plus text-[6px] sm:text-[7px] absolute top-1.5 right-1.5 sm:top-2 sm:right-2"></i>
+                            </button>
+                            <button id="btn-editor-fullscreen" onclick="toggleEditorFullscreen()"
+                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 w-8 h-8 sm:w-9 sm:h-9 rounded-xl active:scale-95 transition flex items-center justify-center"
+                                title="Volledig scherm editor">
+                                <i class="fa-solid fa-expand text-xs"></i>
                             </button>
                         </div>
                     </div>
@@ -1474,6 +1626,27 @@
         let isInitializingNewCourse = false; // Flag to track course initialization modal state
         let courseNamespace = "default"; // Namespace identifier based on loaded course config URL
         let activeTheme = "light"; // Active theme mode: 'light' (default) or 'dark'
+        let errorLineHandle = null; // Track highlighted CodeMirror line handle
+
+        function clearErrorHighlight() {
+            if (errorLineHandle !== null) {
+                try {
+                    editor.removeLineClass(errorLineHandle, "background", "cm-error-line");
+                } catch (e) {}
+                errorLineHandle = null;
+            }
+        }
+
+        function highlightErrorLine(lineNo) {
+            clearErrorHighlight();
+            if (typeof lineNo === "number" && lineNo > 0) {
+                const docLineCount = editor.lineCount();
+                const targetLine = Math.min(lineNo - 1, docLineCount - 1);
+                if (targetLine >= 0) {
+                    errorLineHandle = editor.addLineClass(targetLine, "background", "cm-error-line");
+                }
+            }
+        }
 
         function applyTheme(theme) {
             activeTheme = theme;
@@ -1832,11 +2005,16 @@
         }
 
         function openOutputDrawer() {
+            // Keep native fullscreen active when running or validating code, do not exit fullscreen.
             if (!isCompactMode) return;
             updateCompactOutputLayout();
             const outputPanel = document.getElementById("output-wrapper-panel");
             if (outputPanel && !outputPanel.classList.contains("drawer-open")) {
                 outputPanel.classList.add("drawer-open");
+                const workspaceContainer = document.getElementById("editor-workspace-container");
+                if (workspaceContainer) {
+                    workspaceContainer.classList.add("drawer-active");
+                }
                 // Force editor and canvas refresh after slide transition starts/completes
                 setTimeout(() => {
                     if (editor) editor.refresh();
@@ -1853,6 +2031,14 @@
             if (outputPanel) {
                 outputPanel.classList.remove("drawer-open");
             }
+            const workspaceContainer = document.getElementById("editor-workspace-container");
+            if (workspaceContainer) {
+                workspaceContainer.classList.remove("drawer-active");
+            }
+            // Force editor refresh after revealing it
+            setTimeout(() => {
+                if (editor) editor.refresh();
+            }, 50);
         }
 
         // Window resize handler to keep drawer positioned accurately
@@ -1967,7 +2153,8 @@
                 indentUnit: 4,
                 tabSize: 4,
                 autoCloseBrackets: true,
-                viewportMargin: Infinity
+                viewportMargin: Infinity,
+                undoDepth: 2000
             });
 
             // Sync theme configuration visual classes
@@ -1976,6 +2163,7 @@
 
             // Auto-save changes in background when user types
             editor.on("change", () => {
+                clearErrorHighlight();
                 if (currentTaskId) {
                     const codeValue = editor.getValue();
                     const workspace = getTaskWorkspace(currentTaskId);
@@ -2350,13 +2538,6 @@
                 const btn = document.createElement("button");
                 btn.id = `task-btn-${task.id}`;
                 btn.onclick = () => {
-                    isTaskSelectorCollapsed = true;
-                    const btnText = document.getElementById("btn-toggle-task-selector-text");
-                    const btnIcon = document.querySelector("#btn-toggle-task-selector i");
-                    if (btnText && btnIcon) {
-                        btnText.textContent = "Uitklappen";
-                        btnIcon.className = "fa-solid fa-expand text-[10px]";
-                    }
                     selectTask(task.id);
                 };
                 btn.className = `flex-1 text-left p-2.5 rounded-xl transition flex items-center justify-between min-w-0 ${isActive
@@ -2484,6 +2665,7 @@
         }
 
         function selectTask(taskId) {
+            closeOutputDrawer();
             currentTaskId = taskId;
             renderTaskSelector();
 
@@ -2835,6 +3017,7 @@
 
         function validatePythonCode() {
             if (isExecuting) return;
+            clearErrorHighlight();
 
             // Save active tab code first
             const workspace = getTaskWorkspace(currentTaskId);
@@ -2883,6 +3066,15 @@
             } catch (err) {
                 appendToConsole("❌ Fout bij compileren:\n" + err.toString() + "\n");
                 showToast("❌ Validatie mislukt. Zie console.");
+                let lineNo = undefined;
+                if (err.traceback && err.traceback.length > 0) {
+                    const activeFrame = err.traceback.find(f => f.filename === "<stdin>" || f.filename === (workspace ? workspace.activeFile : "main.py")) || err.traceback[err.traceback.length - 1];
+                    if (activeFrame) lineNo = activeFrame.lineno;
+                }
+                if (lineNo === undefined && err.lineno !== undefined) {
+                    lineNo = err.lineno;
+                }
+                highlightErrorLine(lineNo);
             }
         }
 
@@ -3250,6 +3442,7 @@
         }
 
         function runPythonCode() {
+            clearErrorHighlight();
             // Save current active tab code first
             const workspace = getTaskWorkspace(currentTaskId);
             if (workspace) {
@@ -3351,6 +3544,16 @@
                         if (window.innerWidth < 1024) {
                             switchMobileView('output');
                         }
+                        // Highlight error line in editor
+                        let lineNo = undefined;
+                        if (err.traceback && err.traceback.length > 0) {
+                            const activeFrame = err.traceback.find(f => f.filename === "<stdin>" || f.filename === (workspace ? workspace.activeFile : "main.py")) || err.traceback[err.traceback.length - 1];
+                            if (activeFrame) lineNo = activeFrame.lineno;
+                        }
+                        if (lineNo === undefined && err.lineno !== undefined) {
+                            lineNo = err.lineno;
+                        }
+                        highlightErrorLine(lineNo);
                     }
                     setExecutionRunningState(false);
                 }
@@ -3359,6 +3562,7 @@
 
         // Execute automated unit tests
         async function runAssignmentTests() {
+            clearErrorHighlight();
             openOutputDrawer();
             const task = taskConfig.tabs.find(t => t.id === currentTaskId);
             if (!task) return;
@@ -3779,6 +3983,35 @@
             const panel = document.getElementById("panel-turtle");
             if (panel) {
                 panel.classList.toggle("turtle-fullscreen-active");
+            }
+        }
+
+        let editorFontSize = 15; // default matching CSS
+        function zoomEditor(direction) {
+            editorFontSize += direction;
+            if (editorFontSize < 10) editorFontSize = 10;
+            if (editorFontSize > 30) editorFontSize = 30;
+
+            const cmElements = document.querySelectorAll(".CodeMirror");
+            cmElements.forEach(el => {
+                el.style.fontSize = editorFontSize + "px";
+            });
+            if (editor) {
+                editor.refresh();
+            }
+        }
+
+        function toggleEditorFullscreen() {
+            // Fullscreen the entire page to allow seeing instructions, editor, and output together in all modes
+            const targetElement = document.documentElement;
+            if (targetElement) {
+                if (!document.fullscreenElement) {
+                    targetElement.requestFullscreen().catch(err => {
+                        console.error(`Error attempting to enable fullscreen: ${err.message}`);
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
             }
         }
 
@@ -6307,6 +6540,66 @@
 
         // Register document level selection listener
         document.addEventListener("selectionchange", updateWysiwygToolbarHighlighting);
+
+        document.addEventListener("fullscreenchange", () => {
+            const panel = document.getElementById("editor-wrapper-panel");
+            const btn = document.getElementById("btn-editor-fullscreen");
+            const outputPanel = document.getElementById("output-wrapper-panel");
+            const hint = document.getElementById("fullscreen-hint");
+            if (panel && btn) {
+                const icon = btn.querySelector("i");
+                const isFullscreen = !!document.fullscreenElement;
+                if (isFullscreen) {
+                    if (icon) icon.className = "fa-solid fa-compress text-xs";
+                    btn.title = "Sluit volledig scherm";
+                    
+                    if (hint && document.fullscreenElement === document.documentElement) {
+                        hint.classList.remove("hidden");
+                    }
+                    
+                    if (document.fullscreenElement === document.documentElement) {
+                        // If in compact mode, temporarily disable it to show standard student mode layout in fullscreen
+                        if (document.documentElement.classList.contains("mode-compact")) {
+                            document.documentElement.classList.remove("mode-compact");
+                            document.documentElement.classList.add("mode-compact-paused");
+                            if (outputPanel) {
+                                outputPanel.classList.add("lg:col-span-5");
+                            }
+                            setTimeout(() => {
+                                updateToolbarHeight();
+                                if (typeof activeOutputSubTab !== 'undefined' && activeOutputSubTab) {
+                                    switchOutputSubTab(activeOutputSubTab);
+                                }
+                            }, 50);
+                        }
+                    } else if (document.fullscreenElement === panel) {
+                        panel.classList.add("editor-fullscreen-active");
+                    }
+                } else {
+                    if (icon) icon.className = "fa-solid fa-expand text-xs";
+                    btn.title = "Volledig scherm";
+                    
+                    if (hint) {
+                        hint.classList.add("hidden");
+                    }
+                    
+                    if (document.documentElement.classList.contains("mode-compact-paused")) {
+                        document.documentElement.classList.remove("mode-compact-paused");
+                        document.documentElement.classList.add("mode-compact");
+                        if (outputPanel) {
+                            outputPanel.classList.remove("lg:col-span-5");
+                        }
+                        setTimeout(() => {
+                            updateToolbarHeight();
+                        }, 50);
+                    }
+                    panel.classList.remove("editor-fullscreen-active");
+                }
+                setTimeout(() => {
+                    if (editor) editor.refresh();
+                }, 50);
+            }
+        });
 
         window.addEventListener("keydown", function (e) {
             if (e.key === "Escape") {
