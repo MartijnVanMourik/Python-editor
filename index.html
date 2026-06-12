@@ -3579,8 +3579,8 @@
                         if (turtlePanel && turtlePanel.classList.contains("turtle-fullscreen-active")) {
                             toggleTurtleFullscreen();
                         }
-                        // Focus output panel on mobile screens
-                        if (window.innerWidth < 1024) {
+                        // Focus output panel on mobile screens (only in standard non-fullscreen mode)
+                        if (window.innerWidth < 1024 && !isCompactMode && !document.fullscreenElement) {
                             switchMobileView('output');
                         }
                         // Highlight error line in editor
