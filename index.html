@@ -231,12 +231,11 @@
             height: calc(100% - 150px) !important;
             max-height: 480px !important;
         }
-        /* Make standard console window shorter in compact mode (fitting approx 2 lines) */
         .mode-compact #turtle-console-panel:not(.h-\[480px\]) {
-            height: 70px !important;
+            height: 100px !important;
         }
         .mode-compact #web-console-panel:not(.h-\[480px\]) {
-            height: 70px !important;
+            height: 100px !important;
         }
 
         /* Custom scrollbar styles for premium look */
@@ -1483,7 +1482,7 @@
 
                             <!-- Wrapper for interactive canvas container with grab cursor -->
                             <div id="turtle-canvas-wrapper"
-                                class="flex-1 flex items-center justify-center min-h-0 relative group">
+                                class="flex-1 w-full flex items-center justify-center min-h-0 relative group">
                                 <!-- Target element where Skulpt renders Canvas -->
                                 <div id="turtle-canvas" class="cursor-grab">
                                     <!-- Skulpt automatically injects HTML5 Canvas here -->
@@ -1514,7 +1513,7 @@
 
                             <!-- Embedded Turtle Console Logs at bottom -->
                             <div id="turtle-console-panel"
-                                class="w-full mt-3 flex flex-col bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 h-[180px] shrink-0 transition-all duration-300 turtle-normal-only">
+                                class="w-full mt-3 flex flex-col bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 h-[100px] shrink-0 transition-all duration-300 turtle-normal-only">
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-mono text-slate-500 dark:text-slate-400">CONSOLE
                                         OUTPUT</span>
@@ -1605,7 +1604,7 @@
 
                             <!-- Embedded Web Console Logs at bottom -->
                             <div id="web-console-panel"
-                                class="mt-3 flex flex-col bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 h-[180px] shrink-0 transition-all duration-300">
+                                class="mt-3 flex flex-col bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 h-[100px] shrink-0 transition-all duration-300">
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="text-xs font-mono text-slate-500 dark:text-slate-400">WEB CONSOLE
                                         OUTPUT</span>
@@ -2113,7 +2112,6 @@
         }
 
         function resizeTurtleCanvasCompact() {
-            if (!isCompactMode) return;
             const canvasContainer = document.getElementById("turtle-canvas");
             if (!canvasContainer) return;
             const parent = canvasContainer.parentElement;
@@ -2127,11 +2125,12 @@
         }
 
         function updateToolbarHeight() {
-            if (!isCompactMode) return;
-            const toolbar = document.getElementById('editor-control-toolbar');
-            if (toolbar) {
-                const height = toolbar.offsetHeight;
-                document.documentElement.style.setProperty('--toolbar-height', `${height}px`);
+            if (isCompactMode) {
+                const toolbar = document.getElementById('editor-control-toolbar');
+                if (toolbar) {
+                    const height = toolbar.offsetHeight;
+                    document.documentElement.style.setProperty('--toolbar-height', `${height}px`);
+                }
             }
             resizeTurtleCanvasCompact();
         }
@@ -4218,6 +4217,8 @@
             const panel = document.getElementById("panel-turtle");
             if (panel) {
                 panel.classList.toggle("turtle-fullscreen-active");
+                setTimeout(resizeTurtleCanvasCompact, 50);
+                setTimeout(resizeTurtleCanvasCompact, 300);
             }
         }
 
@@ -4366,7 +4367,7 @@
             const icon = btn.querySelector("i");
 
             if (isConsoleExpanded) {
-                panel.classList.remove("h-[180px]");
+                panel.classList.remove("h-[100px]");
                 panel.classList.add("h-[480px]");
                 label.textContent = "Verkleinen";
                 if (icon) {
@@ -4374,7 +4375,7 @@
                 }
             } else {
                 panel.classList.remove("h-[480px]");
-                panel.classList.add("h-[180px]");
+                panel.classList.add("h-[100px]");
                 label.textContent = "Vergroten";
                 if (icon) {
                     icon.className = "fa-solid fa-up-right-and-down-left-from-center text-[10px]";
@@ -4399,7 +4400,7 @@
             const icon = btn.querySelector("i");
 
             if (isTurtleConsoleExpanded) {
-                panel.classList.remove("h-[180px]");
+                panel.classList.remove("h-[100px]");
                 panel.classList.add("h-[480px]");
                 label.textContent = "Verkleinen";
                 if (icon) {
@@ -4407,7 +4408,7 @@
                 }
             } else {
                 panel.classList.remove("h-[480px]");
-                panel.classList.add("h-[180px]");
+                panel.classList.add("h-[100px]");
                 label.textContent = "Vergroten";
                 if (icon) {
                     icon.className = "fa-solid fa-up-right-and-down-left-from-center text-[10px]";
