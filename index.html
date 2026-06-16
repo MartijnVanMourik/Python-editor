@@ -5776,12 +5776,21 @@
             const doc = parser.parseFromString(html, "text/html");
             const body = doc.body;
 
+            // Convert <b> and <strong> elements to markdown bold markers so they are recognized by the parser
+            const bolds = body.querySelectorAll("b, strong");
+            bolds.forEach(el => {
+                const text = el.textContent.trim();
+                if (text) {
+                    el.innerHTML = `**${el.innerHTML}**`;
+                }
+            });
+
             // Convert <i> and <em> elements to markdown backticks so they are recognized as code
             const italics = body.querySelectorAll("i, em");
             italics.forEach(el => {
                 const text = el.textContent.trim();
                 if (text) {
-                    el.textContent = `\`${text}\``;
+                    el.innerHTML = `\`${el.innerHTML}\``;
                 }
             });
 
@@ -6051,6 +6060,12 @@
             escaped = escaped.replace(/`([^`\n\r\t]+)`/g, (match, content) => {
                 const codeHtml = `<code class="bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs">${content}</code>`;
                 return addPlaceholder(codeHtml);
+            });
+
+            // 0b. Auto wrap markdown bold **text** (converted from <b> / <strong> tags or manual asterisks)
+            escaped = escaped.replace(/\*\*([^*]+)\*\*/g, (match, content) => {
+                const boldHtml = `<strong>${content}</strong>`;
+                return addPlaceholder(boldHtml);
             });
 
             // 1. Auto wrap string parameter listings in quotes (e.g. "param" or 'param')
