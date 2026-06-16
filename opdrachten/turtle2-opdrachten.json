@@ -1,0 +1,58 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "Inleveropdracht - 4 vierkanten",
+            "instruction": "<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<p class=\"mb-3\"><ol><li>Voer het onderstaande programma uit. Bekijk de code en roep \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">MAND!</code>\".</li><li>Maak dit programma met behulp van een extra <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">for</code> loop zo kort mogelijk. Bekijk Hoe inleveren voor de inleverinstructies.</li></ol></p>\n\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(8)\n\nfor i in range(4):\n    forward(40)\n    left(90)\n\nforward(40)\n\nfor i in range(4):\n    forward(40)\n    left(90)\n\nforward(40)\n\nfor i in range(4):\n    forward(40)\n    left(90)\n\nforward(40)\n\nfor i in range(4):\n    forward(40)\n    left(90)\n\nforward(40)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "Uitwerking - 4 vierkanten",
+            "instruction": "<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<p class=\"mb-3\"><ol><li>Voer het onderstaande programma uit. Bekijk de code en roep \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">MAND!</code>\".</li><li>Maak dit programma met behulp van een extra <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">for</code> loop zo kort mogelijk. Bekijk Hoe inleveren voor de inleverinstructies.</li></ol></p>\n\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(8)\n\nfor i in range(4):\n  for i in range(4):\n      forward(40)\n      left(90)\n\n  forward(40)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "Inleveropdracht - Slingers",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Het is feest, meneer Hofland wordt 40 jaar!</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Maak het programma om de slingers te maken.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-tip my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-lightbulb text-orange-400\"></i> Tip:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Lees de tips onder de Tips-<code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">TAB</code>.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(2)\n\npenup()\ngoto(-180,0)\npendown()\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "Uitwerking - Slingers",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Het is feest, meneer Hofland wordt 40 jaar!</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<p class=\"mb-3\"><ol><li>Maak het programma om de slingers te maken.</li></ol></p>\n</div>\n<div class=\"wysiwyg-section-tip my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-lightbulb text-orange-400\"></i> Tip:</div>\n<p class=\"mb-3\"><ol><li>Lees de tips onder de Tips-<code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">TAB</code>.</li></ol></p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(2)\n\npenup()\ngoto(-180,0)\npendown()\n\nfor i in range(5):\n  for i in range(3):\n      forward(30)\n      left(-120)\n\n  forward(60)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

@@ -1686,8 +1686,16 @@
                         <option value="web">Web Development Cursus (HTML, CSS, JS)</option>
                     </select>
                 </div>
+                <div id="new-assignment-filename-container">
+                    <label for="new-assignment-filename"
+                        class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Naam
+                        van de json-file</label>
+                    <input type="text" id="new-assignment-filename"
+                        class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
+                        placeholder="Bijv. nieuwe_python_cursus.json" autocomplete="off">
+                </div>
                 <div>
-                    <label for="new-assignment-name"
+                    <label for="new-assignment-name" id="new-assignment-name-label"
                         class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Naam
                         van de opdracht</label>
                     <input type="text" id="new-assignment-name"
@@ -6152,6 +6160,9 @@
             const submitBtn = document.getElementById("new-assignment-submit");
             const typeSelect = document.getElementById("new-assignment-type");
             const typeContainer = document.getElementById("new-assignment-type-container");
+            const filenameInput = document.getElementById("new-assignment-filename");
+            const filenameContainer = document.getElementById("new-assignment-filename-container");
+            const nameLabel = document.getElementById("new-assignment-name-label");
 
             if (!modal || !nameInput || !idInput || !cancelBtn || !submitBtn) {
                 // Fallback to prompt if modal elements not found
@@ -6185,6 +6196,15 @@
 
                 if (isInitializingNewCourse) {
                     const isWeb = (type === "web");
+                    let fallbackFilename = prompt("Voer de naam in voor de json-file:", isWeb ? "nieuwe_web_cursus.json" : "nieuwe_python_cursus.json");
+                    if (fallbackFilename === null) return;
+                    fallbackFilename = fallbackFilename.trim();
+                    if (!fallbackFilename) {
+                        fallbackFilename = isWeb ? "nieuwe_web_cursus.json" : "nieuwe_python_cursus.json";
+                    } else if (!fallbackFilename.endsWith(".json")) {
+                        fallbackFilename += ".json";
+                    }
+
                     taskConfig = {
                         title: "Python & Web Editor",
                         courseType: type,
@@ -6228,9 +6248,9 @@
 
                     document.getElementById("config-title").textContent = taskConfig.title;
 
-                    const filenameInput = document.getElementById("teacher-filename-input");
-                    if (filenameInput) {
-                        filenameInput.value = isWeb ? "nieuwe_web_cursus.json" : "nieuwe_python_cursus.json";
+                    const tFilenameInput = document.getElementById("teacher-filename-input");
+                    if (tFilenameInput) {
+                        tFilenameInput.value = fallbackFilename;
                     }
 
                     renderTaskSelector();
@@ -6278,6 +6298,9 @@
 
             nameInput.value = "";
             idInput.value = "";
+            if (filenameInput) {
+                filenameInput.value = typeSelect && typeSelect.value === "web" ? "nieuwe_web_cursus.json" : "nieuwe_python_cursus.json";
+            }
 
             // Adjust modal details based on course initialization state
             const modalHeader = modal.querySelector("h3");
@@ -6291,6 +6314,16 @@
                     typeContainer.classList.add("hidden");
                 }
             }
+            if (filenameContainer) {
+                if (isInitializingNewCourse) {
+                    filenameContainer.classList.remove("hidden");
+                } else {
+                    filenameContainer.classList.add("hidden");
+                }
+            }
+            if (nameLabel) {
+                nameLabel.textContent = isInitializingNewCourse ? "Naam van de (eerste) opdracht" : "Naam van de opdracht";
+            }
 
             modal.classList.remove("hidden");
             modal.classList.add("flex");
@@ -6303,6 +6336,8 @@
                 submitBtn.onclick = null;
                 nameInput.onkeydown = null;
                 idInput.onkeydown = null;
+                if (typeSelect) typeSelect.onchange = null;
+                if (filenameInput) filenameInput.onkeydown = null;
                 isInitializingNewCourse = false;
             };
 
@@ -6315,6 +6350,23 @@
                 if (!name) {
                     alert("Naam mag niet leeg zijn.");
                     return;
+                }
+
+                let finalFilename = "";
+                if (isInitializingNewCourse) {
+                    if (filenameInput) {
+                        let enteredFilename = filenameInput.value.trim();
+                        if (!enteredFilename) {
+                            alert("Naam van de json-file mag niet leeg zijn.");
+                            return;
+                        }
+                        if (!enteredFilename.endsWith(".json")) {
+                            enteredFilename += ".json";
+                        }
+                        finalFilename = enteredFilename;
+                    } else {
+                        finalFilename = type === "web" ? "nieuwe_web_cursus.json" : "nieuwe_python_cursus.json";
+                    }
                 }
 
                 let id = "";
@@ -6375,10 +6427,10 @@
                     // Apply new default title to title bar
                     document.getElementById("config-title").textContent = taskConfig.title;
 
-                    // Set filename input to standard default
-                    const filenameInput = document.getElementById("teacher-filename-input");
-                    if (filenameInput) {
-                        filenameInput.value = isWeb ? "nieuwe_web_cursus.json" : "nieuwe_python_cursus.json";
+                    // Set filename input to custom filename chosen by the user
+                    const teacherFilenameInput = document.getElementById("teacher-filename-input");
+                    if (teacherFilenameInput) {
+                        teacherFilenameInput.value = finalFilename;
                     }
 
                     // Render task selector and select the first assignment
@@ -6427,6 +6479,13 @@
             };
 
             submitBtn.onclick = handleSubmit;
+            if (typeSelect) {
+                typeSelect.onchange = () => {
+                    if (filenameInput) {
+                        filenameInput.value = typeSelect.value === "web" ? "nieuwe_web_cursus.json" : "nieuwe_python_cursus.json";
+                    }
+                };
+            }
             nameInput.onkeydown = (e) => {
                 if (e.key === "Enter") {
                     handleSubmit();
@@ -6437,6 +6496,13 @@
                     handleSubmit();
                 }
             };
+            if (filenameInput) {
+                filenameInput.onkeydown = (e) => {
+                    if (e.key === "Enter") {
+                        handleSubmit();
+                    }
+                };
+            }
         }
 
         function moveTask(index, offset) {
