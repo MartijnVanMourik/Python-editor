@@ -2,7 +2,7 @@
     "title": "Mijn Informatica Cursus - Python",
     "assignments": [
         {
-            "id": "opdracht_naam_id",
+            "id": "task_1",
             "instruction": "<h3 class='text-lg font-semibold text-slate-100 mb-2'>Titel van Opdracht 1</h3><p class='mb-2'>Dit is de omschrijving in HTML-formaat. Je kunt Tailwind-klassen gebruiken voor styling.</p>",
             "tests": [
                 {

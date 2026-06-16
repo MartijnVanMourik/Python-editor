@@ -1694,7 +1694,7 @@
                         class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl px-4 py-2.5 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm"
                         placeholder="Bijv. Teken een Vierkant" autocomplete="off">
                 </div>
-                <div>
+                <div class="hidden">
                     <label for="new-assignment-id"
                         class="block text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1.5">Uniek
                         ID (automatisch gegenereerd, mag worden aangepast)</label>
@@ -2331,8 +2331,8 @@
                 mode: { name: "python", version: 3, singleLineStringErrors: false },
                 lineNumbers: true,
                 theme: activeTheme === 'dark' ? "dracula" : "default",
-                indentUnit: 4,
-                tabSize: 4,
+                indentUnit: 2,
+                tabSize: 2,
                 autoCloseBrackets: true,
                 viewportMargin: Infinity,
                 undoDepth: 2000
@@ -2729,7 +2729,7 @@
                     }`;
 
                 btn.innerHTML = `
-                    <span class="font-semibold text-sm truncate select-none mr-2">${task.title} <span class="text-xs font-normal opacity-60 font-mono">(${task.id})</span></span>
+                    <span class="font-semibold text-sm truncate select-none mr-2">${task.title}</span>
                     <span id="badge-${task.id}" class="shrink-0">
                         ${isPassed ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>' : '<i class="fa-regular fa-circle text-slate-500"></i>'}
                     </span>
@@ -4281,7 +4281,7 @@
         }
 
         function detectIndentation(code) {
-            if (!code) return 4;
+            if (!code) return 2;
             const lines = code.split('\n');
             let minIndent = Infinity;
             for (let i = 0; i < lines.length; i++) {
@@ -4294,8 +4294,8 @@
                     }
                 }
             }
-            if (minIndent === 2) return 2;
-            return 4; // Default to standard PEP 8 4 spaces
+            if (minIndent === 4) return 4;
+            return 2; // Default to 2 spaces
         }
 
         function updateEditorModeForFile(filename) {
@@ -6144,11 +6144,16 @@
                 if (name === null) return;
                 name = name.trim();
                 if (!name) return;
-                const defaultId = name.toLowerCase().replace(/[^a-z0-9]/g, "_");
-                let id = prompt("Voer een uniek ID in:", defaultId);
-                if (id === null) return;
-                id = id.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
-                if (!id) return;
+                let id = "";
+                let index = 1;
+                if (isInitializingNewCourse || !taskConfig || !taskConfig.tabs) {
+                    id = "task_1";
+                } else {
+                    while (taskConfig.tabs.some(t => t.id === "task_" + index)) {
+                        index++;
+                    }
+                    id = "task_" + index;
+                }
 
                 let type = "python";
                 if (isInitializingNewCourse) {
@@ -6290,22 +6295,22 @@
 
             const handleSubmit = () => {
                 const name = nameInput.value.trim();
-                let id = idInput.value.trim().toLowerCase().replace(/[^a-z0-9_]/g, "");
                 const type = typeSelect ? typeSelect.value : "python";
 
                 if (!name) {
                     alert("Naam mag niet leeg zijn.");
                     return;
                 }
-                if (!id) {
-                    alert("ID mag niet leeg zijn.");
-                    return;
-                }
 
-                // Verify duplicate IDs (only if not starting a new course from scratch)
-                if (!isInitializingNewCourse && taskConfig && taskConfig.tabs && taskConfig.tabs.find(t => t.id === id)) {
-                    alert(`Een opdracht met ID "${id}" bestaat al. Kies een ander ID.`);
-                    return;
+                let id = "";
+                let index = 1;
+                if (isInitializingNewCourse || !taskConfig || !taskConfig.tabs) {
+                    id = "task_1";
+                } else {
+                    while (taskConfig.tabs.some(t => t.id === "task_" + index)) {
+                        index++;
+                    }
+                    id = "task_" + index;
                 }
 
                 if (isInitializingNewCourse) {
@@ -6464,7 +6469,7 @@
             const task = taskConfig.tabs.find(t => t.id === taskId);
             if (!task) return;
 
-            let newTitle = prompt(`Pas de naam van de opdracht aan (ID: ${task.id} - niet aanpasbaar):`, task.title || task.filename.replace(/\.py$/, ""));
+            let newTitle = prompt("Pas de naam van de opdracht aan:", task.title || task.filename.replace(/\.py$/, ""));
             if (newTitle === null) return;
             newTitle = newTitle.trim();
             if (!newTitle) return;

@@ -2,7 +2,7 @@
     "title": "Web Development Cursus",
     "assignments": [
         {
-            "id": "web_01",
+            "id": "task_1",
             "title": "Mijn Eerste Webpagina",
             "instruction": "<h3 class='text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2'>Hallo Wereld in HTML</h3><p class='mb-2 text-slate-800 dark:text-slate-300'>In deze opdracht gaan we een simpele webpagina maken met HTML, CSS en JavaScript!</p><p class='mb-2 text-slate-800 dark:text-slate-300'>De editor heeft automatisch <code>style.css</code> en <code>script.js</code> gekoppeld aan <code>index.html</code>. Kijk in de webconsole hieronder voor een tip hoe je dit normaal gesproken zelf doet.</p>",
             "files": [
@@ -23,7 +23,7 @@
             "tests": []
         },
         {
-            "id": "web_02",
+            "id": "task_2",
             "title": "Handmatig Bestanden Koppelen",
             "instruction": "<h3 class='text-lg font-semibold text-slate-900 dark:text-slate-100 mb-2'>Koppelen van CSS en JS</h3><p class='mb-2 text-slate-800 dark:text-slate-300'>Voor deze opdracht is de strenge modus geactiveerd. De editor koppelt <code>style.css</code> en <code>script.js</code> niet meer automatisch!</p><p class='mb-2 text-slate-800 dark:text-slate-300'>Koppel de stylesheet handmatig in de <code>&lt;head&gt;</code> en voeg het scriptbestand handmatig toe onderaan de <code>&lt;body&gt;</code>.</p>",
             "requireManualLinking": true,
