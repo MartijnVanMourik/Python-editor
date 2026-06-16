@@ -4,7 +4,7 @@
     "tabs": [
         {
             "id": "task_1",
-            "title": "Herhaalinstructie",
+            "title": "2.01: Herhaalinstructie",
             "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Als je een vierkant wilt gaan tekenen met zijden van 100 pixels, dan zou je het programma van hiernaast kunnen uitvoeren.</p>\n<p>&nbsp;</p>\n<p class=\"mb-3\">Merk op dat de twee commando's <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">forward(100)</code> en <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">left(90)</code> vier keer worden herhaald!&nbsp;<span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Zou het niet veel beter zijn als je de computer kort en krachtig kan aangeven dat hij die twee instructies vier keer moet uitvoeren?</span></p></div>\n<p><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Dat kan! En hiervoor maak je gebruik van de herhaalinstructie (wordt ook een loop genoemd). Dit leggen we zo verder uit.</span></p>\n<div class=\"wysiwyg-section-uitvoeren my-3\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div><ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\"><li><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Voer het programma uit</span></li></ol></div>\n",
             "files": [
                 {
@@ -17,7 +17,7 @@
         },
         {
             "id": "task_2",
-            "title": "for i in range()",
+            "title": "2.02: for i in range()",
             "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">De <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">for</code>-instructie zorgt ervoor dat de twee opdrachten eronder vier keer worden uitgevoerd. Als er <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">for i in range(14):</code> zou staan, dan zouden die twee opdrachten dus 14 keer worden herhaald.</p>\n<p><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"><span style=\"font-weight: bold;\">Let op</span>: zet een <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">tab</code> voor alle instructies die herhaald moeten worden. Dit noem je inspringen. Hetgeen dat herhaald moet worden, dient dus te worden ingesprongen. Als je dat niet doet, dan krijg je een foutmelding of je programma doet niet wat je bedoelde.</span></p>\n<div class=\"wysiwyg-section-uitvoeren my-3\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div><ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\"><li><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Voer het programma uit</span></li><li>Maak van de 4 een 2 en kijk wat er gebeurt, en wat als je er 100 van maakt</li><li>Verander op regel 8 de hoek naar 70 en voer het programma uit met 100 loops</li></ol></div>\n</div>\n",
             "files": [
                 {
@@ -30,7 +30,7 @@
         },
         {
             "id": "task_3",
-            "title": "MAND",
+            "title": "2.03: MAND",
             "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Net zoals je zelf \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\"><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">Mand...</code></code>\" zou roepen als iemand een langdradig verhaal vertelt dat korter kan, wil je natuurlijk niet dat de computer dat over jouw instructies zou kunnen zeggen. Daarom is de loop functie erg handig.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het gegeven programma uit, bekijk de instructies en roep \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\"><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">Mand...!</code></code>\"</li>\n  <li>Maak het programma korter door gebruik te maken van van een loop!</li>\n</ol>\n</div>\n",
             "files": [
                 {
@@ -43,7 +43,7 @@
         },
         {
             "id": "task_4",
-            "title": "Blauw vierkant",
+            "title": "2.04: Blauw vierkant",
             "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Meneer Van Mourik vindt een blauw vierkant het mooiste vierkant!</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Maak met behulp van de loop functie een blauw vierkant waarvan de zijden 100 pixels zijn</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-tip my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-lightbulb text-orange-400\"></i> Tip:</div>\n<p class=\"mb-3\">Gebruik de spiekbrief voor de functies voor het vullen. De herhaal functie staat daar nu ook bij.</p>\n</div>\n",
             "files": [
                 {
@@ -56,12 +56,77 @@
         },
         {
             "id": "task_5",
-            "title": "Trap",
+            "title": "2.06: Trap",
             "instruction": "<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Maak een programma dat een trap maakt met 10 treden. De treden zijn 20 pixels. De eerste trede is al voor je gemaakt.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-tip my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-lightbulb text-orange-400\"></i> Tip:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Herhaal de trede 10 keer met een loop. Vergeet niet het inspringen. Dit kan makkelijk door de regels 7 t/m 10 te selecteren en op <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">TAB</code> te klikken.</li>\n</ol>\n</div>\n",
             "files": [
                 {
                     "filename": "main.py",
                     "initialCode": "from turtle import * \n\nshape(\"turtle\")\nspeed(7)\n\nfor i in range(10):\n  #maak een trede\n  left(90)\n  forward(20)\n  right(90)\n  forward(20)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_6",
+            "title": "2.07: 18-hoek",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Meneer Hofland vindt een groene 18 hoek het mooiste figuur! Het lijkt op een cirkel maar dat is het echt niet.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Maak met behulp van de loop functie een groene 18-hoek waarvan de zijden 30 pixels zijn. De instructies zijn al gemaakt, echter staan ze niet op de juiste plek. En daarnaast kloppen de getallen helaas niet.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-tip my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-lightbulb text-orange-400\"></i> Tip:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Hoe groot is de hoek? Alle hoeken bij elkaar zijn 360</li>\n  <li>Wanneer moet je starten met vullen en wanneer eindigen?</li>\n  <li>Vergeet het inspringen niet!</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(2)\n\n#De code hieronder staat in de verkeerde volgorde.\n  left(20)\nbegin_fill()\nend_fill()\nfor i in range(18):\nfillcolor(\"green\")\n  forward(30)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_7",
+            "title": "2.08: Ster",
+            "instruction": "<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Maak een programma dat een ster maakt.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-tip my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-lightbulb text-orange-400\"></i> Tip:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>De hoek is 45 graden en de lengte van een straal is 100 pixels.</li>\n  <li>Het enige dat je hoeft te doen is regel 7 t/m 9 herhalen met een loop.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(2)\n\n#Dit deel maakt een enkele straal.\nforward(100) \nbackward(100)\nright(45)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_8",
+            "title": "2.09: Geneste loop",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Je kan ook een loop in een loop doen. Je ziet dat de tweede loop ook twee <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">TAB</code>-jes ingesprongen zijn. Dit noemen we <b>geneste</b> loop.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit.</li>\n  <li>Pas de getallen en de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">TAB</code>-jes aan zodat je goed snapt wat er eigenlijk gebeurt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(6)\n\n#Deze loop maakt 10 vierkanten\nfor i in range(10): \n  #Deze loop maakt een vierkant\n  for i in range(4): \n    forward(20)\n    left(90)\n  #Naar nieuwe start\n  forward(20)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_9",
+            "title": "2.10: Driehoeken",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Hiernaast is een programma dat 5 keer een driehoek tekent. Helaas op dezelfde plek.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Pas het programma zo aan dat de 5 driehoeken exact <b>naast</b> elkaar gezet worden.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-tip my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-lightbulb text-orange-400\"></i> Tip:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>De aanpassingen moeten gemaakt worden in de eerste <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">for-loop</code> (Dus op 1 <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">tab</code>).</li>\n  <li>De volgende instructie moet worden toegevoegd: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">forward(25)</code>.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(2)\n\nfor i in range(5):\n  for i in range(3):\n    forward(25)\n    left(120)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_10",
+            "title": "2.11: Blokken",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Olivier maakt vaak een toren van blokken. Zijn record is wel 5 blokken!</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Pas het programma zo aan dat de 5 vierkanten exact op elkaar gestapeld worden.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(2)\n\nfor i in range(5): \n  for i in range(4):\n    forward(25)\n    left(90)",
                     "isMain": true
                 }
             ],
