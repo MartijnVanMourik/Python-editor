@@ -3076,6 +3076,7 @@
 
                     const workspace = getTaskWorkspace(currentTaskId);
                     editor.setValue(workspace.files[workspace.activeFile] || "");
+                    updateEditorModeForFile(workspace.activeFile);
                     renderWorkspaceTabs();
                 }
                 confirmation.remove();
@@ -4279,6 +4280,24 @@
             return Object.keys(workspace.files).some(name => name.endsWith('.html'));
         }
 
+        function detectIndentation(code) {
+            if (!code) return 4;
+            const lines = code.split('\n');
+            let minIndent = Infinity;
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                const match = line.match(/^([ ]+)\S/);
+                if (match) {
+                    const indentLength = match[1].length;
+                    if (indentLength < minIndent) {
+                        minIndent = indentLength;
+                    }
+                }
+            }
+            if (minIndent === 2) return 2;
+            return 4; // Default to standard PEP 8 4 spaces
+        }
+
         function updateEditorModeForFile(filename) {
             if (!editor) return;
             const ext = filename.split('.').pop().toLowerCase();
@@ -4293,6 +4312,17 @@
                 mode = { name: "python", version: 3, singleLineStringErrors: false };
             }
             editor.setOption("mode", mode);
+
+            // Configure dynamic indentation unit and tab size to match current file formatting
+            if (ext === "py") {
+                const code = editor.getValue();
+                const detectedIndent = detectIndentation(code);
+                editor.setOption("indentUnit", detectedIndent);
+                editor.setOption("tabSize", detectedIndent);
+            } else {
+                editor.setOption("indentUnit", 4);
+                editor.setOption("tabSize", 4);
+            }
 
             // Update export file label and title to match the active tab file type
             const exportLabel = document.getElementById("export-file-label");
@@ -5243,6 +5273,7 @@
 
                 // Load active code and re-render
                 editor.setValue(workspace.files[workspace.activeFile] || "");
+                updateEditorModeForFile(workspace.activeFile);
                 renderWorkspaceTabs();
                 showToast(`🗑️ ${filename} verwijderd`);
             }
