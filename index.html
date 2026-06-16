@@ -5634,22 +5634,22 @@
 
             let html = "";
             if (type === 'lezen') {
-                html = `<div class="wysiwyg-section-lezen my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-eye text-sky-400"></i> Lezen:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Regel 1 - ...</li></ol></div><p>&nbsp;</p>`;
+                html = `<div class="wysiwyg-section-lezen my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-eye text-sky-400"></i> Lezen:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Regel 1 - ...</li></ol></div>`;
             } else if (type === 'uitvoeren') {
-                html = `<div class="wysiwyg-section-uitvoeren my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-play text-emerald-400"></i> Uitvoeren:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Probeer te voorspellen...</li><li>Run de code...</li></ol></div><p>&nbsp;</p>`;
+                html = `<div class="wysiwyg-section-uitvoeren my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-play text-emerald-400"></i> Uitvoeren:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Probeer te voorspellen...</li><li>Run de code...</li></ol></div>`;
             } else if (type === 'bewerken') {
-                html = `<div class="wysiwyg-section-bewerken my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-pen-to-square text-amber-400"></i> Bewerken:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Pas de code aan zodat...</li></ol></div><p>&nbsp;</p>`;
+                html = `<div class="wysiwyg-section-bewerken my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-pen-to-square text-amber-400"></i> Bewerken:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Pas de code aan zodat...</li></ol></div>`;
             } else if (type === 'tip') {
                 if (isSingleLine) {
-                    html = `<div class="wysiwyg-tip-box bg-orange-500/10 border border-orange-500/30 rounded-xl p-3 text-xs text-orange-300 italic my-3"><i class="fa-solid fa-lightbulb mr-1.5 text-orange-400"></i> ${selHtml || 'Tip: Typ hier je hulpmiddel...'}</div><p>&nbsp;</p>`;
+                    html = `<div class="wysiwyg-tip-box bg-orange-500/10 border border-orange-500/30 rounded-xl p-3 text-xs text-orange-300 italic my-3"><i class="fa-solid fa-lightbulb mr-1.5 text-orange-400"></i> ${selHtml || 'Tip: Typ hier je hulpmiddel...'}</div>`;
                 } else {
-                    html = `<div class="wysiwyg-section-tip my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-lightbulb text-orange-400"></i> Tip:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Tip 1 - ...</li></ol></div><p>&nbsp;</p>`;
+                    html = `<div class="wysiwyg-section-tip my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-lightbulb text-orange-400"></i> Tip:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Tip 1 - ...</li></ol></div>`;
                 }
             } else if (type === 'info') {
                 if (isSingleLine) {
-                    html = `<div class="wysiwyg-info-box bg-blue-500/10 border border-blue-500/30 rounded-xl p-3 text-xs text-blue-300 my-3"><i class="fa-solid fa-info-circle mr-1.5 text-blue-400"></i> ${selHtml || 'Opmerking: Typ hier je aanvullende informatie...'}</div><p>&nbsp;</p>`;
+                    html = `<div class="wysiwyg-info-box bg-blue-500/10 border border-blue-500/30 rounded-xl p-3 text-xs text-blue-300 my-3"><i class="fa-solid fa-info-circle mr-1.5 text-blue-400"></i> ${selHtml || 'Opmerking: Typ hier je aanvullende informatie...'}</div>`;
                 } else {
-                    html = `<div class="wysiwyg-section-info my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-info-circle text-blue-400"></i> Opmerking:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Opmerking 1 - ...</li></ol></div><p>&nbsp;</p>`;
+                    html = `<div class="wysiwyg-section-info my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-info-circle text-blue-400"></i> Opmerking:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Opmerking 1 - ...</li></ol></div>`;
                 }
             }
 
@@ -5827,8 +5827,28 @@
                         // Ignore blank line immediately following a heading
                         continue;
                     }
+
+                    // Look ahead to check if the next non-empty line is a section heading
+                    let nextIsHeading = false;
+                    for (let j = i + 1; j < lines.length; j++) {
+                        const nextLine = lines[j].trim();
+                        if (nextLine !== '') {
+                            const nextLower = nextLine.toLowerCase();
+                            if (nextLower.startsWith('lezen') || nextLower.includes('👁 lezen') || nextLower.includes('lezen:') ||
+                                nextLower.startsWith('uitvoeren') || nextLower.includes('▶ uitvoeren') || nextLower.includes('uitvoeren:') ||
+                                nextLower.startsWith('bewerken') || nextLower.includes('📝 bewerken') || nextLower.includes('bewerken:') ||
+                                nextLower.startsWith('tip') || nextLower.includes('💡 tip') || nextLower.includes('tip:') ||
+                                nextLower.startsWith('info') || nextLower.includes('ℹ️ info') || nextLower.startsWith('opmerking') || nextLower.includes('info:') || nextLower.includes('opmerking:')) {
+                                nextIsHeading = true;
+                            }
+                            break;
+                        }
+                    }
+
                     closeList();
-                    html += `<p>&nbsp;</p>\n`;
+                    if (!nextIsHeading) {
+                        html += `<p>&nbsp;</p>\n`;
+                    }
                     continue;
                 }
 
