@@ -1,0 +1,32 @@
+{
+    "title": "Nieuwe Python Cursus",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "2_01",
+            "title": "Herhaalinstructie",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Als je een vierkant wilt gaan tekenen met zijden van 100 pixels, dan zou je het programma van hiernaast kunnen uitvoeren.</p>\n<p>&nbsp;</p>\n<p class=\"mb-3\">Merk op dat de twee commando's <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">forward(100)</code> en <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">left(90)</code> vier keer worden herhaald!&nbsp;<span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Zou het niet veel beter zijn als je de computer kort en krachtig kan aangeven dat hij die twee instructies vier keer moet uitvoeren?</span></p></div>\n<p><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Dat kan! En hiervoor maak je gebruik van de herhaalinstructie (wordt ook een loop genoemd). Dit leggen we zo verder uit.</span></p>\n<div class=\"wysiwyg-section-uitvoeren my-3\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div><ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\"><li><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Voer het programma uit</span></li></ol></div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(2)\n\nforward(100)\nleft(90)\nforward(100)\nleft(90)\nforward(100)\nleft(90)\nforward(100)\nleft(90)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "2_02",
+            "title": "for i in range()",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">De <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">for</code>-instructie zorgt ervoor dat de twee opdrachten eronder vier keer worden uitgevoerd. Als er <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">for i in range(14):</code> zou staan, dan zouden die twee opdrachten dus 14 keer worden herhaald.</p>\n<p><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"><span style=\"font-weight: bold;\">Let op</span>: zet een <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">tab</code> voor alle instructies die herhaald moeten worden. Dit noem je inspringen. Hetgeen dat herhaald moet worden, dient dus te worden ingesprongen. Als je dat niet doet, dan krijg je een foutmelding of je programma doet niet wat je bedoelde.</span></p>\n<div class=\"wysiwyg-section-uitvoeren my-3\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div><ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\"><li><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Voer het programma uit</span></li><li>Maak van de 4 een 2 en kijk wat er gebeurt, en wat als je er 100 van maakt</li><li>Verander op regel 8 de hoek naar 70 en voer het programma uit met 100 loops</li></ol></div>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(2)\n\nfor i in range(4):\n  forward(100)\n  left(90)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

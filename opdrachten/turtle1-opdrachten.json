@@ -1,0 +1,84 @@
+{
+    "title": "Python Turtle 1 - Inleveropdrachten",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "1_01",
+            "title": "Inleveropdracht - Een vierkant",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>In deze opdracht maak je een vierkant. Een deel van de code is er al.&nbsp;</li></ol>\n</div>\n<div class=\"wysiwyg-section-tip my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-lightbulb text-orange-400\"></i> Tip:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Selecteer met je muis de instructies op regel 10 en 11. Deze worden dan blauw.</li>\n  <li>Druk nu tegelijk op de knoppen <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">control </code>en <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">c</code>. Hiermee worden deze twee instructies gekopieerd.</li>\n  <li>Zet de cursor nu op regel 12.</li>\n  <li>Druk nu tegelijk op de knoppen <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">control </code>en <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">v</code>. Hiermee plak je de eerder gekopieerde code.</li>\n  <li>Doe de laatste stap nog twee keer, en ta da, je hebt een vierkant.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\ncolor(\"black\")\nspeed(2)\n\nforward(100)\nleft() # hoeveel graden?\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "1_02",
+            "title": "Uitwerking - Een vierkant",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">In deze opdracht maak je een vierkant. Een deel van de code is er al.</p>\n</div>\n<div class=\"wysiwyg-section-tip my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-lightbulb text-orange-400\"></i> Tip:</div>\n<p class=\"mb-3\"><ol><li>Selecteer met je muis de instructies op regel 10 en 11. Deze worden dan blauw.</li><li>Druk nu tegelijk op de knoppen <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">control </code>en <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">c</code>. Hiermee worden deze twee instructies gekopieerd.</li><li>Zet de cursor nu op regel 12.</li><li>Druk nu tegelijk op de knoppen <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">control </code>en <code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">v</code>. Hiermee plak je de eerder gekopieerde code.</li><li><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Doe de laatste stap nog twee keer, en ta da, je hebt een vierkant.</span></li></ol></p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\ncolor(\"black\")\nspeed(2)\n\nforward(100)\nleft(90) # hoeveel graden?\nforward(100)\nleft(90)\nforward(100)\nleft(90)\nforward(100)\nleft(90)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "1_03",
+            "title": "Inleveropdracht - Een zeshoek",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Een deel van het programma heeft meneer Van Mourik al gemaakt. Maar hij kan niet verder, de Domoor.</li>\n  <li>Bekijk het tabblad Tips als het niet lukt.&nbsp;</li></ol>\n</div>\n<div class=\"wysiwyg-section-bewerken my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-pen-to-square text-amber-400\"></i> Bewerken:</div>\n<p class=\"mb-3\">Maak een programma zodat de schildpad een zeshoek maakt. De zijde moeten 100 pixels lang zijn.  Als je klaar bent kopieer je de code en lever de link je deze in via onderstaande inleverknop.</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\ncolor(\"black\")\nspeed(2)\n\nforward(100)\nleft() # hoeveel graden?",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "1_04",
+            "title": "Uitwerking - Een zeshoek",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Een deel van het programma heeft meneer Van Mourik al gemaakt. Maar hij kan niet verder, de Domoor.</p>\n<p class=\"mb-3\">Bekijk het tabblad Tips als het niet lukt.</p>\n</div>\n<div class=\"wysiwyg-section-bewerken my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-pen-to-square text-amber-400\"></i> Bewerken:</div>\n<p class=\"mb-3\">Maak een programma zodat de schildpad een zeshoek maakt. De zijde moeten 100 pixels lang zijn. Als je klaar bent kopieer je de code en lever de link je deze in via onderstaande inleverknop.</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\ncolor(\"black\")\nspeed(2)\n\nforward(100)\nleft(60) # hoeveel graden?\nforward(100)\nleft(60)\nforward(100)\nleft(60)\nforward(100)\nleft(60)\nforward(100)\nleft(60)\nforward(100)\nleft(60)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "1_05",
+            "title": "Inleveropdracht - Een vlag",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>In deze opdracht pas je toe wat je in deze les hebt geleerd. Je gaat een afbeelding van een vlag maken. Dit kan een bestaande vlag zijn, of een eigen verzonnen vlag.</li></ol></div>",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\ncolor(\"black\") \nspeed(5)\npensize(8)\n\n#Ga naar het begin\npenup()\ngoto(-110,-180)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "1_06",
+            "title": "Uitwerking - Een vlag (met functies)",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">In deze opdracht pas je toe wat je in deze les hebt geleerd. Je gaat een afbeelding van een vlag maken. Dit kan een bestaande vlag zijn, of een eigen verzonnen vlag.</p><div class=\"wysiwyg-section-info my-3\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-info-circle text-blue-400\"></i> Opmerking:</div><span style=\"font-size: 0.875rem; color: rgb(51, 65, 85);\">Deze uitwerking gebruikt <span style=\"font-weight: bold;\">functies</span>. Probeer te begrijpen wat er precies gebeurt door de code nauwkeurig te bekijken, maar als dit (nog) niet lukt dan is dit niet erg.&nbsp;</span></div>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\ncolor(\"black\") \nspeed(5)\npensize(8)\n\ndef maakStreep(kleur, breedte, hoogte):\n  setheading(90)\n  pendown()\n  fillcolor(kleur)\n  begin_fill()\n  forward(breedte)\n  right(90)\n  forward(hoogte)\n  right(90)\n  forward(breedte)\n  right(90)\n  forward(hoogte)\n  right(90)\n  end_fill()\n  \ndef maakStok():  \n  setheading(90)\n  forward(300)\n  \ndef gaNaarBegin():  \n  penup()\n  goto(-110,-180)\n  pendown()\n  \ndef volgendeStreep():\n  backward(50)\n\ngaNaarBegin()\nmaakStok()\nmaakStreep(\"blue\",50,200)\nvolgendeStreep()\nmaakStreep(\"white\",50,200)\nvolgendeStreep()\nmaakStreep(\"magenta\",50,200)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

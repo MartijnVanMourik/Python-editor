@@ -32,6 +32,13 @@
     <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
 
     <style>
+        html, body {
+            height: 100vh;
+            height: 100dvh;
+            margin: 0;
+            overflow: hidden;
+        }
+
         :root {
             --editor-color-default: #334155;
             --editor-color-white-black: #0f172a;
@@ -223,6 +230,13 @@
         .mode-compact #web-console-panel.h-\[480px\] {
             height: calc(100% - 150px) !important;
             max-height: 480px !important;
+        }
+        /* Make standard console window shorter in compact mode (fitting approx 2 lines) */
+        .mode-compact #turtle-console-panel:not(.h-\[480px\]) {
+            height: 70px !important;
+        }
+        .mode-compact #web-console-panel:not(.h-\[480px\]) {
+            height: 70px !important;
         }
 
         /* Custom scrollbar styles for premium look */
@@ -479,6 +493,23 @@
             margin-bottom: 0.5rem !important;
         }
 
+        #assignment-instruction h3 {
+            font-size: 1.125rem !important; /* text-lg */
+            font-weight: 600 !important;    /* font-semibold */
+            color: #f1f5f9 !important;      /* text-slate-100 */
+            margin-bottom: 0.5rem !important; /* mb-2 */
+        }
+        .theme-light #assignment-instruction h3 {
+            color: #0f172a !important;      /* text-slate-900 */
+        }
+        #assignment-instruction p {
+            font-size: 0.875rem !important; /* text-sm */
+            color: #cbd5e1 !important;      /* text-slate-300 */
+            margin-bottom: 0.5rem !important; /* mb-2 */
+        }
+        .theme-light #assignment-instruction p {
+            color: #334155 !important;      /* text-slate-700 */
+        }
         #assignment-instruction li {
             margin-bottom: 0.25rem !important;
             display: list-item !important;
@@ -5252,17 +5283,9 @@
             if (blockParent && blockParent !== docBox) {
                 const tag = blockParent.nodeName.toLowerCase();
                 if (tag === "h3") {
-                    // Toggle off: convert H3 to standard Paragraph block
-                    const p = document.createElement("p");
-                    p.className = "mb-2 text-sm text-slate-300";
-                    p.innerHTML = blockParent.innerHTML;
-                    blockParent.replaceWith(p);
+                    document.execCommand("formatBlock", false, "<p>");
                 } else {
-                    // Toggle on / convert existing block to H3 block
-                    const h3 = document.createElement("h3");
-                    h3.className = "text-lg font-semibold text-slate-100 mb-2";
-                    h3.innerHTML = blockParent.innerHTML;
-                    blockParent.replaceWith(h3);
+                    document.execCommand("formatBlock", false, "<h3>");
                 }
             } else {
                 // Fallback to standard command formatting if no block wrapper found
@@ -5297,10 +5320,7 @@
             if (blockParent && blockParent !== docBox) {
                 const tag = blockParent.nodeName.toLowerCase();
                 if (tag !== "p") {
-                    const p = document.createElement("p");
-                    p.className = "mb-2 text-sm text-slate-300";
-                    p.innerHTML = blockParent.innerHTML;
-                    blockParent.replaceWith(p);
+                    document.execCommand("formatBlock", false, "<p>");
                 }
             } else {
                 document.execCommand("formatBlock", false, "<p>");
@@ -5325,15 +5345,16 @@
             if (codeElem || preElem) {
                 // Toggle off: replace the element with its plain contents
                 const targetToRemove = preElem || codeElem;
-                const parent = targetToRemove.parentNode;
-
-                // If it is a pre block containing code, let's grab the inner code node or text content
                 const contentNode = preElem ? (preElem.querySelector("code") || preElem) : codeElem;
+                const contentHtml = contentNode.innerHTML;
 
-                while (contentNode.firstChild) {
-                    parent.insertBefore(contentNode.firstChild, targetToRemove);
-                }
-                targetToRemove.remove();
+                // Select targetToRemove so that execCommand replaces it
+                const selectRange = document.createRange();
+                selectRange.selectNode(targetToRemove);
+                selection.removeAllRanges();
+                selection.addRange(selectRange);
+
+                document.execCommand("insertHTML", false, contentHtml);
                 saveActiveInstruction();
                 return;
             }
@@ -5342,37 +5363,42 @@
             const selText = selection.toString();
             const hasNewlines = selText.includes("\n") || selText.includes("\r");
 
+            // Simple HTML escape function to prevent injection/broken tags
+            function escapeHTML(str) {
+                return str.replace(/[&<>'"]/g, 
+                    tag => ({
+                        '&': '&amp;',
+                        '<': '&lt;',
+                        '>': '&gt;',
+                        "'": '&#39;',
+                        '"': '&quot;'
+                    }[tag] || tag)
+                );
+            }
+
             if (hasNewlines) {
                 // Multi-line selection: Create a beautiful block-level pre container
-                const preElement = document.createElement("pre");
-                preElement.className = "bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs text-yellow-400 my-3 block whitespace-pre-wrap";
-
-                const codeElement = document.createElement("code");
-                codeElement.className = "font-mono";
-                codeElement.textContent = selText;
-
-                preElement.appendChild(codeElement);
-                range.deleteContents();
-                range.insertNode(preElement);
-
-                // Insert empty spacing paragraph below the block so cursor can escape easily
-                const p = document.createElement("p");
-                p.innerHTML = "&nbsp;";
-                preElement.parentNode.insertBefore(p, preElement.nextSibling);
+                const escapedText = escapeHTML(selText);
+                const html = `<pre class="bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs text-yellow-400 my-3 block whitespace-pre-wrap"><code class="font-mono">${escapedText}</code></pre><p>&nbsp;</p>`;
+                document.execCommand("insertHTML", false, html);
             } else {
                 // Single line or single word selection: Create an inline code element
-                const codeElement = document.createElement("code");
-                codeElement.className = "bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs";
-                codeElement.textContent = selText || "code";
-                range.deleteContents();
-                range.insertNode(codeElement);
-
-                // Focus and select the newly inserted code block if it was blank
                 if (!selText) {
-                    const newRange = document.createRange();
-                    newRange.selectNodeContents(codeElement);
-                    selection.removeAllRanges();
-                    selection.addRange(newRange);
+                    // Focus and select the newly inserted code block if it was blank
+                    const html = `<code id="temp-code-marker" class="bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs">code</code>`;
+                    document.execCommand("insertHTML", false, html);
+                    const codeElement = document.getElementById("temp-code-marker");
+                    if (codeElement) {
+                        codeElement.removeAttribute("id");
+                        const newRange = document.createRange();
+                        newRange.selectNodeContents(codeElement);
+                        selection.removeAllRanges();
+                        selection.addRange(newRange);
+                    }
+                } else {
+                    const escapedText = escapeHTML(selText);
+                    const html = `<code class="bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs">${escapedText}</code>`;
+                    document.execCommand("insertHTML", false, html);
                 }
             }
 
@@ -5393,14 +5419,19 @@
                 range = selection.getRangeAt(0);
             }
 
+            if (!range) {
+                const newRange = document.createRange();
+                newRange.selectNodeContents(docBox);
+                newRange.collapse(false);
+                selection.removeAllRanges();
+                selection.addRange(newRange);
+                range = newRange;
+            }
+
             if (range) {
                 selection.removeAllRanges();
                 selection.addRange(range);
-
-                // Use insertHTML to keep browser's undo/redo history intact
                 document.execCommand("insertHTML", false, htmlContent);
-            } else {
-                docBox.innerHTML += htmlContent;
             }
 
             // Clear the saved selection range after use
@@ -5455,23 +5486,19 @@
             if (!docBox) return;
             docBox.focus();
 
+            if (!range) {
+                const newRange = document.createRange();
+                newRange.selectNodeContents(docBox);
+                newRange.collapse(false);
+                selection.removeAllRanges();
+                selection.addRange(newRange);
+                range = newRange;
+            }
+
             if (range) {
                 selection.removeAllRanges();
                 selection.addRange(range);
-                range.deleteContents();
-
-                const tempDiv = document.createElement("div");
-                tempDiv.innerHTML = linkHtml;
-                const node = tempDiv.firstChild;
-                range.insertNode(node);
-
-                const newRange = document.createRange();
-                newRange.setStartAfter(node);
-                newRange.collapse(true);
-                selection.removeAllRanges();
-                selection.addRange(newRange);
-            } else {
-                docBox.innerHTML += linkHtml;
+                document.execCommand("insertHTML", false, linkHtml);
             }
             saveActiveInstruction();
         }
@@ -5590,10 +5617,18 @@
                     if (sectionElem) {
                         if (confirm(`Weet je zeker dat je de complete sectie '${sectionName}' wilt verwijderen?`)) {
                             const nextSib = sectionElem.nextSibling;
+                            
+                            const deleteRange = document.createRange();
                             if (nextSib && nextSib.nodeName.toLowerCase() === 'p' && (nextSib.innerHTML === '&nbsp;' || nextSib.textContent.trim() === '')) {
-                                nextSib.remove();
+                                deleteRange.setStartBefore(sectionElem);
+                                deleteRange.setEndAfter(nextSib);
+                            } else {
+                                deleteRange.selectNode(sectionElem);
                             }
-                            sectionElem.remove();
+                            selection.removeAllRanges();
+                            selection.addRange(deleteRange);
+                            document.execCommand("delete");
+
                             saveActiveInstruction();
                             showToast(`🗑️ Sectie '${sectionName}' verwijderd`);
                         }
@@ -5709,6 +5744,15 @@
             const doc = parser.parseFromString(html, "text/html");
             const body = doc.body;
 
+            // Convert <i> and <em> elements to markdown backticks so they are recognized as code
+            const italics = body.querySelectorAll("i, em");
+            italics.forEach(el => {
+                const text = el.textContent.trim();
+                if (text) {
+                    el.textContent = `\`${text}\``;
+                }
+            });
+
             // Prepend numbering/bullets to <li> elements if they don't already have them
             const lis = body.querySelectorAll("li");
             lis.forEach(li => {
@@ -5735,7 +5779,21 @@
             // Traverse the DOM recursively to build plain text with newlines for block elements
             function getDomTextWithLayout(node) {
                 if (node.nodeType === Node.TEXT_NODE) {
-                    return node.textContent;
+                    let text = node.textContent;
+                    let parent = node.parentNode;
+                    let insidePre = false;
+                    while (parent) {
+                        const parentTag = parent.nodeName.toLowerCase();
+                        if (parentTag === "pre" || parentTag === "code") {
+                            insidePre = true;
+                            break;
+                        }
+                        parent = parent.parentNode;
+                    }
+                    if (!insidePre) {
+                        text = text.replace(/\s+/g, " ");
+                    }
+                    return text;
                 }
                 if (node.nodeType === Node.ELEMENT_NODE) {
                     const tagName = node.nodeName.toLowerCase();
@@ -5747,10 +5805,11 @@
 
                     // Add newlines for block tags and breaks
                     const blockTags = ["p", "div", "li", "h1", "h2", "h3", "h4", "h5", "h6", "tr", "thead", "tbody", "table", "section", "header", "footer", "nav", "aside", "article", "form"];
-                    if (blockTags.includes(tagName)) {
-                        content += "\n";
-                    } else if (tagName === "br" || tagName === "hr") {
-                        content += "\n";
+                    if (blockTags.includes(tagName) || tagName === "br" || tagName === "hr") {
+                        const trimmedContent = content.trim();
+                        if (trimmedContent !== "") {
+                            content = content.replace(/\n*$/, "") + "\n";
+                        }
                     }
 
                     return content;
@@ -5828,21 +5887,35 @@
                         continue;
                     }
 
-                    // Look ahead to check if the next non-empty line is a section heading
+                    // Look ahead to check if the next non-empty line is a section heading or same list type
                     let nextIsHeading = false;
+                    let nextIsSameList = false;
                     for (let j = i + 1; j < lines.length; j++) {
                         const nextLine = lines[j].trim();
                         if (nextLine !== '') {
                             const nextLower = nextLine.toLowerCase();
                             if (nextLower.startsWith('lezen') || nextLower.includes('👁 lezen') || nextLower.includes('lezen:') ||
                                 nextLower.startsWith('uitvoeren') || nextLower.includes('▶ uitvoeren') || nextLower.includes('uitvoeren:') ||
+                                nextLower.startsWith('doen') || nextLower.includes('doen:') ||
                                 nextLower.startsWith('bewerken') || nextLower.includes('📝 bewerken') || nextLower.includes('bewerken:') ||
                                 nextLower.startsWith('tip') || nextLower.includes('💡 tip') || nextLower.includes('tip:') ||
                                 nextLower.startsWith('info') || nextLower.includes('ℹ️ info') || nextLower.startsWith('opmerking') || nextLower.includes('info:') || nextLower.includes('opmerking:')) {
                                 nextIsHeading = true;
                             }
+                            if (inList) {
+                                const isOl = listType === 'ol' && nextLine.match(/^(\d+[\.\)]\s*)(.*)/);
+                                const isUl = listType === 'ul' && nextLine.match(/^([\-\*\+]\s*)(.*)/);
+                                if (isOl || isUl) {
+                                    nextIsSameList = true;
+                                }
+                            }
                             break;
                         }
+                    }
+
+                    if (nextIsSameList) {
+                        // Skip empty line to prevent list fragmentation
+                        continue;
                     }
 
                     closeList();
@@ -5862,7 +5935,8 @@
                     html += `<div class="wysiwyg-section-lezen my-3">\n<div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-eye text-sky-400"></i> Lezen:</div>\n`;
                     headingMatched = true;
                     justMatchedHeading = true;
-                } else if (lowerLine.startsWith('uitvoeren') || lowerLine.includes('▶ uitvoeren') || lowerLine.includes('uitvoeren:')) {
+                } else if (lowerLine.startsWith('uitvoeren') || lowerLine.includes('▶ uitvoeren') || lowerLine.includes('uitvoeren:') ||
+                           lowerLine.startsWith('doen') || lowerLine.includes('doen:')) {
                     closeSection();
                     activeSectionType = 'uitvoeren';
                     html += `<div class="wysiwyg-section-uitvoeren my-3">\n<div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-play text-emerald-400"></i> Uitvoeren:</div>\n`;
@@ -5934,14 +6008,53 @@
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;");
 
-            // Auto wrap functions/statements with code block (e.g. backwards(), goto(), right(90))
-            escaped = escaped.replace(/([a-zA-Z_][a-zA-Z0-9_]*\([^\)]*\))/g, '<code class="bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs">$1</code>');
+            const placeholders = [];
+            function addPlaceholder(html) {
+                const id = `___PLACEHOLDER_${placeholders.length}___`;
+                placeholders.push({ id, html });
+                return id;
+            }
 
-            // Auto wrap quotes inside string parameter listings
-            escaped = escaped.replace(/(["'])([^"'\n\r\t]+)(["'])/g, '$1<code class="bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs">$2</code>$3');
+            // 0. Auto wrap backtick blocks (converted from <i> / <em> tags or manual backticks)
+            escaped = escaped.replace(/`([^`\n\r\t]+)`/g, (match, content) => {
+                const codeHtml = `<code class="bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs">${content}</code>`;
+                return addPlaceholder(codeHtml);
+            });
 
-            // Highlight "Run" and "Test"
-            escaped = escaped.replace(/(Run|Test|Voer uit|Voer Code Uit|Test Code)/gi, '<span class="font-bold text-slate-800 dark:text-slate-200">$1</span>');
+            // 1. Auto wrap string parameter listings in quotes (e.g. "param" or 'param')
+            escaped = escaped.replace(/(["'])([^"'\n\r\t]+)(["'])/g, (match, q1, content, q2) => {
+                const codeHtml = `${q1}<code class="bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs">${content}</code>${q2}`;
+                return addPlaceholder(codeHtml);
+            });
+
+            // 2. Detect python loops like "for i in range(14):" or keyword combinations
+            escaped = escaped.replace(/\b(for\s+[a-zA-Z_][a-zA-Z0-9_]*\s+in\s+range\([^)]*\):)/gi, (match, loopStr) => {
+                const codeHtml = `<code class="bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs">${loopStr}</code>`;
+                return addPlaceholder(codeHtml);
+            });
+
+            // 3. Detect standard functions like range(14), backwards(), right(90)
+            escaped = escaped.replace(/\b([a-zA-Z_][a-zA-Z0-9_]*\([^\)]*\))/g, (match, funcStr) => {
+                const codeHtml = `<code class="bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs">${funcStr}</code>`;
+                return addPlaceholder(codeHtml);
+            });
+
+            // 4. Detect standalone keywords/words: "for" and "tab" (using word boundaries \b)
+            escaped = escaped.replace(/\b(for|tab)\b/gi, (match, word) => {
+                const codeHtml = `<code class="bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs">${word}</code>`;
+                return addPlaceholder(codeHtml);
+            });
+
+            // 5. Highlight "Run" and "Test"
+            escaped = escaped.replace(/\b(Run|Test|Voer uit|Voer Code Uit|Test Code)\b/gi, (match, word) => {
+                const spanHtml = `<span class="font-bold text-slate-800 dark:text-slate-200">${word}</span>`;
+                return addPlaceholder(spanHtml);
+            });
+
+            // Restore all placeholders in reverse order
+            for (let i = placeholders.length - 1; i >= 0; i--) {
+                escaped = escaped.replaceAll(placeholders[i].id, placeholders[i].html);
+            }
 
             return escaped;
         }
