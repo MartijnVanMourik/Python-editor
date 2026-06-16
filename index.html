@@ -70,17 +70,123 @@
             --editor-color-fuchsia: #f472b6;
         }
 
-        /* Legacy font color overrides mapping to active theme variables */
-        #assignment-instruction font[color="#60a5fa"] {
-            color: var(--editor-color-blue) !important;
-        }
+        /* Comprehensive color overrides mapping light/dark hex/rgb to active theme variables */
+        #assignment-instruction [style*="rgb(51, 65, 85)"],
+        #assignment-instruction [style*="rgb(203, 213, 225)"],
+        #assignment-instruction [style*="#334155"],
+        #assignment-instruction [style*="#cbd5e1"],
+        #assignment-instruction font[color="#334155"],
+        #assignment-instruction font[color="#cbd5e1"] { color: var(--editor-color-default) !important; }
 
-        #assignment-instruction font[color="#fb923c"] {
-            color: var(--editor-color-orange) !important;
-        }
+        #assignment-instruction [style*="rgb(15, 23, 42)"],
+        #assignment-instruction [style*="rgb(255, 255, 255)"],
+        #assignment-instruction [style*="#0f172a"],
+        #assignment-instruction [style*="#ffffff"],
+        #assignment-instruction font[color="#0f172a"],
+        #assignment-instruction font[color="#ffffff"] { color: var(--editor-color-white-black) !important; }
 
-        /* Ensure code inside colored font tags inherits font color */
-        #assignment-instruction font[color] code {
+        #assignment-instruction [style*="rgb(100, 116, 139)"],
+        #assignment-instruction [style*="rgb(148, 163, 184)"],
+        #assignment-instruction [style*="#64748b"],
+        #assignment-instruction [style*="#94a3b8"],
+        #assignment-instruction font[color="#64748b"],
+        #assignment-instruction font[color="#94a3b8"] { color: var(--editor-color-gray) !important; }
+
+        #assignment-instruction [style*="rgb(225, 29, 72)"],
+        #assignment-instruction [style*="rgb(248, 113, 113)"],
+        #assignment-instruction [style*="#e11d48"],
+        #assignment-instruction [style*="#f87171"],
+        #assignment-instruction font[color="#e11d48"],
+        #assignment-instruction font[color="#f87171"] { color: var(--editor-color-red) !important; }
+
+        #assignment-instruction [style*="rgb(219, 39, 119)"],
+        #assignment-instruction [style*="rgb(251, 113, 133)"],
+        #assignment-instruction [style*="#db2777"],
+        #assignment-instruction [style*="#fb7185"],
+        #assignment-instruction font[color="#db2777"],
+        #assignment-instruction font[color="#fb7185"] { color: var(--editor-color-pink) !important; }
+
+        #assignment-instruction [style*="rgb(234, 88, 12)"],
+        #assignment-instruction [style*="rgb(251, 146, 60)"],
+        #assignment-instruction [style*="#ea580c"],
+        #assignment-instruction [style*="#fb923c"],
+        #assignment-instruction font[color="#ea580c"],
+        #assignment-instruction font[color="#fb923c"] { color: var(--editor-color-orange) !important; }
+
+        #assignment-instruction [style*="rgb(217, 119, 6)"],
+        #assignment-instruction [style*="rgb(251, 191, 36)"],
+        #assignment-instruction [style*="#d97706"],
+        #assignment-instruction [style*="#fbbf24"],
+        #assignment-instruction font[color="#d97706"],
+        #assignment-instruction font[color="#fbbf24"] { color: var(--editor-color-amber) !important; }
+
+        #assignment-instruction [style*="rgb(202, 138, 4)"],
+        #assignment-instruction [style*="rgb(250, 204, 21)"],
+        #assignment-instruction [style*="#ca8a04"],
+        #assignment-instruction [style*="#facc15"],
+        #assignment-instruction font[color="#ca8a04"],
+        #assignment-instruction font[color="#facc15"] { color: var(--editor-color-yellow) !important; }
+
+        #assignment-instruction [style*="rgb(101, 163, 13)"],
+        #assignment-instruction [style*="rgb(163, 230, 53)"],
+        #assignment-instruction [style*="#65a30d"],
+        #assignment-instruction [style*="#a3e635"],
+        #assignment-instruction font[color="#65a30d"],
+        #assignment-instruction font[color="#a3e635"] { color: var(--editor-color-lime) !important; }
+
+        #assignment-instruction [style*="rgb(22, 163, 74)"],
+        #assignment-instruction [style*="rgb(74, 222, 128)"],
+        #assignment-instruction [style*="#16a34a"],
+        #assignment-instruction [style*="#4ade80"],
+        #assignment-instruction font[color="#16a34a"],
+        #assignment-instruction font[color="#4ade80"] { color: var(--editor-color-green) !important; }
+
+        #assignment-instruction [style*="rgb(5, 150, 105)"],
+        #assignment-instruction [style*="rgb(52, 211, 153)"],
+        #assignment-instruction [style*="#059669"],
+        #assignment-instruction [style*="#34d399"],
+        #assignment-instruction font[color="#059669"],
+        #assignment-instruction font[color="#34d399"] { color: var(--editor-color-emerald) !important; }
+
+        #assignment-instruction [style*="rgb(8, 145, 178)"],
+        #assignment-instruction [style*="rgb(34, 211, 238)"],
+        #assignment-instruction [style*="#0891b2"],
+        #assignment-instruction [style*="#22d3ee"],
+        #assignment-instruction font[color="#0891b2"],
+        #assignment-instruction font[color="#22d3ee"] { color: var(--editor-color-cyan) !important; }
+
+        #assignment-instruction [style*="rgb(2, 132, 199)"],
+        #assignment-instruction [style*="rgb(56, 189, 248)"],
+        #assignment-instruction [style*="#0284c7"],
+        #assignment-instruction [style*="#38bdf8"],
+        #assignment-instruction font[color="#0284c7"],
+        #assignment-instruction font[color="#38bdf8"] { color: var(--editor-color-sky) !important; }
+
+        #assignment-instruction [style*="rgb(37, 99, 235)"],
+        #assignment-instruction [style*="rgb(96, 165, 250)"],
+        #assignment-instruction [style*="#2563eb"],
+        #assignment-instruction [style*="#60a5fa"],
+        #assignment-instruction font[color="#2563eb"],
+        #assignment-instruction font[color="#60a5fa"] { color: var(--editor-color-blue) !important; }
+
+        #assignment-instruction [style*="rgb(147, 51, 234)"],
+        #assignment-instruction [style*="rgb(167, 139, 250)"],
+        #assignment-instruction [style*="#9333ea"],
+        #assignment-instruction [style*="#a78bfa"],
+        #assignment-instruction font[color="#9333ea"],
+        #assignment-instruction font[color="#a78bfa"] { color: var(--editor-color-purple) !important; }
+
+        #assignment-instruction [style*="rgb(192, 132, 252)"],
+        #assignment-instruction [style*="rgb(244, 114, 182)"],
+        #assignment-instruction [style*="#c084fc"],
+        #assignment-instruction [style*="#f472b6"],
+        #assignment-instruction font[color="#c084fc"],
+        #assignment-instruction font[color="#f472b6"] { color: var(--editor-color-fuchsia) !important; }
+
+        /* Ensure code inside colored elements inherits font color */
+        #assignment-instruction font[color] code,
+        #assignment-instruction [style*="color:"] code,
+        #assignment-instruction [style*="rgb("] code {
             color: inherit !important;
         }
 
@@ -392,8 +498,8 @@
         .theme-light #assignment-instruction,
         .theme-light #assignment-instruction p,
         .theme-light #assignment-instruction li,
-        .theme-light #assignment-instruction span,
-        .theme-light #assignment-instruction div {
+        .theme-light #assignment-instruction span:not([style*="color:"]):not([style*="rgb("]),
+        .theme-light #assignment-instruction div:not([style*="color:"]):not([style*="rgb("]):not(.wysiwyg-tip-box):not(.wysiwyg-info-box):not([class*="wysiwyg-section-"]) {
             color: #334155 !important;
             /* text-slate-700 */
         }
@@ -435,16 +541,16 @@
 
         /* Light theme overrides for WYSIWYG Tip and Info Boxes */
         .theme-light #assignment-instruction .wysiwyg-tip-box {
-            background-color: #fffbeb !important;
-            /* bg-amber-50 */
-            border-color: #fde68a !important;
-            /* border-amber-200 */
-            color: #b45309 !important;
-            /* text-amber-700 */
+            background-color: #fff7ed !important;
+            /* bg-orange-50 */
+            border-color: #fed7aa !important;
+            /* border-orange-200 */
+            color: #c2410c !important;
+            /* text-orange-700 */
         }
 
         .theme-light #assignment-instruction .wysiwyg-tip-box i {
-            color: #d97706 !important;
+            color: #ea580c !important;
         }
 
         .theme-light #assignment-instruction .wysiwyg-info-box {
@@ -929,26 +1035,26 @@
         <div
             class="flex items-center gap-2 text-purple-800 dark:text-purple-200 text-xs md:text-sm font-semibold tracking-wider">
             <i class="fa-solid fa-graduation-cap text-purple-600 dark:text-purple-400 text-base animate-pulse"></i>
-            <span>DOCENTENMODUS ACTIEF &mdash; Opdrachten en tests inline bewerken</span>
+            <span>DOCENTENMODUS ACTIEF &mdash; Opdrachten inline bewerken</span>
         </div>
-        <div class="flex flex-wrap items-center gap-2">
+        <div class="flex flex-wrap items-center gap-1.5">
             <div
-                class="flex items-center gap-1.5 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg px-2 py-1 text-xs text-slate-800 dark:text-slate-300">
+                class="flex items-center gap-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md px-1.5 py-0.5 text-[11px] text-slate-800 dark:text-slate-300">
                 <span class="text-slate-500 dark:text-slate-400 font-mono">Bestand:</span>
                 <input type="text" id="teacher-filename-input"
-                    class="bg-transparent text-slate-800 dark:text-slate-200 font-mono focus:outline-none w-36"
+                    class="bg-transparent text-slate-800 dark:text-slate-200 font-mono focus:outline-none w-28"
                     placeholder="opdracht1.json" title="De bestandsnaam van het te downloaden configuratiebestand">
             </div>
 
             <button onclick="startNewCourse()"
-                class="bg-purple-200 hover:bg-purple-300 border border-purple-300 text-purple-800 dark:bg-purple-900/60 dark:hover:bg-purple-800 dark:border-purple-700/50 dark:text-purple-200 font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5"
+                class="bg-purple-200 hover:bg-purple-300 border border-purple-300 text-purple-800 dark:bg-purple-900/60 dark:hover:bg-purple-800 dark:border-purple-700/50 dark:text-purple-200 font-semibold px-2.5 py-1 rounded-md text-[11px] md:text-xs shadow active:scale-95 transition flex items-center gap-1"
                 title="Start een lege cursus">
                 <i class="fa-solid fa-file-circle-plus"></i>
                 <span>Nieuwe Cursus</span>
             </button>
 
             <button onclick="triggerCourseImport()"
-                class="bg-purple-200 hover:bg-purple-300 border border-purple-300 text-purple-800 dark:bg-purple-900/60 dark:hover:bg-purple-800 dark:border-purple-700/50 dark:text-purple-200 font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5"
+                class="bg-purple-200 hover:bg-purple-300 border border-purple-300 text-purple-800 dark:bg-purple-900/60 dark:hover:bg-purple-800 dark:border-purple-700/50 dark:text-purple-200 font-semibold px-2.5 py-1 rounded-md text-[11px] md:text-xs shadow active:scale-95 transition flex items-center gap-1"
                 title="Importeer een bestaand Cursus JSON bestand">
                 <i class="fa-solid fa-file-import text-purple-600 dark:text-purple-400"></i>
                 <span>Importeer Cursus</span>
@@ -957,7 +1063,7 @@
                 onchange="importCourseFromJSON(event)">
 
             <button onclick="downloadCourseJSON()"
-                class="bg-purple-600 hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-500 text-white font-bold px-3 py-1.5 rounded-lg text-xs md:text-sm shadow active:scale-95 transition flex items-center gap-1.5">
+                class="bg-purple-600 hover:bg-purple-700 dark:bg-purple-600 dark:hover:bg-purple-500 text-white font-semibold px-2.5 py-1 rounded-md text-[11px] md:text-xs shadow active:scale-95 transition flex items-center gap-1">
                 <i class="fa-solid fa-cloud-arrow-down"></i>
                 <span>Download Cursus JSON</span>
             </button>
@@ -989,98 +1095,98 @@
 
             <!-- Instruction Box -->
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex-1 flex flex-col min-h-[150px]">
-                <div class="flex items-center gap-2 border-b border-slate-800 pb-2 mb-3">
-                    <i class="fa-solid fa-circle-info text-blue-400 text-lg"></i>
-                    <h3 class="font-bold text-slate-100">Opdrachtomschrijving</h3>
+                <div class="flex items-center justify-between border-b border-slate-800 pb-2 mb-3">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info text-blue-400 text-lg"></i>
+                        <h3 class="font-bold text-slate-100">Opdrachtomschrijving</h3>
+                    </div>
+                    <!-- Smart Paste (Only visible in edit mode) -->
+                    <button id="wysiwyg-btn-smart-paste" onclick="openSmartPasteModal()"
+                        class="hidden px-2 h-7 rounded bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-500/20 dark:border-purple-500/35 dark:hover:bg-purple-500/30 dark:text-purple-300 transition flex items-center justify-center text-[10px] font-semibold"
+                        title="Plak platte tekst en zet om naar HTML"><i class="fa-solid fa-paste mr-1"></i> Slim Plakken</button>
                 </div>
                 <!-- WYSIWYG Toolbar (Visible only in edit mode) -->
                 <div id="wysiwyg-toolbar"
-                    class="hidden flex flex-wrap items-center gap-1 bg-slate-950 border border-slate-800 p-1.5 rounded-lg mb-3">
-                    <button id="wysiwyg-btn-bold" onclick="execStyle('bold')"
-                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-bold text-xs"
-                        title="Vet (B)"><i class="fa-solid fa-bold"></i></button>
-                    <button id="wysiwyg-btn-italic" onclick="execStyle('italic')"
-                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center italic text-xs"
-                        title="Cursief (I)"><i class="fa-solid fa-italic"></i></button>
-                    <button id="wysiwyg-btn-list-ul" onclick="execStyle('insertUnorderedList')"
-                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
-                        title="Opsomming"><i class="fa-solid fa-list-ul"></i></button>
-                    <button id="wysiwyg-btn-list-ol" onclick="execStyle('insertOrderedList')"
-                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
-                        title="Genummerde lijst"><i class="fa-solid fa-list-ol"></i></button>
-                    <button id="wysiwyg-btn-code" onclick="insertCodeBlock()"
-                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-mono text-xs"
-                        title="Code-regel"><i class="fa-solid fa-code"></i></button>
-                    <button id="wysiwyg-btn-h3" onclick="insertHeader()"
-                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-bold text-[10px]"
-                        title="Koptekst (H3)">H3</button>
-                    <button id="wysiwyg-btn-p" onclick="insertParagraph()"
-                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
-                        title="Standaard tekst"><i class="fa-solid fa-paragraph"></i></button>
-                    <button id="wysiwyg-btn-tip" onclick="insertTipBox()"
-                        class="px-2 h-7 rounded bg-amber-100 border border-amber-300 text-amber-800 hover:bg-amber-200 dark:bg-amber-500/20 dark:border-amber-500/30 dark:hover:bg-amber-500/30 dark:text-amber-300 transition flex items-center justify-center text-[10px] font-semibold"
-                        title="Tipbox invoegen"><i class="fa-solid fa-lightbulb mr-1"></i> Tip</button>
-                    <button id="wysiwyg-btn-info" onclick="insertInfoBox()"
-                        class="px-2 h-7 rounded bg-blue-100 border border-blue-300 text-blue-800 hover:bg-blue-200 dark:bg-blue-500/20 dark:border-blue-500/30 dark:hover:bg-blue-500/30 dark:text-blue-300 transition flex items-center justify-center text-[10px] font-semibold"
-                        title="Infobox invoegen"><i class="fa-solid fa-info-circle mr-1"></i> Info</button>
-                    <button id="wysiwyg-btn-table" onclick="insertTable()"
-                        class="px-2 h-7 rounded bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/20 dark:border-purple-800/30 dark:hover:bg-purple-950/40 dark:text-purple-300 transition flex items-center justify-center text-[10px] font-semibold"
-                        title="Tabel invoegen"><i class="fa-solid fa-table mr-1"></i> Tabel</button>
-                    <button id="wysiwyg-btn-link" onclick="insertHyperlink()"
-                        class="px-2 h-7 rounded bg-sky-100 border border-sky-300 text-sky-800 hover:bg-sky-200 dark:bg-sky-950/20 dark:border-sky-800/30 dark:hover:bg-sky-950/40 dark:text-sky-300 transition flex items-center justify-center text-[10px] font-semibold"
-                        title="Link invoegen"><i class="fa-solid fa-link mr-1"></i> Link</button>
+                    class="hidden flex flex-col gap-1 bg-slate-950 border border-slate-800 p-2 rounded-lg mb-1.5">
+                    <!-- Row 1: Formatting and Utilities -->
+                    <div class="flex flex-wrap items-center gap-0.5">
+                        <button id="wysiwyg-btn-bold" onclick="execStyle('bold')"
+                            class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-bold text-xs"
+                            title="Vet (B)"><i class="fa-solid fa-bold"></i></button>
+                        <button id="wysiwyg-btn-italic" onclick="execStyle('italic')"
+                            class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center italic text-xs"
+                            title="Cursief (I)"><i class="fa-solid fa-italic"></i></button>
+                        <button id="wysiwyg-btn-list-ul" onclick="execStyle('insertUnorderedList')"
+                            class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
+                            title="Opsomming"><i class="fa-solid fa-list-ul"></i></button>
+                        <button id="wysiwyg-btn-list-ol" onclick="execStyle('insertOrderedList')"
+                            class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
+                            title="Genummerde lijst"><i class="fa-solid fa-list-ol"></i></button>
+                        <button id="wysiwyg-btn-code" onclick="insertCodeBlock()"
+                            class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-mono text-xs"
+                            title="Code-regel"><i class="fa-solid fa-code"></i></button>
+                        <button id="wysiwyg-btn-h3" onclick="insertHeader()"
+                            class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center font-bold text-[10px]"
+                            title="Koptekst (H3)">H3</button>
+                        <button id="wysiwyg-btn-p" onclick="insertParagraph()"
+                            class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
+                            title="Standaard tekst"><i class="fa-solid fa-paragraph"></i></button>
+                        <button id="wysiwyg-btn-table" onclick="insertTable()"
+                            class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
+                            title="Tabel invoegen"><i class="fa-solid fa-table"></i></button>
+                        <button id="wysiwyg-btn-link" onclick="insertHyperlink()"
+                            class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
+                            title="Link invoegen"><i class="fa-solid fa-link"></i></button>
 
-                    <span class="w-[1px] h-5 bg-slate-300 dark:bg-slate-800 mx-1"></span>
+                        <span class="w-[1px] h-5 bg-slate-300 dark:bg-slate-800 mx-0.5"></span>
 
-                    <!-- Templates -->
-                    <div class="flex items-center gap-1">
-                        <button onclick="insertInstructionTemplate('lezen')"
+                        <!-- Text Color Selector -->
+                        <div class="relative inline-block">
+                            <button onclick="toggleColorPalette(event)"
+                                class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
+                                title="Tekstkleur">
+                                <i class="fa-solid fa-palette text-amber-500 dark:text-amber-400"></i>
+                            </button>
+                            <div id="wysiwyg-color-palette"
+                                class="hidden absolute right-0 top-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2 shadow-2xl z-50 grid grid-cols-4 gap-1 w-32">
+                                <!-- Curated 16 colors loaded dynamically -->
+                            </div>
+                        </div>
+
+                        <button onclick="toggleHtmlView()" id="btn-toggle-html"
+                            class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition flex items-center justify-center text-xs"
+                            title="Toggle HTML Weergave"><i class="fa-solid fa-code-compare"></i></button>
+
+                        <!-- Dynamic Table Controls (Visible only when selection inside a table) -->
+                        <button id="wysiwyg-btn-add-row" onclick="addTableRow()"
+                            class="hidden bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/80 dark:border-purple-600/50 dark:text-purple-200 dark:hover:bg-purple-900 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
+                            title="Rij eronder toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Rij</button>
+                        <button id="wysiwyg-btn-add-col" onclick="addTableColumn()"
+                            class="hidden bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/80 dark:border-purple-600/50 dark:text-purple-200 dark:hover:bg-purple-900 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
+                            title="Kolom ernaast toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Kolom</button>
+                        <button id="wysiwyg-btn-del-table" onclick="deleteTable()"
+                            class="hidden bg-red-100 border border-red-300 text-red-800 hover:bg-red-200 dark:bg-red-950/60 dark:border-red-800/40 dark:text-red-300 dark:hover:bg-red-950 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
+                            title="Tabel verwijderen"><i class="fa-solid fa-trash-can text-[8px]"></i> Tabel</button>
+                    </div>
+
+                    <!-- Row 2: Structure Blocks (Lezen, Uitvoeren, Bewerken, Tip, Info) -->
+                    <div class="flex flex-wrap items-center gap-0.5">
+                        <button id="wysiwyg-btn-lezen" onclick="insertInstructionTemplate('lezen')"
                             class="px-1.5 h-7 rounded bg-sky-100 border border-sky-300 text-sky-800 hover:bg-sky-200 dark:bg-sky-500/10 dark:border-sky-500/25 dark:hover:bg-sky-500/20 dark:text-sky-400 transition flex items-center justify-center text-[10px] font-semibold"
                             title="Voeg 'Lezen' sectie toe"><i class="fa-solid fa-eye mr-1"></i> Lezen</button>
-                        <button onclick="insertInstructionTemplate('uitvoeren')"
+                        <button id="wysiwyg-btn-uitvoeren" onclick="insertInstructionTemplate('uitvoeren')"
                             class="px-1.5 h-7 rounded bg-emerald-100 border border-emerald-300 text-emerald-800 hover:bg-emerald-200 dark:bg-emerald-500/10 dark:border-emerald-500/25 dark:hover:bg-emerald-500/20 dark:text-emerald-400 transition flex items-center justify-center text-[10px] font-semibold"
                             title="Voeg 'Uitvoeren' sectie toe"><i class="fa-solid fa-play mr-1"></i> Uitvoeren</button>
-                        <button onclick="insertInstructionTemplate('bewerken')"
+                        <button id="wysiwyg-btn-bewerken" onclick="insertInstructionTemplate('bewerken')"
                             class="px-1.5 h-7 rounded bg-amber-100 border border-amber-300 text-amber-800 hover:bg-amber-200 dark:bg-amber-500/10 dark:border-amber-500/25 dark:hover:bg-amber-500/20 dark:text-amber-400 transition flex items-center justify-center text-[10px] font-semibold"
-                            title="Voeg 'Bewerken' sectie toe"><i class="fa-solid fa-pen-to-square mr-1"></i>
-                            Bewerken</button>
+                            title="Voeg 'Bewerken' sectie toe"><i class="fa-solid fa-pen-to-square mr-1"></i> Bewerken</button>
+                        <button id="wysiwyg-btn-tip" onclick="insertInstructionTemplate('tip')"
+                            class="px-1.5 h-7 rounded bg-orange-100 border border-orange-300 text-orange-800 hover:bg-orange-200 dark:bg-orange-500/10 dark:border-orange-500/25 dark:hover:bg-orange-500/20 dark:text-orange-400 transition flex items-center justify-center text-[10px] font-semibold"
+                            title="Tipbox invoegen"><i class="fa-solid fa-lightbulb mr-1"></i> Tip</button>
+                        <button id="wysiwyg-btn-info" onclick="insertInstructionTemplate('info')"
+                            class="px-1.5 h-7 rounded bg-blue-100 border border-blue-300 text-blue-800 hover:bg-blue-200 dark:bg-blue-500/10 dark:border-blue-500/25 dark:hover:bg-blue-500/20 dark:text-blue-400 transition flex items-center justify-center text-[10px] font-semibold"
+                            title="Infobox invoegen"><i class="fa-solid fa-info-circle mr-1"></i> Info</button>
                     </div>
-
-                    <span class="w-[1px] h-5 bg-slate-300 dark:bg-slate-800 mx-1"></span>
-
-                    <!-- Smart Paste -->
-                    <button onclick="openSmartPasteModal()"
-                        class="px-2 h-7 rounded bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-500/20 dark:border-purple-500/35 dark:hover:bg-purple-500/30 dark:text-purple-300 transition flex items-center justify-center text-[10px] font-semibold"
-                        title="Plak platte tekst en zet om naar HTML"><i class="fa-solid fa-paste mr-1"></i> Slim
-                        Plakken</button>
-
-                    <!-- Dynamic Table Controls (Visible only when selection inside a table) -->
-                    <button id="wysiwyg-btn-add-row" onclick="addTableRow()"
-                        class="hidden bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/80 dark:border-purple-600/50 dark:text-purple-200 dark:hover:bg-purple-900 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
-                        title="Rij eronder toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Rij</button>
-                    <button id="wysiwyg-btn-add-col" onclick="addTableColumn()"
-                        class="hidden bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/80 dark:border-purple-600/50 dark:text-purple-200 dark:hover:bg-purple-900 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
-                        title="Kolom ernaast toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Kolom</button>
-                    <button id="wysiwyg-btn-del-table" onclick="deleteTable()"
-                        class="hidden bg-red-100 border border-red-300 text-red-800 hover:bg-red-200 dark:bg-red-950/60 dark:border-red-800/40 dark:text-red-300 dark:hover:bg-red-950 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
-                        title="Tabel verwijderen"><i class="fa-solid fa-trash-can text-[8px]"></i> Tabel</button>
-
-                    <!-- Text Color Selector -->
-                    <div class="relative inline-block ml-auto">
-                        <button onclick="toggleColorPalette(event)"
-                            class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 transition flex items-center justify-center text-xs"
-                            title="Tekstkleur">
-                            <i class="fa-solid fa-palette text-amber-500 dark:text-amber-400"></i>
-                        </button>
-                        <div id="wysiwyg-color-palette"
-                            class="hidden absolute right-0 top-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-2 shadow-2xl z-50 grid grid-cols-4 gap-1 w-32">
-                            <!-- Curated 16 colors loaded dynamically -->
-                        </div>
-                    </div>
-
-                    <button onclick="toggleHtmlView()" id="btn-toggle-html"
-                        class="w-7 h-7 rounded bg-slate-200 hover:bg-slate-300 text-slate-500 hover:text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition flex items-center justify-center text-xs"
-                        title="Toggle HTML Weergave"><i class="fa-solid fa-code-compare"></i></button>
                 </div>
 
                 <div id="assignment-instruction-container" class="flex-1 overflow-y-auto pr-1 min-h-0 min-w-0">
@@ -1160,10 +1266,9 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <button onclick="resetCurrentCode()"
-                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 font-medium px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl active:scale-95 transition flex items-center gap-1.5 text-xs sm:text-sm"
+                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 w-8 h-8 sm:w-9 sm:h-9 rounded-xl active:scale-95 transition flex items-center justify-center"
                                 title="Herstel de code naar de beginopstelling">
-                                <i class="fa-solid fa-rotate-left text-red-400"></i>
-                                <span>Reset code</span>
+                                <i class="fa-solid fa-rotate-left text-red-400 text-xs sm:text-sm"></i>
                             </button>
                             <button id="btn-editor-zoom-out" onclick="zoomEditor(-1)"
                                 class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 w-8 h-8 sm:w-9 sm:h-9 rounded-xl active:scale-95 transition flex items-center justify-center relative"
@@ -2748,66 +2853,99 @@
                                     if (container.nodeType === Node.TEXT_NODE) {
                                         container = container.parentNode;
                                     }
+                                    
+                                    const calloutBox = container.closest(".wysiwyg-tip-box, .wysiwyg-info-box");
+                                    if (calloutBox) {
+                                        e.preventDefault();
+                                        document.execCommand("insertLineBreak");
+                                        saveActiveInstruction();
+                                        return;
+                                    }
+
                                     const codeElem = container.closest("code");
                                     const preElem = container.closest("pre");
-
-                                    // If inside an inline <code> but NOT a <pre> block code
-                                    if (codeElem && !preElem) {
-                                        e.preventDefault();
-
-                                        // Convert inline code to pre block
-                                        const pre = document.createElement("pre");
-                                        pre.className = "bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs text-yellow-400 my-3 block whitespace-pre-wrap";
-
-                                        const newCode = document.createElement("code");
-                                        newCode.className = "font-mono";
-
-                                        const text = codeElem.textContent;
-                                        const offset = range.startOffset;
-                                        const newText = text.slice(0, offset) + "\n" + text.slice(offset);
-                                        newCode.textContent = newText;
-
-                                        pre.appendChild(newCode);
-                                        codeElem.replaceWith(pre);
-
-                                        // Focus cursor exactly after the inserted newline
-                                        const newRange = document.createRange();
-                                        if (newCode.firstChild) {
-                                            newRange.setStart(newCode.firstChild, Math.min(offset + 1, newCode.textContent.length));
-                                        } else {
-                                            newRange.selectNodeContents(newCode);
-                                        }
-                                        newRange.collapse(true);
-                                        selection.removeAllRanges();
-                                        selection.addRange(newRange);
-
-                                        // Insert empty spacing paragraph below the block so cursor can escape easily
-                                        if (!pre.nextSibling || pre.nextSibling.nodeName.toLowerCase() !== "p") {
-                                            const p = document.createElement("p");
-                                            p.innerHTML = "&nbsp;";
-                                            pre.parentNode.insertBefore(p, pre.nextSibling);
-                                        }
-
-                                        saveActiveInstruction();
-                                        updateWysiwygToolbarHighlighting();
-                                    }
-                                }
-                            }
-                        };
-                        docBox.onpaste = function (e) {
-                            e.preventDefault();
-                            const text = (e.clipboardData || window.clipboardData).getData("text/plain");
-                            document.execCommand("insertText", false, text);
-                        };
+ 
+                                     // If inside an inline <code> but NOT a <pre> block code
+                                     if (codeElem && !preElem) {
+                                         e.preventDefault();
+ 
+                                         // Convert inline code to pre block
+                                         const pre = document.createElement("pre");
+                                         pre.className = "bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs text-yellow-400 my-3 block whitespace-pre-wrap";
+ 
+                                         const newCode = document.createElement("code");
+                                         newCode.className = "font-mono";
+ 
+                                         const text = codeElem.textContent;
+                                         const offset = range.startOffset;
+                                         const newText = text.slice(0, offset) + "\n" + text.slice(offset);
+                                         newCode.textContent = newText;
+ 
+                                         pre.appendChild(newCode);
+                                         codeElem.replaceWith(pre);
+ 
+                                         // Focus cursor exactly after the inserted newline
+                                         const newRange = document.createRange();
+                                         if (newCode.firstChild) {
+                                             newRange.setStart(newCode.firstChild, Math.min(offset + 1, newCode.textContent.length));
+                                         } else {
+                                             newRange.selectNodeContents(newCode);
+                                         }
+                                         newRange.collapse(true);
+                                         selection.removeAllRanges();
+                                         selection.addRange(newRange);
+ 
+                                         // Insert empty spacing paragraph below the block so cursor can escape easily
+                                         if (!pre.nextSibling || pre.nextSibling.nodeName.toLowerCase() !== "p") {
+                                             const p = document.createElement("p");
+                                             p.innerHTML = "&nbsp;";
+                                             pre.parentNode.insertBefore(p, pre.nextSibling);
+                                         }
+ 
+                                         saveActiveInstruction();
+                                         updateWysiwygToolbarHighlighting();
+                                     }
+                                 }
+                             }
+                         };
+                         docBox.onpaste = function (e) {
+                             e.preventDefault();
+                             const text = (e.clipboardData || window.clipboardData).getData("text/plain");
+                             
+                             const selection = window.getSelection();
+                             if (selection.rangeCount) {
+                                 const range = selection.getRangeAt(0);
+                                 let container = range.commonAncestorContainer;
+                                 if (container.nodeType === Node.TEXT_NODE) {
+                                     container = container.parentNode;
+                                 }
+                                 const calloutBox = container.closest(".wysiwyg-tip-box, .wysiwyg-info-box");
+                                 if (calloutBox) {
+                                     const escapedText = text
+                                         .replace(/&/g, "&amp;")
+                                         .replace(/</g, "&lt;")
+                                         .replace(/>/g, "&gt;");
+                                     const htmlToInsert = escapedText.replace(/\r?\n/g, "<br>");
+                                     document.execCommand("insertHTML", false, htmlToInsert);
+                                     saveActiveInstruction();
+                                     return;
+                                 }
+                             }
+                             document.execCommand("insertText", false, text);
+                         };
                         docBox.classList.add("focus:outline-none", "focus:ring-1", "focus:ring-blue-500/50", "rounded-lg", "p-1");
                         const toolbar = document.getElementById("wysiwyg-toolbar");
                         if (toolbar) toolbar.classList.remove("hidden");
+                        const smartPasteBtn = document.getElementById("wysiwyg-btn-smart-paste");
+                        if (smartPasteBtn) smartPasteBtn.classList.remove("hidden");
                     } else {
                         docBox.contentEditable = "false";
                         docBox.onkeydown = null;
                         docBox.onpaste = null;
                         const toolbar = document.getElementById("wysiwyg-toolbar");
                         if (toolbar) toolbar.classList.add("hidden");
+                        const smartPasteBtn = document.getElementById("wysiwyg-btn-smart-paste");
+                        if (smartPasteBtn) smartPasteBtn.classList.add("hidden");
                     }
                 }
 
@@ -5259,48 +5397,8 @@
                 selection.removeAllRanges();
                 selection.addRange(range);
 
-                range.deleteContents();
-
-                const tempDiv = document.createElement("div");
-                tempDiv.innerHTML = htmlContent;
-
-                const frag = document.createDocumentFragment();
-                let node, lastNode;
-                while ((node = tempDiv.firstChild)) {
-                    lastNode = frag.appendChild(node);
-                }
-
-                // Find closest block element directly under docBox to avoid nesting blocks inside paragraphs/headers
-                let insertBlock = range.commonAncestorContainer;
-                if (insertBlock.nodeType === Node.TEXT_NODE) {
-                    insertBlock = insertBlock.parentNode;
-                }
-                while (insertBlock && insertBlock.parentNode !== docBox && insertBlock !== docBox) {
-                    insertBlock = insertBlock.parentNode;
-                }
-
-                if (insertBlock && insertBlock !== docBox) {
-                    const textVal = insertBlock.textContent.trim();
-                    // If the block is empty or contains only whitespace/br, we can replace it
-                    if (textVal === "" || textVal === "\u00a0") {
-                        const parent = insertBlock.parentNode;
-                        parent.insertBefore(frag, insertBlock);
-                        insertBlock.remove();
-                    } else {
-                        // Otherwise insert after it
-                        insertBlock.parentNode.insertBefore(frag, insertBlock.nextSibling);
-                    }
-                } else {
-                    range.insertNode(frag);
-                }
-
-                if (lastNode) {
-                    const newRange = document.createRange();
-                    newRange.setStartAfter(lastNode);
-                    newRange.collapse(true);
-                    selection.removeAllRanges();
-                    selection.addRange(newRange);
-                }
+                // Use insertHTML to keep browser's undo/redo history intact
+                document.execCommand("insertHTML", false, htmlContent);
             } else {
                 docBox.innerHTML += htmlContent;
             }
@@ -5309,55 +5407,7 @@
             savedSelectionRange = null;
         }
 
-        function insertTipBox() {
-            const selection = window.getSelection();
-            if (!selection.rangeCount) return;
-            const range = selection.getRangeAt(0);
 
-            let container = range.commonAncestorContainer;
-            if (container.nodeType === Node.TEXT_NODE) {
-                container = container.parentNode;
-            }
-            const tipElem = container.closest(".wysiwyg-tip-box");
-
-            if (tipElem) {
-                // Toggle off: completely delete the element (including contents!)
-                tipElem.remove();
-                saveActiveInstruction();
-                return;
-            }
-
-            // Otherwise toggle on: insert new tip box
-            const selText = selection.toString().trim();
-            const html = `<div class="wysiwyg-tip-box bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-xs text-amber-300 italic my-3"><i class="fa-solid fa-lightbulb mr-1.5 text-amber-400"></i>${selText || 'Tip: Typ hier je hulpmiddel...'}</div><p>&nbsp;</p>`;
-            insertBlockAtSelection(html);
-            saveActiveInstruction();
-        }
-
-        function insertInfoBox() {
-            const selection = window.getSelection();
-            if (!selection.rangeCount) return;
-            const range = selection.getRangeAt(0);
-
-            let container = range.commonAncestorContainer;
-            if (container.nodeType === Node.TEXT_NODE) {
-                container = container.parentNode;
-            }
-            const infoElem = container.closest(".wysiwyg-info-box");
-
-            if (infoElem) {
-                // Toggle off: completely delete the element (including contents!)
-                infoElem.remove();
-                saveActiveInstruction();
-                return;
-            }
-
-            // Otherwise toggle on: insert new info box
-            const selText = selection.toString().trim();
-            const html = `<div class="wysiwyg-info-box bg-blue-500/10 border border-blue-500/30 rounded-xl p-3 text-xs text-blue-300 my-3"><i class="fa-solid fa-info-circle mr-1.5 text-blue-400"></i>${selText || 'Opmerking: Typ hier je aanvullende informatie...'}</div><p>&nbsp;</p>`;
-            insertBlockAtSelection(html);
-            saveActiveInstruction();
-        }
 
         function insertTable() {
             const html = `
@@ -5515,6 +5565,19 @@
             const docBox = document.getElementById("assignment-instruction");
             if (!docBox) return;
 
+            let sectionSelector = `.wysiwyg-section-${type}`;
+            if (type === 'tip') sectionSelector = '.wysiwyg-tip-box, .wysiwyg-section-tip';
+            if (type === 'info') sectionSelector = '.wysiwyg-info-box, .wysiwyg-section-info';
+
+            const sectionNameMap = {
+                'lezen': 'Lezen',
+                'uitvoeren': 'Uitvoeren',
+                'bewerken': 'Bewerken',
+                'tip': 'Tip',
+                'info': 'Info'
+            };
+            const sectionName = sectionNameMap[type] || type;
+
             if (!isViewingHtml) {
                 const selection = window.getSelection();
                 if (selection.rangeCount) {
@@ -5523,15 +5586,9 @@
                     if (container.nodeType === Node.TEXT_NODE) {
                         container = container.parentNode;
                     }
-                    const sectionElem = container.closest(`.wysiwyg-section-${type}`);
+                    const sectionElem = container.closest(sectionSelector);
                     if (sectionElem) {
-                        const sectionNameMap = {
-                            'lezen': 'Lezen',
-                            'uitvoeren': 'Uitvoeren',
-                            'bewerken': 'Bewerken'
-                        };
-                        const sectionName = sectionNameMap[type] || type;
-                        if (confirm(`Weet je zeker dat je de complete sectie '${sectionName}' (inclusief alle stappen) wilt verwijderen?`)) {
+                        if (confirm(`Weet je zeker dat je de complete sectie '${sectionName}' wilt verwijderen?`)) {
                             const nextSib = sectionElem.nextSibling;
                             if (nextSib && nextSib.nodeName.toLowerCase() === 'p' && (nextSib.innerHTML === '&nbsp;' || nextSib.textContent.trim() === '')) {
                                 nextSib.remove();
@@ -5545,6 +5602,36 @@
                 }
             }
 
+            // Determine if there is exactly a single-line selection inside the instruction box
+            let isSingleLine = false;
+            let selHtml = "";
+            if (!isViewingHtml) {
+                const selection = window.getSelection();
+                if (selection.rangeCount) {
+                    const range = selection.getRangeAt(0);
+                    if (!range.collapsed) {
+                        const textContent = range.toString();
+                        const container = document.createElement("div");
+                        container.appendChild(range.cloneContents());
+                        const hasNewlines = textContent.includes("\n") || textContent.includes("\r");
+                        const hasBlockElements = container.querySelector("p, div, li, br, tr, td, th, ul, ol, h1, h2, h3, h4, h5, h6") !== null;
+
+                        let startBlock = range.startContainer;
+                        if (startBlock.nodeType === Node.TEXT_NODE) startBlock = startBlock.parentNode;
+                        startBlock = startBlock.closest("p, div, li, td, h1, h2, h3, h4, h5, h6");
+
+                        let endBlock = range.endContainer;
+                        if (endBlock.nodeType === Node.TEXT_NODE) endBlock = endBlock.parentNode;
+                        endBlock = endBlock.closest("p, div, li, td, h1, h2, h3, h4, h5, h6");
+
+                        isSingleLine = textContent.trim() !== "" && !hasNewlines && !hasBlockElements && (startBlock === endBlock);
+                        if (isSingleLine) {
+                            selHtml = container.innerHTML.trim();
+                        }
+                    }
+                }
+            }
+
             let html = "";
             if (type === 'lezen') {
                 html = `<div class="wysiwyg-section-lezen my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-eye text-sky-400"></i> Lezen:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Regel 1 - ...</li></ol></div><p>&nbsp;</p>`;
@@ -5552,6 +5639,18 @@
                 html = `<div class="wysiwyg-section-uitvoeren my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-play text-emerald-400"></i> Uitvoeren:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Probeer te voorspellen...</li><li>Run de code...</li></ol></div><p>&nbsp;</p>`;
             } else if (type === 'bewerken') {
                 html = `<div class="wysiwyg-section-bewerken my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-pen-to-square text-amber-400"></i> Bewerken:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Pas de code aan zodat...</li></ol></div><p>&nbsp;</p>`;
+            } else if (type === 'tip') {
+                if (isSingleLine) {
+                    html = `<div class="wysiwyg-tip-box bg-orange-500/10 border border-orange-500/30 rounded-xl p-3 text-xs text-orange-300 italic my-3"><i class="fa-solid fa-lightbulb mr-1.5 text-orange-400"></i> ${selHtml || 'Tip: Typ hier je hulpmiddel...'}</div><p>&nbsp;</p>`;
+                } else {
+                    html = `<div class="wysiwyg-section-tip my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-lightbulb text-orange-400"></i> Tip:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Tip 1 - ...</li></ol></div><p>&nbsp;</p>`;
+                }
+            } else if (type === 'info') {
+                if (isSingleLine) {
+                    html = `<div class="wysiwyg-info-box bg-blue-500/10 border border-blue-500/30 rounded-xl p-3 text-xs text-blue-300 my-3"><i class="fa-solid fa-info-circle mr-1.5 text-blue-400"></i> ${selHtml || 'Opmerking: Typ hier je aanvullende informatie...'}</div><p>&nbsp;</p>`;
+                } else {
+                    html = `<div class="wysiwyg-section-info my-3"><div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-info-circle text-blue-400"></i> Opmerking:</div><ol class="list-decimal pl-6 space-y-1 mt-1 mb-2"><li>Opmerking 1 - ...</li></ol></div><p>&nbsp;</p>`;
+                }
             }
 
             if (isViewingHtml) {
@@ -5562,7 +5661,7 @@
                 insertBlockAtSelection(html);
                 saveActiveInstruction();
             }
-            showToast(`📝 Template '${type}' ingevoegd`);
+            showToast(`📝 Template '${sectionName}' ingevoegd`);
         }
 
         function openSmartPasteModal() {
@@ -5753,6 +5852,18 @@
                     closeSection();
                     activeSectionType = 'bewerken';
                     html += `<div class="wysiwyg-section-bewerken my-3">\n<div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-pen-to-square text-amber-400"></i> Bewerken:</div>\n`;
+                    headingMatched = true;
+                    justMatchedHeading = true;
+                } else if (lowerLine.startsWith('tip') || lowerLine.includes('💡 tip') || lowerLine.includes('tip:')) {
+                    closeSection();
+                    activeSectionType = 'tip';
+                    html += `<div class="wysiwyg-section-tip my-3">\n<div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-lightbulb text-orange-400"></i> Tip:</div>\n`;
+                    headingMatched = true;
+                    justMatchedHeading = true;
+                } else if (lowerLine.startsWith('info') || lowerLine.includes('ℹ️ info') || lowerLine.startsWith('opmerking') || lowerLine.includes('info:') || lowerLine.includes('opmerking:')) {
+                    closeSection();
+                    activeSectionType = 'info';
+                    html += `<div class="wysiwyg-section-info my-3">\n<div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-info-circle text-blue-400"></i> Opmerking:</div>\n`;
                     headingMatched = true;
                     justMatchedHeading = true;
                 }
@@ -6538,7 +6649,9 @@
                 btn.title = color.name;
                 btn.onclick = (e) => {
                     e.stopPropagation();
-                    execStyle("foreColor", `var(${color.varName})`);
+                    // Resolve the actual hex color value for the current active theme
+                    const resolvedColor = getComputedStyle(document.documentElement).getPropertyValue(color.varName).trim();
+                    execStyle("foreColor", resolvedColor || `var(${color.varName})`);
                     palette.classList.add("hidden");
                 };
                 palette.appendChild(btn);
@@ -6590,10 +6703,10 @@
 
             // Reset callout buttons styling to defaults
             if (tipBtn) {
-                tipBtn.className = "px-2 h-7 rounded bg-amber-100 border border-amber-300 text-amber-800 hover:bg-amber-200 dark:bg-amber-500/20 dark:border-amber-500/30 dark:hover:bg-amber-500/30 dark:text-amber-300 transition flex items-center justify-center text-[10px] font-semibold";
+                tipBtn.className = "px-1.5 h-7 rounded bg-orange-100 border border-orange-300 text-orange-800 hover:bg-orange-200 dark:bg-orange-500/10 dark:border-orange-500/25 dark:hover:bg-orange-500/20 dark:text-orange-400 transition flex items-center justify-center text-[10px] font-semibold";
             }
             if (infoBtn) {
-                infoBtn.className = "px-2 h-7 rounded bg-blue-100 border border-blue-300 text-blue-800 hover:bg-blue-200 dark:bg-blue-500/20 dark:border-blue-500/30 dark:hover:bg-blue-500/30 dark:text-blue-300 transition flex items-center justify-center text-[10px] font-semibold";
+                infoBtn.className = "px-1.5 h-7 rounded bg-blue-100 border border-blue-300 text-blue-800 hover:bg-blue-200 dark:bg-blue-500/10 dark:border-blue-500/25 dark:hover:bg-blue-500/20 dark:text-blue-400 transition flex items-center justify-center text-[10px] font-semibold";
             }
 
             if (boldBtn) boldBtn.className = defaultBtnClass;
@@ -6643,14 +6756,14 @@
                     if (addColBtn) addColBtn.classList.remove("hidden");
                     if (delTableBtn) delTableBtn.classList.remove("hidden");
                 }
-                if (curr.classList && curr.classList.contains("wysiwyg-tip-box")) {
+                if (curr.classList && (curr.classList.contains("wysiwyg-tip-box") || curr.classList.contains("wysiwyg-section-tip"))) {
                     if (tipBtn) {
-                        tipBtn.className = "px-2 h-7 rounded bg-amber-200 border border-amber-400 text-amber-900 transition flex items-center justify-center text-[10px] font-bold shadow-md shadow-amber-200/50 dark:bg-amber-500/40 dark:border-amber-500 dark:text-amber-100 dark:shadow-md dark:shadow-amber-950/20";
+                        tipBtn.className = "px-1.5 h-7 rounded bg-orange-200 border border-orange-400 text-orange-900 transition flex items-center justify-center text-[10px] font-bold shadow-md shadow-orange-200/50 dark:bg-orange-500/40 dark:border-orange-500 dark:text-orange-100 dark:shadow-md dark:shadow-orange-950/20";
                     }
                 }
-                if (curr.classList && curr.classList.contains("wysiwyg-info-box")) {
+                if (curr.classList && (curr.classList.contains("wysiwyg-info-box") || curr.classList.contains("wysiwyg-section-info"))) {
                     if (infoBtn) {
-                        infoBtn.className = "px-2 h-7 rounded bg-blue-200 border border-blue-400 text-blue-900 transition flex items-center justify-center text-[10px] font-bold shadow-md shadow-blue-200/50 dark:bg-blue-500/40 dark:border-blue-500 dark:text-blue-100 dark:shadow-md dark:shadow-blue-950/20";
+                        infoBtn.className = "px-1.5 h-7 rounded bg-blue-200 border border-blue-400 text-blue-900 transition flex items-center justify-center text-[10px] font-bold shadow-md shadow-blue-200/50 dark:bg-blue-500/40 dark:border-blue-500 dark:text-blue-100 dark:shadow-md dark:shadow-blue-950/20";
                     }
                 }
                 curr = curr.parentNode;
