@@ -1,0 +1,71 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "4.01: Drie bijna dezelfde functies",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">je hebt in het voorgaande geleerd dat je zelf een functie kan maken en deze daarna kan aanroepen. Meneer Dukers heeft drie functies gemaakt die allen een vierkant maken, echter van verschillend formaat.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit en bekijk de uitvoer.</li>\n  <li>Wat valt je op aan het programma. Hier zit nog steeds herhaling in toch? Er worden steeds vierkanten gemaakt, echter van verschillende afmetingen.</li>\n</ol>\n<p class=\"mb-3\">Dit kan korter en makkelijker.</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(7)\n\ndef maak_vierkant20():\n  for i in range(4):\n    forward(20)\n    left(90)\n\ndef maak_vierkant50():\n  for i in range(4):\n    forward(50)\n    left(90)\n\ndef maak_vierkant100():\n  for i in range(4):\n    forward(100)\n    left(90)\n\nmaak_vierkant20()\nforward(30)\nmaak_vierkant50()\nforward(60)\nmaak_vierkant100()",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "4.02: Van 3 functies naar 1 functie",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Hiernaast zie je dat er nog maar een zelfgemaakte functie is: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">maak_vierkant(zijde)</code>. Het woord <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">zijde</code> tussen de haakjes noemen we een <strong>parameter</strong>. Met een parameter kan je heel makkelijk variatie in je functie maken. In dit geval is het de lengte van de zijde van het vierkant.</p>\n<p class=\"mb-3\">Het gebruik van parameters is eigenlijk niet nieuw. In de instructie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">forward(30)</code> maak je hier ook al gebruik van.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit en bekijk de uitvoer. Zie je dat de parameter op twee plekken terug komt. Bij het aanmaken van de functie (regel 6), maar ook in regel 11 bij het bepalen van de zijde van het te tekenen vierkant.</li>\n  <li>Verander de 100 in regel 15 naar 50 en kijk wat er gebeurt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(7)\n\ndef maak_vierkant(zijde):\n  for i in range(4):\n    forward(zijde)\n    left(90)\n\nmaak_vierkant(20)\nforward(30)\nmaak_vierkant(50)\nforward(60)\nmaak_vierkant(100)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "4.03: Driehoek met parameter",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">De instructie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">maak_driehoek(20)</code> in regel 10 moet een driehoek met zijde 20 laten maken. Dit werkt echter nog niet omdat de functie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">maak_driehoek(zijde)</code> nog niet afgemaakt is.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Maak de de functie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">maak_driehoek(zijde)</code> af.</li>\n  <li>Zorg dat er minimaal 5 driehoeken van verschillend formaat getekend worden.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(7)\n\ndef maak_driehoek(zijde):\n  #hier de code van het maken van een driehoek\n\nmaak_driehoek(20)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "4.04: maakDriehoek(zijde, kleur)",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Hiernaast zie je dat je meerdere parameters kan toevoegen aan je zelfgemaakte functie. Nu is niet alleen de lengte van de zijde variabel, maar is de kleur ook variabel: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">def maak_driehoek(zijde, kleur):</code></p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit en bekijk de uitvoer. Zie je dat je in regel 14 heel makkelijk kan zien dat je daar een zwarte driehoek maakt met zijde 10?</li>\n  <li>Pas het programma aan zodat de volgende driehoek een zijde heeft van 30 en groen (green) van kleur is. (Vergeet de \" niet bij de kleur)</li>\n  <li>Voeg nu nog een driehoek toe met de de zijde van 40 en de kleur blauw (blue). Zie je hoe snel en makkelijk dit gaat?</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(7)\n\ndef maak_driehoek(zijde, kleur):\n  fillcolor(kleur)\n  begin_fill()\n  for i in range(3):\n    forward(zijde)\n    left(120)\n  end_fill()\n\nmaak_driehoek(10, \"black\")\nforward(30)\nmaak_driehoek(20, \"red\")\nforward(30)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "4.05: maakHuisje(zijde)",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Meneer Dukers heeft een huisje gemaakt en heeft voor meneer Smits een huis ernaast gezet. Echter wil meneer Smits graag een groter huis.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Maak met behulp van de parameter <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">zijde</code> de functie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">maak_huis()</code> variabel. Pas dus regel 6 aan, en zet de parameter <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">zijde</code> op de plek waar nu het getal 50 staat.</li>\n  <li>Zorg nu dat er drie huizen komen met ieder een eigen formaat huis! Dukers krijgt 50, Smits krijgt 70 en De Bruin krijgt 100.</li>\n  <li>Voer het programma uit en voeg daarna ook jouw huis toe. Hoe groot mag die worden?</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(7)\n\ndef maak_huis():\n  for i in range(4):\n    forward(50)\n    left(90)\n  left(90)\n  forward(50)\n  right(30)\n  forward(50)\n  right(120)\n  forward(50)\n  right(30)\n  forward(50)\n  left(90)\n\nmaak_huis()\nmaak_huis()",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

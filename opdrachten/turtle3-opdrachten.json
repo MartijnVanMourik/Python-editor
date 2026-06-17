@@ -1,0 +1,84 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "Inleveropdracht - Zeshoeken",
+            "instruction": "<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Maak een functie die de schildpad een zeshoek laat maken. De zijde moeten 20 pixels lang zijn en de kleur van de zijde moet groen zijn.</li>\n  <li>Als je klaar bent met het maken van de zeshoek zorg je ervoor dat je op vier plekken de zeshoek laat verschijnen.</li>\n  <li>Vergeet niet jouw opdracht in te leveren.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(2)\n\nsetheading(90)\n\ndef maak_zeshoek():\n  #Hier de code voor de zeshoek. Vergeet niet het tabje\n\n#Hier roep je de functie maak_zeshoek() aan.\n\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "Uitwerking - Zeshoeken",
+            "instruction": "<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<p class=\"mb-3\"></p><ol><li>Maak een functie die de schildpad een zeshoek laat maken. De zijde moeten 20 pixels lang zijn en de kleur van de zijde moet groen zijn.</li><li>Als je klaar bent met het maken van de zeshoek zorg je ervoor dat je op vier plekken de zeshoek laat verschijnen.</li><li>Vergeet niet jouw opdracht in te leveren.</li></ol><p></p>\n\n\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(2)\n\nsetheading(90)\n\ndef maak_zeshoek():\n  #Hier de code voor de zeshoek. Vergeet niet het tabje\n\n#Hier roep je de functie maak_zeshoek() aan.\n\n\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "Inleveropdracht - Slingerfuncties",
+            "instruction": "<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Het is weer eens feest! Maak het programma af zodat je deze slingers na maakt.</li>\n  <li>Maak eerst de functies af.</li>\n  <li>Wil je los gaan, geef de slingers een kleur.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(9)\n\npenup()\ngoto(-200,0)\npendown()\n\ndef maak_vierkant():\n  for i in range(4):\n    forward(20)\n    right(90)\n\ndef maak_rechthoek(): #deze functie is nog niet af\n  forward(20)\n\ndef maak_zeshoek(): #deze functie is nog niet af\n  forward(20)\n\ndef maak_driehoek(): #deze functie is nog niet af\n  forward(20)\n  \ndef maak_draad():\n  forward(20)\n    \n#Start programma\nmaak_vierkant()\nmaak_draad()\nmaak_rechthoek()\nmaak_draad()\nmaak_driehoek()\nmaak_draad()\nmaak_vierkant()\nmaak_draad()\nmaak_zeshoek()\nmaak_draad()\nmaak_zeshoek()\nmaak_draad()\nmaak_zeshoek()\nmaak_draad()\nmaak_rechthoek()\nmaak_draad()\nmaak_driehoek()\nmaak_draad()\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "Uitwerking - Slingerfuncties",
+            "instruction": "<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<p class=\"mb-3\"><ol><li>Het is weer eens feest! Maak het programma af zodat je deze slingers na maakt.</li><li>Maak eerst de functies af.</li><li>Wil je los gaan, geef de slingers een kleur.</li></ol></p>\n\n\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(9)\n\npenup()\ngoto(-200,0)\npendown()\n\ndef maak_vierkant():\n  for i in range(4):\n    forward(20)\n    right(90)\n\ndef maak_rechthoek(): #deze functie is nog niet af\n  forward(20)\n\ndef maak_zeshoek(): #deze functie is nog niet af\n  forward(20)\n\ndef maak_driehoek(): #deze functie is nog niet af\n  forward(20)\n  \ndef maak_draad():\n  forward(20)\n    \n#Start programma\nmaak_vierkant()\nmaak_draad()\nmaak_rechthoek()\nmaak_draad()\nmaak_driehoek()\nmaak_draad()\nmaak_vierkant()\nmaak_draad()\nmaak_zeshoek()\nmaak_draad()\nmaak_zeshoek()\nmaak_draad()\nmaak_zeshoek()\nmaak_draad()\nmaak_rechthoek()\nmaak_draad()\nmaak_driehoek()\nmaak_draad()\n\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "Inleveropdracht - Kunst",
+            "instruction": "<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<p class=\"mb-3\">Zie de uitleg voor wat je moet maken. Je begint dit keer met NIETS, NADA, NOPPES en NIENTE!<span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">&nbsp;</span></p>\n<p class=\"mb-3\">Succes</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "# Schrijf hier je Python-code...\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_6",
+            "title": "Uitwerking - Kunst",
+            "instruction": "<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<p class=\"mb-3\">Zie de uitleg voor wat je moet maken. Je begint dit keer met NIETS, NADA, NOPPES en NIENTE!<span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">&nbsp;</span></p>\n<p class=\"mb-3\">Succes</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "# Schrijf hier je Python-code...\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

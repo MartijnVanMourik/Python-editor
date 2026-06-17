@@ -1,0 +1,19 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "assignments": [
+        {
+            "id": "task_1",
+            "title": "Inleveropdracht - Kunst kapot",
+            "instruction": "<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<p class=\"mb-3\">Ohjéé, de zoon van meneer Hofland heeft op de knoppen van zijn toetsenbord gedrukt waardoor zijn zelfgemaakte functie weg is. Hij was er trots op want hij gebruikte wel twee parameters: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">zijde en kleur.</code></p>\n<p class=\"mb-3\"><i>Fix jij het programma even!</i></p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(7)\n\ndef maak_vierkant(zijde, kleur):\n#Herstel hier de functie!\n\nmaak_vierkant(100,\"pink\")\nmaak_vierkant(75, \"blue\")\nmaak_vierkant(50, \"Yellow\")\nmaak_vierkant(20,\"red\")\nmaak_vierkant(10,\"black\")",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

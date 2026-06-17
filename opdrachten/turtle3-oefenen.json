@@ -1,0 +1,97 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "3.01: Functie 1",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">We gaan in deze les aan de slag met het maken van <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">functies</code>. Een ander woord voor functie is deeltaak. Je gebruikt functies al wanneer je iets tekent met de schildpad:</p>\n<p class=\"mb-3\">• <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">forward()</code> - een functie om de schildpad vooruit te laten gaan.</p>\n<p class=\"mb-3\">• <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">circle()</code> - de schildpad beweegt in een cirkel.</p>\n<p class=\"mb-3\">Eigenlijk alles waar je <strong>()</strong>-jes achter zet is een functie. Je weet dan niet hoe de functie <strong>exact</strong> werkt, maar je weet wel wat er uiteindelijk gebeurt. We kunnen ook zelf functies maken. En dit is echt superhandig.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit, kijk wat je opvalt en kijk eens of je ziet dat het programma eigenlijk uit 5 stappen bestaat. Drie keer een vierkant maken, en twee keer de pen verplaatsen.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(7)\n\nfor i in range(4): # Maak\n  forward(20)      # een\n  right(90)        # vierkant\n  \npenup()\ngoto(100,100)\npendown()\n\nfor i in range(4): # Maak\n  forward(20)      # een\n  right(90)        # vierkant\n\npenup()\ngoto(-100,-100)\npendown()\n\nfor i in range(4): # Maak\n  forward(20)      # een\n  right(90)        # vierkant\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "3.02: Functie 2",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Ok, we hebben nu de code om 3 vierkantjes te maken. Maar wat nu als we de vierkanten niet 20, maar 30 groot willen hebben? We moeten dan op regelnummer <strong>7</strong>, <strong>15</strong> en <strong>23</strong> de instructies aanpassen.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Zorg ervoor dat de zijden van de vierkantjes inderdaad 30 groot worden.</li>\n  <li>Voer het programma uit en controleer het resultaat.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(7)\n\nfor i in range(4): # Maak\n  forward(20)      # een\n  right(90)        # vierkant\n  \npenup()\ngoto(100,100)\npendown()\n\nfor i in range(4): # Maak\n  forward(20)      # een\n  right(90)        # vierkant\n\npenup()\ngoto(100,100)\npendown()\n\nfor i in range(4): # Maak\n  forward(20)      # een\n  right(90)        # vierkant\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "3.03: Functie van vierkant",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Als we nog meer vierkanten zouden tekenen zouden we het op nog meer plekken moeten doen! Dubbele code is meestal niet handig.</p>\n<p class=\"mb-3\">Je ziet dat het programma nu iets extra`s heeft in regel <strong>6</strong> t/m <strong>9</strong>. Dit is een functie die een vierkant maakt.</p>\n<p class=\"mb-3\">Om deze functie te starten gebruik je deze instructie: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">maak_vierkant()</code>.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Vervang de huidige instructies van regel <strong>11</strong> t/m <strong>13</strong> met deze enkele instructie: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">maak_vierkant()</code>.</li>\n  <li>Voer het programma uit en zie dat je hetzelfde resultaat bereikt met minder code.</li>\n  <li>Vervang ook de instructies van het tweede en derde vierkant.</li>\n  <li><span class=\"font-bold text-slate-800 dark:text-slate-200\">Test</span> of je programma het nog steeds doet!</li>\n  <li>Hoeveel regels code scheelt dit? En op hoeveel plekken moet je nu de code aanpassen als het vierkant niet 20 maar 40 moet worden?</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(7)\n\ndef maak_vierkant(): # Maakt een vierkant\n  for i in range(4):   \n    forward(20)\n    right(90)\n\nfor i in range(4): # Maak\n  forward(20)      # een\n  right(90)        # vierkant\n  \npenup()\ngoto(100,100)\npendown()\n\nfor i in range(4): # Maak\n  forward(20)      # een\n  right(90)        # vierkant\n\npenup()\ngoto(-100,-100)\npendown()\n\nfor i in range(4): # Maak\n  forward(20)      # een\n  right(90)        # vierkant",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "3.04: Functie van een driehoek",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">je hebt in het voorgaande geleerd dat je zelf een functie kan maken en deze daarna kan aanroepen. Meneer Dukers heeft de functie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">maak_driehoek()</code> al voor je gemaakt. Zie regels <strong>6</strong> t/m <strong>9</strong>. Let hierbij op de tabjes. Hij is echter vergeten om de andere code aan te passen zodat het programma korter en overzichtelijker wordt.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Pas het programma aan zodat de functie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">maak_driehoek()</code> gebruikt wordt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(7)\n\ndef maak_driehoek(): #dit is een functie om een driehoek te maken. \n  for i in range (3):\n    forward(20)\n    right(120)\n\nfor i in range(3):\n  forward(20)\n  right(120)\n  \npenup()\nforward(30)\npendown()\n\nfor i in range(3):\n  forward(20)\n  right(120)\n\npenup()\nforward(30)\npendown()\n\nfor i in range(3):\n  forward(20)\n  right(120)\n  \npenup()\nforward(30)\npendown()",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "3.05: Slingers",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Het is weer eens feest bij meneer Dukers en de slingers worden opgehangen. Meneer Hofland heeft de functie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">maak_driehoek()</code> en <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">maak_vierkant()</code> al gemaakt.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li><span class=\"font-bold text-slate-800 dark:text-slate-200\" style=\"font-weight: normal;\">Run</span> het programma en bekijk het huidige resultaat.</li>\n  <li>Met de huidige code heb je al een driehoek en een streep. Gebruik de gegeven functies om een lange slinger te maken.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(7)\n\npenup()\ngoto(-150,0)\npendown()\n\ndef maak_driehoek(): #Maak een driehoek vlaggetje\n  for i in range(3):\n    forward(20)\n    right(120)\n  \ndef maak_vierkant(): #Maak een vierkant vlaggetje\n  for i in range(4):\n    forward(20)\n    right(90)\n    \nmaak_driehoek()\nforward(30)\n\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_6",
+            "title": "3.06: Functie van huis",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Meneer Smits heeft de functie van een huis gemaakt, en daarmee twee huizen getekend.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li><span class=\"font-bold text-slate-800 dark:text-slate-200\" style=\"font-weight: normal;\">Run</span> het programma.</li>\n  <li>Pas de functie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">teken_huis()</code> aan zodat het dak rood wordt.</li>\n  <li>Pas de code zo aan zodat er vier huizen op een rij komen ipv twee.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(7)\n\ndef teken_huis (): #teken een huis\n  setheading(90)\n  #start begane grond\n  for i in range(4):\n    forward(50)  # in de for-loop dus 2 keer inspringen\n    right(90)\n  \n  #start dak\n  forward(50) #Nog steeds inspringen. \n  right(30)\n  forward(50)\n  right(120)\n  forward(50)\n  right(30)\n  forward(50)\n  right(90)\n  forward(50)\n  right(90)\n  \nteken_huis()\ngoto(50,0)\nteken_huis()",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_7",
+            "title": "3.07: Functie van ster",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">In het programma staat een functie van een ster.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li><span class=\"font-bold text-slate-800 dark:text-slate-200\" style=\"font-weight: normal;\">Run</span> het programma om te zien hoe de ster eruit ziet.</li>\n  <li>Pas het programma zo aan zodat er <strong>vijf</strong> sterren in het scherm komen. De plek waar de sterren moeten komen mag je zelf bepalen.</li>\n  <li>Pas de functie van de ster zo aan zodat een straal niet 50 maar 20 lang is. Zie je hoe snel dit gaat nu je gebruik maakt van een functie.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(7)\n\ndef teken_ster():\n  for i in range(12):\n    forward(50)\n    backward(50)\n    right(30)\n\nteken_ster()\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

@@ -2791,6 +2791,20 @@
                         controls.appendChild(arrowsContainer);
                     }
 
+                    // Copy button
+                    const copyBtn = document.createElement("button");
+                    copyBtn.className = `w-5 h-5 rounded flex items-center justify-center text-[10px] transition ${activeTheme === 'dark'
+                        ? 'bg-slate-900 hover:bg-blue-950 text-slate-500 hover:text-blue-400'
+                        : 'bg-slate-200 hover:bg-blue-100 text-slate-500 hover:text-blue-600'
+                        }`;
+                    copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i>';
+                    copyBtn.title = "Kopieer opdracht";
+                    copyBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        duplicateTask(task.id);
+                    };
+                    controls.appendChild(copyBtn);
+
                     const delBtn = document.createElement("button");
                     delBtn.className = `w-5 h-5 rounded flex items-center justify-center text-[10px] transition ${activeTheme === 'dark'
                         ? 'bg-slate-900 hover:bg-red-950 text-slate-500 hover:text-red-400'
@@ -6544,6 +6558,94 @@
                 }
                 showToast(`🗑️ Opdracht verwijderd`);
             }
+        }
+
+        function duplicateTask(taskId) {
+            const task = taskConfig.tabs.find(t => t.id === taskId);
+            if (!task) return;
+
+            // Save active instructions and code of current task first if duplicating the active task
+            if (taskId === currentTaskId) {
+                saveActiveInstruction();
+                const workspace = getTaskWorkspace(currentTaskId);
+                if (workspace) {
+                    workspace.files[workspace.activeFile] = editor.getValue();
+                    userProgress[currentTaskId] = workspace;
+                    localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
+                }
+            }
+
+            // Generate unique task ID
+            let newId = "";
+            let index = 1;
+            while (taskConfig.tabs.some(t => t.id === "task_" + index)) {
+                index++;
+            }
+            newId = "task_" + index;
+
+            // Format new title
+            let currentTitle = task.title || "";
+            let newTitle = "";
+            if (currentTitle.startsWith("Inleveropdracht")) {
+                newTitle = currentTitle.replace(/^Inleveropdracht/, "Uitwerking");
+            } else {
+                newTitle = currentTitle + " (copy)";
+            }
+
+            const newInstruction = task.instruction || "";
+            const newTests = task.tests ? JSON.parse(JSON.stringify(task.tests)) : [];
+
+            // Get source workspace files
+            const sourceWorkspace = getTaskWorkspace(task.id);
+            const newFiles = [];
+            if (sourceWorkspace && sourceWorkspace.files) {
+                Object.keys(sourceWorkspace.files).forEach(filename => {
+                    newFiles.push({
+                        filename: filename,
+                        initialCode: sourceWorkspace.files[filename],
+                        isMain: filename === "main.py" || filename === "index.html" || (task.files && task.files.find(f => f.filename === filename)?.isMain)
+                    });
+                });
+            } else {
+                if (task.files && Array.isArray(task.files)) {
+                    task.files.forEach(f => {
+                        newFiles.push({
+                            filename: f.filename,
+                            initialCode: f.initialCode || "",
+                            isMain: f.isMain
+                        });
+                    });
+                }
+            }
+
+            const newTask = {
+                id: newId,
+                title: newTitle,
+                instruction: newInstruction,
+                files: newFiles,
+                tests: newTests,
+                previewImage: task.previewImage || ""
+            };
+
+            const targetIndex = taskConfig.tabs.findIndex(t => t.id === taskId);
+            if (targetIndex !== -1) {
+                taskConfig.tabs.splice(targetIndex + 1, 0, newTask);
+            } else {
+                taskConfig.tabs.push(newTask);
+            }
+
+            // Sync user progress/editor content for the new task
+            if (sourceWorkspace) {
+                userProgress[newId] = {
+                    activeFile: sourceWorkspace.activeFile,
+                    files: { ...sourceWorkspace.files }
+                };
+                localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
+            }
+
+            renderTaskSelector();
+            selectTask(newId);
+            showToast(`📋 Opdracht gekopieerd naar "${newTitle}"`);
         }
 
         function renameTaskTitle(taskId) {
