@@ -293,7 +293,7 @@
             max-width: 100%;
             max-height: 100%;
             aspect-ratio: 1 / 1;
-            background-color: #ffffff;
+            background-color: transparent;
             border-radius: 0.75rem;
             overflow: hidden;
             margin: 0 auto;
@@ -302,15 +302,23 @@
 
         #turtle-canvas * {
             position: absolute !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 100% !important;
-            height: 100% !important;
-            background: transparent !important;
+            left: -200% !important; /* Center a 500% wide child canvas sheet */
+            top: -200% !important;  /* Center a 500% high canvas sheet */
+            width: 500% !important;
+            height: 500% !important;
             margin: 0 !important;
             padding: 0 !important;
             border: none !important;
             box-sizing: border-box !important;
+        }
+
+        #turtle-canvas *:not(.turtle-bg) {
+            background: transparent !important;
+        }
+
+        .turtle-bg {
+            background-color: #ffffff !important;
+            border-radius: 0.75rem;
         }
 
         /* Fullscreen style for panel-turtle */
@@ -1486,6 +1494,7 @@
                                 <!-- Target element where Skulpt renders Canvas -->
                                 <div id="turtle-canvas" class="cursor-grab">
                                     <!-- Skulpt automatically injects HTML5 Canvas here -->
+                                    <div class="turtle-bg bg-white shadow-sm"></div>
                                 </div>
 
                                 <!-- Floating Controls (Zoom in, Zoom out, Reset, Download) -->
@@ -2495,9 +2504,9 @@
                 sizeIndicator.textContent = `Canvas ${canvasSize}x${canvasSize}`;
             }
 
-            // Configure Skulpt Engine canvas dimensions globally as fallback
-            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).width = canvasSize;
-            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).height = canvasSize;
+            // Configure Skulpt Engine canvas dimensions globally as fallback (5x canvas size for scrolling outside viewport)
+            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).width = canvasSize * 5;
+            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).height = canvasSize * 5;
 
             // Establish clean course namespace for project isolation
             if (configUrl) {
@@ -3721,6 +3730,11 @@
             const canvasDiv = document.getElementById("turtle-canvas");
             canvasDiv.innerHTML = "";
 
+            // Add canvas background sheet that pans and zooms along with the drawings
+            const bgSheet = document.createElement("div");
+            bgSheet.className = "turtle-bg bg-white shadow-sm";
+            canvasDiv.appendChild(bgSheet);
+
             // Configure Skulpt Engine
             Sk.configure({
                 output: appendToConsole,
@@ -3758,10 +3772,10 @@
                 killableFor: true
             });
 
-            // Target the canvas element for turtle drawings
+            // Target the canvas element for turtle drawings (5x size for scrollable background)
             (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = "turtle-canvas";
-            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).width = canvasSize;
-            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).height = canvasSize;
+            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).width = canvasSize * 5;
+            (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).height = canvasSize * 5;
 
             const myPromise = Sk.misceval.asyncToPromise(function () {
                 return Sk.importMainWithBody("<stdin>", false, mainCode, true);
