@@ -816,13 +816,17 @@
         @media (min-width: 768px) {
             .mode-compact main {
                 flex-direction: row !important;
+                height: 100% !important;
+                max-height: 100% !important;
+                overflow: hidden !important;
             }
 
             .mode-compact #instructions-panel {
                 width: 33.333% !important;
                 min-width: 260px !important;
                 max-width: 320px !important;
-                max-height: none !important;
+                height: 100% !important;
+                max-height: 100% !important;
                 border-right: 1px solid #1e293b !important;
                 border-bottom: none !important;
                 display: flex !important;
@@ -835,7 +839,8 @@
 
             .mode-compact main>section:last-child {
                 flex: 1 !important;
-                max-height: none !important;
+                height: 100% !important;
+                max-height: 100% !important;
                 display: flex !important;
             }
         }
