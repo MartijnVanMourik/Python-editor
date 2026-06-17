@@ -3696,6 +3696,18 @@
             return text.substring(0, index).split('\n').length;
         }
 
+        function preprocessPythonCode(code) {
+            let processedCode = code;
+            if (/from\s+turtle\s+import\s+/.test(processedCode)) {
+                processedCode = processedCode.replace(/(from\s+turtle\s+import\s+[^\r\n#;]+)/, "$1; colormode(255)");
+            } else if (/import\s+turtle\s+as\s+(\w+)/.test(processedCode)) {
+                processedCode = processedCode.replace(/(import\s+turtle\s+as\s+(\w+))/, "$1; $2.colormode(255)");
+            } else if (/import\s+turtle/.test(processedCode)) {
+                processedCode = processedCode.replace(/(import\s+turtle)/, "$1; turtle.colormode(255)");
+            }
+            return processedCode;
+        }
+
         function runPythonCode() {
             clearErrorHighlight();
             // Save current active tab code first
@@ -3706,8 +3718,9 @@
                 localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
             }
 
-            const mainCode = workspace ? (workspace.files["main.py"] || "") : editor.getValue();
-            const isTurtle = mainCode.includes("import turtle") || mainCode.includes("from turtle import");
+            const mainCodeRaw = workspace ? (workspace.files["main.py"] || "") : editor.getValue();
+            const mainCode = preprocessPythonCode(mainCodeRaw);
+            const isTurtle = mainCodeRaw.includes("import turtle") || mainCodeRaw.includes("from turtle import");
             isRunningTest = false;
             setExecutionRunningState(true);
 
@@ -3884,7 +3897,8 @@
         function runSingleTestCase(initialCode, studentCode, testCase) {
             return new Promise((resolve) => {
                 const workspace = getTaskWorkspace(currentTaskId);
-                const mainCode = workspace ? (workspace.files["main.py"] || "") : studentCode;
+                const studentCodeRaw = workspace ? (workspace.files["main.py"] || "") : studentCode;
+                const mainCode = preprocessPythonCode(studentCodeRaw);
 
                 // Keep track of inputs we provide for the mocking function
                 testInputsQueue = [...testCase.inputs];
