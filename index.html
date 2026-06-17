@@ -971,6 +971,9 @@
 
         /* Let turtle canvas expand to full drawer width/height minus console */
         .mode-compact #turtle-canvas {
+            position: absolute !important;
+            inset: 0 !important;
+            margin: auto !important;
             width: 100% !important;
             height: auto !important;
             max-width: 400px !important;
@@ -1784,6 +1787,7 @@
         let isRunningTest = false; // Flag to isolate manual input from test input mocks
         let isExecuting = false; // Flag to track if Python code/tests are currently running
         let executionInterrupted = false; // Flag to check if stop execution was requested
+        let activeInputRejectCallback = null; // Handler to reject active input Promise on interrupt
         let testInputsQueue = []; // Sequence of inputs configured for the active automated test case
         let activeMobileView = "editor"; // State tracking for mobile split screen
         let activeOutputSubTab = "console"; // Active subtab in the output panel
@@ -3190,19 +3194,26 @@
             };
             targetConsole.addEventListener("click", focusInput);
 
+            const cleanup = () => {
+                inputEl.removeEventListener("input", adjustWidth);
+                targetConsole.removeEventListener("click", focusInput);
+                inputEl.remove();
+                activeInputRejectCallback = null;
+            };
+
+            // Set global reject handler so interrupt can cancel this input
+            activeInputRejectCallback = (err) => {
+                cleanup();
+                rejectCallback(err);
+            };
+
             // Handle Enter submit
             inputEl.onkeydown = (e) => {
                 if (e.key === "Enter") {
                     const value = inputEl.value;
-                    
-                    // Cleanup event listeners and element
-                    inputEl.removeEventListener("input", adjustWidth);
-                    targetConsole.removeEventListener("click", focusInput);
-                    inputEl.remove();
-
+                    cleanup();
                     // Print user entry + newline back to console history
                     appendToConsole(value + "\n");
-                    
                     // Resolve promise to resume Skulpt interpreter execution
                     resolveCallback(value);
                 }
@@ -3232,6 +3243,9 @@
 
         function interruptPythonCode() {
             executionInterrupted = true;
+            if (activeInputRejectCallback) {
+                activeInputRejectCallback(new Error("Execution Interrupted"));
+            }
             showToast("🛑 Uitvoering onderbroken...");
         }
 
