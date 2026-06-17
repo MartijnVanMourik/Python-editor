@@ -1,0 +1,123 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "5.01: Maak lijnen",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Dit programma bestaat uit 4 delen:</p>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Regel 1 t/m 5: hier wordt de schildpad ingesteld.</li>\n  <li>Regel 8 t/m 11: hier gaat de schildpad naar het beginpunt, links onder.</li>\n  <li>Regel 14 t/m 19: dit is een functie die een lijn tekent en alvast naar het volgende startpunt gaat.</li>\n  <li>Regel 22 t/m 25: Hier worden de vertikale lijnen getekend.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit. Bekijk de code en probeer te snappen hoe het programma werkt.</li>\n  <li>Zie je dat de lijnen steeds hoger worden. Maak het programma af tot en met de lijn die 200 pixels lang is.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\npensize(2)\nspeed(8)\n\n#Ga naar het startpunt\npenup()\ngoto(-190,-190)\npendown()\nleft(90)\n\n#Teken een lijn en ga naar het volgende startpunt\ndef teken_lijn(lengte):\n  forward(lengte)\n  backward(lengte)\n  right(90)\n  forward(10)\n  left(90)\n  \n#Hier de lijnen maken  \nteken_lijn(20)\nteken_lijn(40)\nteken_lijn(60)\nteken_lijn(80)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "5.02: Tot 400",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Hier zie je het programma dat doorgaat tot 400. Best wel veel werk. Zelfs als je de lijnen kopieert, dan moet je nog steeds de waarde van de parameter veranderen.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit. Bekijk de code en probeer te snappen hoe het werkt.</li>\n</ol>\n<p class=\"mb-3\">Dit moet toch makkelijker kunnen, en dat gaan we doen met een zogenaamde <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">variabele</code>.</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\npensize(2)\nspeed(8)\n\n#Ga naar het startpunt\npenup()\ngoto(-190,-190)\npendown()\nleft(90)\n\n#Teken een lijn en ga naar het volgende startpunt\ndef teken_lijn(lengte):\n  forward(lengte)\n  backward(lengte)\n  right(90)\n  forward(10)\n  left(90)\n  \n#Hier de lijnen maken  \nteken_lijn(20)\nteken_lijn(40)\nteken_lijn(60)\nteken_lijn(80)\nteken_lijn(100)\nteken_lijn(120)\nteken_lijn(140)\nteken_lijn(160)\nteken_lijn(180)\nteken_lijn(200)\nteken_lijn(220)\nteken_lijn(240)\nteken_lijn(260)\nteken_lijn(280)\nteken_lijn(300)\nteken_lijn(320)\nteken_lijn(340)\nteken_lijn(360)\nteken_lijn(380)\nteken_lijn(400)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "5.03: Variabelen",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\"><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">Variabelen</code> worden gebruikt om waardes, bijvoorbeeld getallen, in je programma te gebruiken en te onthouden. Je kunt bijvoorbeeld een variabele hebben die de waarde van de lengte van een lijn opslaat. Deze waarde kan tijdens het uitvoeren van het programma veranderen, daarom heet het ook een variabele.</p>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>In <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">regel 7</code> zie je dat er een variabele met de naam <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">lengte</code>&nbsp;aangemaakt is. Deze krijgt direct de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">waarde</code> 20 mee.</li>\n  <li>In <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">regel 24</code> wordt er een lijn gemaakt en de waarde van de variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">lengte</code> wordt meegegeven. Die is op dat moment 20. Daarom wordt er een lijn getekend met een lengte van 20</li>\n  <li>In <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">regel 25</code> zie je dat de variabelen <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">lengte</code> verhoogd wordt met 20. Dus na het uitvoeren wordt deze 40.</li>\n  <li>In <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">regel 26</code> wordt er een lijn gemaakt en de waarde van de variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">lengte</code> wordt meegegeven. Die is op dat moment 40. Daarom wordt er een lijn getekend met een lengte van 40.</li>\n  <li>In <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">regel 27</code> zie je dat de variabelen <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">lengte</code> verhoogd wordt met 20. Dus na het uitvoeren wordt deze 60.</li>\n  <li>In <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">regel 28</code> wordt er een lijn gemaakt en de waarde van de variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">lengte</code> wordt meegegeven. Die is op dat moment 40. Daarom wordt er een lijn getekend met een lengte van 40.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Verander de waarde van de variabele lengte in regel 7 aan naar 100 en kijk wat er gebeurt!</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\npensize(2)\nspeed(8)\n\nlengte = 20\n\n#Ga naar het startpunt\npenup()\ngoto(-190,-190)\npendown()\nleft(90)\n\n#Teken een lijn en ga naar het volgende startpunt\ndef teken_lijn(lengte):\n  forward(lengte)\n  backward(lengte)\n  right(90)\n  forward(10)\n  left(90)\n  \n#Hier de lijnen maken  \nteken_lijn(lengte)\nlengte = lengte + 20\nteken_lijn(lengte)\nlengte = lengte + 20\nteken_lijn(lengte)\nlengte = lengte + 20\nteken_lijn(lengte)\nlengte = lengte + 20\nteken_lijn(lengte)\nlengte = lengte + 20\nteken_lijn(lengte)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "5.04: Op en neer",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Het programma van 5.3 kon natuurlijk korter. Hier is dat gedaan met een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">for</code> loop.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit. Zie je dat regel 24 t/m 26 ervoor zorgt dat er 10 lijnen getekend worden die steeds langer worden?</li>\n  <li>Zie je dat regel 29 t/m 30 ervoor zorgt dat er daarna 11 lijnen getekend worden die even lang zijn?</li>\n  <li>Voeg op regel 31 de instructie toe die ervoor zorgt dat de lijnen steeds kleiner worden: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">lengte = lengte - 20</code></li>\n  <li>Voer het programma uit.</li>\n  <li>Wat gebeurt er als je nu in plaats van 20 pixels 40 pixels zou invullen?</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\npensize(2)\nspeed(9)\n\nlengte = 20\n\n#Ga naar het startpunt\npenup()\ngoto(-190,-190)\npendown()\nleft(90)  \n\n#Teken een lijn en ga naar het volgende startpunt\ndef teken_lijn(lengte):\n  forward(lengte)\n  backward(lengte)\n  right(90)\n  forward(10)\n  left(90)\n  \n#Hier de lijnen maken die steeds langer worden \nfor i in range(10):\n  teken_lijn(lengte)\n  lengte = lengte + 20\n\n#Hier de lijnen maken die steeds korter worden\nfor i in range(11):\n  teken_lijn(lengte)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "5.05: Steeds langer",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">In de volgende opdrachten bekijken we nog een keer hoe we zo`n variabele kunnen gebruiken!</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het gegeven programma en voer het uit.</li>\n  <li>Op <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">regel 6</code> zie je een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">variabele</code> met de naam <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">lengte</code>. Deze krijgt daar meteen de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">waarde</code> 5.</li>\n  <li>Zie je dat de eerste lijn die getekend wordt een lengte heeft van 5 (regel 8), en dat de lijnen daarna steeds met 10 langer worden. Dat zie je mooi in regel 9 gebeuren.</li>\n  <li>Verander het getal 10 overal in 20 en voer het programma uit. Wat gebeurt er?</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(3)\n\nlengte = 5\n\nforward(lengte)\nlengte = lengte + 10\nleft(90)\n\nforward(lengte)\nlengte = lengte + 10\nleft(90)\n\nforward(lengte)\nlengte = lengte + 10\nleft(90)\n\nforward(lengte)\nlengte = lengte + 10\nleft(90)\n\nforward(lengte)\nlengte = lengte + 10\nleft(90)\n\nforward(lengte)\nlengte = lengte + 10\nleft(90)\n\nforward(lengte)\nlengte = lengte + 10\nleft(90)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_6",
+            "title": "5.06: Verlenging",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Zojuist heb je op heel veel plekken een getal moeten veranderen. Geen leuk werk. Daarom is het beter om een extra variabele met de naam <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">verlenging</code> te maken. Deze krijgt de waarde die de lengte er steeds bij moet krijgen, zie regel 7.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het gegeven programma en voer het uit. Als het goed is komt er exact het zelfde programma uit.</li>\n  <li>Pas nu de waarde van de variabelen <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">verlenging</code> aan naar 20 en voer het programma uit (regel 7). En nu 30? Zie je hoe makkelijk dit gaat.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(3)\n\nlengte = 5\nverlenging = 10\n\nforward(lengte)\nlengte = lengte + verlenging\nleft(90)\n\nforward(lengte)\nlengte = lengte + verlenging\nleft(90)\n\nforward(lengte)\nlengte = lengte + verlenging\nleft(90)\n\nforward(lengte)\nlengte = lengte + verlenging\nleft(90)\n\nforward(lengte)\nlengte = lengte + verlenging\nleft(90)\n\nforward(lengte)\nlengte = lengte + verlenging\nleft(90)\n\nforward(lengte)\nlengte = lengte + verlenging\nleft(90)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_7",
+            "title": "5.07: MAND",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Ondanks dat het programma nu beter werkt heb je mogelijk nog steeds de behoefte om \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">mand</code>\" te roepen. Het moet toch korter kunnen. Dat hebben we hier gedaan met behulp van een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">for</code> loop.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het gegeven programma en voer het uit. Pas nu de parameter van de range functie aan naar 30 in regel 9 en voer het programma uit.</li>\n  <li>Pas de hoek aan naar 70 graden in regel 12 en voer het programma uit.</li>\n  <li>Maak de hoek 50, 150 en 180 graden en zie wat er gebeurt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(8)\n\nlengte = 5\nverlenging = 10\n\nfor i in range(10):\n  forward(lengte)\n  lengte = lengte + verlenging\n  left(90)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_8",
+            "title": "5.08: Functie",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Dit begint al ergens op te lijken. Als we dit figuur vaker willen gebruiken is het slim om er een eigen functie van te maken en dan de variabelen als parameter mee te geven. Dat is wat we hier gedaan hebben.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het gegeven programma en voer het uit.</li>\n  <li>Zorg dat het twee keer wordt uitgevoerd door de instructie van regel 15 te herhalen.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\nspeed(8)\n\nlengte = 5\nverlenging = 10\n\ndef maak_figuur(lengte, verlenging):\n  for i in range(10):\n    forward(lengte)\n    lengte = lengte + verlenging\n    left(90)\n\nmaak_figuur(lengte, verlenging)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_9",
+            "title": "5.09: RGB variabelen",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Het wordt al mooier maar de kleur zwart is een beetje saai. We gaan nu met behulp van drie variabelen de kleur van de lijnen aanpassen. Hiervoor maken we eerst drie variabelen aan. Dat doen we in regel 11, 12 en 13. Daarnaast hebben we de functie zo aangepast dat de waarde van de drie kleur variabelen de kleur van de lijn bepaald. Daarnaast hebben we de dikte van de pen aangepast in regel 6 met de instructie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">pensize(10)</code></p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het gegeven programma en voer het uit. Zie je dat de lijnen allemaal zwart zijn. Dat komt door de RGB waarde (0,0,0).</li>\n  <li>Geef de variabele in regel 13 de waarde 255 en voer het programma uit. Zie je dat je nu een andere kleur krijgt.</li>\n  <li>Wat zou er gebeuren als we na het tekenen van iedere individuele lijn de roodwaarde met 13 ophogen? Voeg nu de volgende instructie toe op regel 19: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">rood = rood + 13</code>. (Zet deze instructie wel in twee tabjes zodat het ook echt in de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">for</code>-loop wordt meegenomen).</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\npensize(10)\nspeed(8)\n\nlengte = 20\nverlenging = 10\n\ndef maak_figuur(lengte, verlenging):\n  rood = 0\n  groen = 0\n  blauw = 13\n  for i in range(20):\n    color(rood,groen,blauw)\n    forward(lengte)\n    lengte = lengte + verlenging\n    left(90)\n\nmaak_figuur(lengte, verlenging)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

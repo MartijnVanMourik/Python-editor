@@ -137,7 +137,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "from turtle import *\n\n#Maak de schildpad magenta en snelheid 2\nshape(\"turtle\")\ncolormode(255)\nspeed(2)\n\n#Maak de schildpad rood en ga 100 naar voren\ncolor(\"red\")\nforward(100)\n\n#Maak de schildpad blauw en ga 100 naar boven\ncolor(0,0,255)\nleft(90)\nforward(100)",
+                    "initialCode": "from turtle import *\n\n#Maak de schildpad magenta en snelheid 2\nshape(\"turtle\")\nspeed(2)\n\n#Maak de schildpad rood en ga 100 naar voren\ncolor(\"red\")\nforward(100)\n\n#Maak de schildpad blauw en ga 100 naar boven\ncolor(0,0,255)\nleft(90)\nforward(100)",
                     "isMain": true
                 }
             ],
