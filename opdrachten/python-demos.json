@@ -1,0 +1,60 @@
+{
+    "title": "Nieuwe Python Cursus",
+    "assignments": [
+        {
+            "id": "task_1",
+            "title": "Turtle Demo",
+            "instruction": "<h3 class=\"text-lg font-semibold text-slate-100 mb-2\">Turtle Demo</h3><p class=\"mb-2\">Demonstratie van Python Turtle.</p>",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nspeed(7)\nshape(\"turtle\")\ncolors = ['red', 'purple', 'blue', 'green', 'orange', 'pink']\n\nfor x in range(300):\n  pencolor(colors[x%6])\n  width(x/100 + 1)\n  forward(x)\n  left(59)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "Console Demo",
+            "instruction": "<h3 class=\"text-lg font-semibold text-slate-100 mb-2\">Console Demo</h3><p class=\"mb-2\"><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Demonstratie van Python Console.</span></p>",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "# Schrijf hier je Python-code...\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ],
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "Turtle Demo",
+            "instruction": "<h3 class=\"text-lg font-semibold text-slate-100 mb-2\">Turtle Demo</h3><p class=\"mb-2\">Demonstratie van Python Turtle.</p>",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nspeed(7)\nshape(\"turtle\")\ncolors = ['red', 'purple', 'blue', 'green', 'orange', 'pink']\n\nfor x in range(300):\n  pencolor(colors[x%6])\n  width(x/100 + 1)\n  forward(x)\n  left(59)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "Console Demo",
+            "instruction": "<h3 class=\"text-lg font-semibold text-slate-100 mb-2\">Console Demo</h3><p class=\"mb-2\"><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Demonstratie van Python Console.</span></p>",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "#!/bin/python3\n\nwhile True:\n  print(\"Welke berekening wil je maken?\")\n  print()\n  print(\"1: optellen\")\n  print(\"2: aftrekken\")\n  print(\"3: vermenigvuldigen\")\n  print(\"4: delen\")\n  print()\n  \n  keuze = input(\"maak je keuze: 1, 2, 3, 4\")\n\n  if keuze == \"1\" or keuze == \"2\" or keuze == \"3\" or keuze == \"4\":\n    getal1 = int(input(\"geef het eerste getal\"))\n    getal2 = int(input(\"geef het tweede getal\"))\n    if keuze == \"1\":\n      antwoord = getal1 + getal2\n      print(getal1,\"+\",getal2,\"=\",antwoord)\n    elif keuze == \"2\":\n      antwoord = getal1 - getal2\n      print(getal1,\"-\",getal2,\"=\",antwoord)\n    elif keuze == \"3\":\n      antwoord = getal1 * getal2\n      print(getal1,\"*\",getal2,\"=\",antwoord)\n    else:\n      antwoord = getal1 / getal2\n      print(getal1,\"/\",getal2,\"=\",antwoord)\n  else:\n    print(\"dit is geen juiste invoer\")",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ],
+    "courseType": "python"
+}
