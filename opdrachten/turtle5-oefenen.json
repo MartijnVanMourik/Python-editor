@@ -113,7 +113,33 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\npensize(10)\nspeed(8)\n\nlengte = 20\nverlenging = 10\n\ndef maak_figuur(lengte, verlenging):\n  rood = 0\n  groen = 0\n  blauw = 13\n  for i in range(20):\n    color(rood,groen,blauw)\n    forward(lengte)\n    lengte = lengte + verlenging\n    left(90)\n\nmaak_figuur(lengte, verlenging)",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\npensize(10)\nspeed(8)\n\nlengte = 20\nverlenging = 10\n\ndef maak_figuur(lengte, verlenging):\n  rood = 0\n  groen = 0\n  blauw = 0\n  for i in range(20):\n    color(rood,groen,blauw)\n    forward(lengte)\n    lengte = lengte + verlenging\n    left(90)\n\nmaak_figuur(lengte, verlenging)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_10",
+            "title": "5.10: Kleur verloop",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Hier zie je het programma zoals je geeindigd bent. Hoe kan kan het dat de kleur per lijn anders wordt? Dit komt omdat na het tekenen van iedere lijn de roodwaarde met 13 opgehoogd wordt.</p>\n<p class=\"mb-3\">Er is in dit programma op regel 20 nog een nieuwe instructie gezet: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">print(rood)</code>. Met deze instructie wordt er in de console de waarde van de variabelen rood geprint. (Je kunt de inhoud van de console output goed lezen door de vergroten-knop in te drukken).</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit.</li>\n  <li>Voeg nu de volgende instructie toe aan regel 21: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">blauw = blauw - 13</code>. Denk hierbij aan de tabjes.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\npensize(10)\nspeed(8)\n\nlengte = 20\nverlenging = 10\n\ndef maak_figuur(lengte, verlenging):\n  rood = 0\n  groen = 0\n  blauw = 255\n  for i in range(20):\n    color(rood,groen,blauw)\n    forward(lengte)\n    lengte = lengte + verlenging\n    left(90)\n    rood = rood + 13\n    print(rood)\n\nmaak_figuur(lengte, verlenging)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_11",
+            "title": "5.11: Kunstwerk",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Hier zie je het programma zoals je in de eerste les gezien hebt. Als het goed is snap je nu precies hoe dit algoritme werkt.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit en kijk naar het mooie kunstwerk.</li>\n  <li>Pas de getallen in regel 11, 14 en 18 aan en experimenteer met de uitkomst.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\npensize(1)\nspeed(0)\n\nlengte = 1\nverlenging = 1\n\ndef maak_figuur(lengte, verlenging):\n  rood = 0\n  groen = 0\n  blauw = 255\n  for i in range(450):\n    color(rood,groen,blauw)\n    forward(lengte)\n    lengte = lengte + verlenging\n    left(80)\n    rood = rood + 2\n    blauw - blauw -1\n    groen = groen +1\n    print(rood)\n\nmaak_figuur(lengte, verlenging)",
                     "isMain": true
                 }
             ],

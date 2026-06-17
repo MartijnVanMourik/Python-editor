@@ -26,6 +26,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/addon/comment/comment.min.js"></script>
 
     <!-- Skulpt Python browser execution library -->
     <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt.min.js"></script>
@@ -2352,7 +2353,11 @@
                 tabSize: 2,
                 autoCloseBrackets: true,
                 viewportMargin: Infinity,
-                undoDepth: 2000
+                undoDepth: 2000,
+                extraKeys: {
+                    "Ctrl-/": "toggleComment",
+                    "Cmd-/": "toggleComment"
+                }
             });
 
             // Sync theme configuration visual classes
