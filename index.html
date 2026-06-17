@@ -3142,49 +3142,68 @@
 
         // Custom Promise-based Input Overlay System
         function showInputModal(promptText, resolveCallback, rejectCallback) {
-            const modal = document.getElementById("input-modal");
-            const promptBox = document.getElementById("input-modal-prompt");
-            const inputField = document.getElementById("input-modal-field");
-            const submitBtn = document.getElementById("input-modal-submit");
-            const stopBtn = document.getElementById("input-modal-stop");
+            // Find active console (normal or turtle output console)
+            const isTurtleActive = !document.getElementById("panel-turtle").classList.contains("hidden");
+            const targetConsole = isTurtleActive ? document.getElementById("turtle-console-output") : document.getElementById("console-output");
+            
+            if (!targetConsole) {
+                // Fallback to window prompt if target console element isn't found
+                const val = prompt(promptText);
+                resolveCallback(val || "");
+                return;
+            }
 
-            promptBox.textContent = promptText || "Invoer vereist:";
-            inputField.value = "";
-            modal.classList.remove("hidden");
-            modal.classList.add("flex");
-            inputField.focus();
+            // Append prompt text directly into the active console
+            appendToConsole(promptText || "Invoer: ");
 
-            const closeModal = () => {
-                modal.classList.add("hidden");
-                modal.classList.remove("flex");
-                submitBtn.onclick = null;
-                inputField.onkeydown = null;
-                if (stopBtn) stopBtn.onclick = null;
+            // Create inline terminal input element
+            const inputEl = document.createElement("input");
+            inputEl.type = "text";
+            inputEl.className = "bg-transparent text-inherit border-none outline-none p-0 m-0 font-mono text-inherit focus:ring-0 focus:outline-none inline-block";
+            inputEl.style.width = "1.5ch";
+            inputEl.autofocus = true;
+            
+            // Append input directly at the end of the console buffer
+            targetConsole.appendChild(inputEl);
+            inputEl.focus();
+
+            // Auto-size listener using the CSS 'ch' unit
+            const adjustWidth = () => {
+                inputEl.style.width = (inputEl.value.length + 1.5) + "ch";
             };
+            inputEl.addEventListener("input", adjustWidth);
 
-            const handleSubmit = () => {
-                const value = inputField.value;
-                closeModal();
-                appendToConsole(value + "\n");
-                resolveCallback(value);
+            // Click-to-focus listener so clicking the console focuses the input
+            const focusInput = () => {
+                inputEl.focus();
             };
+            targetConsole.addEventListener("click", focusInput);
 
-            submitBtn.onclick = handleSubmit;
-            inputField.onkeydown = (e) => {
+            // Handle Enter submit
+            inputEl.onkeydown = (e) => {
                 if (e.key === "Enter") {
-                    handleSubmit();
+                    const value = inputEl.value;
+                    
+                    // Cleanup event listeners and element
+                    inputEl.removeEventListener("input", adjustWidth);
+                    targetConsole.removeEventListener("click", focusInput);
+                    inputEl.remove();
+
+                    // Print user entry + newline back to console history
+                    appendToConsole(value + "\n");
+                    
+                    // Resolve promise to resume Skulpt interpreter execution
+                    resolveCallback(value);
                 }
             };
 
-            if (stopBtn) {
-                stopBtn.onclick = () => {
-                    closeModal();
-                    interruptPythonCode();
-                    if (rejectCallback) {
-                        rejectCallback(new Error("Execution Interrupted"));
-                    }
-                };
-            }
+            // Keep scrolling at the bottom of the console
+            targetConsole.scrollTop = targetConsole.scrollHeight;
+
+            // Enforce focus state
+            setTimeout(() => {
+                inputEl.focus();
+            }, 20);
         }
 
         function togglePythonExecution() {
