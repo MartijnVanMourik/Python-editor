@@ -1003,7 +1003,7 @@
                 // Resolve layout mode (embed vs standard)
                 const modeParam = urlParams.get('mode');
                 const embedParam = urlParams.get('embed');
-                const isEmbed = (modeParam === 'embed' || embedParam === 'true');
+                const isEmbed = (modeParam === 'embed' || modeParam === 'embed-restart' || embedParam === 'true');
                 if (isEmbed) {
                     document.documentElement.classList.add('is-embed');
                 }
@@ -1793,6 +1793,7 @@
         let canvasSize = 400; // Default canvas size in pixels (both width and height)
         let menuConfig = null; // Force show/hide task selector menu ('show', 'hide', or null)
         let isEmbed = false; // Flag to hide header and buttons for iframe embeds
+        let isEmbedRestart = false; // Flag to show run/interrupt button in embed mode
         let isCompactMode = false; // Flag for compact mode layout (width 800-900px with bottom sliding output drawer)
         let isInitializingNewCourse = false; // Flag to track course initialization modal state
         let courseNamespace = "default"; // Namespace identifier based on loaded course config URL
@@ -2463,7 +2464,7 @@
             if (modeParam === 'teacher' || modeParam === 'docent' || editParam === 'true') {
                 appMode = 'teacher';
                 isEditMode = true;
-            } else if (modeParam === 'demo' || modeParam === 'demonstratie' || modeParam === 'run' || modeParam === 'embed' || embedParam === 'true') {
+            } else if (modeParam === 'demo' || modeParam === 'demonstratie' || modeParam === 'run' || modeParam === 'embed' || modeParam === 'embed-restart' || embedParam === 'true') {
                 appMode = 'demo';
                 isEditMode = false;
             } else if (modeParam === 'compact') {
@@ -2476,7 +2477,8 @@
             }
 
             // Set isEmbed state
-            isEmbed = (modeParam === 'embed' || embedParam === 'true');
+            isEmbed = (modeParam === 'embed' || modeParam === 'embed-restart' || embedParam === 'true');
+            isEmbedRestart = (modeParam === 'embed-restart');
 
             // Check canvas size parameter (canvas_size or size)
             const canvasSizeParam = urlParams.get('canvas_size') || urlParams.get('size');
@@ -4905,7 +4907,7 @@
                 if (subtabsBar) subtabsBar.classList.add("hidden");
 
                 if (demoHeader) {
-                    if (isEmbed) {
+                    if (isEmbed && !isEmbedRestart) {
                         demoHeader.classList.add("hidden");
                         demoHeader.classList.remove("flex");
                     } else {

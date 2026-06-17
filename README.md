@@ -162,6 +162,9 @@ Je kunt de weergave en het gedrag van de editor aanpassen met de query-parameter
     👉 [http://localhost:8000/index.html?config=opdracht1&mode=demo](http://localhost:8000/index.html?config=opdracht1&mode=demo)
 *   **Iframe Embed-modus** (`mode=embed` of door `&embed=true` toe te voegen): Toont *alleen* het pure canvas of console-scherm. Alle knoppen, headers, de demo-balk en de zwevende pandoor-knoppen op het canvas zijn verborgen. Tevens is de padding weggenomen zodat het programma naadloos in een iframe van een andere website getoond kan worden.
     👉 [http://localhost:8000/index.html?config=opdracht1&mode=embed](http://localhost:8000/index.html?config=opdracht1&mode=embed)
+*   **Iframe Embed-restart-modus** (`mode=embed-restart`): Werkt precies hetzelfde als de embed-modus, maar toont bovenin wel de balk met de Run/Onderbreken-knop. Dit is handig wanneer je de code direct in een iframe wilt tonen maar leerlingen de mogelijkheid wilt geven de uitvoering handmatig te starten of te stoppen.
+    👉 [http://localhost:8000/index.html?config=opdracht1&mode=embed-restart](http://localhost:8000/index.html?config=opdracht1&mode=embed-restart)
+
 
 Wanneer de Docentenmodus actief is, verschijnt er een opvallende **paarse statusbalk** bovenin het scherm om aan te geven dat je in bewerkingsmodus bent.
 
