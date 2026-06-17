@@ -1,0 +1,71 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "6.01: Vierkant",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Je hebt in het voorgaande geleerd hoe je een vierkant kan maken. Zie hiernaast een voorbeeld daarvan.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit en bekijk de uitvoer</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\ndef maak_vierkant():\n  for i in range(4):\n    forward(100)\n    right(90)\n    \nmaak_vierkant()",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "6.02: update() en tracer()",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Hiernaast zie hetzelfde programma met 2 kleine veranderingen. Er is toegevoegd: \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\"><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">tracer(0,0)</code></code>\". Dit zorgt ervoor dat de turtle tijdens het tekenen niet meer gevolgd wordt. Het tekenen gebeurt helemaal in het geheugen. Om op het scherm te zien wat er is getekend, gebruik je \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\"><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">update()</code></code>\" aan het eind.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit en bekijk de uitvoer.</li>\n  <li>Haal de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">update()</code> regel weg en <span class=\"font-bold text-slate-800 dark:text-slate-200\">test</span> het programma (kan met # ervoor).</li>\n  <li>Zet de regel weer terug. Merk op dat het vierkant <b>in een keer</b>&nbsp;verschijnt, en dus niet geleidelijk getekend wordt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\ntracer(0,0)\n\ndef maak_vierkant():\n  for i in range(4):\n    forward(100)\n    right(90)\n    \nmaak_vierkant()\n\nupdate()",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "6.03: update()",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Hiernaast zie hetzelfde programma met een nieuwe <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">for</code>-loop. In de loop wordt steeds een vierkant getekend en daarna wordt de turtle 5 graden gedraaid. Het scherm wordt ververst en het begint weer opnieuw.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit en bekijk de uitvoer.</li>\n  <li>Experimenteer met de hoek van 5 graden (lijn 12).</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\ntracer(0,0)\n\ndef maak_vierkant():\n  for i in range(4):\n    forward(100)\n    right(90)\n    \nfor i in range(100):\n  maak_vierkant()\n  right(5)\n  update()",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "6.04: Draaien",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Hiernaast zie hetzelfde programma alleen is er op regel 11 <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">clear()</code> toegevoegd. Dit betekend dat iedere keer wanneer de loop gestart wordt het scherm geleegd wordt. Vervolgens wordt er weer een nieuw vierkant getekend alleen met een andere hoek.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit en bekijk de uitvoer.</li>\n  <li>Experimenteer met het weghalen van de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">clear()</code> instructie (lijn 11).</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\ntracer(0,0)\n\ndef maak_vierkant():\n  for i in range(4):\n    forward(100)\n    right(90)\n    \nfor i in range(100):\n  clear()\n  maak_vierkant()\n  right(5)\n  update()",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "6.05: hideturtle() en while True",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Nog twee kleine verbeteringen:</p>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">hideturtle()</code> verbergt de schildpad (of eigenlijk: het pijltje).</li>\n  <li><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">while True</code> geeft een oneindige loop. Je leert later meer over while-loops. Voor nu is het gewoon een makkelijke manier om een loop oneindig te maken.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit en bekijk de uitvoer.</li>\n  <li>Verander de draaihoek en <span class=\"font-bold text-slate-800 dark:text-slate-200\">test</span> wat er gebeurt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\ntracer(0,0)\nhideturtle()\n\ndef maak_vierkant():\n  for i in range(4):\n    forward(100)\n    right(90)\n    \nwhile True:\n  clear()\n  maak_vierkant()\n  right(5)\n  update()",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

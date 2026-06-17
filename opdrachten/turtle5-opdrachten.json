@@ -1,0 +1,61 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "Inleveropdracht - Veel vierkanten",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Je start met niets, nada, nopes. Lees de tips als je het lastig vindt.</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "Uitwerking - Veel vierkanten",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Je start met niets, nada, nopes. Lees de tips als je het lastig vindt.</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\n# --- Setup ---\nshape(\"turtle\")\npensize(1)\nspeed(0)\n\n# Tip 1: Startpositie\npenup()\ngoto(-200, -200)\npendown()\n\n# Tip 3: Variabele voor de zijdelengte\nzijde = 400\n\n# We berekenen het aantal stappen: (grootste zijde - kleinste zijde) / stapgrootte\n# (400 - 0) / 10 = 40 vierkanten\nfor i in range(40):\n    # Tip 2: Maak een vierkant met de huidige zijdelengte\n    for j in range(4):\n        forward(zijde)\n        left(90)\n    \n    # Tip 5: Maak de zijde korter voor de volgende ronde\n    zijde = zijde - 10\n",
+                    "isMain": true
+                }
+            ],
+            "tests": [],
+            "previewImage": ""
+        },
+        {
+            "id": "task_2",
+            "title": "Inleveropdracht - Veel vierkanten met kleur",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Je start met niets, nada, nopes. Lees de tips als je het lastig vindt.</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n",
+                    "isMain": true
+                }
+            ],
+            "tests": [],
+            "previewImage": ""
+        },
+        {
+            "id": "task_4",
+            "title": "Uitwerking - Veel vierkanten met kleur",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Je start met niets, nada, nopes. Lees de tips als je het lastig vindt.</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\n# --- Setup ---\nshape(\"turtle\")\npensize(1)\nspeed(0)          # Zorgt ervoor dat het tekenen snel klaar is\n\n# Tip 1: Maak eerst de vorige opdracht (Basisopzet: startpositie en zijdelengte)\npenup()\ngoto(-200, -200)\npendown()\nzijde = 400\n\n# Tip 2: Gebruik drie variabelen voor de kleuren rood groen en blauw.\n# Tip 5: Denk na over de waarde van de variabelen als je begint.\n# Omdat de buitenkant groen is, starten we met groen op maximaal en rood op minimaal.\nr = 0\ng = 255\nb = 0\n\ncolor(\"black\")    # De randkleur van de vierkanten blijft zwart\n\n# Hoofdloop voor de 40 vierkanten\nfor i in range(40):\n    \n    # Tip 3:  Gebruik de instructies om een vierkant te vullen met kleur en bepaal de kleur met fillcolor(r,g,b).\n    fillcolor(r, g, b)\n    \n    begin_fill()\n    for j in range(4):\n        forward(zijde)\n        left(90)\n    end_fill()\n    \n    # Pas de zijde aan voor het volgende vierkant (uit opdracht 1)\n    zijde = zijde - 10\n    \n    # Tip 4: Pas de kleur na iedere loop aan.\n    # We gebruiken grotere stappen (+15 en -15) zodat het rood sneller tevoorschijn komt.\n    r = r + 15\n    g = g - 15",
+                    "isMain": true
+                }
+            ],
+            "tests": [],
+            "previewImage": ""
+        }
+    ]
+}
