@@ -1,0 +1,46 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "Inleveropdracht - Animatie",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\"><ol><li>In deze opdracht maak je een vierkant. Een deel van de code is er al.</li></ol></p>\n</div>\n<div class=\"wysiwyg-section-tip my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-lightbulb text-orange-400\"></i> Tip:</div>\n<p class=\"mb-3\"><ol><li>Selecteer met je muis de instructies op regel 7 en 8. Deze worden dan paars.</li><li>Druk nu tegelijk op de knoppen control en c. Hiermee worden deze twee instructies gekopieerd.</li><li>Zet de cursor nu op regel 9.</li><li>Druk nu tegelijk op de knoppen control en v. Hiermee plak je de eerder gekopieerde code.</li><li>Doe de laatste stap nog twee keer, en tada, je hebt een vierkant.</li></ol></p>\n\n\n\n\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\ncolor(\"black\")\nspeed(2)\n\nforward(100)\nleft() # hoeveel graden?",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "Uitwerking - Animatie",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\"><ol><li>In deze opdracht maak je een vierkant. Een deel van de code is er al.</li></ol></p>\n</div>\n<div class=\"wysiwyg-section-tip my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-lightbulb text-orange-400\"></i> Tip:</div>\n<p class=\"mb-3\"><ol><li>Selecteer met je muis de instructies op regel 7 en 8. Deze worden dan paars.</li><li>Druk nu tegelijk op de knoppen control en c. Hiermee worden deze twee instructies gekopieerd.</li><li>Zet de cursor nu op regel 9.</li><li>Druk nu tegelijk op de knoppen control en v. Hiermee plak je de eerder gekopieerde code.</li><li>Doe de laatste stap nog twee keer, en tada, je hebt een vierkant.</li></ol></p>\n\n\n\n\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\nimport math\nimport time\n\nclass Point:\n  def __init__(self, x, y):\n    self.x = x\n    self.y = y\n\ndef draw(points):\n  if len(points) == 0:\n    return\n  firstpoint = points[0]\n  up()\n  goto(firstpoint.x, firstpoint.y)\n  down()\n  for p in points:\n    goto(p.x,p.y)\n  goto(firstpoint.x, firstpoint.y)\n\ndef drawobjects(objects):\n  for obj in objects:\n    draw(obj)\n\ndef makepolygon(N,r,x,y,angle):\n  points = []\n  anglestep = 2*math.pi/N\n  for i in range(N):\n    px = x + r * math.cos(angle)\n    py = y + r * math.sin(angle)\n    angle += anglestep\n    points.append(Point(px,py))\n  return points\n\nhideturtle()\ntracer(0,0)\npensize(5)\nobjects = []\nscreen = getscreen()\nangle = 0\nanglestep = 2*math.pi/100\nlasttime = time.time()\ncounter = 0\ns = 30\n\nwhile True:\n  counter +=1\n  clear()\n  objects = []\n  objects.append(makepolygon(3,s,-2*s,2*s,angle))\n  objects.append(makepolygon(4,s,0,2*s,angle))\n  objects.append(makepolygon(5,s,2*s,2*s,angle))\n  objects.append(makepolygon(6,s,-2*s,0,angle))\n  objects.append(makepolygon(7,s,0,0,angle))\n  objects.append(makepolygon(8,s,2*s,0,angle))\n  objects.append(makepolygon(9,s,-2*s,-2*s,angle))\n  objects.append(makepolygon(10,s,0,-2*s,angle))\n  objects.append(makepolygon(11,s,2*s,-2*s,angle))\n  objects.append(makepolygon(12,s/6, math.cos(angle) * 5*s,-math.sin(angle) * 5*s , 0))\n  objects.append(makepolygon(12,s/6, -math.cos(angle) * 6*s,-math.sin(angle) * 6*s , 0))\n  angle += anglestep\n  drawobjects(objects)\n  screen.update() ",
+                    "isMain": true
+                }
+            ],
+            "tests": [],
+            "previewImage": ""
+        },
+        {
+            "id": "task_3",
+            "title": "Vallende cirkels",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Bekijk de code van deze animatie en probeer te snappen hoe dit werkt. Er staan best wat onbekende instructies in, toch? Deze gaan we verder ontdekken met de vervolgcursus Python</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "from turtle import *\nfrom random import *\n\nhideturtle()\n\nlijst_x = []\nlijst_y = []\n\nfor i in range(20):\n  lijst_x.append(randint(-180, 180))\n  lijst_y.append(randint(-200,200))\n\ntracer(0,0) # stop met tekenen\n\nt = Turtle() # nieuwe schildpad\nt.hideturtle() \n\nwhile True:\n  t.clear()\n  for i in range(20):\n    t.penup()\n    t.goto(lijst_x[i], lijst_y[i])\n    t.pendown()\n    t.circle(10)\n    \n  for i in range(20):\n    lijst_y[i] = lijst_y[i] - 1\n    \n    if lijst_y[i] < -200:\n      lijst_y[i]  = 200\n  t.update()\n    \n  ",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}
