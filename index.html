@@ -2133,6 +2133,15 @@
         function resizeTurtleCanvasCompact() {
             const canvasContainer = document.getElementById("turtle-canvas");
             if (!canvasContainer) return;
+            
+            // In compact mode, we let CSS flex and aspect-ratio handle the sizing
+            // of the canvas to avoid layout cycle bugs and console overflow.
+            if (isCompactMode) {
+                canvasContainer.style.removeProperty("width");
+                canvasContainer.style.removeProperty("height");
+                return;
+            }
+
             const parent = canvasContainer.parentElement;
             if (!parent) return;
             const rect = parent.getBoundingClientRect();
