@@ -4276,6 +4276,7 @@
 
         // Simple floating notification feedback
         function showToast(message) {
+            if (isEmbed) return; // Show no toast messages in embed mode
             const toast = document.createElement("div");
             toast.className = "fixed bottom-5 right-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 px-4 py-3 rounded-xl shadow-2xl z-[999999] flex items-center gap-2 max-w-sm text-sm animate-bounce";
             toast.innerHTML = `<i class="fa-solid fa-circle-info text-emerald-600 dark:text-emerald-400"></i> <span>${message}</span>`;
@@ -4879,6 +4880,16 @@
             const mobileSwitchTabs = document.getElementById("mobile-switch-tabs");
             const panelsContainer = document.getElementById("output-panels-container");
             const floatingControls = document.getElementById("turtle-floating-controls");
+
+            // Hide/show clear console buttons depending on embed mode
+            const clearButtons = document.querySelectorAll("button[onclick='clearConsole()']");
+            clearButtons.forEach(btn => {
+                if (isEmbed) {
+                    btn.classList.add("hidden");
+                } else {
+                    btn.classList.remove("hidden");
+                }
+            });
 
             if (appMode === 'demo') {
                 applyTheme(activeTheme);
