@@ -33,7 +33,8 @@
     <script src="https://cdn.jsdelivr.net/npm/skulpt@1.2.0/dist/skulpt-stdlib.js"></script>
 
     <style>
-        html, body {
+        html,
+        body {
             height: 100vh;
             height: 100dvh;
             margin: 0;
@@ -41,11 +42,14 @@
         }
 
         .console-user-input {
-            color: #38bdf8 !important; /* sky-400 equivalent for dark theme */
+            color: #38bdf8 !important;
+            /* sky-400 equivalent for dark theme */
             font-weight: 600 !important;
         }
+
         .theme-light .console-user-input {
-            color: #0284c7 !important; /* sky-700 equivalent for light theme */
+            color: #0284c7 !important;
+            /* sky-700 equivalent for light theme */
         }
 
         :root {
@@ -92,112 +96,144 @@
         #assignment-instruction [style*="#334155"],
         #assignment-instruction [style*="#cbd5e1"],
         #assignment-instruction font[color="#334155"],
-        #assignment-instruction font[color="#cbd5e1"] { color: var(--editor-color-default) !important; }
+        #assignment-instruction font[color="#cbd5e1"] {
+            color: var(--editor-color-default) !important;
+        }
 
         #assignment-instruction [style*="rgb(15, 23, 42)"],
         #assignment-instruction [style*="rgb(255, 255, 255)"],
         #assignment-instruction [style*="#0f172a"],
         #assignment-instruction [style*="#ffffff"],
         #assignment-instruction font[color="#0f172a"],
-        #assignment-instruction font[color="#ffffff"] { color: var(--editor-color-white-black) !important; }
+        #assignment-instruction font[color="#ffffff"] {
+            color: var(--editor-color-white-black) !important;
+        }
 
         #assignment-instruction [style*="rgb(100, 116, 139)"],
         #assignment-instruction [style*="rgb(148, 163, 184)"],
         #assignment-instruction [style*="#64748b"],
         #assignment-instruction [style*="#94a3b8"],
         #assignment-instruction font[color="#64748b"],
-        #assignment-instruction font[color="#94a3b8"] { color: var(--editor-color-gray) !important; }
+        #assignment-instruction font[color="#94a3b8"] {
+            color: var(--editor-color-gray) !important;
+        }
 
         #assignment-instruction [style*="rgb(225, 29, 72)"],
         #assignment-instruction [style*="rgb(248, 113, 113)"],
         #assignment-instruction [style*="#e11d48"],
         #assignment-instruction [style*="#f87171"],
         #assignment-instruction font[color="#e11d48"],
-        #assignment-instruction font[color="#f87171"] { color: var(--editor-color-red) !important; }
+        #assignment-instruction font[color="#f87171"] {
+            color: var(--editor-color-red) !important;
+        }
 
         #assignment-instruction [style*="rgb(219, 39, 119)"],
         #assignment-instruction [style*="rgb(251, 113, 133)"],
         #assignment-instruction [style*="#db2777"],
         #assignment-instruction [style*="#fb7185"],
         #assignment-instruction font[color="#db2777"],
-        #assignment-instruction font[color="#fb7185"] { color: var(--editor-color-pink) !important; }
+        #assignment-instruction font[color="#fb7185"] {
+            color: var(--editor-color-pink) !important;
+        }
 
         #assignment-instruction [style*="rgb(234, 88, 12)"],
         #assignment-instruction [style*="rgb(251, 146, 60)"],
         #assignment-instruction [style*="#ea580c"],
         #assignment-instruction [style*="#fb923c"],
         #assignment-instruction font[color="#ea580c"],
-        #assignment-instruction font[color="#fb923c"] { color: var(--editor-color-orange) !important; }
+        #assignment-instruction font[color="#fb923c"] {
+            color: var(--editor-color-orange) !important;
+        }
 
         #assignment-instruction [style*="rgb(217, 119, 6)"],
         #assignment-instruction [style*="rgb(251, 191, 36)"],
         #assignment-instruction [style*="#d97706"],
         #assignment-instruction [style*="#fbbf24"],
         #assignment-instruction font[color="#d97706"],
-        #assignment-instruction font[color="#fbbf24"] { color: var(--editor-color-amber) !important; }
+        #assignment-instruction font[color="#fbbf24"] {
+            color: var(--editor-color-amber) !important;
+        }
 
         #assignment-instruction [style*="rgb(202, 138, 4)"],
         #assignment-instruction [style*="rgb(250, 204, 21)"],
         #assignment-instruction [style*="#ca8a04"],
         #assignment-instruction [style*="#facc15"],
         #assignment-instruction font[color="#ca8a04"],
-        #assignment-instruction font[color="#facc15"] { color: var(--editor-color-yellow) !important; }
+        #assignment-instruction font[color="#facc15"] {
+            color: var(--editor-color-yellow) !important;
+        }
 
         #assignment-instruction [style*="rgb(101, 163, 13)"],
         #assignment-instruction [style*="rgb(163, 230, 53)"],
         #assignment-instruction [style*="#65a30d"],
         #assignment-instruction [style*="#a3e635"],
         #assignment-instruction font[color="#65a30d"],
-        #assignment-instruction font[color="#a3e635"] { color: var(--editor-color-lime) !important; }
+        #assignment-instruction font[color="#a3e635"] {
+            color: var(--editor-color-lime) !important;
+        }
 
         #assignment-instruction [style*="rgb(22, 163, 74)"],
         #assignment-instruction [style*="rgb(74, 222, 128)"],
         #assignment-instruction [style*="#16a34a"],
         #assignment-instruction [style*="#4ade80"],
         #assignment-instruction font[color="#16a34a"],
-        #assignment-instruction font[color="#4ade80"] { color: var(--editor-color-green) !important; }
+        #assignment-instruction font[color="#4ade80"] {
+            color: var(--editor-color-green) !important;
+        }
 
         #assignment-instruction [style*="rgb(5, 150, 105)"],
         #assignment-instruction [style*="rgb(52, 211, 153)"],
         #assignment-instruction [style*="#059669"],
         #assignment-instruction [style*="#34d399"],
         #assignment-instruction font[color="#059669"],
-        #assignment-instruction font[color="#34d399"] { color: var(--editor-color-emerald) !important; }
+        #assignment-instruction font[color="#34d399"] {
+            color: var(--editor-color-emerald) !important;
+        }
 
         #assignment-instruction [style*="rgb(8, 145, 178)"],
         #assignment-instruction [style*="rgb(34, 211, 238)"],
         #assignment-instruction [style*="#0891b2"],
         #assignment-instruction [style*="#22d3ee"],
         #assignment-instruction font[color="#0891b2"],
-        #assignment-instruction font[color="#22d3ee"] { color: var(--editor-color-cyan) !important; }
+        #assignment-instruction font[color="#22d3ee"] {
+            color: var(--editor-color-cyan) !important;
+        }
 
         #assignment-instruction [style*="rgb(2, 132, 199)"],
         #assignment-instruction [style*="rgb(56, 189, 248)"],
         #assignment-instruction [style*="#0284c7"],
         #assignment-instruction [style*="#38bdf8"],
         #assignment-instruction font[color="#0284c7"],
-        #assignment-instruction font[color="#38bdf8"] { color: var(--editor-color-sky) !important; }
+        #assignment-instruction font[color="#38bdf8"] {
+            color: var(--editor-color-sky) !important;
+        }
 
         #assignment-instruction [style*="rgb(37, 99, 235)"],
         #assignment-instruction [style*="rgb(96, 165, 250)"],
         #assignment-instruction [style*="#2563eb"],
         #assignment-instruction [style*="#60a5fa"],
         #assignment-instruction font[color="#2563eb"],
-        #assignment-instruction font[color="#60a5fa"] { color: var(--editor-color-blue) !important; }
+        #assignment-instruction font[color="#60a5fa"] {
+            color: var(--editor-color-blue) !important;
+        }
 
         #assignment-instruction [style*="rgb(147, 51, 234)"],
         #assignment-instruction [style*="rgb(167, 139, 250)"],
         #assignment-instruction [style*="#9333ea"],
         #assignment-instruction [style*="#a78bfa"],
         #assignment-instruction font[color="#9333ea"],
-        #assignment-instruction font[color="#a78bfa"] { color: var(--editor-color-purple) !important; }
+        #assignment-instruction font[color="#a78bfa"] {
+            color: var(--editor-color-purple) !important;
+        }
 
         #assignment-instruction [style*="rgb(192, 132, 252)"],
         #assignment-instruction [style*="rgb(244, 114, 182)"],
         #assignment-instruction [style*="#c084fc"],
         #assignment-instruction [style*="#f472b6"],
         #assignment-instruction font[color="#c084fc"],
-        #assignment-instruction font[color="#f472b6"] { color: var(--editor-color-fuchsia) !important; }
+        #assignment-instruction font[color="#f472b6"] {
+            color: var(--editor-color-fuchsia) !important;
+        }
 
         /* Ensure code inside colored elements inherits font color */
         #assignment-instruction font[color] code,
@@ -210,9 +246,12 @@
         .scrollbar-none::-webkit-scrollbar {
             display: none !important;
         }
+
         .scrollbar-none {
-            -ms-overflow-style: none !important;  /* IE and Edge */
-            scrollbar-width: none !important;  /* Firefox */
+            -ms-overflow-style: none !important;
+            /* IE and Edge */
+            scrollbar-width: none !important;
+            /* Firefox */
         }
 
         /* Ensure both panels are always visible on desktop and override mobile hidden toggles */
@@ -220,6 +259,7 @@
             #editor-wrapper-panel {
                 display: flex !important;
             }
+
             #output-wrapper-panel {
                 display: flex !important;
             }
@@ -236,13 +276,16 @@
             height: calc(100% - 150px) !important;
             max-height: 480px !important;
         }
+
         .mode-compact #web-console-panel.h-\[480px\] {
             height: calc(100% - 150px) !important;
             max-height: 480px !important;
         }
+
         .mode-compact #turtle-console-panel:not(.h-\[480px\]) {
             height: 100px !important;
         }
+
         .mode-compact #web-console-panel:not(.h-\[480px\]) {
             height: 100px !important;
         }
@@ -287,6 +330,7 @@
                 padding: 0.25rem !important;
                 border-radius: 0.75rem !important;
             }
+
             #turtle-floating-controls button {
                 width: 1.75rem !important;
                 height: 1.75rem !important;
@@ -311,8 +355,10 @@
 
         #turtle-canvas * {
             position: absolute !important;
-            left: -200% !important; /* Center a 500% wide child canvas sheet */
-            top: -200% !important;  /* Center a 500% high canvas sheet */
+            left: -200% !important;
+            /* Center a 500% wide child canvas sheet */
+            top: -200% !important;
+            /* Center a 500% high canvas sheet */
             width: 500% !important;
             height: 500% !important;
             margin: 0 !important;
@@ -510,22 +556,35 @@
         }
 
         #assignment-instruction h3 {
-            font-size: 1.125rem !important; /* text-lg */
-            font-weight: 600 !important;    /* font-semibold */
-            color: #f1f5f9 !important;      /* text-slate-100 */
-            margin-bottom: 0.5rem !important; /* mb-2 */
+            font-size: 1.125rem !important;
+            /* text-lg */
+            font-weight: 600 !important;
+            /* font-semibold */
+            color: #f1f5f9 !important;
+            /* text-slate-100 */
+            margin-bottom: 0.5rem !important;
+            /* mb-2 */
         }
+
         .theme-light #assignment-instruction h3 {
-            color: #0f172a !important;      /* text-slate-900 */
+            color: #0f172a !important;
+            /* text-slate-900 */
         }
+
         #assignment-instruction p {
-            font-size: 0.875rem !important; /* text-sm */
-            color: #cbd5e1 !important;      /* text-slate-300 */
-            margin-bottom: 0.5rem !important; /* mb-2 */
+            font-size: 0.875rem !important;
+            /* text-sm */
+            color: #cbd5e1 !important;
+            /* text-slate-300 */
+            margin-bottom: 0.5rem !important;
+            /* mb-2 */
         }
+
         .theme-light #assignment-instruction p {
-            color: #334155 !important;      /* text-slate-700 */
+            color: #334155 !important;
+            /* text-slate-700 */
         }
+
         #assignment-instruction li {
             margin-bottom: 0.25rem !important;
             display: list-item !important;
@@ -763,7 +822,7 @@
                 flex: 1 1 0% !important;
             }
 
-            main > section {
+            main>section {
                 height: 100% !important;
             }
         }
@@ -944,19 +1003,23 @@
                 height: 60vh !important;
                 min-height: 480px !important;
             }
+
             .mode-compact #editor-workspace-container.drawer-active {
                 height: 75vh !important;
                 min-height: 620px !important;
             }
+
             .mode-compact #editor-workspace-container.drawer-active #editor-tabs-bar,
             .mode-compact #editor-workspace-container.drawer-active .CodeMirror,
-            .mode-compact #editor-workspace-container.drawer-active #editor-wrapper-panel > div:not(#editor-control-toolbar) {
+            .mode-compact #editor-workspace-container.drawer-active #editor-wrapper-panel>div:not(#editor-control-toolbar) {
                 display: none !important;
             }
+
             .mode-compact #editor-workspace-container.drawer-active #output-wrapper-panel {
                 top: var(--toolbar-height, 56px) !important;
                 height: calc(100% - var(--toolbar-height, 56px)) !important;
             }
+
             /* Shrink instructions panel on mobile when the drawer is active to fit everything on screen */
             .mode-compact main:has(.drawer-active) #instructions-panel {
                 max-height: 30vh !important;
@@ -1058,7 +1121,8 @@
             <span id="fullscreen-hint"
                 class="hidden text-xs bg-slate-800 text-slate-400 px-2.5 py-1.5 rounded-full border border-slate-700 flex items-center gap-1.5">
                 <i class="fa-solid fa-circle-info text-blue-400"></i>
-                Sluit volledig scherm met <kbd class="px-1.5 py-0.5 rounded bg-slate-700 text-slate-200 border border-slate-600 font-mono text-[10px]">Esc</kbd>
+                Sluit volledig scherm met <kbd
+                    class="px-1.5 py-0.5 rounded bg-slate-700 text-slate-200 border border-slate-600 font-mono text-[10px]">Esc</kbd>
             </span>
 
             <!-- Progress Status -->
@@ -1164,7 +1228,8 @@
                     <!-- Smart Paste (Only visible in edit mode) -->
                     <button id="wysiwyg-btn-smart-paste" onclick="openSmartPasteModal()"
                         class="hidden px-2 h-7 rounded bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-500/20 dark:border-purple-500/35 dark:hover:bg-purple-500/30 dark:text-purple-300 transition flex items-center justify-center text-[10px] font-semibold"
-                        title="Plak platte tekst en zet om naar HTML"><i class="fa-solid fa-paste mr-1"></i> Slim Plakken</button>
+                        title="Plak platte tekst en zet om naar HTML"><i class="fa-solid fa-paste mr-1"></i> Slim
+                        Plakken</button>
                 </div>
                 <!-- WYSIWYG Toolbar (Visible only in edit mode) -->
                 <div id="wysiwyg-toolbar"
@@ -1246,7 +1311,8 @@
                             title="Voeg 'Uitvoeren' sectie toe"><i class="fa-solid fa-play mr-1"></i> Uitvoeren</button>
                         <button id="wysiwyg-btn-bewerken" onclick="insertInstructionTemplate('bewerken')"
                             class="px-1.5 h-7 rounded bg-amber-100 border border-amber-300 text-amber-800 hover:bg-amber-200 dark:bg-amber-500/10 dark:border-amber-500/25 dark:hover:bg-amber-500/20 dark:text-amber-400 transition flex items-center justify-center text-[10px] font-semibold"
-                            title="Voeg 'Bewerken' sectie toe"><i class="fa-solid fa-pen-to-square mr-1"></i> Bewerken</button>
+                            title="Voeg 'Bewerken' sectie toe"><i class="fa-solid fa-pen-to-square mr-1"></i>
+                            Bewerken</button>
                         <button id="wysiwyg-btn-tip" onclick="insertInstructionTemplate('tip')"
                             class="px-1.5 h-7 rounded bg-orange-100 border border-orange-300 text-orange-800 hover:bg-orange-200 dark:bg-orange-500/10 dark:border-orange-500/25 dark:hover:bg-orange-500/20 dark:text-orange-400 transition flex items-center justify-center text-[10px] font-semibold"
                             title="Tipbox invoegen"><i class="fa-solid fa-lightbulb mr-1"></i> Tip</button>
@@ -1262,7 +1328,8 @@
                         Selecteer een opdracht om de instructies te laden...
                     </div>
                     <!-- Voltooi Button Container -->
-                    <div id="complete-btn-container" class="hidden my-4 pt-3 border-t border-slate-800/80 flex justify-end">
+                    <div id="complete-btn-container"
+                        class="hidden my-4 pt-3 border-t border-slate-800/80 flex justify-center">
                         <button onclick="completeCurrentTask()"
                             class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-4 py-2 rounded-xl shadow-lg shadow-emerald-950/20 active:scale-95 transition flex items-center gap-1.5 text-xs sm:text-sm">
                             <i class="fa-solid fa-circle-check"></i>
@@ -1347,13 +1414,15 @@
                                 class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 w-8 h-8 sm:w-9 sm:h-9 rounded-xl active:scale-95 transition flex items-center justify-center relative"
                                 title="Verklein lettertype">
                                 <i class="fa-solid fa-font text-[10px] sm:text-xs"></i>
-                                <i class="fa-solid fa-minus text-[6px] sm:text-[7px] absolute top-1.5 right-1.5 sm:top-2 sm:right-2"></i>
+                                <i
+                                    class="fa-solid fa-minus text-[6px] sm:text-[7px] absolute top-1.5 right-1.5 sm:top-2 sm:right-2"></i>
                             </button>
                             <button id="btn-editor-zoom-in" onclick="zoomEditor(1)"
                                 class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 w-8 h-8 sm:w-9 sm:h-9 rounded-xl active:scale-95 transition flex items-center justify-center relative"
                                 title="Vergroot lettertype">
                                 <i class="fa-solid fa-font text-[10px] sm:text-xs"></i>
-                                <i class="fa-solid fa-plus text-[6px] sm:text-[7px] absolute top-1.5 right-1.5 sm:top-2 sm:right-2"></i>
+                                <i
+                                    class="fa-solid fa-plus text-[6px] sm:text-[7px] absolute top-1.5 right-1.5 sm:top-2 sm:right-2"></i>
                             </button>
                             <button id="btn-editor-fullscreen" onclick="toggleEditorFullscreen()"
                                 class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 w-8 h-8 sm:w-9 sm:h-9 rounded-xl active:scale-95 transition flex items-center justify-center"
@@ -1844,7 +1913,7 @@
                 const docBox = document.getElementById("assignment-instruction");
                 if (!docBox) return;
                 const html = docBox.innerHTML;
-                
+
                 if (this.stack[this.index] === html) return;
 
                 this.stack = this.stack.slice(0, this.index + 1);
@@ -1897,7 +1966,7 @@
             if (errorLineHandle !== null) {
                 try {
                     editor.removeLineClass(errorLineHandle, "background", "cm-error-line");
-                } catch (e) {}
+                } catch (e) { }
                 errorLineHandle = null;
             }
         }
@@ -2226,7 +2295,7 @@
         function resizeTurtleCanvasCompact() {
             const canvasContainer = document.getElementById("turtle-canvas");
             if (!canvasContainer) return;
-            
+
             // In compact mode, we let CSS flex and aspect-ratio handle the sizing
             // of the canvas to avoid layout cycle bugs and console overflow.
             if (isCompactMode) {
@@ -2535,7 +2604,7 @@
                                 } else if (!isTurtle && isCurrentlyTurtleVisible) {
                                     btnTurtle.classList.add("hidden");
                                     btnConsole.classList.remove("hidden");
-                                    
+
                                     const task = taskConfig.tabs.find(t => t.id === currentTaskId);
                                     const hasTests = task && task.tests && task.tests.length > 0;
                                     const showTestsElements = isEditMode || hasTests;
@@ -3188,7 +3257,7 @@
                         docBox.onkeydown = function (e) {
                             const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
                             const isCmdOrCtrl = isMac ? e.metaKey : e.ctrlKey;
-                            
+
                             // Undo: Ctrl+Z / Cmd+Z
                             if (isCmdOrCtrl && e.key.toLowerCase() === 'z' && !e.shiftKey) {
                                 if (wysiwygHistory.undo()) {
@@ -3212,7 +3281,7 @@
                                     if (container.nodeType === Node.TEXT_NODE) {
                                         container = container.parentNode;
                                     }
-                                    
+
                                     const calloutBox = container.closest(".wysiwyg-tip-box, .wysiwyg-info-box");
                                     if (calloutBox) {
                                         e.preventDefault();
@@ -3223,75 +3292,75 @@
 
                                     const codeElem = container.closest("code");
                                     const preElem = container.closest("pre");
- 
-                                     // If inside an inline <code> but NOT a <pre> block code
-                                     if (codeElem && !preElem) {
-                                         e.preventDefault();
- 
-                                         // Convert inline code to pre block
-                                         const pre = document.createElement("pre");
-                                         pre.className = "bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs text-yellow-400 my-3 block whitespace-pre-wrap";
- 
-                                         const newCode = document.createElement("code");
-                                         newCode.className = "font-mono";
- 
-                                         const text = codeElem.textContent;
-                                         const offset = range.startOffset;
-                                         const newText = text.slice(0, offset) + "\n" + text.slice(offset);
-                                         newCode.textContent = newText;
- 
-                                         pre.appendChild(newCode);
-                                         codeElem.replaceWith(pre);
- 
-                                         // Focus cursor exactly after the inserted newline
-                                         const newRange = document.createRange();
-                                         if (newCode.firstChild) {
-                                             newRange.setStart(newCode.firstChild, Math.min(offset + 1, newCode.textContent.length));
-                                         } else {
-                                             newRange.selectNodeContents(newCode);
-                                         }
-                                         newRange.collapse(true);
-                                         selection.removeAllRanges();
-                                         selection.addRange(newRange);
- 
-                                         // Insert empty spacing paragraph below the block so cursor can escape easily
-                                         if (!pre.nextSibling || pre.nextSibling.nodeName.toLowerCase() !== "p") {
-                                             const p = document.createElement("p");
-                                             p.innerHTML = "&nbsp;";
-                                             pre.parentNode.insertBefore(p, pre.nextSibling);
-                                         }
- 
-                                         saveActiveInstruction();
-                                         updateWysiwygToolbarHighlighting();
-                                     }
-                                 }
-                             }
-                         };
-                         docBox.onpaste = function (e) {
-                             e.preventDefault();
-                             const text = (e.clipboardData || window.clipboardData).getData("text/plain");
-                             
-                             const selection = window.getSelection();
-                             if (selection.rangeCount) {
-                                 const range = selection.getRangeAt(0);
-                                 let container = range.commonAncestorContainer;
-                                 if (container.nodeType === Node.TEXT_NODE) {
-                                     container = container.parentNode;
-                                 }
-                                 const calloutBox = container.closest(".wysiwyg-tip-box, .wysiwyg-info-box");
-                                 if (calloutBox) {
-                                     const escapedText = text
-                                         .replace(/&/g, "&amp;")
-                                         .replace(/</g, "&lt;")
-                                         .replace(/>/g, "&gt;");
-                                     const htmlToInsert = escapedText.replace(/\r?\n/g, "<br>");
-                                     document.execCommand("insertHTML", false, htmlToInsert);
-                                     saveActiveInstruction();
-                                     return;
-                                 }
-                             }
-                             document.execCommand("insertText", false, text);
-                         };
+
+                                    // If inside an inline <code> but NOT a <pre> block code
+                                    if (codeElem && !preElem) {
+                                        e.preventDefault();
+
+                                        // Convert inline code to pre block
+                                        const pre = document.createElement("pre");
+                                        pre.className = "bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs text-yellow-400 my-3 block whitespace-pre-wrap";
+
+                                        const newCode = document.createElement("code");
+                                        newCode.className = "font-mono";
+
+                                        const text = codeElem.textContent;
+                                        const offset = range.startOffset;
+                                        const newText = text.slice(0, offset) + "\n" + text.slice(offset);
+                                        newCode.textContent = newText;
+
+                                        pre.appendChild(newCode);
+                                        codeElem.replaceWith(pre);
+
+                                        // Focus cursor exactly after the inserted newline
+                                        const newRange = document.createRange();
+                                        if (newCode.firstChild) {
+                                            newRange.setStart(newCode.firstChild, Math.min(offset + 1, newCode.textContent.length));
+                                        } else {
+                                            newRange.selectNodeContents(newCode);
+                                        }
+                                        newRange.collapse(true);
+                                        selection.removeAllRanges();
+                                        selection.addRange(newRange);
+
+                                        // Insert empty spacing paragraph below the block so cursor can escape easily
+                                        if (!pre.nextSibling || pre.nextSibling.nodeName.toLowerCase() !== "p") {
+                                            const p = document.createElement("p");
+                                            p.innerHTML = "&nbsp;";
+                                            pre.parentNode.insertBefore(p, pre.nextSibling);
+                                        }
+
+                                        saveActiveInstruction();
+                                        updateWysiwygToolbarHighlighting();
+                                    }
+                                }
+                            }
+                        };
+                        docBox.onpaste = function (e) {
+                            e.preventDefault();
+                            const text = (e.clipboardData || window.clipboardData).getData("text/plain");
+
+                            const selection = window.getSelection();
+                            if (selection.rangeCount) {
+                                const range = selection.getRangeAt(0);
+                                let container = range.commonAncestorContainer;
+                                if (container.nodeType === Node.TEXT_NODE) {
+                                    container = container.parentNode;
+                                }
+                                const calloutBox = container.closest(".wysiwyg-tip-box, .wysiwyg-info-box");
+                                if (calloutBox) {
+                                    const escapedText = text
+                                        .replace(/&/g, "&amp;")
+                                        .replace(/</g, "&lt;")
+                                        .replace(/>/g, "&gt;");
+                                    const htmlToInsert = escapedText.replace(/\r?\n/g, "<br>");
+                                    document.execCommand("insertHTML", false, htmlToInsert);
+                                    saveActiveInstruction();
+                                    return;
+                                }
+                            }
+                            document.execCommand("insertText", false, text);
+                        };
                         docBox.classList.add("focus:outline-none", "focus:ring-1", "focus:ring-blue-500/50", "rounded-lg", "p-1");
                         const toolbar = document.getElementById("wysiwyg-toolbar");
                         if (toolbar) toolbar.classList.remove("hidden");
@@ -3368,7 +3437,7 @@
                     } else {
                         if (btnTurtle) btnTurtle.classList.add("hidden");
                         if (btnConsole) btnConsole.classList.remove("hidden");
-                        
+
                         const hasTests = task && task.tests && task.tests.length > 0;
                         const showTestsElements = isEditMode || hasTests;
                         if (btnTests) {
@@ -3515,7 +3584,7 @@
             // Find active console (normal or turtle output console)
             const isTurtleActive = !document.getElementById("panel-turtle").classList.contains("hidden");
             const targetConsole = isTurtleActive ? document.getElementById("turtle-console-output") : document.getElementById("console-output");
-            
+
             if (!targetConsole) {
                 // Fallback to window prompt if target console element isn't found
                 const val = prompt(promptText);
@@ -3536,7 +3605,7 @@
             inputEl.className = "bg-transparent console-user-input border-none outline-none p-0 m-0 font-mono focus:ring-0 focus:outline-none inline-block";
             inputEl.style.width = "1.5ch";
             inputEl.autofocus = true;
-            
+
             // Append input directly at the end of the console buffer
             targetConsole.appendChild(inputEl);
             inputEl.focus();
@@ -4423,7 +4492,7 @@
                         if (passedConsole) {
                             actualOutputToDisplay = rawConsoleOutput;
                         } else if (!passedPrint) {
-                            const expectedContainsPrompt = prompts.some(p => 
+                            const expectedContainsPrompt = prompts.some(p =>
                                 testCase.expectedOutput.toLowerCase().includes(p.trim().toLowerCase())
                             );
                             if (expectedContainsPrompt) {
@@ -4974,7 +5043,7 @@
 
         function enlargeCompactConsole() {
             if (!isCompactMode) return;
-            
+
             // For Turtle mode
             const turtleConsole = document.getElementById("turtle-console-panel");
             if (turtleConsole && !isTurtleConsoleExpanded) {
@@ -4990,7 +5059,7 @@
 
         function shrinkCompactConsole() {
             if (!isCompactMode) return;
-            
+
             // For Turtle mode
             const turtleConsole = document.getElementById("turtle-console-panel");
             if (turtleConsole && isTurtleConsoleExpanded) {
@@ -5943,7 +6012,7 @@
 
             // Simple HTML escape function to prevent injection/broken tags
             function escapeHTML(str) {
-                return str.replace(/[&<>'"]/g, 
+                return str.replace(/[&<>'"]/g,
                     tag => ({
                         '&': '&amp;',
                         '<': '&lt;',
@@ -6190,7 +6259,7 @@
 
             const cellIndex = cell.cellIndex;
             const rows = table.querySelectorAll("tr");
-            
+
             const cellsCount = cell.parentNode.cells.length;
             if (cellsCount <= 1) {
                 if (confirm("Dit is de laatste kolom. Wil je de hele tabel verwijderen?")) {
@@ -6259,7 +6328,7 @@
                     if (sectionElem) {
                         if (confirm(`Weet je zeker dat je de complete sectie '${sectionName}' wilt verwijderen?`)) {
                             const nextSib = sectionElem.nextSibling;
-                            
+
                             const deleteRange = document.createRange();
                             if (nextSib && nextSib.nodeName.toLowerCase() === 'p' && (nextSib.innerHTML === '&nbsp;' || nextSib.textContent.trim() === '')) {
                                 deleteRange.setStartBefore(sectionElem);
@@ -6628,7 +6697,7 @@
                     headingMatched = true;
                     justMatchedHeading = true;
                 } else if (lowerLine.startsWith('uitvoeren') || lowerLine.includes('▶ uitvoeren') || lowerLine.includes('uitvoeren:') ||
-                           lowerLine.startsWith('doen') || lowerLine.includes('doen:')) {
+                    lowerLine.startsWith('doen') || lowerLine.includes('doen:')) {
                     closeSection();
                     activeSectionType = 'uitvoeren';
                     html += `<div class="wysiwyg-section-uitvoeren my-3">\n<div class="font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none"><i class="fa-solid fa-play text-emerald-400"></i> Uitvoeren:</div>\n`;
@@ -7843,11 +7912,11 @@
                 if (isFullscreen) {
                     if (icon) icon.className = "fa-solid fa-compress text-xs";
                     btn.title = "Sluit volledig scherm";
-                    
+
                     if (hint && document.fullscreenElement === document.documentElement) {
                         hint.classList.remove("hidden");
                     }
-                    
+
                     if (document.fullscreenElement === document.documentElement) {
                         // If in compact mode, temporarily disable it to show standard student mode layout in fullscreen
                         if (document.documentElement.classList.contains("mode-compact")) {
@@ -7869,11 +7938,11 @@
                 } else {
                     if (icon) icon.className = "fa-solid fa-expand text-xs";
                     btn.title = "Volledig scherm";
-                    
+
                     if (hint) {
                         hint.classList.add("hidden");
                     }
-                    
+
                     if (document.documentElement.classList.contains("mode-compact-paused")) {
                         document.documentElement.classList.remove("mode-compact-paused");
                         document.documentElement.classList.add("mode-compact");
