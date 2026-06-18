@@ -4864,23 +4864,38 @@
             const scaleX = layoutWidth > 0 ? (width / layoutWidth) : 1;
             const scaleY = layoutHeight > 0 ? (height / layoutHeight) : 1;
 
-            const adjPanX = panX * scaleX;
-            const adjPanY = panY * scaleY;
+            const exportZoom = isEditMode ? 1.0 : zoom;
+            const exportPanX = isEditMode ? 0 : panX;
+            const exportPanY = isEditMode ? 0 : panY;
+
+            const adjPanX = exportPanX * scaleX;
+            const adjPanY = exportPanY * scaleY;
 
             // Draw all Skulpt canvas layers in order onto the temp canvas with active transform (zoom and pan)
             canvases.forEach(canvas => {
                 tempCtx.save();
                 // CSS transform origin is 'center center', so we translate to center first, apply shift and scale, then draw
                 tempCtx.translate(width / 2 + adjPanX, height / 2 + adjPanY);
-                tempCtx.scale(zoom, zoom);
+                tempCtx.scale(exportZoom, exportZoom);
                 tempCtx.translate(-width / 2, -height / 2);
 
                 tempCtx.drawImage(canvas, 0, 0);
                 tempCtx.restore();
             });
 
-            // Export the combined image
-            const dataURL = tempCanvas.toDataURL("image/png");
+            // Crop the central viewport area corresponding to the original canvas size (e.g. 400x400)
+            const viewportCanvas = document.createElement("canvas");
+            viewportCanvas.width = canvasSize;
+            viewportCanvas.height = canvasSize;
+            const viewportCtx = viewportCanvas.getContext("2d");
+
+            // Re-center relative to the original canvas size bounds (crop from the middle)
+            const cropX = (width - canvasSize) / 2;
+            const cropY = (height - canvasSize) / 2;
+            viewportCtx.drawImage(tempCanvas, cropX, cropY, canvasSize, canvasSize, 0, 0, canvasSize, canvasSize);
+
+            // Export the combined image from viewportCanvas
+            const dataURL = viewportCanvas.toDataURL("image/png");
 
             if (isEditMode) {
                 // In docent edit-mode: ONLY save to preview
