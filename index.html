@@ -4530,11 +4530,11 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2 text-xs font-mono">
                         <div class="bg-slate-50 dark:bg-slate-950 p-2.5 rounded border border-slate-150 dark:border-slate-850">
                             <span class="text-[10px] text-slate-500 dark:text-slate-400 uppercase block mb-1">Verwachte Output:</span>
-                            <div class="text-slate-700 dark:text-slate-300 whitespace-pre-wrap">${res.expected}</div>
+                            <div class="text-slate-700 dark:text-slate-300 whitespace-pre-wrap">${escapeHtml(res.expected)}</div>
                         </div>
                         <div class="bg-slate-50 dark:bg-slate-950 p-2.5 rounded border border-slate-150 dark:border-slate-850">
                             <span class="text-[10px] text-slate-500 dark:text-slate-400 uppercase block mb-1">Jouw Output:</span>
-                            <div class="${res.passed ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'} whitespace-pre-wrap">${res.actual || '[Niets geprint]'}</div>
+                            <div class="${res.passed ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'} whitespace-pre-wrap">${escapeHtml(res.actual) || '[Niets geprint]'}</div>
                         </div>
                     </div>
                 `;
@@ -6763,12 +6763,17 @@
             return tableHtml;
         }
 
-        function formatInlineCode(text) {
-            // Escape HTML special characters
-            let escaped = text
+        function escapeHtml(text) {
+            if (!text) return "";
+            return String(text)
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;");
+        }
+
+        function formatInlineCode(text) {
+            // Escape HTML special characters
+            let escaped = escapeHtml(text);
 
             const placeholders = [];
             function addPlaceholder(html) {
