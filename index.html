@@ -4350,6 +4350,7 @@
                 testInputsQueue = [...testCase.inputs];
                 let consoleOutputs = [];
                 let printOutputs = [];
+                let prompts = [];
 
                 // Custom intercept run outputs
                 const testOutputLogger = (text) => {
@@ -4374,6 +4375,9 @@
                         let displayPrompt = prompt;
                         if (displayPrompt && !displayPrompt.endsWith(" ") && !displayPrompt.endsWith("\n")) {
                             displayPrompt += " ";
+                        }
+                        if (displayPrompt) {
+                            prompts.push(displayPrompt);
                         }
                         // Return inputs queue sequentially
                         if (testInputsQueue.length > 0) {
@@ -4411,13 +4415,27 @@
                         // Evaluate gathered print outputs against expectations
                         const rawPrintOutput = printOutputs.join("").trim();
                         const rawConsoleOutput = consoleOutputs.join("").trim();
-                        const checkPassed = evaluateOutput(rawPrintOutput, testCase.expectedOutput, testCase.matchType) ||
-                                            evaluateOutput(rawConsoleOutput, testCase.expectedOutput, testCase.matchType);
+                        const passedPrint = evaluateOutput(rawPrintOutput, testCase.expectedOutput, testCase.matchType);
+                        const passedConsole = evaluateOutput(rawConsoleOutput, testCase.expectedOutput, testCase.matchType);
+                        const checkPassed = passedPrint || passedConsole;
+
+                        let actualOutputToDisplay = rawPrintOutput;
+                        if (passedConsole) {
+                            actualOutputToDisplay = rawConsoleOutput;
+                        } else if (!passedPrint) {
+                            const expectedContainsPrompt = prompts.some(p => 
+                                testCase.expectedOutput.toLowerCase().includes(p.trim().toLowerCase())
+                            );
+                            if (expectedContainsPrompt) {
+                                actualOutputToDisplay = rawConsoleOutput;
+                            }
+                        }
+
                         resolve({
                             name: testCase.name,
                             inputs: testCase.inputs,
                             expected: testCase.expectedOutput,
-                            actual: rawConsoleOutput,
+                            actual: actualOutputToDisplay,
                             passed: checkPassed
                         });
                     },
