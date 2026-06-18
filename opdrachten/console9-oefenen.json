@@ -1,0 +1,71 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "9.01: lijsten intro",
+            "instruction": "<p class=\"mb-3\">Hiernaast zie je hoe een lijst gedefinieerd kan worden. Zoals je ziet kunnen er allerlei verschillende typen variabelen in één lijst voorkomen. Python is daar redelijk uniek in. In andere programmeertalen bestaan lijsten vaak alleen uit één type.</p>\n<p class=\"mb-3\">Individuele items uit een lijst kunnen worden aangeroepen met vierkante haken&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">[]</code>.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Pas de getallen 3 en 4 aan tussen de vierkante haken op regel 3 en regel 4 en kijk wat er gebeurt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "lijst_A = [1,2,\"3\",True, False, 1.32] \nprint(lijst_A)\nprint(lijst_A[3])\nlijst_A[4] = 2\nprint(lijst_A)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "9.02: append()",
+            "instruction": "<p class=\"mb-3\">Je kunt ook met een lege lijst beginnen en de lijst dan opbouwen met de functie <strong>append()</strong>.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Maak de lijst nog langer door andere dingen toe te voegen.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "lijst_A = [] \n\nprint(lijst_A)\n\nlijst_A.append(5)\nlijst_A.append(7)\n\nprint(lijst_A)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "9.03: len()",
+            "instruction": "<p class=\"mb-3\">Een python programma dat lijsten gebruikt zal vrijwel altijd ook iets doen met een <strong>for</strong> loop. Hiernaast zie je twee manieren om dat te doen.</p>\n<p class=\"mb-3\">De eerste manier is de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">for</code> loop zoals je die kent. Daarvoor moet je wel weten hoe lang de lijst is. Dit doe je met de functie <strong>len()</strong></p>\n<p class=\"mb-3\">De tweede manier is een stuk eleganter. Je hebt dan geen range meer nodig en je hoeft ook de lengte niet te weten. Het nadeel is dat je tijdens de loop niet weet op welke plek het item staat.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Kun je met append bij de 2de manier een&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">\"f\"</code>&nbsp;en een&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">\"g\"</code>&nbsp;toevoegen aan de lijst?</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "lijst_A = ['a','b','c','d','e'] \n\n# manier 1\nlengte_lijst = len(lijst_A)\n\nfor i in range(lengte_lijst):\n  print(lijst_A[i])\n  \nprint() # lege regel\n\n# manier 2\nfor item in lijst_A:\n  print(item)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "9.04: Kopie van lijst",
+            "instruction": "Misschien wil je soms een kopie maken van een lijst. Je bent dan geneigd om te doen:&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">lijstA = lijstB</code>. Dat gaat mis. Het probleem is dat je een nieuwe \"referentie\" maakt naar dezelfde lijst. Je zou kunnen zeggen dat de lijst nu 2 namen heeft.<div>In plaats daarvan gebruik je de functie&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">list()</code>&nbsp;om een nieuwe lijst te maken. Nu maak je daadwerkelijk een kopie.</div><div><br></div><div><div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<p class=\"mb-3\"></p><ol><li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li><li>Start het programma en kijk of je gelijk hebt.</li></ol><p></p>\n\n<p class=\"mb-3\"><br></p>\n</div></div>",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "lijst_C = ['a','b','c','d','e'] \nlijst_D = list(lijst_C)\nlijst_E = lijst_C\n\nlijst_D[2] = 'z'\n\n# Kopie\nprint(lijst_C)\nprint(lijst_D)\nprint()\n\nlijst_E[1] = 'y'\n\n# Referentie\nprint(lijst_C)\nprint(lijst_E)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "9.05: Lijst functies",
+            "instruction": "<p class=\"mb-3\">Hieronder vind je een lijst met functies die werken op lijsten.</p>\n<table class=\"wysiwyg-table w-full border-collapse border border-slate-800 my-4 text-xs md:text-sm bg-slate-950/20\" style=\"border-radius: 8px; overflow: hidden;\">\n                    <thead>\n                        <tr class=\"bg-slate-900\">\n                            <th class=\"border border-slate-800 p-2 text-left font-bold text-slate-200\">Methode</th>\n                            <th class=\"border border-slate-800 p-2 text-left font-bold text-slate-200\">Beschrijving</th>\n                        </tr>\n                    </thead>\n                    <tbody>\n                        <tr>\n                            <td class=\"border border-slate-800 p-2 text-slate-300\">clear()</td>\n                            <td class=\"border border-slate-800 p-2 text-slate-300\">Maakt de lijst leeg</td>\n                        </tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">count()</td><td class=\"border border-slate-800 p-2 text-slate-300\">Telt het aantal elementen met de gegeven waarde</td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">extend()</td><td class=\"border border-slate-800 p-2 text-slate-300\">Plakt de ene lijst aan de andere</td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">index()</td><td class=\"border border-slate-800 p-2 text-slate-300\">Geeft de positie in de lijst van het element met de gegeven waarde</td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">pop()</td><td class=\"border border-slate-800 p-2 text-slate-300\">haalt een element weg op de gegeven positie</td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">remove()</td><td class=\"border border-slate-800 p-2 text-slate-300\">Haalt een element weg met de gegeven waarde</td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">reverse()</td><td class=\"border border-slate-800 p-2 text-slate-300\">Draait de lijst om</td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">sort()</td><td class=\"border border-slate-800 p-2 text-slate-300\">Sorteert de lijst</td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\"><br></td><td class=\"border border-slate-800 p-2 text-slate-300\"><br></td></tr></tbody></table>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<p class=\"mb-3\"></p><ol><li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn wanneer je het programma uitvoert.</li><li>Start het programma en kijk of je gelijk hebt.</li><li>Probeer de reverse en pop functies zelf uit.</li></ol><p></p>\n\n\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "lijst = ['a','d','c','b','a'] \nprint(lijst); print()\n\nlijst.sort()\nprint(lijst); print()\n\nnummers = [1,2,3,4,5]\nlijst.extend(nummers)\nprint(lijst); print()\n\nlijst.remove('b')\nprint(lijst); print()\n\nlijst.pop(3)\nprint(lijst); print()\n\nlijst.reverse()\nprint(lijst); print()",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

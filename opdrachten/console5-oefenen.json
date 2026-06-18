@@ -1,0 +1,71 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "5.01: if",
+            "instruction": "<p class=\"mb-3\">De <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">if</code> uitspraak wordt in programma's gebuikt voor het maken van een <strong>beslissing</strong>.</p>\n<p class=\"mb-3\">In instructie 4 moet je eerst evalueren wat er uit de booleaanse-uitspaak komt. Als dit <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">True</code> is, dan wordt alles na de dubbele punt uitgevoerd. Let op het inspringen.</p>\n<p class=\"mb-3\">Als de uitspraak <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">False</code> is, dan gaat het programma verder bij de eerste instructie die niet ingesprongen is. instructie9 in dit geval.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Voer als waarde van <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">nummer</code>&nbsp;-10 in en bekijk wat het programma nu doet.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "nummer = int(input(\"Wat is uw nummer\"))\n\nif nummer > 0:\n  print(\"Het nummer is positief\")\n  \nif nummer < 0:\n  print(\"Het nummer is negatief\")\n  \nif nummer == 0:\n  print(\"Het nummer is nul\")\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "5.02: if...else",
+            "instruction": "<p class=\"mb-3\">Bij de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">if</code> uitspraak kan optioneel nog een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">else</code> toegevoegd worden.</p>\n<p class=\"mb-3\">Als er uit de voorgaande <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">if</code> <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">False</code> komt, dan wordt de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">else</code> wel uitgevoerd. Als de voorgaande <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">if</code> statement <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">True</code> was, dan wordt de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">else</code> juist niet uitgevoerd. Let weer op het inspringen.</p>\n<p class=\"mb-3\">Regel 13 wordt altijd uitgevoerd omdat deze niet ingesprongen is.</p>\n<p class=\"mb-3\">Als de uitspraak <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">False</code> is, dan gaat het programma verder bij de eerste instructie die niet ingesprongen is. Regel 8 in dit geval.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Verander de waarde van <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">nummer</code> in -10 en bekijk wat het programma nu doet.</li>\n  <li>Verander de waarde van <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">nummer</code> in 0 en bekijk wat het programma nu doet. Hmm.. Dit lijkt niet te kloppen. Dit gaan we in de volgende stap oplossen.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "nummer = 10\n\nif nummer > 0:\n  print(\"Het nummer is positief\")\n  print(\"Deze regel wordt alleen geprint bij positieve getallen\")\n  print()\n\nelse:\n  print(\"Het nummer is negatief\")\n  print(\"Deze regel wordt alleen geprint als het getal niet positief is\")\n  print()\n\nprint(\"Einde programma. Deze regel wordt altijd uitgeprint\")",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "5.03: if...elif...else",
+            "instruction": "<p class=\"mb-3\">Bij de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">if...else</code> uitspraak kan je slechts kiezen tussen twee opties. Als je meerdere keuze-opties wilt, dan gebruik je de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">elif</code> uitspraak.</p>\n<p class=\"mb-3\">Je kan oneindig veel <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">elif</code> uitspraken toevoegen. Let op, ze worden alleen uitgevoerd wanneer alle voorgaande <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">if</code> en <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">elif</code> uitspraken <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">False</code> waren. De <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">else</code> wordt alleen uitgevoerd als alle voorgaande uitspraken <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">False</code> waren.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Verander de waarde van <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">nummer</code> in -10 en bekijk wat het programma nu doet.</li>\n  <li>Verander de waarde van <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">nummer</code> in 0 en bekijk wat het programma nu doet.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "nummer = 10\n\nif nummer > 0:\n  print(\"Het nummer is positief\")\n  print(\"Deze regel wordt alleen geprint bij POSITIEVE getallen\")\n  print()\n\nelif nummer == 0:\n  print(\"Het nummer is nul\")\n  print(\"Deze regel wordt alleen geprint bij het getal NUL\")\n  print()\n\nelse:\n  print(\"Het nummer is negatief\")\n  print(\"Deze regel wordt alleen geprint als het getal NEGATIEF is\")\n  print()\n\nprint(\"Einde programma. Deze regel wordt altijd uitgeprint\")",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "5.04: Geneste if",
+            "instruction": "<p class=\"mb-3\">Net als bij operaties kan je bij if statements ook gebruik maken van <strong>nesten</strong>. Dit betekent dat je meerdere if statements in elkaar zet. In het programma hiernaast zie je dit gebeuren.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Geef een negatief getal en controleer de uitkomst.</li>\n  <li>Geef een positief getal en controleer de uitkomst.</li>\n  <li>Geef het getal \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">0</code>\" en controleer de uitkomst.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "print(\"Dit programma bepaalt of een getal positief of negatief is.\")\nprint()\nnummer = float(input(\"Geef een getal\"))\nprint()\n\nif nummer >= 0:\n  if nummer == 0:\n    print(\"Je getal is exact nul\")\n  else:\n    print(\"Je getal is positief\")\nelse:\n  print(\"Je getal is negatief\")\n  \nprint()\nprint(\"Het programma is klaar\")",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "5.05: Voorbeeld",
+            "instruction": "<p class=\"mb-3\">Een getal is deelbaar door een ander getal wanneer je geen rest overhoudt na de deling.</p>\n<p class=\"mb-3\">Bijvoorbeeld:</p>\n<ul class=\"list-disc pl-6 space-y-1 mt-1 mb-2\">\n  <li>20 is wel deelbaar door 5. Daar komt 4 uit en je houdt geen rest over.</li>\n  <li>21 is niet deelbaar door 5. Daar komt 4 uit en je houdt 1 rest over.</li>\n</ul>\n<p class=\"mb-3\">Om te bepalen of twee getalleen deelbaar zijn kan je de operatie % gebruiken.</p>\n<p class=\"mb-3\">Hiernaast zie je een programma dat van twee getallen bepaald of ze deelbaar zijn.</p><div class=\"wysiwyg-section-uitvoeren my-3\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div></div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n</ol>\n<div class=\"wysiwyg-info-box bg-blue-500/10 border border-blue-500/30 rounded-xl p-3 text-xs text-blue-300 my-3\"><i class=\"fa-solid fa-info-circle mr-1.5 text-blue-400\"></i> Let op: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">%</code> is niet hetzelfde als <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">/</code>.</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "print(\"Dit programma bepaalt of twee gehele getallen deelbaar zijn.\")\nprint()\n\ngetal1 = int(input(\"geef het eerste getal\"))\ngetal2 = int(input(\"geef het tweede getal\"))\n\nprint()\nprint(\"We gaan nu kijken of\",getal1,\"en\",getal2,\"deelbaar zijn.\")\nprint()\n\nif (getal1 % getal2 == 0):\n  print(\"Bij de deling is er geen rest, dus de getallen zijn deelbaar\")\n\nelse:\n  print(\"Bij de deling blijft er rest over, dus de getallen zijn niet deelbaar.\")\n\nprint()\nprint(\"Het programma is klaar.\")",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

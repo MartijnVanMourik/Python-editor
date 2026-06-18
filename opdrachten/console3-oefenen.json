@@ -1,0 +1,97 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "3.01: Operatoren",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>In deze sectie bespreken we <strong>operatoren</strong> waarmee we wiskundige en logische berekeningen kunnen doen. Bijvoorbeeld het optellen van getallen.</li>\n  <li>Een operator is een <strong>speciaal symbool</strong> dat een rekenkundige of logische berekening uitvoert.</li>\n  <li>In het programma hiernaast zie je in instructie3 de operator <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">+</code>. Deze telt twee getallen of variabelen met elkaar op. De operator <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">=</code> zorgt ervoor dat de waarde van de operatie in de variabele wordt gezet.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma en bedenk wat de uitkomst zal zijn.</li>\n  <li>Start het programma en bekijk of je gelijk hebt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "a = 5\nb = a + a\ntotaal = a + b\nprint(\"a is:\", a)\nprint(\"b is:\", b)\nprint(\"totaal is:\", totaal)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "3.02: - + - * /",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Vier veelgebruikte <strong>operatoren</strong> zijn:</p>\n<ul class=\"list-disc pl-6 space-y-1 mt-1 mb-2\">\n  <li>Optellen: +</li>\n  <li>Aftrekken: -</li>\n  <li>Vermenigvuldigen: *</li>\n  <li>Delen: /</li>\n</ul>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma en bedenk wat de uitkomst zal zijn.</li>\n  <li>Start het programma en bekijk of je gelijk hebt.</li>\n  <li>Zie je dat bij de deling er een inplicite conversie van datatype plaatsvindt? Het waren integers, maar door het delen wordt het een float.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "a = 11\nb = 3\n\nprint(a + b)\nprint(a - b)\nprint(a * b)\nprint(a / b)\nprint(a // b) # Quotiënt operator (of gehele delingsoperator: hoe vaak past het getal?)\nprint(a % b)\t# Modulo-operator (of rest-operator)\nprint(a ** b)\t# Exponentiatie-operator (of machtsverheffingsoperator)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "3.03: quotiënt //",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Een andere veelgebruikte operatie is de <strong>quotiënt</strong> operator. Het symbool hiervoor is //.</li>\n  <li>Dit lijkt op delen, echter wordt alles na de komma gewoon weggegooid. Dus je rond naar beneden af op een geheel getal. Je kan dit ook <strong>geheeltallig delen</strong> noemen.</li>\n  <li>Stel, je hebt 11 euro en een kaartje voor de Efteling kost 3 euro. Met hoeveel mensen kan je naar binnen? Voor dit soort vragen is de quotiënt operatie erg handig.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma en bedenk wat de uitkomst zal zijn.</li>\n  <li>Start het programma en bekijk of je gelijk hebt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "a = 11\nb = 3\n\nprint(a / b)\nprint(a // b)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "3.04: modulo %",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Een andere veelgebruikte operatie is de <strong>modulo</strong> operator. Het symbool hiervoor is %.</li>\n  <li>Als je de modulo van een deling berekend, bereken je eigenlijk dat wat er overblijft.</li>\n  <li>Stel, je hebt 11 euro en een kaartje voor de Efteling kost 3 euro. Hoeveel euro krijg je terug als je zegt dat je zoveel mogelijk kaartjes wilt van die 11 euro. Voor dit soort vragen is de modulo operator erg handig.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma en bedenk wat de uitkomst zal zijn.</li>\n  <li>Start het programma en bekijk of je gelijk hebt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "a = 11\nb = 3\n\nprint(a % b)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "3.05: Machten **",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Een andere veelgebruikte operatie is de <strong>macht</strong> operator. Het symbool hiervoor is **</li>\n  <li>Als je bijvoorbeeld 2 tot de macht 3 wilt doen (2 x 2 x 2), dan bereik je dit met de instructie 2**3.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma en bedenk wat de uitkomst zal zijn.</li>\n  <li>Start het programma en bekijk of je gelijk hebt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "#!/bin/python3\na = 2\nb = 3\n\nprint(a**b)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_6",
+            "title": "3.06: Voorrang",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"><span style=\"font-weight: normal;\">Net als met gewoon rekenen gelden hier ook de bekende voorrangsregels met het uitvoeren van de operaties. De volgorde van uitvoeren is:<br></span></span></div>\n</div></div>\n<ol><li><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">()</span></li><li><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">**</span></li><li><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">*, /, //, %</span></li><li><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">+, -</span></li></ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma en bedenk wat de uitkomst zal zijn.</li>\n  <li>Welk getal komt er uit?</li>\n  <li>Wat zal het datatype zijn?</li>\n  <li>Start het programma en bekijk of je gelijk hebt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "a = 1\nb = 3\nc = 2\nd = 4\n\nuitkomst = (a + b) * c / 4\nprint(uitkomst)\nprint(type(uitkomst))",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_7",
+            "title": "3.07: Voorbeeld",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Stel, je bent kaartjes verkoper in ijssalon \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">De gelikte beer</code>\". Je krijgt steeds van die vervelende vragen en daarom maak je een programma zodat je niet steeds je rekenmachine hoeft te pakken.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma en <span class=\"font-bold text-slate-800 dark:text-slate-200\">test</span> het.</li>\n  <li>Snap je hoe de het werkt?</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "prijs_van_ijsje = 3\neuro = int(input(\"Hoeveel euro wilt u uitgeven?\"))\naantal_ijsjes = euro // prijs_van_ijsje\nwisselgeld = euro % prijs_van_ijsje\n\nprint()\nprint(\"Het aantal ijsjes is\", aantal_ijsjes)\nprint(\"Het wisselgeld is\", wisselgeld)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

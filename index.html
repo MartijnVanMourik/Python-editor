@@ -1222,9 +1222,15 @@
                         <button id="wysiwyg-btn-add-row" onclick="addTableRow()"
                             class="hidden bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/80 dark:border-purple-600/50 dark:text-purple-200 dark:hover:bg-purple-900 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
                             title="Rij eronder toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Rij</button>
+                        <button id="wysiwyg-btn-del-row" onclick="deleteTableRow()"
+                            class="hidden bg-red-100 border border-red-300 text-red-800 hover:bg-red-200 dark:bg-red-950/60 dark:border-red-800/40 dark:text-red-300 dark:hover:bg-red-950 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
+                            title="Rij verwijderen"><i class="fa-solid fa-minus text-[8px]"></i> Rij</button>
                         <button id="wysiwyg-btn-add-col" onclick="addTableColumn()"
                             class="hidden bg-purple-100 border border-purple-300 text-purple-800 hover:bg-purple-200 dark:bg-purple-950/80 dark:border-purple-600/50 dark:text-purple-200 dark:hover:bg-purple-900 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
                             title="Kolom ernaast toevoegen"><i class="fa-solid fa-plus text-[8px]"></i> Kolom</button>
+                        <button id="wysiwyg-btn-del-col" onclick="deleteTableColumn()"
+                            class="hidden bg-red-100 border border-red-300 text-red-800 hover:bg-red-200 dark:bg-red-950/60 dark:border-red-800/40 dark:text-red-300 dark:hover:bg-red-950 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
+                            title="Kolom verwijderen"><i class="fa-solid fa-minus text-[8px]"></i> Kolom</button>
                         <button id="wysiwyg-btn-del-table" onclick="deleteTable()"
                             class="hidden bg-red-100 border border-red-300 text-red-800 hover:bg-red-200 dark:bg-red-950/60 dark:border-red-800/40 dark:text-red-300 dark:hover:bg-red-950 font-bold px-2 h-7 rounded text-[10px] transition flex items-center justify-center gap-1 active:scale-95"
                             title="Tabel verwijderen"><i class="fa-solid fa-trash-can text-[8px]"></i> Tabel</button>
@@ -6038,6 +6044,70 @@
             showToast("➕ Kolom ernaast toegevoegd");
         }
 
+        function deleteTableRow() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+
+            let container = range.commonAncestorContainer;
+            if (container.nodeType === Node.TEXT_NODE) {
+                container = container.parentNode;
+            }
+            const tr = container.closest("tr");
+            const table = container.closest("table");
+            if (!tr || !table) return;
+
+            const rowsCount = table.querySelectorAll("tr").length;
+            if (rowsCount <= 1) {
+                if (confirm("Dit is de laatste rij. Wil je de hele tabel verwijderen?")) {
+                    table.remove();
+                    saveActiveInstruction();
+                    showToast("🗑️ Tabel verwijderd");
+                }
+                return;
+            }
+
+            tr.remove();
+            saveActiveInstruction();
+            showToast("➖ Rij verwijderd");
+        }
+
+        function deleteTableColumn() {
+            const selection = window.getSelection();
+            if (!selection.rangeCount) return;
+            const range = selection.getRangeAt(0);
+
+            let container = range.commonAncestorContainer;
+            if (container.nodeType === Node.TEXT_NODE) {
+                container = container.parentNode;
+            }
+            const cell = container.closest("td") || container.closest("th");
+            const table = container.closest("table");
+            if (!cell || !table) return;
+
+            const cellIndex = cell.cellIndex;
+            const rows = table.querySelectorAll("tr");
+            
+            const cellsCount = cell.parentNode.cells.length;
+            if (cellsCount <= 1) {
+                if (confirm("Dit is de laatste kolom. Wil je de hele tabel verwijderen?")) {
+                    table.remove();
+                    saveActiveInstruction();
+                    showToast("🗑️ Tabel verwijderd");
+                }
+                return;
+            }
+
+            rows.forEach(row => {
+                if (row.cells[cellIndex]) {
+                    row.cells[cellIndex].remove();
+                }
+            });
+
+            saveActiveInstruction();
+            showToast("➖ Kolom verwijderd");
+        }
+
         function deleteTable() {
             const selection = window.getSelection();
             if (!selection.rangeCount) return;
@@ -6254,6 +6324,42 @@
                 }
             });
 
+            // Convert tables to markdown table placeholders
+            const tables = body.querySelectorAll("table");
+            const tableDataList = [];
+            tables.forEach((table, index) => {
+                if (!table.parentNode) return;
+                let markdownTable = "\n";
+                const rows = Array.from(table.querySelectorAll("tr"));
+                if (rows.length > 0) {
+                    const firstRow = rows[0];
+                    const headerCells = Array.from(firstRow.querySelectorAll("th, td"));
+                    if (headerCells.length > 0) {
+                        const headerText = headerCells.map(cell => cell.textContent.trim().replace(/\|/g, "\\|"));
+                        markdownTable += "| " + headerText.join(" | ") + " |\n";
+                        markdownTable += "| " + headerCells.map(() => "---").join(" | ") + " |\n";
+
+                        for (let r = 1; r < rows.length; r++) {
+                            const cells = Array.from(rows[r].querySelectorAll("th, td"));
+                            const cellsText = cells.map(cell => cell.textContent.trim().replace(/\|/g, "\\|"));
+                            while (cellsText.length < headerCells.length) {
+                                cellsText.push("");
+                            }
+                            if (cellsText.length > headerCells.length) {
+                                cellsText.length = headerCells.length;
+                            }
+                            markdownTable += "| " + cellsText.join(" | ") + " |\n";
+                        }
+                    }
+                }
+                markdownTable += "\n";
+                const placeholder = `___TABLE_PLACEHOLDER_${index}___`;
+                tableDataList.push({ placeholder, markdown: markdownTable });
+
+                const placeholderNode = doc.createTextNode(placeholder);
+                table.parentNode.replaceChild(placeholderNode, table);
+            });
+
             // Traverse the DOM recursively to build plain text with newlines for block elements
             function getDomTextWithLayout(node) {
                 if (node.nodeType === Node.TEXT_NODE) {
@@ -6295,7 +6401,12 @@
                 return "";
             }
 
-            return getDomTextWithLayout(body).trim();
+            let textResult = getDomTextWithLayout(body).trim();
+            // Restore markdown tables
+            tableDataList.forEach(data => {
+                textResult = textResult.replace(data.placeholder, data.markdown);
+            });
+            return textResult;
         }
 
         function applySmartPaste() {
@@ -6447,6 +6558,22 @@
                 // Since we found actual content line, reset heading matched flag
                 justMatchedHeading = false;
 
+                // Detect table rows
+                if (line.startsWith('|') && line.endsWith('|')) {
+                    closeList();
+                    const tableLines = [];
+                    while (i < lines.length && lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
+                        tableLines.push(lines[i].trim());
+                        i++;
+                    }
+                    i--; // adjust index because loop will increment it
+
+                    if (tableLines.length > 0) {
+                        html += parseMarkdownTable(tableLines);
+                    }
+                    continue;
+                }
+
                 // Detect list items (e.g. "1. Item", "2) Item", "- Item", "* Item")
                 const olMatch = line.match(/^(\d+[\.\)]\s*)(.*)/);
                 const ulMatch = line.match(/^([\-\*\+]\s*)(.*)/);
@@ -6477,6 +6604,78 @@
             }
             closeSection();
             return html;
+        }
+
+        function parseMarkdownTable(tableLines) {
+            let separatorIndex = -1;
+            for (let i = 0; i < tableLines.length; i++) {
+                const row = tableLines[i];
+                const clean = row.replace(/[\|\-\:\s]/g, '');
+                if (clean === '' && row.includes('-')) {
+                    separatorIndex = i;
+                    break;
+                }
+            }
+
+            let headerLines = [];
+            let bodyLines = [];
+
+            if (separatorIndex !== -1) {
+                headerLines = tableLines.slice(0, separatorIndex);
+                bodyLines = tableLines.slice(separatorIndex + 1);
+            } else {
+                headerLines = [tableLines[0]];
+                bodyLines = tableLines.slice(1);
+            }
+
+            function splitRow(rowText) {
+                let content = rowText.trim();
+                if (content.startsWith('|')) content = content.substring(1);
+                if (content.endsWith('|')) content = content.substring(0, content.length - 1);
+
+                const parts = content.split('|');
+                const rawCells = [];
+                for (let i = 0; i < parts.length; i++) {
+                    let part = parts[i];
+                    while (part.endsWith('\\') && i + 1 < parts.length) {
+                        part = part.slice(0, -1) + '|' + parts[i + 1];
+                        i++;
+                    }
+                    rawCells.push(part);
+                }
+                return rawCells.map(c => c.trim().replace(/\\\|/g, '|'));
+            }
+
+            let tableHtml = `<table class="wysiwyg-table w-full border-collapse border border-slate-800 my-4 text-xs md:text-sm bg-slate-950/20" style="border-radius: 8px; overflow: hidden;">\n`;
+
+            if (headerLines.length > 0) {
+                tableHtml += `    <thead>\n`;
+                headerLines.forEach(line => {
+                    tableHtml += `        <tr class="bg-slate-900">\n`;
+                    const cells = splitRow(line);
+                    cells.forEach(cell => {
+                        tableHtml += `            <th class="border border-slate-800 p-2 text-left font-bold text-slate-200">${formatInlineCode(cell)}</th>\n`;
+                    });
+                    tableHtml += `        </tr>\n`;
+                });
+                tableHtml += `    </thead>\n`;
+            }
+
+            if (bodyLines.length > 0) {
+                tableHtml += `    <tbody>\n`;
+                bodyLines.forEach(line => {
+                    tableHtml += `        <tr>\n`;
+                    const cells = splitRow(line);
+                    cells.forEach(cell => {
+                        tableHtml += `            <td class="border border-slate-800 p-2 text-slate-300">${formatInlineCode(cell)}</td>\n`;
+                    });
+                    tableHtml += `        </tr>\n`;
+                });
+                tableHtml += `    </tbody>\n`;
+            }
+
+            tableHtml += `</table>\n`;
+            return tableHtml;
         }
 
         function formatInlineCode(text) {
@@ -7423,12 +7622,16 @@
             const infoBtn = document.getElementById("wysiwyg-btn-info");
 
             const addRowBtn = document.getElementById("wysiwyg-btn-add-row");
+            const delRowBtn = document.getElementById("wysiwyg-btn-del-row");
             const addColBtn = document.getElementById("wysiwyg-btn-add-col");
+            const delColBtn = document.getElementById("wysiwyg-btn-del-col");
             const delTableBtn = document.getElementById("wysiwyg-btn-del-table");
 
             // Hide table modifier controls by default
             if (addRowBtn) addRowBtn.classList.add("hidden");
+            if (delRowBtn) delRowBtn.classList.add("hidden");
             if (addColBtn) addColBtn.classList.add("hidden");
+            if (delColBtn) delColBtn.classList.add("hidden");
             if (delTableBtn) delTableBtn.classList.add("hidden");
 
             // Reset standard button styling to defaults
@@ -7496,7 +7699,9 @@
                 if (nodeName === "table" || nodeName === "td" || nodeName === "th" || nodeName === "tr") {
                     // Reveal table action buttons (Rij, Kolom, Tabel verwijderen) when active inside a table cell
                     if (addRowBtn) addRowBtn.classList.remove("hidden");
+                    if (delRowBtn) delRowBtn.classList.remove("hidden");
                     if (addColBtn) addColBtn.classList.remove("hidden");
+                    if (delColBtn) delColBtn.classList.remove("hidden");
                     if (delTableBtn) delTableBtn.classList.remove("hidden");
                 }
                 if (curr.classList && (curr.classList.contains("wysiwyg-tip-box") || curr.classList.contains("wysiwyg-section-tip"))) {

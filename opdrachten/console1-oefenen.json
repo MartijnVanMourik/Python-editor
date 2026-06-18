@@ -9,7 +9,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "# Schrijf hier je begin-code\nprint('Hallo Wereld!')\n",
+                    "initialCode": "",
                     "isMain": true
                 }
             ],
@@ -22,7 +22,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "print(\"Hallo wereld!\")\n",
+                    "initialCode": "nummer_integer = 2\nnummer_float = 1.5\n\n#We gaan de getallen bij elkaar op tellen\ntotaal = nummer_integer + nummer_float\n\nprint(totaal) #Output: 3.5",
                     "isMain": true
                 }
             ],
@@ -35,7 +35,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "a = 10\nb = 1.1\n",
+                    "initialCode": "nummer_integer = 123\nnummer_float = 1.23\n\n#We gaan de getallen bij elkaar op tellen\ntotaal = nummer_integer + nummer_float \n\nprint(totaal) #Output: 124.23\nprint(type(totaal)) #output: ???",
                     "isMain": true
                 }
             ],
@@ -48,7 +48,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "a = 10\nprint(a)\na = 5\nprint(a)\n#Verander de waarde van a\n#Print de waarde van a op het scherm",
+                    "initialCode": "leerling_nummer = 12323\n\nprint(\"Het datatype van de variabele leerling_nummer is\")\nprint(type(leerling_nummer))\n",
                     "isMain": true
                 }
             ],
@@ -61,7 +61,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "aantal_hoeken = 42\nprint(aantal_hoeken)",
+                    "initialCode": "a = \"554\"\nb = 12.7\n\n# we maken nu van a en b int\nc = int(a)\nd = int(b)\n\nprint(\"a is van het datatype\", type(a), \n\"en de waarde is\", a)\nprint(\"b is van het datatype\", type(b), \n\"en de waarde is\", b)\nprint(\"c is van het datatype\", type(c), \n\"en de waarde is\", c)\nprint(\"d is van het datatype\", type(d), \n\"en de waarde is\", d)",
                     "isMain": true
                 }
             ],
@@ -74,7 +74,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "lengte = 199\nprint(lengte)\n",
+                    "initialCode": "a = \"55\"\nb = int(a)\nc = float(a)\n\nprint(\"a is van het datatype\", type(a), \n\"en de waarde is\", a)\nprint(\"getal_b is van het datatype\", type(b), \n\"en de waarde is\", b)\nprint(\"getal_c is van het datatype\", type(c), \n\"en de waarde is\", c)\n",
                     "isMain": true
                 }
             ],
@@ -87,7 +87,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "rekening = 34.12 \naantal_personen = 4\ntemperatuur = -3",
+                    "initialCode": "a = 80\nb = 80.99\nc = str(a)\nd = str(b)\n\nprint(\"a is van het datatype\", type(a), \n\"en de waarde is\", a)\nprint(\"b is van het datatype\", type(b), \n\"en de waarde is\", b)\nprint(\"str_a is van het datatype\", type(c), \n\"en de waarde is\", c)\nprint(\"str_b is van het datatype\", type(d), \n\"en de waarde is\", d)",
                     "isMain": true
                 }
             ],
@@ -100,7 +100,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "naam = \"Dhr Dukers\"\ntitel = \"Groot-maarschalk van het Universum\"\nkleur = 'groen'\n\nleeftijd1 = 39\nleeftijd2 = \"39\"\n",
+                    "initialCode": "a = \"Dit is een string\"\nb = int(a)",
                     "isMain": true
                 }
             ],
@@ -113,7 +113,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "winkel_open = False\nschool_open = \"False\"\nbioscoop_open = false\nprint(winkel_open)\nprint(school_open)",
+                    "initialCode": "print(\"Bereken de oppervlakte voor je terras\")\nprint()\nlengte = int(input(\"Lengte in gehele cm?\"))\nbreedte = int(input(\"Breedte in gehele cm?\"))\n\noppervlakte = lengte * breedte\nprint()\nprint(\"De lengte is\", lengte)\nprint(\"De breedte is\", breedte)\nprint()\nprint(\"de oppervlakte is\", oppervlakte, \"vierkante cm.\")",
                     "isMain": true
                 }
             ],
@@ -135,11 +135,11 @@
         {
             "id": "task_11",
             "title": "1.11: Input",
-            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bij veel programma`s wil je gebruik maken van <strong>input</strong> van de gebruiker. Je wil de gebruiker iets vragen. Dit doe je door een vraag op het scherm te <strong>printen</strong>. Vervolgens wil je iets met de gegeven antwoorden doen.</li>\n  <li>Binnen python zijn er voorgemaakte functies die je hierbij helpen. Dit zijn de functies: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">input()</code> en <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">print()</code>.</li>\n  <li>Hier zie je een voorbeeld van een programma die dit gebruikt.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Je ziet een programma dat van deze functies gebruikt maakt. Kan je achterhalen wat dit programma doet?</li>\n  <li>Start het programma op, en vul je naam in door op het grijze invul-vakje te klikken.</li>\n</ol>\n<ul class=\"list-disc pl-6 space-y-1 mt-1 mb-2\">\n  <li><b>LET OP</b>: je ziet in <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">instructie 1</code> wat commentaar staan. Dit is nodig voor sommige Python compilers. Je geeft hiermee aan dat je python 3 gebruikt.</li>\n</ul>\n</div>\n",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bij veel programma`s wil je gebruik maken van <strong>input</strong> van de gebruiker. Je wil de gebruiker iets vragen. Dit doe je door een vraag op het scherm te <strong>printen</strong>. Vervolgens wil je iets met de gegeven antwoorden doen.</li>\n  <li>Binnen python zijn er voorgemaakte functies die je hierbij helpen. Dit zijn de functies: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">input()</code> en <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">print()</code>.</li>\n  <li>Hier zie je een voorbeeld van een programma die dit gebruikt.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Je ziet een programma dat van deze functies gebruikt maakt. Kan je achterhalen wat dit programma doet?</li>\n  <li>Start het programma op, en vul je naam in door op het grijze invul-vakje te klikken.</li></ol>\n</div>\n",
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "#!/bin/python3\nprint(\"Hallo\")\nnaam = input(\"Wat is je naam?\")\nprint()\nprint(naam, \"dat is een mooie naam\")",
+                    "initialCode": "print(\"Hallo\")\nnaam = input(\"Wat is je naam?\")\nprint()\nprint(naam, \"dat is een mooie naam\")",
                     "isMain": true
                 }
             ],
@@ -152,7 +152,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "#!/bin/python3\nnaam = input(\"Wat is je naam?\")\n\n",
+                    "initialCode": "naam = input(\"Wat is je naam?\")",
                     "isMain": true
                 }
             ],
@@ -165,7 +165,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "#!/bin/python3\nleeftijd = 42\nnaam = \"Dukers\"\n\nprint(\"Hallo, jouw naam is..\")\nprint(\"...\")\nprint()\nprint()\nprint(naam)\nprint(\"De leeftijd is:\\n\\n\\n\",leeftijd)\nprint()\nprint(\"nog een regel\")\n",
+                    "initialCode": "leeftijd = 42\nnaam = \"Dukers\"\n\nprint(\"Hallo, jouw naam is..\")\nprint(\"...\")\nprint()\nprint()\nprint(naam)\nprint(\"De leeftijd is:\\n\\n\\n\",leeftijd)\nprint()\nprint(\"nog een regel\")",
                     "isMain": true
                 }
             ],

@@ -1,0 +1,71 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "7.01: Introductie",
+            "instruction": "<p class=\"mb-3\">De <strong>for</strong> loop wordt in Python gebruikt om een reeks instructies te herhalen.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Verander de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">11</code> in regel 2 in <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">20</code> en bekijk wat het programma nu doet.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "n = 12\nfor i in range(1,11):\n  print(n, \"x\", i, \"=\", n*i)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "7.02: Rijen",
+            "instruction": "<p class=\"mb-3\">Python kent meerdere objecten die een rij zijn.</p>\n<ul class=\"list-disc pl-6 space-y-1 mt-1 mb-2\">\n  <li><b>String:</b> Een string is een rij van karakters. Bijvoorbeeld:</li>\n</ul>\n<p class=\"mb-3\">tekst = “Dit is een rij met karakters”</p>\n<ul class=\"list-disc pl-6 space-y-1 mt-1 mb-2\">\n  <li><b>Lijst:</b> Een lijst is een rij van items . Bijvoorbeeld:</li>\n</ul>\n<p class=\"mb-3\">mijn_lijst = [12, 24, “tekst”, 5.6]</p>\n<ul class=\"list-disc pl-6 space-y-1 mt-1 mb-2\">\n  <li><b>Bereik:</b>&nbsp;De functie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">range()</code> wordt gebruikt voor het maken van een rij van nummers. Bijvoorbeeld:</li>\n</ul>\n<p class=\"mb-3\">nummers = <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">range(1, 6)</code> # Dit zijn de nummers 1 tot en met 6</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Verander de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">6</code> in regel 3 in <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">20</code> en bekijk wat het programma nu doet.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "tekst = \"Dit is een rij met karakters\"\nmijn_lijst = [12, 24, \"tekst\", 5.6]\nbereik = range(1, 6)\t# Dit zijn de nummers 1 tot en met 6\n\nprint(tekst)\nprint(mijn_lijst)\nprint(bereik)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "7.03: syntax",
+            "instruction": "<p class=\"mb-3\">De syntax voor de <strong>for</strong> loop is:</p>\n<p class=\"mb-3\"></p><pre class=\"bg-slate-950 p-3 rounded-lg border border-slate-800 font-mono text-xs text-yellow-400 my-3 block whitespace-pre-wrap\"><code class=\"font-mono\">for val in rij:<br>    <i>instructie(s)</i>\n</code></pre><p><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Hierbij is </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">val</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"> een variabele die de waarde van het item binnen de </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">rij</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"> overneemt en steeds bij de volgende iteratie het volgende element in de rij pakt.</span></p><p></p>\n<p class=\"mb-3\">De loop gaat door totdat het laatste element van de rij gebruikt is.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li><li>Waarom werkt regel 6 niet? Wat kun je erom heen zetten dat het wel werkt?</li>\n  <li>Verander de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">1</code> in regel 10 in <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">0</code> en bekijk wat het programma nu doet.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "mijn_lijst = [12, 24, \"tekst\", 5.6]\n\nfor element in mijn_lijst:\n  print(element)\n\nprint(tekst)\nprint (mijn_lijst)\n\nn = 6\nfor i in range(1,11):\n  print(n, \"x\", i, \"=\", n*i)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "7.04: Voorbeeld 1",
+            "instruction": "<p class=\"mb-3\">Hiernaast zie je een programma. Wat zou het doen?</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Verander de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">1</code>&nbsp;in regel 4 in <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">10</code> en bekijk wat het programma nu doet.</li>\n  <li>Verander de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">1</code>&nbsp;in regel 4 in <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">i</code> en bekijk wat het programma nu doet.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "totaal = 0\nfor i in range(1,21): # Let op, het bereik is tot 21 (dus niet tot en met)\n  print(i)\n  totaal = totaal + 1\nprint(\"---+\")\nprint(totaal)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "7.05: Voorbeeld 2",
+            "instruction": "<p class=\"mb-3\">Meneer Dukers speelt een spelletje met meneer Smits waarbij ze met twee dobbelstenen gooien. Meneer Dukers wil graag een overzicht maken van alle mogelijkheden die met twee dobbelstenen mogelijk zijn.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Verander de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">7</code> in regel 2 in <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">10</code> en bekijk wat het programma nu doet.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "for dobbelsteen1 in range(1,7):\n  for dobbelsteen2 in range(1,7):\n    print(dobbelsteen1, dobbelsteen2, \"=\", dobbelsteen1 + dobbelsteen2)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

@@ -1,0 +1,97 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "6.01: While",
+            "instruction": "<p class=\"mb-3\">Binnen programmeren wordt een <strong>loop</strong> gebruikt om een bepaald stuk code te herhalen zolang een booleaanse uitspraak <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">True</code> is. Alle code binnen de <strong>while</strong> wordt steeds weer herhaald, totdat de booleaanse uitspraak <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">False</code> wordt.</p>\n<p class=\"mb-3\">In het voorbeeld hiernaast zie je dat <strong>zolang</strong> <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">nummer</code> groter is dan \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\"><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">0</code></code>\", de instructies op regel 5 t/m 7 herhaald worden.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code en bepaal wat de uitkomst zal zijn</li>\n  <li>Start het programma en bekijk of je gelijk had.</li>\n</ol>\n<p class=\"mb-3\">Zie je hoe snel de code in beeld komt.</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "nummer = 10\n\nwhile nummer > 0:\n  print(nummer)\n  nummer = nummer - 1",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "6.02: Sleep",
+            "instruction": "<p class=\"mb-3\">Om de code wat minder snel te laten uitvoeren voegen we twee extra instructies toe. Op instructie 2 zie je <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">import time</code> staan. Hiermee zorg je ervoor dat je extra functies uit de <strong>module</strong> <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">time</code> kan gebruiken.</p>\n<p class=\"mb-3\">In regel 7 zie je <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">time.sleep(1)</code> staan. Dit zorgt ervoor dat er 1 seconde gewacht wordt met het uitvoeren van de volgende instructie. Nu kan je goed zien wat de while loop exact doet.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma nog een keer uit en zie dat je nu stap voor stap ziet wat de uitvoer is.</li>\n  <li>Wat denk je dat er zal gebeuren als je de waarde van <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">nummer</code> verandert in 50?</li>\n  <li>Pas het aan en <span class=\"font-bold text-slate-800 dark:text-slate-200\">run</span> het programma om te zien of je gelijk hebt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "import time\n\nnummer = 10\n\nwhile nummer > 0:\n  print(nummer)\n  time.sleep(1)\n  nummer = nummer - 1",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "6.03: Oneindige loop",
+            "instruction": "<p class=\"mb-3\">Het kan ook voorkomen dat een booleaanse uitspraak nooit <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">True</code> wordt. Kijk maar in het programma hiernaast. De variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">nummer</code> begint op 1 en zal iedere iteratie met 1 opgehoogd worden. En zolang <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">nummer</code> groter is dan 0 zal de loop door blijven gaan. Voor altijd dus!</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Wat denk je dat er gebeurt als je <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">nummer</code> met 2 verhoogd in plaats van met 1?</li>\n  <li>Voer het programma uit en kijk of je gelijk hebt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "nummer = 1\n\nwhile nummer > 0:\n  print(nummer)\n  nummer = nummer + 1",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "6.04: Voorbeeld",
+            "instruction": "<p class=\"mb-3\">Hiernaast zie je een programma dat alle opeenvolgende getallen tot en met een specifiek getal bij elkaar op telt.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Waarom wordt de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">int()</code> functie gebruikt in regel 3?</li>\n  <li>Wat zal er gebeuren als je regel 12 en 13 ook in de loop zet?</li>\n  <li>Doe dit en kijk of je gelijk hebt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "import time\n\nmaximaal = int(input(\"Tot welk getal moet ik de getallen bij elkaar op tellen?\"))\nuitkomst = 0\ngetal = 0\n\nwhile maximaal >= getal:\n  print(getal)\n  uitkomst = uitkomst + getal\n  time.sleep(1)\n  getal = getal + 1\nprint(\"---+\")\nprint(uitkomst)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "6.05: Voorbeeld 2",
+            "instruction": "<p class=\"mb-3\">De Factorial oftewel faculteit is een wiskundige formule wat wordt genoteerd door een uitroepteken “!”. In de formule moeten alle gehele getallen en positieven die bestaan tussen het getal dat voorkomt in de formule en het getal 1 vermenigvuldigd worden.</p>\n<p class=\"mb-3\">Bijvoorbeeld: 7! = 1 x 2 x 3 x 4 x 5 x 6 x 7 = 5040</p>\n<p class=\"mb-3\">Hiernaast zie je een programma dat dit voor de gebruiker berekend.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Waarom wordt de variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">uitkomst</code> op 1 gezet en niet gewoon op 0?</li>\n  <li>Wat zal er gebeuren als je regel 8 ook in de loop zet?</li>\n  <li>Doe dit en kijk of je gelijk hebt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "faculteit = int(input(\"Van welk getal wilt u de faculteit weten?\"))\ngetal = faculteit\nuitkomst = 1\n\nwhile getal > 0:\n  uitkomst = uitkomst * getal\n  getal = getal - 1\nprint(str(faculteit)+\"! is\",uitkomst)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_6",
+            "title": "6.06: While True",
+            "instruction": "<p class=\"mb-3\">Soms wil je dat een programma zich blijft herhalen. Daarvoor gebruik je de <strong>while True</strong> loop.</p>\n<p class=\"mb-3\">Dit is dus handig bij programma's die steeds hetzelfde moeten doen. Bijvoorbeeld bij de rekenmachine.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma hiernaast en voorspel wat het gaat doen.</li>\n  <li>Voer het programma uit en kijk of je gelijk hebt</li>\n  <li>Wat denk je als je de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">True</code> verandert naar een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">False</code></li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "while True:\n  woord = input(\"Zeg eens wat?\")\n  print(\"lorre lorre\", woord, \"lorre lorre\")",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_7",
+            "title": "6.07: Break",
+            "instruction": "<p class=\"mb-3\">Een loop stopt pas als de booleaanse uitspraak <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">False</code> is. Maar soms wil je dat de loop eerder <strong>stopt</strong> dan bij de expressie. Om dit te bereiken gebruik je de <strong>break</strong> instructie. Zodra je deze instructie geeft, zal de loop direct stoppen en gaat het programma verder na de loop (Dus na het inspringen). De <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">break</code> instructie wordt bijna altijd gebruik in combinatie met een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">if</code>statement.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Kan je voorspellen wanneer het programma stopt?</li>\n  <li>Voer het programma uit en kijk of je gelijk hebt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "while True:\n  woord = input(\"Zeg eens wat?\")\n  print(\"lorre lorre\", woord, \"lorre lorre\")\n  stoppen = input(\"Wilt u stoppen? ja / nee\")\n  if stoppen == \"ja\":\n    break\n\nprint(\"Het programma is gestopt\")",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

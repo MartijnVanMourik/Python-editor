@@ -1,0 +1,84 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "8.01: String",
+            "instruction": "<p class=\"mb-3\">We hebben geleerd dat een <strong>string</strong> een rij van karakters is. Ook hebben we geleerd dat er verschillende <strong>datatypes</strong> zijn en dat wanneer je operaties op deze datatypes uitvoert, de uitkomst anders is. In deze les zullen we leren hoe we strings kunnen bewerken. Bijvoorbeeld hoe je ze aan elkaar kan plakken, of hoe je ze omdraait.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn. Is er verschil in het samenvoegen van <strong>int</strong> en <strong>string</strong>?</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Kijk eens wat er gebeurt als je in een regel zowel <strong>int</strong> als <strong>string</strong> aan elkaar plakt. Pas de code aan en bekijk wat het programma nu doet.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "getal1 = 2\ngetal2 = 3\nkarakterA = \"2\"\nkarakterB = \"3\"\n\nprint(2 + 3)\nprint(getal1 + getal2)\nprint(\"2 + 3\")\nprint(karakterA + karakterB)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "8.02: Samenvoegen",
+            "instruction": "<p class=\"mb-3\">Je hebt geleerd dat alles met dubbele haakjes erachter een functie is. Bijvoorbeeld <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">print()</code>. Ook heb je geleerd dat de waarden die je tussen de haken zet <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">argumenten</code> heten en dat tussen meerdere argumenten een komma staat.</p>\n<p class=\"mb-3\">Hiernaast zie je dat in regel 5 en regel 7 bijna dezelfde code staat. Bij de ene instructie zie je dat de argumenten met een komma onderscheden worden, en bij de andere zie je dat de strings met behulp van het plusteken aan elkaar geplakt worden. Dit geeft niet dezelfde output.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn. Wat zal het verschil zijn tussen samenvoegen met de komma's, of samenvoegen met het plusteken?</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Pas de code in regel 5 aan door er spaties aan toe te voegen zodat deze dezelfde output heeft als regel 7 geeft.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "karakterA = \"twee\"\nkarakterB = \"drie\"\nkarakterC = \"vijf\"\n\nprint(karakterA, \"+\", karakterB, \"=\", karakterC)\nprint()\nprint(karakterA + \"+\" + karakterB + \"=\" + karakterC)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "8.03: Substring",
+            "instruction": "<p class=\"mb-3\">Zoals je weet is een string een rij van karakters. Wanneer je één bepaald karakter uit de string wilt selecteren dan kan je dat doen door er een <strong>substring</strong> van te maken. Door achter de string <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">[2] </code> te plaatsen, wordt het 3e karakter geselecteerd. Wil je meerdere karakters selecteren, dan plaats je achter de string <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">[0:3]</code>. Dit selecteert karakter 0, 1 en 2.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Pas de code in regel 3 aan zodat het&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">“ers”</code>&nbsp;zal printen.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "naam = \"Dukers\"\n\nprint(naam[0:3])",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "8.04: Voorbeeld 1",
+            "instruction": "<p class=\"mb-3\">Omdat een string een rij karakters is, kan je deze ook doorlopen met behulp van de <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">for</code>-loop. De <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">for</code>-loop zal dan plek voor plek afgaan. Het programma hiernaast maakt daar gebruik van.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn wanneer</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Pas de code in regel 5 aan zodat je naar de letter&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">“b”</code>&nbsp;zal zoeken.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "naam = input(\"Wat is uw naam?\")\naantal = 0\n\nfor letter in naam:\n  if letter == \"a\":\n    aantal = aantal + 1\n  \nprint(\"Uw naam heeft \", aantal, \"keer de letter a\")",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "8.05: Len()",
+            "instruction": "<p class=\"mb-3\">Een string is een rij karakters en soms wil je weten uit hoeveel karakters deze string dan bestaat. Om dit te achterhalen kan je gebruik maken van de functie <strong>len()</strong>. Tussen de haken zet je dan de string, en als uitkomst krijg je dan het aantal karakters waaruit de string bestaat.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn wanneer je het programma uitvoert.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n  <li>Pas de code in regel 1 aan door er veel spaties achter te zetten. Denk je dat de string dan langer wordt? <span class=\"font-bold text-slate-800 dark:text-slate-200\">Test</span> het om je antwoord te controleren.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "naam = \"Donald Duck\"\naantalKarakters = len(naam)\n\nprint(aantalKarakters)\nprint()\nprint(\"Uw naam: \" + str(naam) + \", is \" +  \nstr(aantalKarakters) + \" karakters lang!\")",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_6",
+            "title": "8.06: String functies",
+            "instruction": "<p class=\"mb-3\">Soms wil je van een woord alleen maar hoofdletters maken. Bij dit soort uitdagingen gebruik je verschillende functies binnen de string. De instructie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">upper()</code> zorgt ervoor dat alle karakters in de string hoofdletters worden. Je gebruikt de functies door achter de string die je wilt bewerken een punt te zetten, en dan de functie met haken te plaatsen. Bijvoorbeeld naam.<code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">upper()</code> wordt NAAM. In de tabel hieronder zie je nog meer functies.</p><table class=\"wysiwyg-table w-full border-collapse border border-slate-800 my-4 text-xs md:text-sm bg-slate-950/20\" style=\"border-radius: 8px; overflow: hidden;\">\n                    <thead>\n                        <tr class=\"bg-slate-900\">\n                            <th class=\"border border-slate-800 p-2 text-left font-bold text-slate-200\">Methode</th>\n                            <th class=\"border border-slate-800 p-2 text-left font-bold text-slate-200\">Beschrijving</th>\n                        </tr>\n                    </thead>\n                    <tbody>\n                        <tr>\n                            <td class=\"border border-slate-800 p-2 text-slate-300\"><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">lower()</code></td>\n                            <td class=\"border border-slate-800 p-2 text-slate-300\">Alleen maar kleine letters</td>\n                        </tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\"><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">upper()</code></td><td class=\"border border-slate-800 p-2 text-slate-300\">Alleen maar grote letters</td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\"><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">find()</code></td><td class=\"border border-slate-800 p-2 text-slate-300\">geeft de index waar de substring gevonden is</td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\"><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">title()</code></td><td class=\"border border-slate-800 p-2 text-slate-300\">Ieder woord binnen de string start met een hoofdletter</td></tr>\n                    </tbody>\n                </table>\n                <div class=\"wysiwyg-section-uitvoeren my-3\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div></div><div class=\"wysiwyg-section-uitvoeren my-3\">\n<p class=\"mb-3\"><ol><li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn wanneer je het programma uitvoert.</li><li>Start het programma en kijk of je gelijk hebt.</li><li>Kun je de uitkomst van regels 10 en 11 verklaren?&nbsp;</li></ol></p>\n\n\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "naam = \"Donald Duck is een lieve eend!\"\nprint(naam)\n\nnaamHoofdletters = naam.upper()\nprint(naamHoofdletters)\n\nnaamKleineletters = naam.lower()\nprint(naamKleineletters)\n\nnaamStartHoofdletter = naam.find(\"Duck\")\nprint(naamStartHoofdletter)\n\nnaamStartHoofdletter = naam.title()\nprint(naamStartHoofdletter)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

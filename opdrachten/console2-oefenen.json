@@ -1,0 +1,123 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "2.01: Datatype conversie",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">In de vorige les hebben we geleerd dat je variabelen gebruikt om data op te slaan in verschillende datatypes: tekst (<code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">string</code>), hele getallen (<code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">int</code>), decimalen (<code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">float</code>), en waar/nietwaar (<code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">booleans</code>).</p>\n<p class=\"mb-3\">Soms moet je het datatype van een variabele wijzigen om specifieke berekeningen te kunnen uitvoeren, dit noemen we <strong>conversie</strong>. Python kent twee conversiemethoden:</p>\n<ul class=\"list-disc pl-6 space-y-1 mt-1 mb-2\">\n  <li><b>Impliciete</b><strong> </strong>Type Conversie: Automatisch door Python gedaan indien nodig.</li><li><b>Expliciete</b>&nbsp;Type Conversie: Je gebruikt functies zoals <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">int()</code>, <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">float()</code>, en <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">str()</code> om datatypes handmatig om te zetten.</li>\n</ul>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "2.02: Impliciete type conversie",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Er is sprake van <strong>impliciete type conversie</strong> wanneer Python automatisch het ene datatype omzet naar het andere datatype. In het programma hiernaast tellen we de waarde van een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">integer</code> op met de waarde van een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">float</code>.</li>\n  <li>Python converteert de variabele met waarde <strong>2</strong> automatisch naar een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">float</code> zodat ze bij elkaar opgeteld kunnen worden. Pas als beide variabelen een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">float</code> zijn kunnen ze bij elkaar opgeteld worden. Het resultaat van de som is dan ook een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">float</code>.</li>\n  <li>Let op: als je met getallen wilt rekenen moeten ze van het zelfde datatype zijn.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit en bekijk de uitkomst. Zie je dat ze bij elkaar opgeteld zijn? Het is dus een implicite conversie omdat het programma de omzetting voor je gedaan heeft.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "nummer_integer = 2\nnummer_float = 1.5\n\n#We gaan de getallen bij elkaar op tellen\ntotaal = nummer_integer + nummer_float\n\nprint(totaal) #Output: 3.5",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "2.03: type() functie",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Om te achterhalen wat het datatype van een variabele is, kan je gebruik maken van de bestaande functie <strong>type()</strong> .</li>\n  <li>Bij het uitvoeren van deze functie geef je als argument één variabele mee. De uitkomst van deze functie geeft het datatype. Je moet dit dan natuurlijk nog wel printen.</li>\n  <li>In het voorbeeld hiernaast zie je dat in instructie 8 de waarde van de variabele totaal uitgeprint wordt. In instructie 9 wordt vervolgens het datatype van de variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">totaal</code> geprint. Zie je het verschil?</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma en bedenk wat het datatype is van de variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">totaal</code>,</li>\n  <li>Voer het programma uit en kijk of je gelijk hebt.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "nummer_integer = 123\nnummer_float = 1.23\n\n#We gaan de getallen bij elkaar op tellen\ntotaal = nummer_integer + nummer_float \n\nprint(totaal) #Output: 124.23\nprint(type(totaal)) #output: ???",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "2.04: Voorbeeld 1",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<p class=\"mb-3\">Nog een voorbeeld, alleen dan met de variabele&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">leerling_nummer</code>.</p>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<p class=\"mb-3\">Bekijk het programma en bedenk wat het datatype is van de variabele&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">leerling_nummer</code>.</p>\n<p class=\"mb-3\">Voer het programma uit en kijk of je gelijk hebt.</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "leerling_nummer = 12323\n\nprint(\"Het datatype van de variabele leerling_nummer is\")\nprint(type(leerling_nummer))\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "2.05: Expliciete type conversie",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Met expliciete type conversie, gebruiken we bestaande functies zoals <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">int()</code>, <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">float()</code> en <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">str()</code> om bewust het ene datatype om te zetten in het andere datatype.</li>\n  <li>Zie je dat de variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">a</code> een string, en dus geen getal, is. Dit is zo omdat je de aanhalingstekens gebruikt hebt. De instructie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">int(a)</code> maakt van <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">a</code> een integer, een geheel getal dus.</li>\n  <li>Zie je dat de variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">b</code> een float is, en <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">c</code> en <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">d</code> een int wordt?</li>\n  <li>We noemen dit expliciete type conversie omdat jij als gebruiker <strong>expliciet</strong> aangeeft dat de variabele moet veranderen!</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma en bedenk wat het datatype is van de verschillende variabelen.</li>\n  <li>Voer het programma uit en kijk of je gelijk hebt.</li>\n  <li>Wat gebeurt er als je een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">float</code> omzet naar een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">int</code>? Wordt er afgerond?</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "a = \"554\"\nb = 12.7\n\n# we maken nu van a en b int\nc = int(a)\nd = int(b)\n\nprint(\"a is van het datatype\", type(a), \n\"en de waarde is\", a)\nprint(\"b is van het datatype\", type(b), \n\"en de waarde is\", b)\nprint(\"c is van het datatype\", type(c), \n\"en de waarde is\", c)\nprint(\"d is van het datatype\", type(d), \n\"en de waarde is\", d)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_6",
+            "title": "2.06: str -> int",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Soms wil je van een string een integer of float maken. Want met een string kan je niet rekenen.</li>\n  <li>Hiervoor gebruik je de bestaande conversie functie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">int()</code> of <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">float()</code>.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma en bedenk wat het datatype is van de verschillende variabelen.</li>\n  <li>Voer het programma uit en kijk of je gelijk hebt.</li>\n  <li>Komen er decimalen bij wanneer je van een string een float maakt? Zie uitvoer.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "a = \"55\"\nb = int(a)\nc = float(a)\n\nprint(\"a is van het datatype\", type(a), \n\"en de waarde is\", a)\nprint(\"getal_b is van het datatype\", type(b), \n\"en de waarde is\", b)\nprint(\"getal_c is van het datatype\", type(c), \n\"en de waarde is\", c)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_7",
+            "title": "2.07: int -> string",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Soms wil je van een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">int</code> of <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">float</code> een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">string</code> maken omdat je de waarden als tekst wilt gebruiken.</li>\n  <li>Hiervoor gebruik je de bestaande functie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">str()</code>. Deze zet hetgeen er tussen de haakjes staat om in een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">string</code>.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma en bedenk wat het datatype is van de verschillende variabelen.</li>\n  <li>Voer het programma uit en kijk of je gelijk hebt.</li>\n  <li>Gebeurt er nog iets met de decimalen wanneer je van float naar string gaat? Zie uitvoer.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "a = 80\nb = 80.99\nc = str(a)\nd = str(b)\n\nprint(\"a is van het datatype\", type(a), \n\"en de waarde is\", a)\nprint(\"b is van het datatype\", type(b), \n\"en de waarde is\", b)\nprint(\"str_a is van het datatype\", type(c), \n\"en de waarde is\", c)\nprint(\"str_b is van het datatype\", type(d), \n\"en de waarde is\", d)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_8",
+            "title": "2.08: Error",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Wanneer de conversie van het ene datatype naar het andere datatype niet mogelijk is krijg je een <strong>error</strong>.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma en bedenk wat er gaat gebeuren als je het start.</li>\n  <li>Start het programma en bekijk de foutmelding? Hoe kan dit?</li>\n  <li>Dit kan dus niet, want je kan van een tekst die uit letters bestaat geen getal maken natuurlijk!</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "a = \"Dit is een string\"\nb = int(a)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_9",
+            "title": "2.09: Voorbeeld 2",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Hiernaast zie je een voorbeeld dat alles toepast wat je geleerd hebt.</li>\n  <li>Belangrijk is dat je weet dat wanneer je een input vraagt aan de gebruiker, dat dit altijd een string is. Om hiermee te rekenen moet je het eerst omzetten naar een int of een float!</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk het programma en voorspel wat het doet.</li>\n  <li>Klopt je voorspelling?</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "print(\"Bereken de oppervlakte voor je terras\")\nprint()\nlengte = int(input(\"Lengte in gehele cm?\"))\nbreedte = int(input(\"Breedte in gehele cm?\"))\n\noppervlakte = lengte * breedte\nprint()\nprint(\"De lengte is\", lengte)\nprint(\"De breedte is\", breedte)\nprint()\nprint(\"de oppervlakte is\", oppervlakte, \"vierkante cm.\")",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}

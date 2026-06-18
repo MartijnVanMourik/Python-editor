@@ -1,0 +1,112 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "4.01: intro",
+            "instruction": "<p class=\"mb-3\">In het vorige hoofdstuk hebben we geleerd om simpele programma’s te maken. In dit hoofdstuk zullen we leren om programma`s te maken die <strong>beslissingen</strong> kunnen maken.</p>\n<p class=\"mb-3\">Deze concepten lijken lastig, maar dat zijn ze niet. Aan het eind van het hoofdstuk kan je hele interessante programma`s maken. Zoals het programma wat je hiernaast kan zien.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Start het programma en kijk eens of je kan ontdekken wat het doet, en hoe het werkt. Dit kan door de variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">nummer</code> aan te passen.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "nummer = 10\n\nif nummer > 0:\n  print(\"Het nummer is positief\")\n  print()\n\nelif nummer == 0:\n  print(\"Het nummer is nul\")\n  print()\n\nelse:\n  print(\"Het nummer is negatief\")\n  print()\n\nprint(\"Klaar. Dit wordt altijd uitgeprint\")",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "4.02: Booleaanse uitspraak",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\"><div><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Je hebt in het vorige hoofdstuk geleerd wat een </span><strong style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">boolean</strong><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"> is. Dit is een variabele die alleen maar de waarde </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">False</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"> of </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">True</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"> kan hebben. Bijvoorbeeld de variabele </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">isMan</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">. Deze krijgt de waarde </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">True</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"> als het inderdaad om een man gaat.</span></div></div>\n<p class=\"mb-3\">In het voorbeeld hiernaast is \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\"><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">8 &gt; 10</code></code>\" een booleaanse uitspraak. Deze uitspraak kan waar zijn (True), of niet waar zijn (False). In het gegeven voorbeeld komt er <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">False</code> uit omdat 8 niet groter is dan 10.</p>\n<p class=\"mb-3\">Het “<code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">&gt;</code>”teken noemen we een <strong>vergelijkings-operator</strong>.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div></div><ul class=\"list-disc pl-6 space-y-1 mt-1 mb-2\">\n</ul>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n</ol>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "print(8 > 10)\nprint(8 > 12)\nprint(8 > 6)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "4.03: Vergelijkings-operatoren",
+            "instruction": "<b style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Vergelijkings-operatoren</b><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">&nbsp;gebruiken we om waardes te vergelijken . Afhankelijk van de vergelijking komt er </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">True</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"> uit of </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">False</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">.</span><br><table class=\"wysiwyg-table w-full border-collapse border border-slate-800 my-4 text-xs md:text-sm bg-slate-950/20\" style=\"border-radius: 8px; overflow: hidden;\"><thead><tr class=\"bg-slate-900\"><th class=\"border border-slate-800 p-2 text-left font-bold text-slate-200\">Symbool</th>\n                            <th class=\"border border-slate-800 p-2 text-left font-bold text-slate-200\">Uitleg</th>\n                        <th class=\"border border-slate-800 p-2 text-left font-bold text-slate-200\">Voorbeeld</th><th class=\"border border-slate-800 p-2 text-left font-bold text-slate-200\">Uitkomst</th></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">&gt;</td><td class=\"border border-slate-800 p-2 text-slate-300\">Groter dan</td><td class=\"border border-slate-800 p-2 text-slate-300\">3 &gt; 1</td><th class=\"border border-slate-800 p-2 text-left font-bold text-slate-200\"><span style=\"font-weight: normal;\">True</span></th></tr>\n                    </thead>\n                    <tbody>\n                        <tr>\n                            <td class=\"border border-slate-800 p-2 text-slate-300\">&lt;</td>\n                            <td class=\"border border-slate-800 p-2 text-slate-300\">Kleiner dan</td>\n                        <td class=\"border border-slate-800 p-2 text-slate-300\">3 &lt; 1</td><td class=\"border border-slate-800 p-2 text-slate-300\"><span style=\"font-size: 0.875rem; background-color: rgba(241, 245, 249, 0.5);\"><font color=\"#475569\">False</font></span><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem; background-color: rgb(248, 250, 252);\">&nbsp;</span></td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">==</td><td class=\"border border-slate-800 p-2 text-slate-300\">Gelijk aan</td><td class=\"border border-slate-800 p-2 text-slate-300\">3 == 1</td><td class=\"border border-slate-800 p-2 text-slate-300\">False</td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">!=</td><td class=\"border border-slate-800 p-2 text-slate-300\">Ongelijk aan</td><td class=\"border border-slate-800 p-2 text-slate-300\">3 != 1</td><td class=\"border border-slate-800 p-2 text-slate-300\">True</td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">&gt;=</td><td class=\"border border-slate-800 p-2 text-slate-300\">Groter of gelijk aan</td><td class=\"border border-slate-800 p-2 text-slate-300\">3 &gt;= 1</td><td class=\"border border-slate-800 p-2 text-slate-300\">True</td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">&lt;=</td><td class=\"border border-slate-800 p-2 text-slate-300\">Kleiner of gelijk aan</td><td class=\"border border-slate-800 p-2 text-slate-300\">3 &lt;= 1<br></td><td class=\"border border-slate-800 p-2 text-slate-300\">False</td></tr></tbody></table><ul class=\"list-disc pl-6 space-y-1 mt-1 mb-2\">\n</ul>\n<div class=\"wysiwyg-section-uitvoeren my-3\" style=\"color: rgb(51, 65, 85); font-size: 0.875rem; display: inline !important;\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\" style=\"display: inline !important;\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div></div><div><ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\"><li><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</span></li>\n  <li>Start het programma en kijk of je gelijk hebt.</li>\n</ol>\n</div>",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "x = 8\ny = 12\n\nprint(x > y)\nprint(x < y)\nprint(x == y)\nprint(x != y)\nprint(x >= y)\nprint(x <= y)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "4.04: Logische-operatoren",
+            "instruction": "<p class=\"mb-3\">Een voorbeeld van Logische-operatoren zijn and, or en not. Je hebt deze als eens gebruikt bij het spelletje \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">Booleaans Yahtzee</code>\".</p><table class=\"wysiwyg-table w-full border-collapse border border-slate-800 my-4 text-xs md:text-sm bg-slate-950/20\" style=\"border-radius: 8px; overflow: hidden;\"><thead><tr class=\"bg-slate-900\"><th class=\"border border-slate-800 p-2 text-left font-bold text-slate-200\">Operatie</th>\n                            <th class=\"border border-slate-800 p-2 text-left font-bold text-slate-200\">Uitleg</th>\n                        </tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">and</td><td class=\"border border-slate-800 p-2 text-slate-300\">True als beide uitspraken waar zijn</td></tr><tr><td class=\"border border-slate-800 p-2 text-slate-300\">or</td><td class=\"border border-slate-800 p-2 text-slate-300\">True als een van de uitspraken waar is</td></tr>\n                    </thead>\n                    <tbody>\n                        <tr>\n                            <td class=\"border border-slate-800 p-2 text-slate-300\">not</td>\n                            <td class=\"border border-slate-800 p-2 text-slate-300\">True als de uitspraak False is</td>\n                        </tr>\n                    </tbody>\n                </table>\n                <div class=\"wysiwyg-section-uitvoeren my-3\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div></div><div class=\"wysiwyg-section-uitvoeren my-3\">\n<p class=\"mb-3\"><ol><li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li><li>Start het programma en kijk of je gelijk hebt.</li></ol></p>\n\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "print(20 < 10 and 10 < 20)\nprint(20 < 10 or 10 < 20)\n\nprint(False and True)\nprint(False or True)\n\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "4.05: and",
+            "instruction": "<p class=\"mb-3\">Een uitspraak met een&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">and</code>&nbsp;operatie erin evalueert of beide kanten&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">True</code>&nbsp;zijn.</p><p><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">In <b>regel 9&nbsp;</b>moet je eerst kijken wat er uit&nbsp;</span><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">b&gt;a</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">&nbsp;komt. Dit is&nbsp;</span><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">True</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">. Uit&nbsp;</span><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">c&gt;a</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">&nbsp;komt ook&nbsp;</span><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">True</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">. Omdat beide uitspraken&nbsp;</span><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">True</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">&nbsp;zijn komt er uit het geheel dus ook True.</span></p>\n                <div class=\"wysiwyg-section-uitvoeren my-3\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div></div><div class=\"wysiwyg-section-uitvoeren my-3\">\n<p class=\"mb-3\"></p><ol><li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li><li>Start het programma en kijk of je gelijk hebt.</li></ol><p></p>\n\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "print(True and True)\nprint(False and True)\nprint(False and False)\n\na = 1\nb = 2\nc = 3\n\nprint(b>a and c>a)\nprint(c>a and c<0)",
+                    "isMain": true
+                }
+            ],
+            "tests": [],
+            "previewImage": ""
+        },
+        {
+            "id": "task_7",
+            "title": "4.06: or",
+            "instruction": "<p class=\"mb-3\">Een uitspraak met een&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">or</code>&nbsp;operatie erin evalueert of slechts een van beide kanten&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">True</code>&nbsp;zijn.</p><p><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">In <b>regel 9&nbsp;</b>moet je eerst kijken wat er uit&nbsp;</span><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">b&gt;a</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">&nbsp;komt. Dit is&nbsp;</span><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">True</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">. Je weet dan meteen dat de gehele uitspraak ook&nbsp;</span><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">True</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">&nbsp;is omdat het om de&nbsp;</span><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">or</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">&nbsp;operatie gaat.</span></p>\n                <div class=\"wysiwyg-section-uitvoeren my-3\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div></div><div class=\"wysiwyg-section-uitvoeren my-3\">\n<p class=\"mb-3\"></p><ol><li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li><li>Start het programma en kijk of je gelijk hebt.</li></ol><p></p>\n\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "print(True or True)\nprint(False or True)\nprint(False or False)\n\na = 1\nb = 2\nc = 3\n\nprint(b>a or c>a)\nprint(c>a or c<0)\nprint(c==1 or c==2 or c==3 or c==4)",
+                    "isMain": true
+                }
+            ],
+            "tests": [],
+            "previewImage": ""
+        },
+        {
+            "id": "task_6",
+            "title": "4.07: not",
+            "instruction": "<p class=\"mb-3\">Een uitspraak met een&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">not</code>&nbsp;operatie ervoor wordt&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">True</code>&nbsp;als de uitkomst daarvoor&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">False</code>&nbsp;was.</p>\n<p><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">In <b>regel 7</b> moet je eerst kijken wat er uit&nbsp;</span><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">a == 10</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">&nbsp;komt. Dit is&nbsp;</span><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">True</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">. Omdat er </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">not(a == 10)</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"> staat komt er vervolgens&nbsp;</span><code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">False</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">&nbsp;uit.</span></p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<p class=\"mb-3\"></p><ol><li>Bekijk de code hiernaast en probeer te voorspellen wat de uitkomst zal zijn.</li><li>Start het programma en kijk of je gelijk hebt.</li></ol><p></p>\n\n<div class=\"wysiwyg-info-box bg-blue-500/10 border border-blue-500/30 rounded-xl p-3 text-xs text-blue-300 my-3\"><i class=\"fa-solid fa-info-circle mr-1.5 text-blue-400\"></i> Let op: a = 10 betekent dat a de waarde 10 krijgt. a == 10 is de vraag of a de waarde van 10 heeft.</div>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "print(not True)\nprint(not False)\nprint()\n\na = 10\n\nprint(not(a == 10))\nprint(not(a != 10))\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_8",
+            "title": "4.08: Voorbeeld",
+            "instruction": "<p class=\"mb-3\">Hiernaast zie je een programma dat eerst de waarde van 5 dobbelstenen vraagt. Daarna zal het programma aangeven of je Yahtzee hebt gegooid. Yahtzee zijn vijf dobbelstenen met dezelfde waarde.</p>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<p class=\"mb-3\"><ol><li>Start het programma en kijk of je gelijk hebt.</li><li>Bekijk de code en onderzoek waarom dit werkt.</li></ol></p>\n\n<div class=\"wysiwyg-info-box bg-blue-500/10 border border-blue-500/30 rounded-xl p-3 text-xs text-blue-300 my-3\"><i class=\"fa-solid fa-info-circle mr-1.5 text-blue-400\"></i> Let op: Dit is puur een voorbeeld. Normaal zou je dit anders aanpakken. Dit leren we later nog.</div>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "print(\"Dit programma bepaalt of u Yahtzee gegooid hebt\")\nprint()\n\nsteen1 = input(\"Hoeveel is dobbelsteen 1?\")\nsteen2 = input(\"Hoeveel is dobbelsteen 2?\")\nsteen3 = input(\"Hoeveel is dobbelsteen 3?\")\nsteen4 = input(\"Hoeveel is dobbelsteen 4?\")\nsteen5 = input(\"Hoeveel is dobbelsteen 5?\")\n\nprint()\nprint(steen1 == steen2 and steen1 == steen3 and steen1 == steen4 and steen1 == steen5)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}
