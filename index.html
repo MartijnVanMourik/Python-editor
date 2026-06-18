@@ -3476,17 +3476,7 @@
             isInitializingTask = false;
         }
 
-        function completeCurrentTask() {
-            if (!currentTaskId) return;
-
-            const task = taskConfig.tabs.find(t => t.id === currentTaskId);
-            if (task && task.tests && task.tests.length > 0) {
-                if (!checkIfPassed(currentTaskId)) {
-                    const confirmComplete = confirm("Let op: Niet alle test cases zijn succesvol geslaagd. Weet je zeker dat je deze opdracht toch wilt voltooien?");
-                    if (!confirmComplete) return;
-                }
-            }
-
+        function executeTaskCompletion(task) {
             const workspace = getTaskWorkspace(currentTaskId);
             if (workspace) {
                 workspace.status = "completed";
@@ -3509,6 +3499,40 @@
                 selectTask(nextTask.id);
             } else {
                 showToast("🎉 Gefeliciteerd! Je hebt de laatste opdracht voltooid!");
+            }
+        }
+
+        function completeCurrentTask() {
+            if (!currentTaskId) return;
+
+            const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+            if (task && task.tests && task.tests.length > 0 && !checkIfPassed(currentTaskId)) {
+                // Show custom warning modal
+                const modal = document.createElement("div");
+                modal.innerHTML = `
+                    <div class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-[99999]">
+                        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl">
+                            <h3 class="text-lg font-bold text-amber-400 mb-2">Opdracht voltooien?</h3>
+                            <p class="text-sm text-slate-300 mb-6">Let op: Niet alle test cases zijn succesvol geslaagd. Weet je zeker dat je deze opdracht toch wilt voltooien?</p>
+                            <div class="flex justify-end gap-3">
+                                <button id="cancel-complete" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 transition text-sm">Annuleren</button>
+                                <button id="confirm-complete" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold transition text-sm">Ja, voltooien</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+
+                document.getElementById("cancel-complete").onclick = function () {
+                    modal.remove();
+                };
+
+                document.getElementById("confirm-complete").onclick = function () {
+                    modal.remove();
+                    executeTaskCompletion(task);
+                };
+            } else {
+                executeTaskCompletion(task);
             }
         }
 
