@@ -4205,6 +4205,7 @@
                     });
                 },
                 inputfunTakesPrompt: true,
+                __future__: Sk.python3,
                 yieldLimit: 100,
                 execLimit: (() => {
                     const urlParams = new URLSearchParams(window.location.search);
@@ -4387,6 +4388,7 @@
                         }
                     },
                     inputfunTakesPrompt: true,
+                    __future__: Sk.python3,
                     yieldLimit: 100,
                     execLimit: 10000,
                     killableWhile: true,
@@ -4409,7 +4411,8 @@
                         // Evaluate gathered print outputs against expectations
                         const rawPrintOutput = printOutputs.join("").trim();
                         const rawConsoleOutput = consoleOutputs.join("").trim();
-                        const checkPassed = evaluateOutput(rawPrintOutput, testCase.expectedOutput, testCase.matchType);
+                        const checkPassed = evaluateOutput(rawPrintOutput, testCase.expectedOutput, testCase.matchType) ||
+                                            evaluateOutput(rawConsoleOutput, testCase.expectedOutput, testCase.matchType);
                         resolve({
                             name: testCase.name,
                             inputs: testCase.inputs,
