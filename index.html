@@ -2998,8 +2998,10 @@
 
                 const status = getTaskStatus(task.id);
                 let badgeHtml = '';
-                if (status === 'completed') {
-                    badgeHtml = `<i class="fa-solid fa-circle-check text-emerald-500"></i>`;
+                if (status === 'bypassed') {
+                    badgeHtml = `<i class="fa-solid fa-circle-check text-orange-400" title="Voltooid met waarschuwing (niet alle tests geslaagd)"></i>`;
+                } else if (status === 'completed') {
+                    badgeHtml = `<i class="fa-solid fa-circle-check text-emerald-500" title="Succesvol voltooid (alle tests geslaagd)"></i>`;
                 } else if (status === 'in_progress') {
                     badgeHtml = `<i class="fa-solid fa-circle text-amber-500"></i>`;
                 } else {
@@ -3190,6 +3192,9 @@
             // 1. Is it completed? (tests passed OR status is explicitly completed)
             const isPassed = checkIfPassed(taskId);
             if (isPassed || (hasWorkspace && workspace.status === "completed")) {
+                if (hasWorkspace && workspace.bypassed) {
+                    return "bypassed";
+                }
                 return "completed";
             }
 
@@ -3480,6 +3485,11 @@
             const workspace = getTaskWorkspace(currentTaskId);
             if (workspace) {
                 workspace.status = "completed";
+                if (task && task.tests && task.tests.length > 0 && !checkIfPassed(currentTaskId)) {
+                    workspace.bypassed = true;
+                } else {
+                    delete workspace.bypassed;
+                }
                 userProgress[currentTaskId] = workspace;
                 localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
             }
@@ -4434,6 +4444,7 @@
                 const workspace = getTaskWorkspace(task.id);
                 if (workspace) {
                     workspace.status = "completed";
+                    delete workspace.bypassed;
                     userProgress[task.id] = workspace;
                     localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
                 }
