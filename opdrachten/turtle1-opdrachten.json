@@ -61,7 +61,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\ncolor(\"black\") \nspeed(5)\npensize(8)\n\n#Ga naar het begin\npenup()\ngoto(-110,-180)",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\ncolor(\"black\") \nspeed(5)\npensize(8)\n\n#Ga naar het begin\npenup()\ngoto(-110,-180)\npendown()\n  \n#Maak de mast\nsetheading(90) #hiermee kijk je omhoog\nforward(320)\n\n#Maak de eerste strook\n\n#Maak de tweede strook \n\n#Maak de derde strook",
                     "isMain": true
                 }
             ],
