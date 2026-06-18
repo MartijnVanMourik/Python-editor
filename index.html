@@ -1894,6 +1894,7 @@
         let webPreviewBlobUrl = null; // Blob URL for sandboxed web preview iframe
         let isEditMode = false; // Flag for teacher editing mode
         let appMode = "student"; // State tracking for mode: teacher, student, or demo
+        let loadedAssignmentsKey = "tabs"; // Track the original JSON key for assignments
         let canvasSize = 400; // Default canvas size in pixels (both width and height)
         let menuConfig = null; // Force show/hide task selector menu ('show', 'hide', or null)
         let isTaskSelectorCollapsed = false; // Flag to track if the task selector is collapsed
@@ -2827,12 +2828,19 @@
         // Shared helper to initialize or refresh workspace when a config is loaded or imported
         function initializeConfigLoaded(skipMigration = false) {
             if (taskConfig) {
-                if (taskConfig.assignments && !taskConfig.tabs) {
+                if (taskConfig.tabs) {
+                    loadedAssignmentsKey = "tabs";
+                } else if (taskConfig.assignments) {
+                    loadedAssignmentsKey = "assignments";
                     taskConfig.tabs = taskConfig.assignments;
-                } else if (taskConfig.tasks && !taskConfig.tabs) {
+                } else if (taskConfig.tasks) {
+                    loadedAssignmentsKey = "tasks";
                     taskConfig.tabs = taskConfig.tasks;
-                } else if (taskConfig.opdrachten && !taskConfig.tabs) {
+                } else if (taskConfig.opdrachten) {
+                    loadedAssignmentsKey = "opdrachten";
                     taskConfig.tabs = taskConfig.opdrachten;
+                } else {
+                    loadedAssignmentsKey = "tabs";
                 }
             }
 
@@ -7623,26 +7631,37 @@
             finalConfig.courseType = getCourseType();
 
             // Populate all codes into files array template
-            finalConfig.tabs.forEach(task => {
-                const ws = getTaskWorkspace(task.id);
-                if (ws && ws.files) {
-                    task.files = Object.keys(ws.files).map(filename => ({
-                        filename: filename,
-                        initialCode: ws.files[filename],
-                        isMain: filename === "main.py" || filename === "index.html"
-                    }));
+            if (finalConfig.tabs) {
+                finalConfig.tabs.forEach(task => {
+                    const ws = getTaskWorkspace(task.id);
+                    if (ws && ws.files) {
+                        task.files = Object.keys(ws.files).map(filename => ({
+                            filename: filename,
+                            initialCode: ws.files[filename],
+                            isMain: filename === "main.py" || filename === "index.html"
+                        }));
 
-                    // Remove legacy properties from the task root
-                    delete task.initialCode;
-                    delete task.filename;
-                }
-            });
-
-            // If there is exactly 1 assignment, rename 'tabs' to a more logical 'assignments'
-            if (finalConfig.tabs && finalConfig.tabs.length === 1) {
-                finalConfig.assignments = finalConfig.tabs;
-                delete finalConfig.tabs;
+                        // Remove legacy properties from the task root
+                        delete task.initialCode;
+                        delete task.filename;
+                    }
+                });
             }
+
+            // Consolidate curriculum array key and clean up other stale properties
+            const updatedTabs = finalConfig.tabs || [];
+            delete finalConfig.tabs;
+            delete finalConfig.assignments;
+            delete finalConfig.tasks;
+            delete finalConfig.opdrachten;
+
+            // Determine final key name (use original loadedAssignmentsKey, or 'assignments' if exactly 1 assignment)
+            let finalKey = loadedAssignmentsKey;
+            if (updatedTabs.length === 1) {
+                finalKey = "assignments";
+            }
+
+            finalConfig[finalKey] = updatedTabs;
 
             const jsonString = JSON.stringify(finalConfig, null, 4);
             const blob = new Blob([jsonString], { type: "application/json;charset=utf-8" });
