@@ -40,6 +40,14 @@
             overflow: hidden;
         }
 
+        .console-user-input {
+            color: #38bdf8 !important; /* sky-400 equivalent for dark theme */
+            font-weight: 600 !important;
+        }
+        .theme-light .console-user-input {
+            color: #0284c7 !important; /* sky-700 equivalent for light theme */
+        }
+
         :root {
             --editor-color-default: #334155;
             --editor-color-white-black: #0f172a;
@@ -3346,12 +3354,32 @@
         function appendToConsole(text) {
             const consoleBox = document.getElementById("console-output");
             if (consoleBox) {
-                consoleBox.innerText += text;
+                consoleBox.appendChild(document.createTextNode(text));
                 consoleBox.scrollTop = consoleBox.scrollHeight;
             }
             const turtleBox = document.getElementById("turtle-console-output");
             if (turtleBox) {
-                turtleBox.innerText += text;
+                turtleBox.appendChild(document.createTextNode(text));
+                turtleBox.scrollTop = turtleBox.scrollHeight;
+            }
+            runOutputs.push(text);
+        }
+
+        function appendToConsoleStyled(text, className) {
+            const consoleBox = document.getElementById("console-output");
+            if (consoleBox) {
+                const span = document.createElement("span");
+                span.className = className;
+                span.textContent = text;
+                consoleBox.appendChild(span);
+                consoleBox.scrollTop = consoleBox.scrollHeight;
+            }
+            const turtleBox = document.getElementById("turtle-console-output");
+            if (turtleBox) {
+                const span = document.createElement("span");
+                span.className = className;
+                span.textContent = text;
+                turtleBox.appendChild(span);
                 turtleBox.scrollTop = turtleBox.scrollHeight;
             }
             runOutputs.push(text);
@@ -3370,13 +3398,17 @@
                 return;
             }
 
-            // Append prompt text directly into the active console
-            appendToConsole(promptText || "Invoer: ");
+            // Append prompt text directly into the active console, ensuring space
+            let displayPrompt = promptText || "Invoer: ";
+            if (displayPrompt && !displayPrompt.endsWith(" ") && !displayPrompt.endsWith("\n")) {
+                displayPrompt += " ";
+            }
+            appendToConsole(displayPrompt);
 
-            // Create inline terminal input element
+            // Create inline terminal input element styled with the colored text class
             const inputEl = document.createElement("input");
             inputEl.type = "text";
-            inputEl.className = "bg-transparent text-inherit border-none outline-none p-0 m-0 font-mono text-inherit focus:ring-0 focus:outline-none inline-block";
+            inputEl.className = "bg-transparent console-user-input border-none outline-none p-0 m-0 font-mono focus:ring-0 focus:outline-none inline-block";
             inputEl.style.width = "1.5ch";
             inputEl.autofocus = true;
             
@@ -3414,8 +3446,8 @@
                 if (e.key === "Enter") {
                     const value = inputEl.value;
                     cleanup();
-                    // Print user entry + newline back to console history
-                    appendToConsole(value + "\n");
+                    // Print user entry + newline back to console history with custom styling
+                    appendToConsoleStyled(value + "\n", "console-user-input");
                     // Resolve promise to resume Skulpt interpreter execution
                     resolveCallback(value);
                 }
@@ -4213,15 +4245,19 @@
                         return Sk.builtinFiles["files"][file];
                     },
                     inputfun: function (prompt) {
+                        let displayPrompt = prompt;
+                        if (displayPrompt && !displayPrompt.endsWith(" ") && !displayPrompt.endsWith("\n")) {
+                            displayPrompt += " ";
+                        }
                         // Return inputs queue sequentially
                         if (testInputsQueue.length > 0) {
                             const val = testInputsQueue.shift();
                             // Echo user typed text mock simulated
-                            consoleOutputs.push(prompt + val + "\n");
+                            consoleOutputs.push(displayPrompt + val + "\n");
                             return val;
                         } else {
                             // Empty queue fallback to prevent freezing
-                            consoleOutputs.push(prompt + "[Geen test invoer meer]\n");
+                            consoleOutputs.push(displayPrompt + "[Geen test invoer meer]\n");
                             return "";
                         }
                     },
@@ -7133,43 +7169,18 @@
                 }
             }
 
-            // 1. Check if we have an embedded preview image
-            if (task.previewImage) {
+            // 1. Check if we have an inline base64/URL preview image configured
+            if (task.previewImage && task.previewImage.trim() !== "") {
                 previewImg.src = task.previewImage;
                 previewContainer.classList.remove("hidden");
                 updateDeleteButtonVisibility(true);
                 return;
             }
 
-            // 2. Check if the preview image was explicitly deleted/cleared
-            if (task.previewImage === "") {
-                previewImg.src = "";
-                previewContainer.classList.add("hidden");
-                updateDeleteButtonVisibility(false);
-                return;
-            }
-
-            // 3. Fallback to probed image file on disk
-            // Prioritize task ID to prevent main.png collisions on multi-file workspace entrypoints
-            let filenameWithoutPy = task.id || "opdracht";
-            if (task.filename && task.filename !== "main.py" && task.filename !== "index.html") {
-                filenameWithoutPy = task.filename.replace(/\.(py|html)$/, "");
-            }
-            const targetSrc = `opdrachten/${filenameWithoutPy}.png`;
-
-            // Probe image exists dynamically
-            const tempImg = new Image();
-            tempImg.onload = function () {
-                previewImg.src = targetSrc;
-                previewContainer.classList.remove("hidden");
-                updateDeleteButtonVisibility(true); // Allow clearing/overriding probed image as well
-            };
-            tempImg.onerror = function () {
-                previewImg.src = "";
-                previewContainer.classList.add("hidden");
-                updateDeleteButtonVisibility(false);
-            };
-            tempImg.src = targetSrc;
+            // 2. Default case: no preview image configured
+            previewImg.src = "";
+            previewContainer.classList.add("hidden");
+            updateDeleteButtonVisibility(false);
         }
 
         // Delete/clear preview image

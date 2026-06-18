@@ -248,7 +248,6 @@ Boven de opdrachtomschrijving verschijnt een bewerkingsbalk. Hiermee kun je gese
 *   **Live Preview**: De voorbeeldtekening verschijnt onmiddellijk live onder de omschrijving onder het kopje **"Verwacht resultaat:"**.
 *   **Verwijderen**: In Docentenmodus verschijnt er een subtiel vuilnisbak-icoontje naast het kopje om de preview met één klik te wissen.
 *   **Offline Compatibiliteit**: Omdat de afbeeldingen rechtstreeks in de geëxporteerde JSON worden ingebed, hoef je geen losse PNG-afbeeldingen meer op een server te plaatsen. De opdrachtenreeks is 100% zelfvoorzienend en offline-compatible!
-*   **Disk Fallback**: Mocht er geen ingebedde afbeelding zijn, dan zoekt de editor automatisch naar een lokaal bestand op schijf (`opdrachten/<bestandsnaam-zonder-py>.png`) om compatibel te blijven met bestaand lesmateriaal.
 
 #### 5. Interactieve Unit Test Builder
 Wanneer je naar het tabblad **Tests** schakelt onder de console, zie je in de Docentenmodus een interactieve formulier-builder in plaats van lege testresultaten:
