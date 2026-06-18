@@ -1828,6 +1828,62 @@
         let canvasSize = 400; // Default canvas size in pixels (both width and height)
         let menuConfig = null; // Force show/hide task selector menu ('show', 'hide', or null)
         let isTaskSelectorCollapsed = false; // Flag to track if the task selector is collapsed
+
+        const wysiwygHistory = {
+            stack: [],
+            index: -1,
+            isApplying: false,
+
+            init(initialHtml) {
+                this.stack = [initialHtml];
+                this.index = 0;
+            },
+
+            save() {
+                if (this.isApplying || isViewingHtml) return;
+                const docBox = document.getElementById("assignment-instruction");
+                if (!docBox) return;
+                const html = docBox.innerHTML;
+                
+                if (this.stack[this.index] === html) return;
+
+                this.stack = this.stack.slice(0, this.index + 1);
+                this.stack.push(html);
+                if (this.stack.length > 50) {
+                    this.stack.shift();
+                } else {
+                    this.index++;
+                }
+            },
+
+            undo() {
+                if (this.index > 0) {
+                    this.index--;
+                    this.applyState();
+                    return true;
+                }
+                return false;
+            },
+
+            redo() {
+                if (this.index < this.stack.length - 1) {
+                    this.index++;
+                    this.applyState();
+                    return true;
+                }
+                return false;
+            },
+
+            applyState() {
+                const docBox = document.getElementById("assignment-instruction");
+                if (!docBox) return;
+                this.isApplying = true;
+                docBox.innerHTML = this.stack[this.index];
+                saveActiveInstruction(false); // don't push history on apply
+                docBox.focus();
+                this.isApplying = false;
+            }
+        };
         let isEmbed = false; // Flag to hide header and buttons for iframe embeds
         let isEmbedRestart = false; // Flag to show run/interrupt button in embed mode
         let isCompactMode = false; // Flag for compact mode layout (width 800-900px with bottom sliding output drawer)
@@ -3118,10 +3174,36 @@
                 const docBox = document.getElementById("assignment-instruction");
                 if (docBox) {
                     docBox.innerHTML = task.instruction;
+                    wysiwygHistory.init(task.instruction);
                     if (isEditMode) {
                         docBox.contentEditable = "true";
-                        docBox.oninput = saveActiveInstruction;
+                        let inputDebounceTimer = null;
+                        docBox.oninput = function () {
+                            saveActiveInstruction(false);
+                            clearTimeout(inputDebounceTimer);
+                            inputDebounceTimer = setTimeout(() => {
+                                wysiwygHistory.save();
+                            }, 500);
+                        };
                         docBox.onkeydown = function (e) {
+                            const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+                            const isCmdOrCtrl = isMac ? e.metaKey : e.ctrlKey;
+                            
+                            // Undo: Ctrl+Z / Cmd+Z
+                            if (isCmdOrCtrl && e.key.toLowerCase() === 'z' && !e.shiftKey) {
+                                if (wysiwygHistory.undo()) {
+                                    e.preventDefault();
+                                    return;
+                                }
+                            }
+                            // Redo: Ctrl+Y / Cmd+Shift+Z / Cmd+Y
+                            if ((isCmdOrCtrl && e.key.toLowerCase() === 'y') || (isMac && isCmdOrCtrl && e.shiftKey && e.key.toLowerCase() === 'z')) {
+                                if (wysiwygHistory.redo()) {
+                                    e.preventDefault();
+                                    return;
+                                }
+                            }
+
                             if (e.key === "Enter") {
                                 const selection = window.getSelection();
                                 if (selection.rangeCount) {
@@ -6770,12 +6852,15 @@
             }
         }
 
-        function saveActiveInstruction() {
+        function saveActiveInstruction(shouldSaveHistory = true) {
             if (!currentTaskId || isViewingHtml) return;
             const docBox = document.getElementById("assignment-instruction");
             const task = taskConfig.tabs.find(t => t.id === currentTaskId);
             if (task && docBox) {
                 task.instruction = docBox.innerHTML;
+                if (shouldSaveHistory) {
+                    wysiwygHistory.save();
+                }
             }
         }
 
