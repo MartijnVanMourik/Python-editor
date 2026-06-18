@@ -3479,6 +3479,14 @@
         function completeCurrentTask() {
             if (!currentTaskId) return;
 
+            const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+            if (task && task.tests && task.tests.length > 0) {
+                if (!checkIfPassed(currentTaskId)) {
+                    const confirmComplete = confirm("Let op: Niet alle test cases zijn succesvol geslaagd. Weet je zeker dat je deze opdracht toch wilt voltooien?");
+                    if (!confirmComplete) return;
+                }
+            }
+
             const workspace = getTaskWorkspace(currentTaskId);
             if (workspace) {
                 workspace.status = "completed";
@@ -3487,7 +3495,6 @@
             }
 
             // Also mark as passed in localStorage for tests checkmark if there is a tests array
-            const task = taskConfig.tabs.find(t => t.id === currentTaskId);
             if (task && task.tests && task.tests.length > 0) {
                 const key = getTaskPassedKey(currentTaskId);
                 const passedArray = Array(task.tests.length).fill(true);
