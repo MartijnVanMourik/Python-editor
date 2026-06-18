@@ -3001,11 +3001,13 @@
                 if (status === 'bypassed') {
                     badgeHtml = `<i class="fa-solid fa-circle-check text-orange-400" title="Voltooid met waarschuwing (niet alle tests geslaagd)"></i>`;
                 } else if (status === 'completed') {
-                    badgeHtml = `<i class="fa-solid fa-circle-check text-emerald-500" title="Succesvol voltooid (alle tests geslaagd)"></i>`;
+                    const hasTests = task.tests && task.tests.length > 0;
+                    const tooltipText = hasTests ? "Succesvol voltooid (alle tests geslaagd)" : "Succesvol voltooid";
+                    badgeHtml = `<i class="fa-solid fa-circle-check text-emerald-500" title="${tooltipText}"></i>`;
                 } else if (status === 'in_progress') {
-                    badgeHtml = `<i class="fa-solid fa-circle text-amber-500"></i>`;
+                    badgeHtml = `<i class="fa-solid fa-circle text-amber-500" title="Bezig met bewerken"></i>`;
                 } else {
-                    badgeHtml = `<i class="fa-regular fa-circle text-slate-500 dark:text-slate-400"></i>`;
+                    badgeHtml = `<i class="fa-regular fa-circle text-slate-500 dark:text-slate-400" title="Nog niet gestart"></i>`;
                 }
 
                 btn.innerHTML = `
