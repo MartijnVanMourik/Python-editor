@@ -67,7 +67,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "shape(\"turtle\")\ncolor(\"black\")\nspeed(2)\n\nforward(100)\nleft(90)\nforward(100)",
+                    "initialCode": "from turtle import *\n\nshape(\"turtle\")\ncolor(\"black\")\nspeed(2)\n\nforward(100)\nleft(90)\nforward(100)",
                     "isMain": true
                 }
             ],
