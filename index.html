@@ -1829,6 +1829,7 @@
         let courseNamespace = "default"; // Namespace identifier based on loaded course config URL
         let activeTheme = "light"; // Active theme mode: 'light' (default) or 'dark'
         let errorLineHandle = null; // Track highlighted CodeMirror line handle
+        let isInitializingTask = false; // Flag to prevent setup toasts on initial load
 
         function clearErrorHighlight() {
             if (errorLineHandle !== null) {
@@ -2466,14 +2467,18 @@
                                     btnTests.classList.add("hidden");
                                     if (testBtn) testBtn.classList.add("hidden");
                                     switchOutputSubTab('turtle');
-                                    showToast("🐢 Turtle gedetecteerd: Canvas geopend!");
+                                    if (!isInitializingTask) {
+                                        showToast("🐢 Turtle gedetecteerd: Canvas geopend!");
+                                    }
                                 } else if (!isTurtle && isCurrentlyTurtleVisible) {
                                     btnTurtle.classList.add("hidden");
                                     btnConsole.classList.remove("hidden");
                                     btnTests.classList.remove("hidden");
                                     if (testBtn) testBtn.classList.remove("hidden");
                                     switchOutputSubTab('console');
-                                    showToast("💻 Console geopend (geen turtle)");
+                                    if (!isInitializingTask) {
+                                        showToast("💻 Console geopend (geen turtle)");
+                                    }
                                 }
                             }
                         }
@@ -2960,7 +2965,16 @@
                 if (taskExists) {
                     selectTask(initialTaskId);
                 } else {
-                    selectTask(taskConfig.tabs[0].id);
+                    if (isCompactMode) {
+                        const firstUncompleted = taskConfig.tabs.find(t => getTaskStatus(t.id) !== 'completed');
+                        if (firstUncompleted) {
+                            selectTask(firstUncompleted.id);
+                        } else {
+                            selectTask(taskConfig.tabs[0].id);
+                        }
+                    } else {
+                        selectTask(taskConfig.tabs[0].id);
+                    }
                 }
             }
         }
@@ -3060,6 +3074,7 @@
         }
 
         function selectTask(taskId) {
+            isInitializingTask = true;
             closeOutputDrawer();
             currentTaskId = taskId;
             renderTaskSelector();
@@ -3272,6 +3287,7 @@
                 // Initialize run buttons layout and text state
                 setExecutionRunningState(false);
             }
+            isInitializingTask = false;
         }
 
         function completeCurrentTask() {
