@@ -3046,22 +3046,23 @@
             if (!task) return "not_started";
 
             const workspace = userProgress[taskId];
+            const hasWorkspace = workspace && typeof workspace === "object" && workspace.files;
 
             // 1. Is it completed? (tests passed OR status is explicitly completed)
             const isPassed = checkIfPassed(taskId);
-            if (isPassed || (workspace && workspace.status === "completed")) {
+            if (isPassed || (hasWorkspace && workspace.status === "completed")) {
                 return "completed";
             }
 
             // 2. Is it in progress?
-            if (workspace) {
+            if (hasWorkspace) {
                 if (workspace.status === "in_progress") {
                     return "in_progress";
                 }
 
                 // Check if current files differ from template/initial files
                 const initialWorkspace = getTaskInitialWorkspace(taskId);
-                if (initialWorkspace) {
+                if (initialWorkspace && initialWorkspace.files) {
                     let isDifferent = false;
                     for (const filename in initialWorkspace.files) {
                         const currentVal = workspace.files[filename];
