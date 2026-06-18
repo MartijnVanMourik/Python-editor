@@ -2473,8 +2473,18 @@
                                 } else if (!isTurtle && isCurrentlyTurtleVisible) {
                                     btnTurtle.classList.add("hidden");
                                     btnConsole.classList.remove("hidden");
-                                    btnTests.classList.remove("hidden");
-                                    if (testBtn) testBtn.classList.remove("hidden");
+                                    
+                                    const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+                                    const hasTests = task && task.tests && task.tests.length > 0;
+                                    const showTestsElements = isEditMode || hasTests;
+                                    if (btnTests) {
+                                        if (showTestsElements) btnTests.classList.remove("hidden");
+                                        else btnTests.classList.add("hidden");
+                                    }
+                                    if (testBtn) {
+                                        if (showTestsElements) testBtn.classList.remove("hidden");
+                                        else testBtn.classList.add("hidden");
+                                    }
                                     switchOutputSubTab('console');
                                     if (!isInitializingTask) {
                                         showToast("💻 Console geopend (geen turtle)");
@@ -2965,13 +2975,10 @@
                 if (taskExists) {
                     selectTask(initialTaskId);
                 } else {
-                    if (isCompactMode) {
-                        const firstUncompleted = taskConfig.tabs.find(t => getTaskStatus(t.id) !== 'completed');
-                        if (firstUncompleted) {
-                            selectTask(firstUncompleted.id);
-                        } else {
-                            selectTask(taskConfig.tabs[0].id);
-                        }
+                    const savedActiveTaskId = localStorage.getItem(`edu_py_editor_active_task_${courseNamespace}`);
+                    const savedTaskExists = savedActiveTaskId && taskConfig.tabs.some(t => t.id === savedActiveTaskId);
+                    if (savedTaskExists) {
+                        selectTask(savedActiveTaskId);
                     } else {
                         selectTask(taskConfig.tabs[0].id);
                     }
@@ -3078,6 +3085,10 @@
             closeOutputDrawer();
             currentTaskId = taskId;
             renderTaskSelector();
+
+            if (courseNamespace) {
+                localStorage.setItem(`edu_py_editor_active_task_${courseNamespace}`, taskId);
+            }
 
             const task = taskConfig.tabs.find(t => t.id === taskId);
 
@@ -3268,8 +3279,17 @@
                     } else {
                         if (btnTurtle) btnTurtle.classList.add("hidden");
                         if (btnConsole) btnConsole.classList.remove("hidden");
-                        if (btnTests) btnTests.classList.remove("hidden");
-                        if (testBtn) testBtn.classList.remove("hidden");
+                        
+                        const hasTests = task && task.tests && task.tests.length > 0;
+                        const showTestsElements = isEditMode || hasTests;
+                        if (btnTests) {
+                            if (showTestsElements) btnTests.classList.remove("hidden");
+                            else btnTests.classList.add("hidden");
+                        }
+                        if (testBtn) {
+                            if (showTestsElements) testBtn.classList.remove("hidden");
+                            else testBtn.classList.add("hidden");
+                        }
                         switchOutputSubTab('console');
                     }
                 }
