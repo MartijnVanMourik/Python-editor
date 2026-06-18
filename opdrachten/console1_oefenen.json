@@ -1,0 +1,175 @@
+{
+    "title": "Python & Web Editor",
+    "courseType": "python",
+    "tabs": [
+        {
+            "id": "task_1",
+            "title": "1.01: Je eerste programma",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Welkom bij de Python module. Deze module dekt stap voor stap de belangrijkste aspecten van Python. Aan het einde kan je zelf prima Python programmeren. De enige manier om Python te leren is door zelf code te schrijven.</li>\n  <li>Om het leren makkelijker te maken is er in deze module een Python editor toegevoegd.</li>\n  <li>Deze gebruik je om de code uit te voeren en vervolgens de output te zien.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit door op <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">Run</code> te klikken.</li>\n  <li>Klik hieronder op&nbsp;<code class=\"bg-slate-950 px-1 py-0.5 rounded text-yellow-400 border border-slate-800 font-mono text-xs\">voltooien</code>&nbsp; om de opdracht af te ronden. Je gaat dan vanzelf door naar de volgende opdracht.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "# Schrijf hier je begin-code\nprint('Hallo Wereld!')\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_2",
+            "title": "1.02: Hallo Wereld",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Het programma wat we hier zien is het “<code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">Hallo wereld!</code>” programma. De uitkomst van het programma is dat de tekst “<code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">Hallo wereld!</code>” op het scherm getoond wordt.</li>\n  <li>Het \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\"><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">hallo wereld</code></code>\" programma is vaak het eerste programma dat programmeurs maken. In sommige programmeertalen is het wel 8 regels lang. In Python is het maar 1 regel lang, en juist die simpelheid maakt Python een hele fijne programmeertaal.</li>\n  <li>Je ziet in het programma de instructie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">print()</code>. Dit is een <strong>functie</strong>. Het zet alles wat tussen de aanhalingstekens staat op het scherm. We zullen hier later nog meer over leren.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit door op <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">Run</code> te klikken en zie de tekst verschijnen.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-bewerken my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-pen-to-square text-amber-400\"></i> Bewerken:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Zorg dat je een andere tekst op het scherm print</li>\n  <li>Zorg dat je twee teksten op het scherm print</li><li>Klaar? Druk dan weer op voltooien om de opdracht af te ronden.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "print(\"Hallo wereld!\")\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_3",
+            "title": "1.03: Variabelen",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Een <strong>variabele</strong> gebruik je om data (waarden) in op te slaan. Zie het voorbeeld hiernaast.</li>\n  <li>Hierin zijn <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">a</code> en <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">b</code> variabelen. Variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">a</code> krijgt de waarde <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">10</code>, en variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">b</code> krijgt de waarde <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">1.1</code>. Zie je dat we geen komma, maar een punt gebruiken bij <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">“kommagetallen”</code>.</li>\n  <li>We gebruiken de <strong>operator</strong> \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\"><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">=</code></code>\" om de waarde van de variabele te veranderen.</li>\n  <li>Het aanmaken van een variabelen noemen we <strong>declareren</strong>. Je declareert een variabele, zo noem je dat. Later leren we veel meer over operatoren.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Het programma heeft overigens nog geen uitvoer. Start het maar eens en zie dat er geen uitvoer is. Dat klopt dus!</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "a = 10\nb = 1.1\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_4",
+            "title": "1.04: Waarde",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Een variabele kan je zien als een doos waar je iets in kan bewaren. Je kan wat je in de doos hebt natuurlijk veranderen door er iets anders in te doen. Dus door de waarde te veranderen.</li>\n  <li>In het programma hiernaast is na het uitvoeren van instructie 1, de waarde van de variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">a</code> gezet op <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">10</code>. Na het uitvoeren van instructie 2, is de waarde van variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">a</code> niet meer <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">10</code>, maar is deze veranderd in <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">5</code>.</li>\n  <li>Je ziet dus dat de waarde van een variabele kan veranderen.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voorspel de uitkomst van het programma en controlleer dit door het programma te starten.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-bewerken my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-pen-to-square text-amber-400\"></i> Bewerken:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Zorg dat het programma een extra instructie krijgt, door op regel <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">5</code> de waarde van <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">a</code> te veranderen naar <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">20</code></li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "a = 10\nprint(a)\na = 5\nprint(a)\n#Verander de waarde van a\n#Print de waarde van a op het scherm",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_5",
+            "title": "1.05: Naamregels",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>De naam van een variabele bestaat uit letters (<strong>a t/m z</strong>) en (<strong>A t/m Z</strong>), cijfers (<strong>0 t/m 9</strong>) of een underscore <strong>_</strong>.</li>\n  <li>Je kan een naam die uit meerdere woorden bestaat leesbaar houden door tussen alle individuele woorden een underscore te plaatsen.</li>\n  <li>Voorbeelden van goede namen: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">leeftijd</code>, <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">geboorteplaats</code>of <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">aantal_hoeken</code>.</li>\n  <li>Je kan de <strong>variabelenaam</strong> niet starten met een cijfer en met een aantal specifieke woorden omdat deze al gebruikt zijn door Python, bijvoorbeeld: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">if</code>, <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">for</code>, <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">or</code> of <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">while</code>.</li>\n  <li>Wanneer je dit toch doet krijg je een <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">syntaxError: invalid syntax</code>.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-bewerken my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-pen-to-square text-amber-400\"></i> Bewerken:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Maak een extra variabele aan met de naam \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\"><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">while</code></code>\", geef deze de waarde 12 en kijk wat er gebeurt als je het programma start.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "aantal_hoeken = 42\nprint(aantal_hoeken)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_6",
+            "title": "1.06: Datatype",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Om spullen in dozen te bewaren heb je verschillende soorten dozen. Een doos speciaal voor boeken, of een klein doosje voor papier.</li>\n  <li>In Python gebruiken we ook verschillende dozen, alleen noemen we dat variabelen van een verschillend <strong> datatype </strong>. Het datatype bepaalt wat er in de variabele zit.</li>\n  <li>Binnen Python zitten <strong>numerieke</strong>, <strong>tekenreeks</strong> en <strong>boolean</strong> variabelen.</li>\n  <li>In het programma hiernaast zie je de variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">lengte</code>. Deze heeft de waarde <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">199</code> en is dus van het numerieke datatype.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voorspel de uitkomst van het programma en controleer dit door het programma te starten.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "lengte = 199\nprint(lengte)\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_7",
+            "title": "1.07: Getallen",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol><li><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Er zijn verschillende numerieke datatypes binnen Python. De belangrijkste twee zijn:<br></span><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">- </span><b style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Integers</b><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">, dit zijn gehele getallen. Bijvoorbeeld: </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">5</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">, </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">45</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">, of </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">-45</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">.<br></span><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">- </span><b style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Floats</b><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">, dit zijn komma getallen (die schrijf je met een punt!). Bijvoorbeeld </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">3.4</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">, </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">1.3</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"> of </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">3.142</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">.</span></li><li><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\">Afhankelijk van wat je opslaat wordt dus het datatype bepaald. </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">rekening</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"> is dus een float en </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">aantal_personen</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"> en </span><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">temperatuur</code><span style=\"color: rgb(51, 65, 85); font-size: 0.875rem;\"> zijn integers.</span></li></ol>\n</div>\n<div class=\"wysiwyg-section-bewerken my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-pen-to-square text-amber-400\"></i> Bewerken:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Declareer een nieuwe variabele met de naam <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">tafel_nummer</code>&nbsp;en geef die de waarde \"<code class=\"bg-slate-100 dark:bg-slate-950 px-1.5 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\"><code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">41</code></code>\".</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "rekening = 34.12 \naantal_personen = 4\ntemperatuur = -3",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_8",
+            "title": "1.08: Tekst",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Een <strong>string</strong> is een reeks van tekens die gezet zijn tussen quotes. Dit kunnen enkele of dubbele quotes zijn, dus: “ of '.</li>\n  <li>In het voorbeeld hiernaast zie je een aantal voorbeelden hoe verschillende variabelen van het datatype string zijn aangemaakt.</li>\n  <li>Belangrijk om op te merken is het verschil tussen <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">instructie 4</code> en <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">instructie 5</code>. Dit lijkt hetzelfde te zijn, echter is de variabele in <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">instructie 4</code> van het datatype string en <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">instructie 5</code> een integer. Later zal je zien dat je met een integer kan rekenen, en met de string niet!</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-bewerken my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-pen-to-square text-amber-400\"></i> Bewerken:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Maak nog een string aan en geef die als waarde jouw eigen naam mee.</li>\n  <li>Print deze variabelen vervolgens uit.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "naam = \"Dhr Dukers\"\ntitel = \"Groot-maarschalk van het Universum\"\nkleur = 'groen'\n\nleeftijd1 = 39\nleeftijd2 = \"39\"\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_9",
+            "title": "1.09: Boolean",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Een variabele van het datatype <strong>boolean</strong> kan maar twee waarden hebben. Of <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">“True”</code> of <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">“False”</code>. Let op de hoofdletter!</li>\n  <li>In instructie 1 zie je een boolean met de naam <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">winkel_open</code>. Deze heeft de waarde <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">False</code>. De winkel is nu dus gesloten. Mocht de winkel open gaan dan moet de waarde aangepast worden in <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">True</code>.</li>\n  <li>Let op, in instructie 2 staat een veelgemaakte fout. Door het op deze manier te programmeren maak je een variabele aan van het datatype <strong>string</strong> met de waarde <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">“False”</code>. Dit is dus geen boolean maar tekst.</li>\n  <li>En op instructie3 gaat het ook mis omdat hier geen hoofdletter staat.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-bewerken my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-pen-to-square text-amber-400\"></i> Bewerken:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Pas de waarde van de variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">winkel_open</code> aan zodat de winkel open is.</li>\n  <li>Voer het programma uit en los de foutmelding op.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "winkel_open = False\nschool_open = \"False\"\nbioscoop_open = false\nprint(winkel_open)\nprint(school_open)",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_10",
+            "title": "1.10: Commentaar",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>In Python maak je gebruik van <strong>commentaar</strong> om uit te leggen hoe de code werkt, of om de code overzichtelijker te maken. Dit doe je omdat het niet alleen voor jezelf handig is, maar ook omdat het helpt als iemand anders je code wilt bekijken of aanpassen.</li>\n  <li>Om commentaar toe te voegen start je met het #-teken. Python negeert alles wat er na dit teken komt volledig.</li>\n  <li>Instructie1 wordt volledig genegeerd. Instructie2 wordt deels uitgevoerd, maar alles na het hekje wordt genegeerd.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-bewerken my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-pen-to-square text-amber-400\"></i> Bewerken:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voeg je naam toe als commentaar op instructie 3.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "# deze hele regel is commentaar. \nwinkel_open = False #is winkel open(True) of dicht(False).",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_11",
+            "title": "1.11: Input",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Bij veel programma`s wil je gebruik maken van <strong>input</strong> van de gebruiker. Je wil de gebruiker iets vragen. Dit doe je door een vraag op het scherm te <strong>printen</strong>. Vervolgens wil je iets met de gegeven antwoorden doen.</li>\n  <li>Binnen python zijn er voorgemaakte functies die je hierbij helpen. Dit zijn de functies: <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">input()</code> en <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">print()</code>.</li>\n  <li>Hier zie je een voorbeeld van een programma die dit gebruikt.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Je ziet een programma dat van deze functies gebruikt maakt. Kan je achterhalen wat dit programma doet?</li>\n  <li>Start het programma op, en vul je naam in door op het grijze invul-vakje te klikken.</li>\n</ol>\n<ul class=\"list-disc pl-6 space-y-1 mt-1 mb-2\">\n  <li><b>LET OP</b>: je ziet in <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">instructie 1</code> wat commentaar staan. Dit is nodig voor sommige Python compilers. Je geeft hiermee aan dat je python 3 gebruikt.</li>\n</ul>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "#!/bin/python3\nprint(\"Hallo\")\nnaam = input(\"Wat is je naam?\")\nprint()\nprint(naam, \"dat is een mooie naam\")",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_12",
+            "title": "1.12: Input opvragen",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Input vraag je op met behulp van de bestaande <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\"> input()</code> functie. Binnen de haken zet je de tekst die je de gebruiker wilt vragen. Vervolgens stopt het programma totdat er input en een enter gegeven wordt. Je ziet dat het gegeven antwoord opgeslagen wordt in de variabele <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">naam</code></li>\n  <li>Let op: of je nu tekst of een getal invult, dit wordt altijd als string opgeslagen.</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-uitvoeren my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit en bekijk de uitkomst.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "#!/bin/python3\nnaam = input(\"Wat is je naam?\")\n\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        },
+        {
+            "id": "task_13",
+            "title": "1:13: Voorbeeld",
+            "instruction": "<div class=\"wysiwyg-section-lezen my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-eye text-sky-400\"></i> Lezen:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Een lege enter doe je met <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">print()</code></li>\n  <li>Met de instructie <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">\\n</code> kan je binnen een string een enter aangeven (new line)</li>\n</ol>\n</div>\n<div class=\"wysiwyg-section-bewerken my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-pen-to-square text-amber-400\"></i> Bewerken:</div>\n<ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\">\n  <li>Voer het programma uit en bekijk de uitkomst.</li>\n  <li>Pas het aantal <code class=\"bg-slate-100 dark:bg-slate-950 px-1 py-0.5 rounded text-amber-600 dark:text-amber-400 font-mono text-xs\">\\n</code> aan en kijk wat er verandert.</li>\n</ol>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "#!/bin/python3\nleeftijd = 42\nnaam = \"Dukers\"\n\nprint(\"Hallo, jouw naam is..\")\nprint(\"...\")\nprint()\nprint()\nprint(naam)\nprint(\"De leeftijd is:\\n\\n\\n\",leeftijd)\nprint()\nprint(\"nog een regel\")\n",
+                    "isMain": true
+                }
+            ],
+            "tests": []
+        }
+    ]
+}
