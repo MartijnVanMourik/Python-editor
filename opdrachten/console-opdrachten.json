@@ -85,6 +85,48 @@
                     "matchType": "exact"
                 }
             ]
+        },
+        {
+            "id": "task_4",
+            "title": "Opdracht 4 - Wiskundige operaties",
+            "instruction": "<div class=\"wysiwyg-section-uitvoeren my-3\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div><ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\"><li>Maak het programma af door de juiste wiskundige operaties in te vullen op de puntjes.</li></ol></div>\n\n<div class=\"wysiwyg-section-tip my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-lightbulb text-orange-400\"></i> Tips:</div>\n<p class=\"mb-3\">Zodra het programma wordt gestart, zal het programma automatisch de input genereren. Op deze manier wordt meteen nagekeken of het programma juist is.</p>\n<p class=\"mb-3\">Hieronder zie je wat de output moet zijn bij de input die automatisch gegenereerd wordt.</p>\n<p class=\"mb-3\">Soms wordt een deel van de code al gegeven of worden er tips in commentaar gegeven.</p>\n<p class=\"mb-3\">Vergeet niet dat je een hele mooie&nbsp;<a href=\"https://informaticabaas.nl/interactive/python/spiekbrief-python.html\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline font-medium\">spiekbrief</a>&nbsp;hebt met allerlei voorbeelden.</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "# Stap 1 - Vraag om input en sla het op in een variabele\n\"Welk getal moet er gekwadrateerd worden?\"\n\n# Stap 2 - print het getal keer het getal\n\"Het kwadraat is\"",
+                    "isMain": true
+                }
+            ],
+            "tests": [
+                {
+                    "name": "Nieuwe testcase",
+                    "inputs": [
+                        "4",
+                        "2"
+                    ],
+                    "expectedOutput": "Simpele operaties:\n6\n2\n8\n2.0\nComplexe operaties:\n16\n2\n0",
+                    "matchType": "exact"
+                },
+                {
+                    "name": "Nieuwe testcase",
+                    "inputs": [
+                        "83",
+                        "3"
+                    ],
+                    "expectedOutput": "Simpele operaties:\n86\n80\n249\n27.66666666666667\nComplexe operaties:\n571787\n27\n2",
+                    "matchType": "exact"
+                },
+                {
+                    "name": "Nieuwe testcase",
+                    "inputs": [
+                        "-1",
+                        "5"
+                    ],
+                    "expectedOutput": "wat is getal_a -1\nwat is getal_b 5\nSimpele operaties:\n4\n-6\n-5\n-0.2\nComplexe operaties:\n-1\n-1\n4",
+                    "matchType": "exact"
+                }
+            ],
+            "previewImage": ""
         }
     ],
     "tabs": [
@@ -95,7 +137,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "#een groot deel van het programma is er al. Je hoeft alleen maar de juiste code op de puntjes te zetten.\n\n... = input(\"Wat is jouw leeftijd?\")\nprint(type(...))\n... = int(...)\nprint(type(...))",
+                    "initialCode": "# Een groot deel van het programma is er al. \n# Je hoeft alleen maar de juiste code op de puntjes te zetten.\n\n... = input(\"Wat is jouw leeftijd?\")\nprint(type(...))\n... = int(...)\nprint(type(...))",
                     "isMain": true
                 }
             ],
@@ -117,7 +159,7 @@
             "files": [
                 {
                     "filename": "main.py",
-                    "initialCode": "#een groot deel van het progamma is er al. Je hoeft alleen maar de juiste code op de puntjes te zetten.\n\ngetal_A = int(input(\"Wat is getal A?\"))\ngetal_B = ...\ngetal_C = ... + ...\nprint(\"getal_A =\", getal_A)\nprint(...)\nprint(...)",
+                    "initialCode": "# Een groot deel van het programma is er al. \n# Je hoeft alleen maar de juiste code op de puntjes te zetten.\n\ngetal_A = int(input(\"Wat is getal A?\"))\ngetal_B = ...\ngetal_C = ... + ...\nprint(\"getal_A =\", getal_A)\nprint(...)\nprint(...)",
                     "isMain": true
                 }
             ],
@@ -171,6 +213,48 @@
                     "matchType": "exact"
                 }
             ]
+        },
+        {
+            "id": "task_4",
+            "title": "Opdracht 4 - Wiskundige operaties",
+            "instruction": "<div class=\"wysiwyg-section-uitvoeren my-3\"><div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-play text-emerald-400\"></i> Uitvoeren:</div><ol class=\"list-decimal pl-6 space-y-1 mt-1 mb-2\"><li>Maak het programma af door de juiste wiskundige operaties in te vullen op de puntjes.</li></ol></div>\n\n<div class=\"wysiwyg-section-tip my-3\">\n<div class=\"font-semibold flex items-center gap-2 mb-1 text-slate-700 dark:text-slate-200 text-sm select-none\"><i class=\"fa-solid fa-lightbulb text-orange-400\"></i> Tips:</div>\n<p class=\"mb-3\">Zodra het programma wordt gestart, zal het programma automatisch de input genereren. Op deze manier wordt meteen nagekeken of het programma juist is.</p>\n<p class=\"mb-3\">Hieronder zie je wat de output moet zijn bij de input die automatisch gegenereerd wordt.</p>\n<p class=\"mb-3\">Soms wordt een deel van de code al gegeven of worden er tips in commentaar gegeven.</p>\n<p class=\"mb-3\">Vergeet niet dat je een hele mooie&nbsp;<a href=\"https://informaticabaas.nl/interactive/python/spiekbrief-python.html\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline font-medium\">spiekbrief</a>&nbsp;hebt met allerlei voorbeelden.</p>\n</div>\n",
+            "files": [
+                {
+                    "filename": "main.py",
+                    "initialCode": "getal_a = int(input(\"wat is getal_a\"))\ngetal_b = int(input(\"wat is getal_b\"))\n\nprint(\"Simpele operaties:\")\nprint(getal_a ... getal_b) #plus\nprint(getal_a ... getal_b) #min\nprint(getal_a ... getal_b) #keer\nprint(getal_a ... getal_b) #normaal delen\nprint(\"Complexe operaties:\")\nprint(getal_a ... getal_b) #machtsverheffing\nprint(getal_a ... getal_b) #vloerdeling\nprint(getal_a ... getal_b) #modulo",
+                    "isMain": true
+                }
+            ],
+            "tests": [
+                {
+                    "name": "Nieuwe testcase",
+                    "inputs": [
+                        "4",
+                        "2"
+                    ],
+                    "expectedOutput": "Simpele operaties:\n6\n2\n8\n2.0\nComplexe operaties:\n16\n2\n0",
+                    "matchType": "exact"
+                },
+                {
+                    "name": "Nieuwe testcase",
+                    "inputs": [
+                        "83",
+                        "3"
+                    ],
+                    "expectedOutput": "Simpele operaties:\n86\n80\n249\n27.66666666666667\nComplexe operaties:\n571787\n27\n2",
+                    "matchType": "exact"
+                },
+                {
+                    "name": "Nieuwe testcase",
+                    "inputs": [
+                        "-1",
+                        "5"
+                    ],
+                    "expectedOutput": "wat is getal_a -1\nwat is getal_b 5\nSimpele operaties:\n4\n-6\n-5\n-0.2\nComplexe operaties:\n-1\n-1\n4",
+                    "matchType": "exact"
+                }
+            ],
+            "previewImage": ""
         }
     ]
 }
