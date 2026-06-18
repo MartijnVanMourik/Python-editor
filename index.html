@@ -1247,6 +1247,14 @@
                         class="text-sm text-slate-300 leading-relaxed prose prose-invert mb-4 select-text">
                         Selecteer een opdracht om de instructies te laden...
                     </div>
+                    <!-- Voltooi Button Container -->
+                    <div id="complete-btn-container" class="hidden my-4 pt-3 border-t border-slate-800/80 flex justify-end">
+                        <button onclick="completeCurrentTask()"
+                            class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-bold px-4 py-2 rounded-xl shadow-lg shadow-emerald-950/20 active:scale-95 transition flex items-center gap-1.5 text-xs sm:text-sm">
+                            <i class="fa-solid fa-circle-check"></i>
+                            <span>Voltooien</span>
+                        </button>
+                    </div>
                     <!-- Dynamic Target Preview Image Container -->
                     <div id="assignment-preview-container" class="hidden my-4 border-t border-slate-800/80 pt-3">
                         <div
@@ -1302,14 +1310,6 @@
                                 <i class="fa-solid fa-play text-xs sm:text-sm"></i>
                                 <span>Run</span>
                             </button>
-                            <!-- Validate Code Button -->
-                            <button id="btn-validate-code" onclick="validateActiveCode()"
-                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200 dark:border-slate-700 font-bold px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-1.5 text-xs sm:text-sm"
-                                title="Controleer de code op syntaxfouten zonder deze uit te voeren">
-                                <i
-                                    class="fa-solid fa-clipboard-check text-xs sm:text-sm text-slate-500 dark:text-slate-400"></i>
-                                <span>Valideer</span>
-                            </button>
                             <!-- Run Unit Tests Button -->
                             <button id="btn-run-tests" onclick="runAssignmentTests()"
                                 class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-2 py-1.5 sm:px-3 sm:py-2 rounded-xl shadow-lg active:scale-95 transition flex items-center gap-1.5 text-xs sm:text-sm">
@@ -1318,6 +1318,12 @@
                             </button>
                         </div>
                         <div class="flex items-center gap-2">
+                            <!-- Validate Code Button -->
+                            <button id="btn-validate-code" onclick="validateActiveCode()"
+                                class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 w-8 h-8 sm:w-9 sm:h-9 rounded-xl active:scale-95 transition flex items-center justify-center"
+                                title="Controleer de code op syntaxfouten (Valideer)">
+                                <i class="fa-solid fa-clipboard-check text-xs sm:text-sm"></i>
+                            </button>
                             <button onclick="resetCurrentCode()"
                                 class="bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 dark:border-slate-700 w-8 h-8 sm:w-9 sm:h-9 rounded-xl active:scale-95 transition flex items-center justify-center"
                                 title="Herstel de code naar de beginopstelling">
@@ -1807,6 +1813,7 @@
         let appMode = "student"; // State tracking for mode: teacher, student, or demo
         let canvasSize = 400; // Default canvas size in pixels (both width and height)
         let menuConfig = null; // Force show/hide task selector menu ('show', 'hide', or null)
+        let isTaskSelectorCollapsed = false; // Flag to track if the task selector is collapsed
         let isEmbed = false; // Flag to hide header and buttons for iframe embeds
         let isEmbedRestart = false; // Flag to show run/interrupt button in embed mode
         let isCompactMode = false; // Flag for compact mode layout (width 800-900px with bottom sliding output drawer)
@@ -2396,10 +2403,43 @@
                     const codeValue = editor.getValue();
                     const workspace = getTaskWorkspace(currentTaskId);
                     if (workspace) {
+                        const oldStatus = getTaskStatus(currentTaskId);
+
                         workspace.files[workspace.activeFile] = codeValue;
+
+                        // Check if current files differ from template/initial files
+                        const initialWorkspace = getTaskInitialWorkspace(currentTaskId);
+                        let isDifferent = false;
+                        if (initialWorkspace) {
+                            for (const filename in initialWorkspace.files) {
+                                const currentVal = (filename === workspace.activeFile) ? codeValue : workspace.files[filename];
+                                const initialVal = initialWorkspace.files[filename];
+                                if (currentVal !== undefined && currentVal !== initialVal) {
+                                    isDifferent = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (isDifferent) {
+                            if (workspace.status !== "completed") {
+                                workspace.status = "in_progress";
+                            }
+                        } else {
+                            if (workspace.status === "in_progress") {
+                                workspace.status = null;
+                            }
+                        }
+
                         userProgress[currentTaskId] = workspace;
                         localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
                         showSavingState();
+
+                        // Render ONLY on status transition to prevent typing lag
+                        const newStatus = getTaskStatus(currentTaskId);
+                        if (oldStatus !== newStatus) {
+                            renderTaskSelector();
+                        }
 
                         // Reactive environment toggler for turtle imports inside main.py (only for Python assignments)
                         if (!isWebModeActive() && workspace.activeFile === "main.py") {
@@ -2513,12 +2553,31 @@
                 }
             }
 
-            // Check menu visibility parameter (menu=show/true/hide/false)
+            // Check menu visibility parameter (menu=show/collapse/hide or legacy hide=true/false)
             const menuParam = urlParams.get('menu');
-            if (menuParam === 'show' || menuParam === 'true') {
-                menuConfig = 'show';
-            } else if (menuParam === 'hide' || menuParam === 'false') {
+            const legacyHideParam = urlParams.get('hide');
+
+            if (menuParam === 'show' || menuParam === 'collapse' || menuParam === 'hide') {
+                menuConfig = menuParam;
+            } else if (legacyHideParam === 'true') {
                 menuConfig = 'hide';
+            } else if (legacyHideParam === 'false') {
+                menuConfig = 'show';
+            } else {
+                // Determine default based on mode
+                if (isEmbed) {
+                    menuConfig = 'hide';
+                } else if (isCompactMode) {
+                    menuConfig = 'collapse';
+                } else if (appMode === 'teacher') {
+                    menuConfig = 'show';
+                } else {
+                    menuConfig = 'show';
+                }
+            }
+
+            if (menuConfig === 'collapse') {
+                isTaskSelectorCollapsed = true;
             }
 
             // Apply canvas sizing
@@ -2715,9 +2774,17 @@
             document.body.classList.add("ready");
         }
 
-        let isTaskSelectorCollapsed = false;
         function toggleTaskSelectorCollapse() {
             isTaskSelectorCollapsed = !isTaskSelectorCollapsed;
+            renderTaskSelector();
+        }
+
+        function renderTaskSelector() {
+            const wrapper = document.getElementById("task-selector-wrapper");
+            const container = document.getElementById("task-selector-container");
+            if (!container) return;
+            container.innerHTML = "";
+
             const btnText = document.getElementById("btn-toggle-task-selector-text");
             const btnIcon = document.querySelector("#btn-toggle-task-selector i");
             if (btnText && btnIcon) {
@@ -2729,17 +2796,9 @@
                     btnIcon.className = "fa-solid fa-compress text-[10px]";
                 }
             }
-            renderTaskSelector();
-        }
-
-        function renderTaskSelector() {
-            const wrapper = document.getElementById("task-selector-wrapper");
-            const container = document.getElementById("task-selector-container");
-            if (!container) return;
-            container.innerHTML = "";
 
             let shouldShowMenu = true;
-            if (menuConfig === 'show') {
+            if (menuConfig === 'show' || menuConfig === 'collapse') {
                 shouldShowMenu = true;
             } else if (menuConfig === 'hide') {
                 shouldShowMenu = false;
@@ -2754,7 +2813,6 @@
             }
 
             taskConfig.tabs.forEach((task, index) => {
-                const isPassed = checkIfPassed(task.id);
                 const isActive = task.id === currentTaskId;
 
                 if (isTaskSelectorCollapsed && !isActive) {
@@ -2776,10 +2834,20 @@
                         : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200')
                     }`;
 
+                const status = getTaskStatus(task.id);
+                let badgeHtml = '';
+                if (status === 'completed') {
+                    badgeHtml = `<i class="fa-solid fa-circle-check text-emerald-500"></i>`;
+                } else if (status === 'in_progress') {
+                    badgeHtml = `<i class="fa-solid fa-circle text-amber-500"></i>`;
+                } else {
+                    badgeHtml = `<i class="fa-regular fa-circle text-slate-500 dark:text-slate-400"></i>`;
+                }
+
                 btn.innerHTML = `
                     <span class="font-semibold text-sm truncate select-none mr-2">${task.title}</span>
                     <span id="badge-${task.id}" class="shrink-0">
-                        ${isPassed ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>' : '<i class="fa-regular fa-circle text-slate-500"></i>'}
+                        ${badgeHtml}
                     </span>
                 `;
 
@@ -2905,6 +2973,82 @@
             const task = taskConfig.tabs.find(t => t.id === taskId);
             if (!task || !task.tests || task.tests.length === 0) return false;
             return passedArray.length === task.tests.length && passedArray.every(v => v === true);
+        }
+
+        function getTaskInitialWorkspace(taskId) {
+            const task = taskConfig.tabs.find(t => t.id === taskId);
+            if (!task) return null;
+
+            const workspace = {
+                activeFile: "main.py",
+                files: {}
+            };
+
+            if (task.files && Array.isArray(task.files) && task.files.length > 0) {
+                task.files.forEach(f => {
+                    workspace.files[f.filename] = f.initialCode || "";
+                });
+                const hasHtml = task.files.some(f => f.filename.endsWith('.html'));
+                if (hasHtml) {
+                    const mainFile = task.files.find(f => f.isMain || f.filename === "index.html" || f.filename.endsWith(".html")) || task.files[0];
+                    workspace.activeFile = mainFile.filename;
+                } else {
+                    if (workspace.files["main.py"] === undefined) {
+                        const mainFile = task.files.find(f => f.isMain) || task.files[0];
+                        workspace.files["main.py"] = mainFile.initialCode || "";
+                        if (mainFile.filename !== "main.py") {
+                            workspace.files[mainFile.filename] = mainFile.initialCode || "";
+                        }
+                    }
+                    workspace.activeFile = "main.py";
+                }
+            } else {
+                const filename = "main.py";
+                const initialCode = task.initialCode || "";
+                workspace.files[filename] = initialCode;
+                workspace.activeFile = filename;
+            }
+
+            return workspace;
+        }
+
+        function getTaskStatus(taskId) {
+            const task = taskConfig.tabs.find(t => t.id === taskId);
+            if (!task) return "not_started";
+
+            const workspace = userProgress[taskId];
+
+            // 1. Is it completed? (tests passed OR status is explicitly completed)
+            const isPassed = checkIfPassed(taskId);
+            if (isPassed || (workspace && workspace.status === "completed")) {
+                return "completed";
+            }
+
+            // 2. Is it in progress?
+            if (workspace) {
+                if (workspace.status === "in_progress") {
+                    return "in_progress";
+                }
+
+                // Check if current files differ from template/initial files
+                const initialWorkspace = getTaskInitialWorkspace(taskId);
+                if (initialWorkspace) {
+                    let isDifferent = false;
+                    for (const filename in initialWorkspace.files) {
+                        const currentVal = workspace.files[filename];
+                        const initialVal = initialWorkspace.files[filename];
+                        if (currentVal !== undefined && currentVal !== initialVal) {
+                            isDifferent = true;
+                            break;
+                        }
+                    }
+                    if (isDifferent) {
+                        return "in_progress";
+                    }
+                }
+            }
+
+            return "not_started";
         }
 
         function selectTask(taskId) {
@@ -3041,6 +3185,16 @@
                     }
                 }
 
+                // Toggle "Voltooien" (Complete) button visibility
+                const completeContainer = document.getElementById("complete-btn-container");
+                if (completeContainer) {
+                    if (!isEditMode && (menuConfig === 'collapse' || menuConfig === 'show')) {
+                        completeContainer.classList.remove("hidden");
+                    } else {
+                        completeContainer.classList.add("hidden");
+                    }
+                }
+
                 // Search and load dynamic image preview
                 loadAssignmentPreviewImage(task);
 
@@ -3106,6 +3260,38 @@
                 } else {
                     renderEmptyTests(task);
                 }
+
+                // Initialize run buttons layout and text state
+                setExecutionRunningState(false);
+            }
+        }
+
+        function completeCurrentTask() {
+            if (!currentTaskId) return;
+
+            const workspace = getTaskWorkspace(currentTaskId);
+            if (workspace) {
+                workspace.status = "completed";
+                userProgress[currentTaskId] = workspace;
+                localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
+            }
+
+            // Also mark as passed in localStorage for tests checkmark if there is a tests array
+            const task = taskConfig.tabs.find(t => t.id === currentTaskId);
+            if (task && task.tests && task.tests.length > 0) {
+                const key = getTaskPassedKey(currentTaskId);
+                const passedArray = Array(task.tests.length).fill(true);
+                localStorage.setItem(key, JSON.stringify(passedArray));
+            }
+
+            renderTaskSelector();
+
+            const currentIndex = taskConfig.tabs.findIndex(t => t.id === currentTaskId);
+            if (currentIndex !== -1 && currentIndex < taskConfig.tabs.length - 1) {
+                const nextTask = taskConfig.tabs[currentIndex + 1];
+                selectTask(nextTask.id);
+            } else {
+                showToast("🎉 Gefeliciteerd! Je hebt de laatste opdracht voltooid!");
             }
         }
 
@@ -3136,10 +3322,15 @@
                     delete userProgress[currentTaskId];
                     localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
 
+                    // Remove namespaced passed tests
+                    localStorage.removeItem(getTaskPassedKey(currentTaskId));
+                    localStorage.removeItem(`edu_py_task_passed_${currentTaskId}`);
+
                     const workspace = getTaskWorkspace(currentTaskId);
                     editor.setValue(workspace.files[workspace.activeFile] || "");
                     updateEditorModeForFile(workspace.activeFile);
                     renderWorkspaceTabs();
+                    renderTaskSelector();
                 }
                 confirmation.remove();
             };
@@ -3241,11 +3432,20 @@
 
         function togglePythonExecution() {
             openOutputDrawer();
+            const workspace = getTaskWorkspace(currentTaskId);
+            const mainCode = workspace ? (workspace.files["main.py"] || "") : "";
+            const isTurtle = !isWebModeActive() && (mainCode.includes("import turtle") || mainCode.includes("from turtle import"));
+
             if (isWebModeActive()) {
                 runWebCode();
             } else {
                 if (isExecuting) {
                     interruptPythonCode();
+                    if (isEmbedRestart && !isTurtle) {
+                        setTimeout(() => {
+                            runPythonCode();
+                        }, 50);
+                    }
                 } else {
                     runPythonCode();
                 }
@@ -3272,6 +3472,10 @@
                 { id: "btn-run-code-fullscreen", isLarge: false }
             ];
 
+            const workspace = getTaskWorkspace(currentTaskId);
+            const mainCode = workspace ? (workspace.files["main.py"] || "") : "";
+            const isTurtle = !isWebModeActive() && (mainCode.includes("import turtle") || mainCode.includes("from turtle import"));
+
             buttons.forEach(btnInfo => {
                 const btn = document.getElementById(btnInfo.id);
                 if (!btn) return;
@@ -3279,7 +3483,19 @@
                 const icon = btn.querySelector("i");
                 const text = btn.querySelector("span");
 
-                if (running) {
+                const isEmbedRestartConsoleOrWeb = isEmbedRestart && !isTurtle && btnInfo.id === "btn-run-code-demo";
+
+                if (isEmbedRestartConsoleOrWeb) {
+                    btn.classList.remove("from-red-500", "to-rose-600", "hover:from-red-400", "hover:to-rose-500", "text-white");
+                    btn.classList.add("from-emerald-500", "to-teal-600", "hover:from-emerald-400", "hover:to-teal-500", "text-slate-950");
+                    if (icon) {
+                        icon.className = "fa-solid fa-arrow-rotate-right";
+                    }
+                    if (text) {
+                        text.textContent = "Herstart";
+                    }
+                    btn.title = "Herstart het programma";
+                } else if (running) {
                     btn.classList.remove("from-emerald-500", "to-teal-600", "hover:from-emerald-400", "hover:to-teal-500", "text-slate-950");
                     btn.classList.add("from-red-500", "to-rose-600", "hover:from-red-400", "hover:to-rose-500", "text-white");
                     if (icon) {
@@ -3296,9 +3512,12 @@
                         icon.className = btnInfo.isLarge ? "fa-solid fa-play text-lg" : "fa-solid fa-play";
                     }
                     if (text) {
-                        text.textContent = "Run";
+                        text.textContent = (isEmbedRestart && !isTurtle) ? "Herstart" : "Run";
                     }
-                    btn.title = "Run de Python code";
+                    if (icon && isEmbedRestart && !isTurtle) {
+                        icon.className = "fa-solid fa-arrow-rotate-right";
+                    }
+                    btn.title = (isEmbedRestart && !isTurtle) ? "Herstart het programma" : "Run de Python code";
                 }
             });
 
@@ -3943,7 +4162,16 @@
             }
 
             // Save passing state to localstorage
-            localStorage.setItem(`edu_py_task_passed_${task.id}`, JSON.stringify(results));
+            localStorage.setItem(getTaskPassedKey(task.id), JSON.stringify(results));
+
+            if (checkIfPassed(task.id)) {
+                const workspace = getTaskWorkspace(task.id);
+                if (workspace) {
+                    workspace.status = "completed";
+                    userProgress[task.id] = workspace;
+                    localStorage.setItem(getProgressStorageKey(), JSON.stringify(userProgress));
+                }
+            }
 
             // Re-render task selection badges
             renderTaskSelector();
